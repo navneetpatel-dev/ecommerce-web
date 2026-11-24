@@ -68,6 +68,15 @@ describe("adminTableCells adversarial and boundary tests", () => {
     expect(formatAdminCellValue(false)).toBe("No");
   });
 
+  it("adminCellText formats returnReference and reasonCode", () => {
+    const row = {
+      id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+      reasonCode: "NO_LONGER_NEEDED",
+    };
+    expect(adminCellText(row, "returnReference")).toBe("#RET-A1B2C3D4");
+    expect(adminCellText(row, "reasonCode")).toBe("No longer needed");
+  });
+
   it("shouldInferAdminColumn strictly ignores id and id-like keys", () => {
     expect(shouldInferAdminColumn("id")).toBe(false);
     expect(shouldInferAdminColumn("userId")).toBe(false);

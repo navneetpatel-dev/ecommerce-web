@@ -17,6 +17,8 @@ interface ReturnRequestCardProps {
 
 export function ReturnRequestCard({ row }: ReturnRequestCardProps) {
   const {
+    returnReference,
+    orderReference,
     productTitle,
     reasonCodeLabel,
     createdLabel,
@@ -38,7 +40,9 @@ export function ReturnRequestCard({ row }: ReturnRequestCardProps) {
         <div className={styles.contentCol}>
           <p className={styles.title}>{productTitle}</p>
           <p className={styles.subMeta}>
-            {reasonCodeLabel} · {createdLabel}
+            {returnReference}
+            {orderReference ? ` · ${orderReference}` : ""} · {reasonCodeLabel} ·{" "}
+            {createdLabel}
           </p>
           <p className={styles.reason}>{row.reason}</p>
           {hasRefundAmount ? (

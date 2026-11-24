@@ -12,9 +12,15 @@ export function VendorReturnCard({ row }: VendorReturnCardProps) {
   return (
     <li className={vendorReturnsTableStyles.mobileCard}>
       <div className={vendorReturnsTableStyles.mobileCardHeader}>
-        <p className={vendorReturnsTableStyles.mobileCardProduct}>
-          {row.productLabel}
-        </p>
+        <div>
+          <p className={vendorReturnsTableStyles.mobileCardProduct}>
+            {row.productLabel}
+          </p>
+          <p className="text-xs text-muted-foreground mt-0.5">
+            {row.returnReference}
+            {row.orderReference ? ` · ${row.orderReference}` : ""}
+          </p>
+        </div>
         <StatusBadge status={row.status} label={row.statusLabel} />
       </div>
       <p className={vendorReturnsTableStyles.mobileCardMeta}>

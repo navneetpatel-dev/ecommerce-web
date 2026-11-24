@@ -39,7 +39,11 @@ export function AdminDataCell({
     }
   }
 
-  if (columnKey === "status" || columnKey.endsWith(".status")) {
+  if (
+    columnKey === "status" ||
+    columnKey.endsWith(".status") ||
+    columnKey.endsWith("Status")
+  ) {
     if (typeof value === "string" && value.trim()) {
       return <StatusBadge status={value} />;
     }

@@ -12,6 +12,7 @@ import {
 import { FormFieldFrame } from "@/shared/components/forms";
 import { LABELS } from "@/shared/constants/labels";
 import { RETURN_STATUS } from "@/shared/constants/statuses";
+import { formatStatusLabel } from "@/shared/utils/formatting/formatStatus";
 import { CollapsibleTableFilters } from "@/shared/components/filters";
 
 export interface AdminReturnsFiltersProps {
@@ -73,7 +74,7 @@ export function AdminReturnsFilters({
               <SelectItem value="ALL">{LABELS.allReturnStatuses}</SelectItem>
               {RETURN_STATUS_LIST.map((s) => (
                 <SelectItem key={s} value={s}>
-                  {s}
+                  {formatStatusLabel(s)}
                 </SelectItem>
               ))}
             </SelectContent>

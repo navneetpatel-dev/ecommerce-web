@@ -13,7 +13,11 @@ export function VendorReturnsTableRow({ row }: VendorReturnsTableRowProps) {
   return (
     <TableRow>
       <TableCell className={vendorReturnsTableStyles.desktopCellBody}>
-        {row.productLabel}
+        <div>{row.productLabel}</div>
+        <div className="text-xs text-muted-foreground mt-0.5">
+          {row.returnReference}
+          {row.orderReference ? ` · ${row.orderReference}` : ""}
+        </div>
       </TableCell>
       <TableCell className={vendorReturnsTableStyles.desktopCellMuted}>
         {row.customerLabel}

@@ -1,11 +1,13 @@
 import { useMemo } from "react";
 import { LABELS } from "@/shared/constants/labels";
 import { RETURN_STATUS } from "@/shared/constants/statuses";
-import { RETURN_STATUS_LABEL } from "@/features/returns";
+import { RETURN_STATUS_LABEL, formatReturnReason } from "@/features/returns";
 import type { ProductImage, ReturnRequest } from "@/shared/api/types";
 
 export interface VendorReturnRowViewModel {
   id: string;
+  returnReference: string;
+  orderReference: string | null;
   productLabel: string;
   customerLabel: string;
   reasonLabel: string;
@@ -42,26 +44,35 @@ function imagesFor(row: ReturnRequest): ProductImage[] {
 export function useVendorReturnsTablePresentation(returns: ReturnRequest[]) {
   const rows: VendorReturnRowViewModel[] = useMemo(
     () =>
-      returns.map((row) => ({
-        id: row.id,
-        productLabel: row.productName ?? LABELS.orderItemFallback,
-        customerLabel: row.customerName ?? LABELS.emptyCell,
-        reasonLabel: `${row.reasonCode.replaceAll("_", " ")} · ${row.reason}`,
-        pickupLabel: pickupLabelFor(row),
-        status: row.status,
-        statusLabel: RETURN_STATUS_LABEL[row.status] ?? row.status,
-        images: imagesFor(row),
-        canRestock:
-          Boolean(row.receivedAt) && !row.restockedAt && !row.disputedAt,
-        restocked: Boolean(row.restockedAt),
-        canDispute:
-          (Boolean(row.receivedAt) ||
-            row.status === RETURN_STATUS.PICKUP_SCHEDULED) &&
-          !row.disputedAt &&
-          !row.restockedAt,
-        isDisputed: Boolean(row.disputedAt),
-        disputeStatus: row.disputeStatus ?? null,
-      })),
+      returns.map((row) => {
+        const reasonTitle = formatReturnReason(row.reasonCode);
+        const reasonDetail = row.reason?.trim();
+        return {
+          id: row.id,
+          returnReference:
+            row.returnReference ?? `#RET-${row.id.slice(0, 8).toUpperCase()}`,
+          orderReference: row.orderReference ?? null,
+          productLabel: row.productName ?? LABELS.orderItemFallback,
+          customerLabel: row.customerName ?? LABELS.emptyCell,
+          reasonLabel: reasonDetail
+            ? `${reasonTitle} · ${reasonDetail}`
+            : reasonTitle,
+          pickupLabel: pickupLabelFor(row),
+          status: row.status,
+          statusLabel: RETURN_STATUS_LABEL[row.status] ?? row.status,
+          images: imagesFor(row),
+          canRestock:
+            Boolean(row.receivedAt) && !row.restockedAt && !row.disputedAt,
+          restocked: Boolean(row.restockedAt),
+          canDispute:
+            (Boolean(row.receivedAt) ||
+              row.status === RETURN_STATUS.PICKUP_SCHEDULED) &&
+            !row.disputedAt &&
+            !row.restockedAt,
+          isDisputed: Boolean(row.disputedAt),
+          disputeStatus: row.disputeStatus ?? null,
+        };
+      }),
     [returns],
   );
 

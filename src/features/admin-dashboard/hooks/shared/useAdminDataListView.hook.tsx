@@ -7,7 +7,10 @@ import { AdminDataCell } from "../../components/shared/AdminDataListView/AdminDa
 import { adminCellText } from "../../utils/shared/adminTableCells";
 
 const isRichCell = (key: string) =>
-  key === "status" || key.endsWith(".status") || isImageFieldKey(key);
+  key === "status" ||
+  key.endsWith(".status") ||
+  key.endsWith("Status") ||
+  isImageFieldKey(key);
 
 function columnHeader(key: string): string {
   const leaf = key.includes(".") ? key.split(".").pop()! : key;

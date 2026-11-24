@@ -7,6 +7,8 @@ import type {
 
 export interface ReturnRequest {
   id: string;
+  returnReference?: string | null;
+  orderReference?: string | null;
   subOrderId: string;
   orderItemId: string;
   userId: string;

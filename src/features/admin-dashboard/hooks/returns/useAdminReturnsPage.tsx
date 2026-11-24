@@ -47,6 +47,8 @@ export function useAdminReturnsPage(): AdminReturnsPageModel {
     load,
     actions,
     columnKeys: [
+      "returnReference",
+      "orderReference",
       "productName",
       "customerName",
       "reasonCode",

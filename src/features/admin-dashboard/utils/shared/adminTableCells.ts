@@ -1,6 +1,7 @@
 import { LABELS } from "@/shared/constants/labels";
 import { tryFormatDateTime } from "@/shared/utils/formatting/formatDate";
 import { formatInr } from "@/shared/utils/formatting/orderFormat";
+import { formatReturnReason } from "@/features/returns";
 import type { AdminDataRow } from "../../hooks/shared/useAdminDataList.hook";
 
 const SKIP_COLUMN_KEYS = new Set([
@@ -87,6 +88,20 @@ const isMoneyColumnKey = (key: string): boolean => {
 export function adminCellText(row: AdminDataRow, columnKey: string): string {
   if (row == null || typeof row !== "object") return "—";
   const value = getAdminCellValue(row, columnKey);
+
+  if (columnKey === "returnReference") {
+    const ref =
+      typeof value === "string" && value.trim()
+        ? value
+        : typeof row.id === "string"
+          ? `#RET-${row.id.slice(0, 8).toUpperCase()}`
+          : "";
+    return ref ? (ref.startsWith("#") ? ref : `#${ref}`) : "—";
+  }
+
+  if (columnKey === "reasonCode" && typeof value === "string" && value.trim()) {
+    return formatReturnReason(value);
+  }
 
   if (columnKey === "orderReference" || columnKey === "reference") {
     const ref =

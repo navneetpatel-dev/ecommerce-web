@@ -12,7 +12,10 @@ import {
   buildRefundTimeline,
 } from "../../utils/timeline/returnTimeline";
 import { returnsApi } from "../../api/returns/returns.api";
-import { RETURN_STATUS_LABEL } from "../../constants/list/returnStatusLabels";
+import {
+  RETURN_STATUS_LABEL,
+  formatReturnReason,
+} from "../../constants/list/returnStatusLabels";
 import { returnCreditNoteLine } from "../../utils/list/returnRefundStatus";
 
 export function useReturnRequestCard(row: ReturnRequest) {
@@ -30,8 +33,11 @@ export function useReturnRequestCard(row: ReturnRequest) {
   };
 
   return {
+    returnReference:
+      row.returnReference ?? `#RET-${row.id.slice(0, 8).toUpperCase()}`,
+    orderReference: row.orderReference ?? null,
     productTitle: row.productName || LABELS.orderItemFallback,
-    reasonCodeLabel: row.reasonCode.replaceAll("_", " "),
+    reasonCodeLabel: formatReturnReason(row.reasonCode),
     createdLabel: formatOrderDate(row.createdAt),
     statusLabel: RETURN_STATUS_LABEL[row.status] ?? row.status,
     hasRefundAmount: row.refundAmount != null,
