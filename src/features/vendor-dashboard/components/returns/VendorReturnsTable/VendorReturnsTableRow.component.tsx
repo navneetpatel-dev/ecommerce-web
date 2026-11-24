@@ -28,6 +28,8 @@ export function VendorReturnsTableRow({ row }: VendorReturnsTableRowProps) {
       <TableCell className={vendorReturnsTableStyles.desktopCell}>
         <VendorReturnPhotosCell
           images={row.images}
+          returnId={row.id}
+          photoCount={row.photoCount}
           productName={row.productLabel}
         />
       </TableCell>

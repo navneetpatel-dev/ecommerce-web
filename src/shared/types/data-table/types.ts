@@ -77,6 +77,11 @@ export type DataTableProps<T> = {
    * Set false for tables that should not open row details.
    */
   rowDetails?: boolean;
+  /**
+   * Optional async fetcher to retrieve the complete record when a row is viewed.
+   * If omitted, RecordDetailDialog displays the row data directly.
+   */
+  fetchRowDetail?: (row: T) => Promise<Record<string, unknown>>;
   /** Optional row activation handler (e.g. navigate to detail). Takes precedence over the detail modal. */
   onRowClick?: (row: T, index: number) => void;
   /** Identifier for persisting column visibility and density in localStorage */

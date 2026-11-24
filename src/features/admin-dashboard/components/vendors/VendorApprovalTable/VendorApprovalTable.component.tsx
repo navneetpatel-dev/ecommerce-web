@@ -8,6 +8,7 @@ import {
 import { LABELS } from "@/shared/constants/labels";
 import { useVendorApprovalTableColumns } from "../../../hooks/vendors/useVendorApprovalTableColumns.hook";
 import { VendorApprovalRowActions } from "./VendorApprovalRowActions.component";
+import { vendorsApi } from "@/features/vendors";
 
 interface Vendor {
   id: string;
@@ -42,6 +43,12 @@ export function VendorApprovalTable({
 
   const getRowId = useCallback((row: Vendor) => row.id, []);
 
+  const fetchRowDetail = useCallback(
+    async (row: Vendor) =>
+      (await vendorsApi.getById(row.id)) as unknown as Record<string, unknown>,
+    [],
+  );
+
   const renderActions = useCallback(
     (v: Vendor) => (
       <VendorApprovalRowActions
@@ -65,6 +72,7 @@ export function VendorApprovalTable({
       getRowId={getRowId}
       pagination={pagination}
       actions={renderActions}
+      fetchRowDetail={fetchRowDetail}
       tableId="admin-vendor-approvals"
       enableColumnVisibility
       enableDensityToggle

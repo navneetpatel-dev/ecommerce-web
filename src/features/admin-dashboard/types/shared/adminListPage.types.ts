@@ -12,4 +12,5 @@ export type AdminListPageModel = {
   load: AdminListLoadFn;
   actions?: (row: AdminDataRow, reload: () => void) => ReactNode;
   columnKeys?: string[];
+  fetchDetail?: (row: AdminDataRow) => Promise<Record<string, unknown>>;
 };

@@ -6,6 +6,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/shared/components/ui/dialog";
+import { Skeleton } from "@/shared/components/ui/skeleton";
 import { LABELS } from "@/shared/constants/labels";
 import type { Coupon, CouponAnalytics } from "@/shared/api/types";
 import { formatInr } from "@/shared/utils/formatting/orderFormat";
@@ -41,7 +42,17 @@ export function CouponsAnalyticsDialog({
           </DialogTitle>
         </DialogHeader>
         {loading ? (
-          <p className={styles.dialogTextMuted}>{LABELS.loading}</p>
+          <dl
+            className={styles.analyticsList}
+            data-testid="coupons-analytics-skeleton"
+          >
+            {[1, 2, 3, 4, 5].map((i) => (
+              <div key={i} className={styles.analyticsRow}>
+                <Skeleton className="h-4 w-32" />
+                <Skeleton className="h-4 w-20" />
+              </div>
+            ))}
+          </dl>
         ) : analytics ? (
           <dl className={styles.analyticsList}>
             <div className={styles.analyticsRow}>

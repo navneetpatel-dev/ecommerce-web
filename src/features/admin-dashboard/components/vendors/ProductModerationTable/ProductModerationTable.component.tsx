@@ -9,6 +9,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { useProductModerationTableColumns } from "../../../hooks/vendors/useProductModerationTableColumns.hook";
 import { ProductModerationRowActions } from "./ProductModerationRowActions.component";
 import { ProductModerationPreviewModal } from "./ProductModerationPreviewModal.component";
+import { productsApi } from "@/features/products";
 import type { ProductDetail } from "@/shared/api/types";
 
 export interface ProductModerationTableProps {
@@ -44,6 +45,12 @@ export function ProductModerationTable({
     setPreviewProduct(null);
   }, []);
 
+  const fetchRowDetail = useCallback(
+    async (row: ProductDetail) =>
+      (await productsApi.detail(row.id)) as unknown as Record<string, unknown>,
+    [],
+  );
+
   const renderActions = useCallback(
     (p: ProductDetail) => (
       <ProductModerationRowActions
@@ -68,6 +75,7 @@ export function ProductModerationTable({
         getRowId={getRowId}
         pagination={pagination}
         actions={renderActions}
+        fetchRowDetail={fetchRowDetail}
         tableId="admin-product-moderation"
         enableColumnVisibility
         enableDensityToggle

@@ -7,15 +7,19 @@ import { useVendorReturnPhotosCell } from "../../../hooks/returns/useVendorRetur
 import { vendorReturnsTableStyles } from "../../../styles/returns/vendorReturnsTable.styles";
 
 interface VendorReturnPhotosCellProps {
-  images: ProductImage[];
+  images?: ProductImage[];
   productName: string;
+  returnId?: string;
+  photoCount?: number;
 }
 
 export function VendorReturnPhotosCell({
-  images,
+  images = [],
   productName,
+  returnId,
+  photoCount = 0,
 }: VendorReturnPhotosCellProps) {
-  const photos = useVendorReturnPhotosCell(images);
+  const photos = useVendorReturnPhotosCell(images, returnId, photoCount);
 
   if (photos.isEmpty) {
     return <span>{LABELS.emptyCell}</span>;
@@ -33,10 +37,11 @@ export function VendorReturnPhotosCell({
       <ImageGalleryLightbox
         open={photos.open}
         onOpenChange={photos.handleOpenChange}
-        images={images}
+        images={photos.images}
         selectedIndex={photos.selectedIndex}
         onSelect={photos.handleSelect}
         productName={productName}
+        loading={photos.loading}
       />
     </>
   );

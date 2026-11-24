@@ -19,13 +19,14 @@ import { FloatingBulkActionBar } from "./FloatingBulkActionBar.component";
 import { RowDensityToggle } from "./RowDensityToggle.component";
 import { TableExportDropdown } from "./TableExportDropdown.component";
 import { useTableKeyboardNavigation } from "./hooks/useTableKeyboardNavigation.hook";
+import { useRowDetailFetcher } from "./hooks/useRowDetailFetcher.hook";
 import type {
   ColumnSortState,
   DataTableColumn,
   DataTableProps,
   TableDensity,
 } from "../../types/data-table/types";
-import { resolveCell, toDetailRecord } from "./utils.component";
+import { resolveCell } from "./utils.component";
 
 export function DataTable<T>({
   columns,
@@ -47,6 +48,7 @@ export function DataTable<T>({
   className,
   tableLayout = "auto",
   rowDetails = true,
+  fetchRowDetail,
   onRowClick,
   tableId,
   enableColumnVisibility = false,
@@ -68,7 +70,14 @@ export function DataTable<T>({
   onSortChange,
   enableFullscreen = true,
 }: DataTableProps<T>) {
-  const [detailRow, setDetailRow] = useState<T | null>(null);
+  const {
+    detailRow,
+    detailRecord,
+    isLoading: isDetailLoading,
+    error: detailError,
+    openRow: openDetailRow,
+    close: closeDetail,
+  } = useRowDetailFetcher({ fetchRowDetail, getRowId });
 
   // Density state
   const [internalDensity, setInternalDensity] =
@@ -313,10 +322,6 @@ export function DataTable<T>({
     onSelectionChange?.([]);
   };
 
-  const handleDetailOpenChange = (open: boolean) => {
-    if (!open) setDetailRow(null);
-  };
-
   const resolvedAriaLabel =
     ariaLabel ?? (typeof title === "string" ? title : undefined);
 
@@ -330,11 +335,8 @@ export function DataTable<T>({
   const rowsInteractive = Boolean(onRowClick) || rowDetails;
 
   const activateRow = (row: T, index: number) => {
-    if (onRowClick) {
-      onRowClick(row, index);
-      return;
-    }
-    if (rowDetails) setDetailRow(row);
+    if (onRowClick) onRowClick(row, index);
+    else if (rowDetails) openDetailRow(row, index);
   };
 
   const onRowKeyDown = (
@@ -525,8 +527,10 @@ export function DataTable<T>({
         {rowDetails ? (
           <RecordDetailDialog
             open={detailRow != null}
-            onOpenChange={handleDetailOpenChange}
-            record={detailRow ? toDetailRecord(detailRow) : null}
+            onOpenChange={(open) => !open && closeDetail()}
+            record={detailRecord}
+            loading={isDetailLoading}
+            error={detailError}
           />
         ) : null}
       </section>

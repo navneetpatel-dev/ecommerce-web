@@ -31,6 +31,7 @@ export function AdminOrdersPage() {
         actions={page.actions}
         columnKeys={page.columnKeys}
         onRowClick={handleRowClick}
+        fetchRowDetail={page.fetchDetail}
       />
       {selectedOrder ? (
         <AdminOrderDetailDrawer

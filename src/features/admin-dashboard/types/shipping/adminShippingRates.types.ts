@@ -1,0 +1,40 @@
+import type { FormEvent } from "react";
+import type { AdminListPageModel } from "../shared/adminListPage.types";
+import type { ShippingZoneOption } from "../../utils/shipping/ratesFilters.utils";
+
+export type AdminShippingRatesPageModel = AdminListPageModel & {
+  isCreateOpen: boolean;
+  setIsCreateOpen: (open: boolean) => void;
+  search: string;
+  setSearch: (value: string) => void;
+  zoneFilter: string;
+  setZoneFilter: (value: string) => void;
+  methodFilter: string;
+  setMethodFilter: (value: string) => void;
+  vendorFilter: string;
+  setVendorFilter: (value: string) => void;
+  zones: ShippingZoneOption[];
+  vendors: Array<{ id: string; name: string }>;
+  onClearFilters: () => void;
+  form: {
+    zoneId: string;
+    method: "STANDARD" | "EXPRESS";
+    minWeightGrams: string;
+    maxWeightGrams: string;
+    price: string;
+    estimatedDays: string;
+    freeShippingThreshold: string;
+    vendorId: string;
+    zones: ShippingZoneOption[];
+    createError: string | null;
+    onZoneIdChange: (value: string) => void;
+    onMethodChange: (value: "STANDARD" | "EXPRESS") => void;
+    onMinWeightGramsChange: (value: string) => void;
+    onMaxWeightGramsChange: (value: string) => void;
+    onPriceChange: (value: string) => void;
+    onEstimatedDaysChange: (value: string) => void;
+    onFreeShippingThresholdChange: (value: string) => void;
+    onVendorIdChange: (value: string) => void;
+    onSubmit: (e: FormEvent) => Promise<void>;
+  };
+};

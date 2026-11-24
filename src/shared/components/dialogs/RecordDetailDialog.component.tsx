@@ -3,6 +3,7 @@
 import { RecordDetailImage } from "@/shared/components/dialogs/RecordDetailImage.component";
 import { RecordDetailObjectView } from "@/shared/components/dialogs/RecordDetailObjectView.component";
 import { RecordDetailListView } from "@/shared/components/dialogs/RecordDetailListView.component";
+import { RecordDetailSkeleton } from "@/shared/components/dialogs/RecordDetailSkeleton.component";
 import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import {
   Dialog,
@@ -30,6 +31,8 @@ interface RecordDetailDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   record: Record<string, unknown> | null;
+  loading?: boolean;
+  error?: string | null;
 }
 
 function formatDetailValue(key: string, value: unknown, label: string) {
@@ -141,6 +144,8 @@ export function RecordDetailDialog({
   open,
   onOpenChange,
   record,
+  loading = false,
+  error = null,
 }: RecordDetailDialogProps) {
   const fields = record ? buildRecordDetailFields(record) : [];
   const title = record ? getRecordDetailTitle(record) : LABELS.recordDetails;
@@ -148,12 +153,21 @@ export function RecordDetailDialog({
   const fieldRows = fields.map((field) => (
     <RecordDetailField key={field.key} field={field} />
   ));
-  const detailContent = isEmpty ? (
+  const detailContent = loading ? (
+    <RecordDetailSkeleton />
+  ) : isEmpty ? (
     <p className={recordDetailDialogStyles.emptyText}>
       {LABELS.noDetailFields}
     </p>
   ) : (
-    <dl className={recordDetailDialogStyles.list}>{fieldRows}</dl>
+    <>
+      {error && (
+        <p className="text-xs text-amber-500 mb-2">
+          Showing cached summary ({error})
+        </p>
+      )}
+      <dl className={recordDetailDialogStyles.list}>{fieldRows}</dl>
+    </>
   );
 
   return (

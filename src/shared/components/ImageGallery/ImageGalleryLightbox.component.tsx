@@ -8,6 +8,7 @@ import {
   DialogTitle,
 } from "@/shared/components/ui/dialog";
 import { Button } from "@/shared/components/ui/button";
+import { Skeleton } from "@/shared/components/ui/skeleton";
 import { MediaImage } from "@/shared/components/media/MediaImage.component";
 import { ImageGalleryThumbnailStrip } from "@/shared/components/ImageGallery/ImageGalleryThumbnailStrip.component";
 import { LABELS } from "@/shared/constants/labels";
@@ -28,6 +29,7 @@ interface ImageGalleryLightboxProps {
   selectedIndex: number;
   onSelect: (index: number) => void;
   productName: string;
+  loading?: boolean;
 }
 
 export function ImageGalleryLightbox({
@@ -37,6 +39,7 @@ export function ImageGalleryLightbox({
   selectedIndex,
   onSelect,
   productName,
+  loading = false,
 }: ImageGalleryLightboxProps) {
   const count = images.length;
   const safeIndex = Math.min(
@@ -111,16 +114,22 @@ export function ImageGalleryLightbox({
                 transform: `translate3d(${transform.x}px, ${transform.y}px, 0) scale(${transform.scale})`,
               }}
             >
-              <div className={imageLightboxStyles.imageWrapper}>
-                <MediaImage
-                  src={current?.url}
-                  alt={productName}
-                  unavailableLabel={LABELS.imageNotAvailable}
-                  sizes={IMAGE_GALLERY_LIGHTBOX_SIZES}
-                  quality={IMAGE_GALLERY_LIGHTBOX_QUALITY}
-                  imageClassName={imageLightboxStyles.imageFit}
-                />
-              </div>
+              {loading ? (
+                <div className="flex items-center justify-center p-8">
+                  <Skeleton className="h-[55vh] w-[70vw] max-w-2xl rounded-lg animate-pulse" />
+                </div>
+              ) : (
+                <div className={imageLightboxStyles.imageWrapper}>
+                  <MediaImage
+                    src={current?.url}
+                    alt={productName}
+                    unavailableLabel={LABELS.imageNotAvailable}
+                    sizes={IMAGE_GALLERY_LIGHTBOX_SIZES}
+                    quality={IMAGE_GALLERY_LIGHTBOX_QUALITY}
+                    imageClassName={imageLightboxStyles.imageFit}
+                  />
+                </div>
+              )}
             </div>
 
             {hasMultiple ? (

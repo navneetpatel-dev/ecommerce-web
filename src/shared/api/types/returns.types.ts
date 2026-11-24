@@ -19,6 +19,7 @@ export interface ReturnRequest {
   rejectionReason?: string | null;
   replacementDeliveredAt?: string | null;
   photoUrls?: string[];
+  photoCount?: number;
   refundMethod?: RefundMethod | null;
   refundStatus?: RefundStatus;
   refundCustomerMessage?: string | null;

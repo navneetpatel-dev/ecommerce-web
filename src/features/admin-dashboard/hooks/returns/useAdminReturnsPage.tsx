@@ -41,11 +41,21 @@ export function useAdminReturnsPage(): AdminReturnsPageModel {
     [],
   );
 
+  const fetchDetail = useCallback(
+    async (row: AdminDataRow) =>
+      (await returnsApi.get(String(row.id))) as unknown as Record<
+        string,
+        unknown
+      >,
+    [],
+  );
+
   return {
     title: LABELS.returnsRefunds,
     permission: PERMISSIONS.ORDER_REFUND,
     load,
     actions,
+    fetchDetail,
     columnKeys: [
       "returnReference",
       "orderReference",

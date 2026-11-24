@@ -18,6 +18,7 @@ import { formatDateTime } from "@/shared/utils/formatting/formatDate";
 import { ordersApi, ordersKeys } from "@/features/orders";
 import type { Order } from "@/shared/api/types";
 import { AdminOrderPriceSummary } from "./AdminOrderPriceSummary.component";
+import { AdminOrderDetailDrawerSkeleton } from "./AdminOrderDetailDrawerSkeleton.component";
 
 interface AdminOrderDetailDrawerProps {
   order: Order | null;
@@ -65,89 +66,95 @@ export function AdminOrderDetailDrawer({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-5 py-2">
-          {address && (
-            <div className="rounded-lg border border-line bg-paper/40 p-4">
-              <h4 className="text-body-sm font-semibold text-ink">
-                {LABELS.addressFormSection}
-              </h4>
-              <p className="mt-1 text-body-sm font-medium text-ink">
-                {address.recipientName ?? "—"}
-              </p>
-              {address.recipientPhone && (
-                <p className="text-body-xs text-ink-muted">
-                  {address.recipientPhone}
+        {detailQuery.isLoading ? (
+          <AdminOrderDetailDrawerSkeleton />
+        ) : (
+          <div className="space-y-5 py-2">
+            {address && (
+              <div className="rounded-lg border border-line bg-paper/40 p-4">
+                <h4 className="text-body-sm font-semibold text-ink">
+                  {LABELS.addressFormSection}
+                </h4>
+                <p className="mt-1 text-body-sm font-medium text-ink">
+                  {address.recipientName ?? "—"}
                 </p>
-              )}
-              <p className="mt-1 text-body-sm text-ink-muted">
-                {[
-                  address.line1,
-                  address.line2,
-                  address.city,
-                  address.state,
-                  address.pincode,
-                ]
-                  .filter(Boolean)
-                  .join(", ")}
-              </p>
-            </div>
-          )}
-
-          <div className="space-y-3">
-            <h4 className="text-body-sm font-semibold text-ink">
-              {LABELS.ordersColumnItems}
-            </h4>
-            {subOrders.map((sub) => (
-              <div
-                key={sub.id}
-                className="rounded-lg border border-line bg-surface p-3 space-y-2"
-              >
-                <div className="flex items-center justify-between text-body-xs font-medium text-ink-muted border-b border-line/50 pb-1.5">
-                  <span>{sub.vendor?.businessName ?? "Vendor"}</span>
-                  <Badge variant="outline" className="text-[10px]">
-                    {sub.status}
-                  </Badge>
-                </div>
-                <div className="divide-y divide-line/40">
-                  {sub.items?.map((item) => (
-                    <div
-                      key={item.id}
-                      className="flex items-center justify-between gap-3 py-2 text-body-sm"
-                    >
-                      <div className="flex items-center gap-3 min-w-0 flex-1">
-                        {item.imageUrl && (
-                          <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded border border-line bg-paper">
-                            <Image
-                              src={item.imageUrl}
-                              alt={item.productName}
-                              fill
-                              sizes="40px"
-                              className="object-cover"
-                            />
-                          </div>
-                        )}
-                        <div className="min-w-0 flex-1">
-                          <p className="truncate font-medium text-ink">
-                            {item.productName}
-                          </p>
-                          <p className="text-body-xs text-ink-muted">
-                            {LABELS.quantity}: {item.quantity} ×{" "}
-                            {formatInr(item.displayUnitPrice ?? item.unitPrice)}
-                          </p>
-                        </div>
-                      </div>
-                      <span className="font-semibold text-ink shrink-0">
-                        {formatInr(item.lineTotal)}
-                      </span>
-                    </div>
-                  ))}
-                </div>
+                {address.recipientPhone && (
+                  <p className="text-body-xs text-ink-muted">
+                    {address.recipientPhone}
+                  </p>
+                )}
+                <p className="mt-1 text-body-sm text-ink-muted">
+                  {[
+                    address.line1,
+                    address.line2,
+                    address.city,
+                    address.state,
+                    address.pincode,
+                  ]
+                    .filter(Boolean)
+                    .join(", ")}
+                </p>
               </div>
-            ))}
-          </div>
+            )}
 
-          <AdminOrderPriceSummary order={active} />
-        </div>
+            <div className="space-y-3">
+              <h4 className="text-body-sm font-semibold text-ink">
+                {LABELS.ordersColumnItems}
+              </h4>
+              {subOrders.map((sub) => (
+                <div
+                  key={sub.id}
+                  className="rounded-lg border border-line bg-surface p-3 space-y-2"
+                >
+                  <div className="flex items-center justify-between text-body-xs font-medium text-ink-muted border-b border-line/50 pb-1.5">
+                    <span>{sub.vendor?.businessName ?? "Vendor"}</span>
+                    <Badge variant="outline" className="text-[10px]">
+                      {sub.status}
+                    </Badge>
+                  </div>
+                  <div className="divide-y divide-line/40">
+                    {sub.items?.map((item) => (
+                      <div
+                        key={item.id}
+                        className="flex items-center justify-between gap-3 py-2 text-body-sm"
+                      >
+                        <div className="flex items-center gap-3 min-w-0 flex-1">
+                          {item.imageUrl && (
+                            <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded border border-line bg-paper">
+                              <Image
+                                src={item.imageUrl}
+                                alt={item.productName}
+                                fill
+                                sizes="40px"
+                                className="object-cover"
+                              />
+                            </div>
+                          )}
+                          <div className="min-w-0 flex-1">
+                            <p className="truncate font-medium text-ink">
+                              {item.productName}
+                            </p>
+                            <p className="text-body-xs text-ink-muted">
+                              {LABELS.quantity}: {item.quantity} ×{" "}
+                              {formatInr(
+                                item.displayUnitPrice ?? item.unitPrice,
+                              )}
+                            </p>
+                          </div>
+                        </div>
+                        <span className="font-semibold text-ink shrink-0">
+                          {formatInr(item.lineTotal)}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <AdminOrderPriceSummary order={active} />
+          </div>
+        )}
 
         <DialogFooter className="border-t border-line/60 pt-4">
           <Button type="button" variant="outline" size="sm" onClick={onClose}>

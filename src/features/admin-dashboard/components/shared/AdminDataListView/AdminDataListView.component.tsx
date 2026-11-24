@@ -23,6 +23,7 @@ export interface AdminDataListViewProps {
   columnKeys?: string[];
   titleLevel?: 1 | 2;
   onRowClick?: (row: AdminDataRow) => void;
+  fetchRowDetail?: (row: AdminDataRow) => Promise<Record<string, unknown>>;
 }
 
 export function AdminDataListView({
@@ -42,6 +43,7 @@ export function AdminDataListView({
   columnKeys,
   titleLevel,
   onRowClick,
+  fetchRowDetail,
 }: AdminDataListViewProps) {
   const { columns, getRowId, renderActions } = useAdminDataListView(
     rows,
@@ -67,6 +69,7 @@ export function AdminDataListView({
       pagination={paginationConfig}
       actions={renderActions}
       onRowClick={onRowClick}
+      fetchRowDetail={fetchRowDetail}
       tableId={`admin-${title.toLowerCase().replace(/\s+/g, "-")}`}
       enableColumnVisibility
       enableDensityToggle

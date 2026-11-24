@@ -11,6 +11,7 @@ import {
   type DataTablePaginationProps,
 } from "@/shared/components/DataTable";
 import { LABELS } from "@/shared/constants/labels";
+import { categoriesApi } from "@/features/categories";
 import { useCategoriesReorder } from "../../../hooks/categories/useCategoriesReorder.hook";
 import type { Category } from "@/shared/api/types";
 import { categoriesTableStyles } from "../../../styles/categories/categoriesTable.styles";
@@ -62,6 +63,15 @@ export function CategoriesTable({
 
   const getRowId = useCallback((row: Category) => row.id, []);
 
+  const fetchRowDetail = useCallback(
+    async (row: Category) =>
+      (await categoriesApi.detail(row.id)) as unknown as Record<
+        string,
+        unknown
+      >,
+    [],
+  );
+
   const hasFilters = Boolean(search || status);
 
   return (
@@ -103,6 +113,7 @@ export function CategoriesTable({
             getRowId={getRowId}
             pagination={pagination}
             actions={actions}
+            fetchRowDetail={fetchRowDetail}
           />
         </SortableContext>
       </DndContext>

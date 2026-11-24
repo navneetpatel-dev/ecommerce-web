@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
+import { useQuery } from "@tanstack/react-query";
 import {
   Dialog,
   DialogContent,
@@ -17,6 +17,8 @@ import type { ProductDetail } from "@/shared/api/types";
 import { AdminConfirmAction } from "../../shared/AdminConfirmAction.component";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { ProductModerationSpecs } from "./ProductModerationSpecs.component";
+import { ProductModerationGallery } from "./ProductModerationGallery.component";
+import { productsApi } from "@/features/products";
 
 interface ProductModerationPreviewModalProps {
   product: ProductDetail | null;
@@ -35,6 +37,12 @@ export function ProductModerationPreviewModal({
 }: ProductModerationPreviewModalProps) {
   const [activeImageIdx, setActiveImageIdx] = useState(0);
 
+  const detailQuery = useQuery({
+    queryKey: ["products", "detail", product?.id],
+    queryFn: () => productsApi.detail(product!.id),
+    enabled: Boolean(product?.id),
+  });
+
   if (!product) return null;
 
   const handleOpenChange = (open: boolean) => {
@@ -51,24 +59,24 @@ export function ProductModerationPreviewModal({
     onClose();
   };
 
-  const vendorName = product.vendor?.businessName || "—";
-  const categoryName = product.category?.name || product.categoryName || "—";
+  const active = detailQuery.data ?? product;
+  const vendorName = active.vendor?.businessName || "—";
+  const categoryName = active.category?.name || active.categoryName || "—";
 
   const allImages: string[] = [];
-  if (product.imageUrl) allImages.push(product.imageUrl);
-  if (Array.isArray(product.images)) {
-    for (const img of product.images) {
+  if (active.imageUrl) allImages.push(active.imageUrl);
+  if (Array.isArray(active.images)) {
+    for (const img of active.images) {
       const url = typeof img === "string" ? img : img?.url;
       if (url && !allImages.includes(url)) allImages.push(url);
     }
   }
 
-  const currentImage = allImages[activeImageIdx] || allImages[0];
   const approveDesc = formatLabel(LABELS.confirmApproveProductBody, {
-    name: product.name,
+    name: active.name,
   });
   const rejectDesc = formatLabel(LABELS.confirmRejectProductBody, {
-    name: product.name,
+    name: active.name,
   });
 
   return (
@@ -76,7 +84,7 @@ export function ProductModerationPreviewModal({
       <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-heading-sm font-semibold text-ink">
-            {product.name}
+            {active.name}
           </DialogTitle>
           <DialogDescription className="text-body-sm text-ink-muted">
             {LABELS.productPreviewTitle}
@@ -84,44 +92,13 @@ export function ProductModerationPreviewModal({
         </DialogHeader>
 
         <div className="space-y-4 py-2">
-          {currentImage && (
-            <div className="space-y-2">
-              <div className="relative aspect-video w-full overflow-hidden rounded-md border border-line bg-paper">
-                <Image
-                  src={currentImage}
-                  alt={product.name}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 600px"
-                  className="object-contain"
-                />
-              </div>
-
-              {allImages.length > 1 && (
-                <div className="flex flex-wrap gap-2 pt-1">
-                  {allImages.map((imgUrl, idx) => (
-                    <button
-                      key={imgUrl}
-                      type="button"
-                      onClick={() => setActiveImageIdx(idx)}
-                      className={`relative h-14 w-14 overflow-hidden rounded border transition-all ${
-                        activeImageIdx === idx
-                          ? "border-brand ring-2 ring-brand/30"
-                          : "border-line opacity-75 hover:opacity-100"
-                      }`}
-                    >
-                      <Image
-                        src={imgUrl}
-                        alt={`Photo ${idx + 1}`}
-                        fill
-                        sizes="56px"
-                        className="object-cover"
-                      />
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
+          <ProductModerationGallery
+            images={allImages}
+            activeIdx={activeImageIdx}
+            productName={active.name}
+            loading={detailQuery.isLoading}
+            onSelectIdx={setActiveImageIdx}
+          />
 
           <div className="grid grid-cols-2 gap-4 rounded-md border border-line/60 bg-paper/40 p-3 text-body-sm">
             <div>
@@ -141,23 +118,23 @@ export function ProductModerationPreviewModal({
                 {LABELS.productPreviewPricing}:
               </span>{" "}
               <span className="font-semibold text-ink">
-                {formatInr(product.basePrice)}
+                {formatInr(active.basePrice)}
               </span>
             </div>
           </div>
 
-          {product.description && (
+          {active.description && (
             <div className="space-y-1">
               <h4 className="text-body-sm font-semibold text-ink">
                 {LABELS.productPreviewDescription}
               </h4>
               <p className="whitespace-pre-line text-body-sm text-ink-muted">
-                {product.description}
+                {active.description}
               </p>
             </div>
           )}
 
-          <ProductModerationSpecs specs={product.specs} />
+          <ProductModerationSpecs specs={active.specs} />
         </div>
 
         <DialogFooter className="flex-wrap items-center justify-between gap-2 border-t border-line/60 pt-4">

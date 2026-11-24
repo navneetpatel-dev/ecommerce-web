@@ -1,9 +1,14 @@
+import Link from "next/link";
 import { Button } from "@/shared/components/ui/button";
 import { FormError } from "@/shared/components/forms/FormError.component";
 import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import { LABELS } from "@/shared/constants/labels";
-import { formatOrderDate } from "@/shared/utils/formatting/orderFormat";
+import { PATHS } from "@/shared/constants/paths/paths";
+import {
+  formatOrderDate,
+  shortOrderId,
+} from "@/shared/utils/formatting/orderFormat";
 import type { SupportTicket } from "../../../api/list/supportTickets.api";
 import {
   TICKET_CATEGORY_LABEL,
@@ -93,7 +98,20 @@ export function TicketDetailsPanel(props: TicketDetailsPanelProps) {
           {ticket.relatedOrderId ? (
             <div className={styles.row}>
               <dt className={styles.label}>{LABELS.ticketOrderSection}</dt>
-              <dd className={styles.valTruncated}>{LABELS.orderDetails}</dd>
+              <dd className={styles.valTruncated}>
+                <Link
+                  href={
+                    mode === "admin"
+                      ? PATHS.admin.orders
+                      : mode === "vendor"
+                        ? PATHS.vendor.orders
+                        : PATHS.order(ticket.relatedOrderId)
+                  }
+                  className="font-medium text-brand hover:underline"
+                >
+                  #{shortOrderId(ticket.relatedOrderId)}
+                </Link>
+              </dd>
             </div>
           ) : null}
         </dl>

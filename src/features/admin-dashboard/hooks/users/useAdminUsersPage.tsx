@@ -121,11 +121,21 @@ export function useAdminUsersPage(): AdminUsersPageModel {
     [currentUserId],
   );
 
+  const fetchDetail = useCallback(
+    async (row: AdminDataRow) =>
+      (await adminUsersApi.getById(String(row.id))) as unknown as Record<
+        string,
+        unknown
+      >,
+    [],
+  );
+
   return {
     title: LABELS.users,
     permission: PERMISSIONS.USER_MANAGE,
     load,
     actions,
+    fetchDetail,
     columnKeys: ["name", "email", "status", "role"],
     filters: {
       search,

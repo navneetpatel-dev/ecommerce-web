@@ -17,6 +17,7 @@ export function AdminUsersPage() {
         load={page.load}
         actions={page.actions}
         columnKeys={page.columnKeys}
+        fetchRowDetail={page.fetchDetail}
       />
     </div>
   );

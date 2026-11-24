@@ -46,7 +46,6 @@ export function useAdminOrdersPage(
   useEffect(() => {
     const nextSearch = searchParams.get("search") ?? "";
     const nextStatus = searchParams.get("status") ?? "";
-     
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setSearch((prev) =>
       prev.trim() !== nextSearch.trim() ? nextSearch : prev,
@@ -83,6 +82,15 @@ export function useAdminOrdersPage(
     setStatus("");
     update({ search: undefined, status: undefined });
   }, [update]);
+
+  const fetchDetail = useCallback(
+    async (row: AdminDataRow) =>
+      (await ordersApi.detail(String(row.id))) as unknown as Record<
+        string,
+        unknown
+      >,
+    [],
+  );
   const actions = useCallback(
     (row: AdminDataRow, reload: () => void): ReactNode => {
       const name = adminRowLabel(row);
@@ -138,6 +146,7 @@ export function useAdminOrdersPage(
     permission: PERMISSIONS.ORDER_MANAGE,
     load,
     actions,
+    fetchDetail,
     columnKeys: [
       "orderReference",
       "customerName",

@@ -7,6 +7,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/shared/components/ui/dialog";
+import { Skeleton } from "@/shared/components/ui/skeleton";
 import { FileUpload } from "@/shared/components/FileUpload";
 import { FormSection } from "@/shared/components/forms";
 import { LABELS } from "@/shared/constants/labels";
@@ -81,9 +82,10 @@ export function VendorProductImagesDialog({
         </DialogHeader>
 
         {loading ? (
-          <p className={vendorProductImagesDialogStyles.loadingText}>
-            {LABELS.loading}
-          </p>
+          <div className="space-y-3 py-2" data-testid="product-images-skeleton">
+            <Skeleton className="h-16 w-full rounded-md" />
+            <Skeleton className="h-16 w-full rounded-md" />
+          </div>
         ) : null}
         {error ? (
           <p role="alert" className={vendorProductImagesDialogStyles.errorText}>

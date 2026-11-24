@@ -21,6 +21,7 @@ interface AdminDataPageProps {
   hideTitle?: boolean;
   titleLevel?: 1 | 2;
   onRowClick?: (row: AdminDataRow) => void;
+  fetchRowDetail?: (row: AdminDataRow) => Promise<Record<string, unknown>>;
 }
 
 export function AdminDataPage({
@@ -32,6 +33,7 @@ export function AdminDataPage({
   hideTitle = false,
   titleLevel,
   onRowClick,
+  fetchRowDetail,
 }: AdminDataPageProps) {
   const stableLoad = useCallback<AdminListLoadFn>(
     (params) => load(params),
@@ -59,6 +61,7 @@ export function AdminDataPage({
         actions={actions}
         columnKeys={columnKeys}
         onRowClick={onRowClick}
+        fetchRowDetail={fetchRowDetail}
       />
     </RequirePermission>
   );

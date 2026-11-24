@@ -15,6 +15,7 @@ export interface VendorReturnRowViewModel {
   status: string;
   statusLabel: string;
   images: ProductImage[];
+  photoCount: number;
   /** Picked up and not yet put back in stock: the vendor may restock it. */
   canRestock: boolean;
   restocked: boolean;
@@ -61,6 +62,7 @@ export function useVendorReturnsTablePresentation(returns: ReturnRequest[]) {
           status: row.status,
           statusLabel: RETURN_STATUS_LABEL[row.status] ?? row.status,
           images: imagesFor(row),
+          photoCount: row.photoCount ?? row.photoUrls?.length ?? 0,
           canRestock:
             Boolean(row.receivedAt) && !row.restockedAt && !row.disputedAt,
           restocked: Boolean(row.restockedAt),

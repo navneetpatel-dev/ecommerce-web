@@ -35,6 +35,8 @@ export function VendorReturnCard({ row }: VendorReturnCardProps) {
       <div className={vendorReturnsTableStyles.mobileCardPhotos}>
         <VendorReturnPhotosCell
           images={row.images}
+          returnId={row.id}
+          photoCount={row.photoCount}
           productName={row.productLabel}
         />
       </div>

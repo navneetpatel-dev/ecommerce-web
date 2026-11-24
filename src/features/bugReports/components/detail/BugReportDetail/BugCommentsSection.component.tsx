@@ -1,6 +1,7 @@
 import { type ChangeEvent } from "react";
 import { Avatar, AvatarFallback } from "@/shared/components/ui/avatar";
 import { Button } from "@/shared/components/ui/button";
+import { Skeleton } from "@/shared/components/ui/skeleton";
 import { FormError } from "@/shared/components/forms/FormError.component";
 import { FormFieldFrame } from "@/shared/components/forms";
 import { Textarea } from "@/shared/components/ui/textarea";
@@ -46,7 +47,24 @@ export function BugCommentsSection(props: BugCommentsSectionProps) {
       </div>
 
       <div className={bugReportPanelsStyles.panelBodyPadded}>
-        {props.comments.length === 0 ? (
+        {props.isLoading && props.comments.length === 0 ? (
+          <div className="space-y-3 py-2" data-testid="bug-comments-skeleton">
+            <div className="flex gap-3 items-center">
+              <Skeleton className="h-8 w-8 rounded-full shrink-0" />
+              <div className="flex-1 space-y-1.5">
+                <Skeleton className="h-3 w-32" />
+                <Skeleton className="h-4 w-3/4" />
+              </div>
+            </div>
+            <div className="flex gap-3 items-center">
+              <Skeleton className="h-8 w-8 rounded-full shrink-0" />
+              <div className="flex-1 space-y-1.5">
+                <Skeleton className="h-3 w-28" />
+                <Skeleton className="h-4 w-1/2" />
+              </div>
+            </div>
+          </div>
+        ) : props.comments.length === 0 ? (
           <p className={bugReportPanelsStyles.commentsEmpty}>
             {LABELS.bugNoCommentsYet}
           </p>

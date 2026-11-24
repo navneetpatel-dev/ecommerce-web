@@ -86,12 +86,22 @@ export function useAdminProductsPage(): AdminProductsPageModel {
     [],
   );
 
+  const fetchDetail = useCallback(
+    async (row: AdminDataRow) =>
+      (await productsApi.detail(String(row.id))) as unknown as Record<
+        string,
+        unknown
+      >,
+    [],
+  );
+
   return {
     approvePermission: PERMISSIONS.PRODUCT_APPROVE,
     title: LABELS.products,
     permission: PERMISSIONS.PRODUCT_MANAGE,
     load,
     actions,
+    fetchDetail,
     columnKeys: ["name", "vendorName", "categoryName", "status", "basePrice"],
     showApprovalQueue: hasPermission(PERMISSIONS.PRODUCT_APPROVE),
     pendingCount: pendingProducts?.total ?? 0,

@@ -10,6 +10,7 @@ import { useDebouncedValue } from "@/shared/hooks/ui/use-debounce.hook";
 import { adminApi } from "../../api/analytics/admin.api";
 import { usePendingVendors } from "../../api/analytics/admin.queries";
 import { usePermissions } from "@/shared/hooks/auth/usePermissions.hook";
+import { vendorsApi } from "@/features/vendors";
 import { renderVendorRowActions } from "../../components/vendors/VendorRowActions.component";
 import type { AdminVendorsFiltersProps } from "../../components/vendors/AdminVendorsFilters.component";
 import type { AdminDataRow } from "../shared/useAdminDataList.hook";
@@ -49,12 +50,22 @@ export function useAdminVendorsPage(): AdminVendorsPageModel {
     return renderVendorRowActions({ row, onReload: reload });
   }, []);
 
+  const fetchDetail = useCallback(
+    async (row: AdminDataRow) =>
+      (await vendorsApi.getById(String(row.id))) as unknown as Record<
+        string,
+        unknown
+      >,
+    [],
+  );
+
   return {
     gatePermission: [PERMISSIONS.VENDOR_MANAGE, PERMISSIONS.VENDOR_APPROVE],
     title: LABELS.vendors,
     permission: [PERMISSIONS.VENDOR_MANAGE, PERMISSIONS.VENDOR_APPROVE],
     load,
     actions,
+    fetchDetail,
     columnKeys: [
       "businessName",
       "slug",

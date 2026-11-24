@@ -22,6 +22,7 @@ export function AdminVendorsPage() {
         actions={page.actions}
         columnKeys={page.columnKeys}
         hideTitle={page.showApprovalQueue}
+        fetchRowDetail={page.fetchDetail}
       />
     </div>
   );

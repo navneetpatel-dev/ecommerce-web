@@ -7,6 +7,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/shared/components/ui/dialog";
+import { Skeleton } from "@/shared/components/ui/skeleton";
 import { LABELS } from "@/shared/constants/labels";
 import { KycChecklistItems } from "./KycChecklistItems.component";
 import { KycConfirmDialogs } from "./KycConfirmDialogs.component";
@@ -51,7 +52,11 @@ export function VendorKycDocumentsDialog({
   }`;
 
   const loadingText = loading ? (
-    <p className={styles.loadingText}>{LABELS.loading}</p>
+    <div className="space-y-3 py-2" data-testid="kyc-loading-skeleton">
+      <Skeleton className="h-14 w-full rounded-md" />
+      <Skeleton className="h-14 w-full rounded-md" />
+      <Skeleton className="h-14 w-full rounded-md" />
+    </div>
   ) : null;
 
   const errorText =
