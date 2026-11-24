@@ -67,6 +67,11 @@ export function useVendorProductsListView(options: {
   const tableViewProps = {
     search: table.search,
     status: table.status,
+    categoryId: table.categoryId,
+    inStock: table.inStock,
+    minPrice: table.minPrice,
+    maxPrice: table.maxPrice,
+    sort: table.sort,
     isLoading: table.isLoading,
     products,
     page: table.page,
@@ -77,23 +82,26 @@ export function useVendorProductsListView(options: {
     actionMessage: table.actionMessage,
     onSearchChange: table.handleSearchChange,
     onStatusChange: table.handleStatusChange,
+    onCategoryChange: table.handleCategoryChange,
+    onInStockChange: table.handleInStockChange,
+    onMinPriceChange: table.handleMinPriceChange,
+    onMaxPriceChange: table.handleMaxPriceChange,
+    onSortChange: table.handleSortChange,
     onClear: table.handleClear,
     onPageChange: table.setPage,
     onAddProduct: canCreate ? () => openCreate() : undefined,
-    onEditProduct: canEdit
-      ? (product: { id: string }) => openEdit(product.id)
-      : undefined,
+    onEditProduct: canEdit ? (p: { id: string }) => openEdit(p.id) : undefined,
     onDeleteProduct: canDelete
-      ? (product: { id: string; name: string }) =>
-          table.setDeleteTarget({ id: product.id, name: product.name })
+      ? (p: { id: string; name: string }) =>
+          table.setDeleteTarget({ id: p.id, name: p.name })
       : undefined,
     onSubmitForApproval: canEdit
-      ? (product: { id: string }) => table.submitForApproval(product.id)
+      ? (p: { id: string }) => table.submitForApproval(p.id)
       : undefined,
     onManageImages: canEdit
-      ? (product: { id: string; name: string }) =>
+      ? (p: { id: string; name: string }) =>
           setQuery({
-            [QUERY_PARAMS.images]: product.id,
+            [QUERY_PARAMS.images]: p.id,
             [QUERY_PARAMS.create]: null,
             [QUERY_PARAMS.edit]: null,
           })

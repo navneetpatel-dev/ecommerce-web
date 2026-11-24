@@ -2,7 +2,15 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuthStore } from "@/shared/stores/auth/auth.store";
 import { vendorApi } from "./vendor.api";
 
-export type VendorProductFilters = { status?: string; search?: string };
+export type VendorProductFilters = {
+  status?: string;
+  search?: string;
+  categoryId?: string;
+  inStock?: boolean;
+  minPrice?: number;
+  maxPrice?: number;
+  sort?: string;
+};
 
 export const vendorKeys = {
   all: ["vendor"] as const,

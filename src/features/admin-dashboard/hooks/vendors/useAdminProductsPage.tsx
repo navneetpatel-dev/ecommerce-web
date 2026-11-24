@@ -30,14 +30,24 @@ export function useAdminProductsPage(): AdminProductsPageModel {
   const { hasPermission } = usePermissions();
   const { data: pendingProducts } = usePendingProducts();
   const searchParams = useSearchParams();
-  const paramSearch = searchParams.get("search") ?? searchParams.get("q") ?? "";
-  const paramStatus = searchParams.get("status") ?? "";
 
-  const [userSearch, setUserSearch] = useState<string | null>(null);
-  const [userStatus, setUserStatus] = useState<string | null>(null);
+  const [userFilters, setUserFilters] = useState<
+    Partial<Record<string, string>>
+  >({});
+  const get = (k: string, alt?: string) =>
+    userFilters[k] ??
+    searchParams.get(k) ??
+    (alt ? searchParams.get(alt) : null) ??
+    "";
 
-  const search = userSearch ?? paramSearch;
-  const status = userStatus ?? paramStatus;
+  const search = get("search", "q");
+  const status = get("status");
+  const categoryId = get("categoryId");
+  const vendorId = get("vendorId");
+  const inStock = get("inStock");
+  const minPrice = get("minPrice");
+  const maxPrice = get("maxPrice");
+  const sort = get("sort");
   const debouncedSearch = useDebouncedValue(search.trim(), 350);
 
   const load = useCallback(
@@ -47,13 +57,40 @@ export function useAdminProductsPage(): AdminProductsPageModel {
         limit,
         search: debouncedSearch || undefined,
         status: status || undefined,
+        categoryId: categoryId || undefined,
+        vendorId: vendorId || undefined,
+        inStock:
+          inStock === "true" || inStock === "in_stock" ? true : undefined,
+        minPrice: minPrice ? Number(minPrice) : undefined,
+        maxPrice: maxPrice ? Number(maxPrice) : undefined,
+        sort: sort || undefined,
       }),
-    [debouncedSearch, status],
+    [
+      debouncedSearch,
+      status,
+      categoryId,
+      vendorId,
+      inStock,
+      minPrice,
+      maxPrice,
+      sort,
+    ],
   );
 
+  const setFilter = (key: string) => (val: string) =>
+    setUserFilters((prev) => ({ ...prev, [key]: val }));
+
   const onClear = useCallback(() => {
-    setUserSearch("");
-    setUserStatus("");
+    setUserFilters({
+      search: "",
+      status: "",
+      categoryId: "",
+      vendorId: "",
+      inStock: "",
+      minPrice: "",
+      maxPrice: "",
+      sort: "",
+    });
   }, []);
 
   const actions = useCallback(
@@ -116,8 +153,20 @@ export function useAdminProductsPage(): AdminProductsPageModel {
     filters: {
       search,
       status,
-      onSearchChange: setUserSearch,
-      onStatusChange: setUserStatus,
+      categoryId,
+      vendorId,
+      inStock,
+      minPrice,
+      maxPrice,
+      sort,
+      onSearchChange: setFilter("search"),
+      onStatusChange: setFilter("status"),
+      onCategoryChange: setFilter("categoryId"),
+      onVendorChange: setFilter("vendorId"),
+      onInStockChange: setFilter("inStock"),
+      onMinPriceChange: setFilter("minPrice"),
+      onMaxPriceChange: setFilter("maxPrice"),
+      onSortChange: setFilter("sort"),
       onClear,
     },
   };

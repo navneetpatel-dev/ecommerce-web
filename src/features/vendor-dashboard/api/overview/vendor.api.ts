@@ -63,13 +63,26 @@ export const vendorApi = {
   products: (
     vendorId: string,
     page = 1,
-    filters?: { status?: string; search?: string },
+    filters?: {
+      status?: string;
+      search?: string;
+      categoryId?: string;
+      inStock?: boolean;
+      minPrice?: number;
+      maxPrice?: number;
+      sort?: string;
+    },
   ) =>
     productsApi.list({
       vendorId,
       page,
       status: filters?.status,
       search: filters?.search,
+      categoryId: filters?.categoryId,
+      inStock: filters?.inStock,
+      minPrice: filters?.minPrice,
+      maxPrice: filters?.maxPrice,
+      sort: filters?.sort,
     }),
   commissions: (page = 1): Promise<PaginatedList<CommissionLedgerEntry>> =>
     commissionsApi.list({ page }),

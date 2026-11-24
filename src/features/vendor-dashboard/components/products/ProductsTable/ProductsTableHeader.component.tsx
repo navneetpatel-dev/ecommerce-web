@@ -16,10 +16,26 @@ import { Plus } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
 import { PRODUCT_STATUS } from "@/shared/constants/statuses";
 import { formatStatusLabel } from "@/shared/utils/formatting/formatStatus";
+import { useCategories } from "@/features/categories";
 import type { ProductsTableHeaderProps } from "../../../types/products/ProductsTable-types";
 import { productsTableHeaderStyles as styles } from "../../../styles/products/productsTable.styles";
 
-const ALL_STATUSES = "__ALL__";
+const ALL_OPTION = "__ALL__";
+
+const SORT_OPTIONS = [
+  { value: ALL_OPTION, label: "Default Sort" },
+  { value: "newest", label: "Newest First" },
+  { value: "price_asc", label: "Price: Low to High" },
+  { value: "price_desc", label: "Price: High to Low" },
+  { value: "rating", label: "Top Rated" },
+  { value: "trending", label: "Trending / Popular" },
+];
+
+const STOCK_OPTIONS = [
+  { value: ALL_OPTION, label: "All Inventory" },
+  { value: "in_stock", label: "In Stock Only" },
+  { value: "out_of_stock", label: "Out of Stock" },
+];
 
 export function ProductsTableHeader(props: ProductsTableHeaderProps) {
   const {
@@ -27,27 +43,34 @@ export function ProductsTableHeader(props: ProductsTableHeaderProps) {
     onSearchChange,
     status,
     onStatusChange,
+    categoryId = "",
+    onCategoryChange,
+    inStock = "",
+    onInStockChange,
+    minPrice = "",
+    onMinPriceChange,
+    maxPrice = "",
+    onMaxPriceChange,
+    sort = "",
+    onSortChange,
     onClear,
     onAddProduct,
   } = props;
 
-  const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) =>
-    onSearchChange(event.target.value);
+  const { data: categories } = useCategories();
 
-  const handleStatusChange = (val: string) => {
-    if (onStatusChange) {
-      onStatusChange(val === ALL_STATUSES ? "" : val);
-    }
+  const handleSelect = (setter?: (val: string) => void) => (val: string) => {
+    setter?.(val === ALL_OPTION ? "" : val);
   };
 
-  const addProductButton = onAddProduct ? (
-    <Button size="sm" type="button" fullWidth="mobile" onClick={onAddProduct}>
-      <Plus aria-hidden /> {LABELS.addProduct}
-    </Button>
-  ) : null;
-
   const activeCount =
-    (search.trim() ? 1 : 0) + (status && status !== ALL_STATUSES ? 1 : 0);
+    (search.trim() ? 1 : 0) +
+    (status && status !== ALL_OPTION ? 1 : 0) +
+    (categoryId ? 1 : 0) +
+    (inStock ? 1 : 0) +
+    (minPrice ? 1 : 0) +
+    (maxPrice ? 1 : 0) +
+    (sort ? 1 : 0);
 
   return (
     <div className={styles.wrapper}>
@@ -56,37 +79,48 @@ export function ProductsTableHeader(props: ProductsTableHeaderProps) {
           <h2 className={styles.heading}>{LABELS.products}</h2>
           <p className={styles.hint}>{LABELS.vendorProductsHint}</p>
         </div>
-        {addProductButton}
+        {onAddProduct && (
+          <Button
+            size="sm"
+            type="button"
+            fullWidth="mobile"
+            onClick={onAddProduct}
+          >
+            <Plus aria-hidden /> {LABELS.addProduct}
+          </Button>
+        )}
       </div>
 
       <CollapsibleTableFilters activeCount={activeCount} onClear={onClear}>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 items-end">
-          <FormFieldFrame
-            label={LABELS.search}
-            htmlFor="vendor-products-filter-search"
-          >
-            <Input
-              id="vendor-products-filter-search"
-              placeholder={LABELS.searchProducts}
-              value={search}
-              onChange={handleSearchChange}
-            />
-          </FormFieldFrame>
+        <div className="space-y-3.5">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4 items-end">
+            <FormFieldFrame
+              label={LABELS.search}
+              htmlFor="vendor-products-search"
+            >
+              <Input
+                id="vendor-products-search"
+                placeholder={LABELS.searchProducts}
+                value={search}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  onSearchChange(e.target.value)
+                }
+              />
+            </FormFieldFrame>
 
-          {onStatusChange ? (
             <FormFieldFrame
               label={LABELS.status}
-              htmlFor="vendor-products-filter-status"
+              htmlFor="vendor-products-status"
             >
               <Select
-                value={status || ALL_STATUSES}
-                onValueChange={handleStatusChange}
+                value={status || ALL_OPTION}
+                onValueChange={handleSelect(onStatusChange)}
               >
-                <SelectTrigger id="vendor-products-filter-status">
+                <SelectTrigger id="vendor-products-status">
                   <SelectValue placeholder="All Statuses" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value={ALL_STATUSES}>All Statuses</SelectItem>
+                  <SelectItem value={ALL_OPTION}>All Statuses</SelectItem>
                   {Object.values(PRODUCT_STATUS).map((s) => (
                     <SelectItem key={s} value={s}>
                       {formatStatusLabel(s)}
@@ -95,7 +129,95 @@ export function ProductsTableHeader(props: ProductsTableHeaderProps) {
                 </SelectContent>
               </Select>
             </FormFieldFrame>
-          ) : null}
+
+            <FormFieldFrame
+              label={LABELS.category}
+              htmlFor="vendor-products-category"
+            >
+              <Select
+                value={categoryId || ALL_OPTION}
+                onValueChange={handleSelect(onCategoryChange)}
+              >
+                <SelectTrigger id="vendor-products-category">
+                  <SelectValue placeholder="All Categories" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value={ALL_OPTION}>All Categories</SelectItem>
+                  {categories?.map((c) => (
+                    <SelectItem key={c.id} value={c.id}>
+                      {c.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </FormFieldFrame>
+
+            <FormFieldFrame label="Inventory" htmlFor="vendor-products-stock">
+              <Select
+                value={inStock || ALL_OPTION}
+                onValueChange={handleSelect(onInStockChange)}
+              >
+                <SelectTrigger id="vendor-products-stock">
+                  <SelectValue placeholder="All Inventory" />
+                </SelectTrigger>
+                <SelectContent>
+                  {STOCK_OPTIONS.map((opt) => (
+                    <SelectItem key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </FormFieldFrame>
+          </div>
+
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 items-end pt-1">
+            <FormFieldFrame
+              label="Min Price (₹)"
+              htmlFor="vendor-products-min-price"
+            >
+              <Input
+                id="vendor-products-min-price"
+                type="number"
+                min={0}
+                placeholder="Min ₹"
+                value={minPrice}
+                onChange={(e) => onMinPriceChange?.(e.target.value)}
+              />
+            </FormFieldFrame>
+
+            <FormFieldFrame
+              label="Max Price (₹)"
+              htmlFor="vendor-products-max-price"
+            >
+              <Input
+                id="vendor-products-max-price"
+                type="number"
+                min={0}
+                placeholder="Max ₹"
+                value={maxPrice}
+                onChange={(e) => onMaxPriceChange?.(e.target.value)}
+              />
+            </FormFieldFrame>
+
+            <FormFieldFrame label="Sort By" htmlFor="vendor-products-sort">
+              <Select
+                value={sort || ALL_OPTION}
+                onValueChange={handleSelect(onSortChange)}
+              >
+                <SelectTrigger id="vendor-products-sort">
+                  <SelectValue placeholder="Default Sort" />
+                </SelectTrigger>
+                <SelectContent>
+                  {SORT_OPTIONS.map((opt) => (
+                    <SelectItem key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </FormFieldFrame>
+          </div>
         </div>
       </CollapsibleTableFilters>
     </div>

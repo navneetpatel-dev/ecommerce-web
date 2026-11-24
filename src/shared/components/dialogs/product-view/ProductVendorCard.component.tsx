@@ -55,6 +55,18 @@ export function ProductVendorCard({ product }: ProductVendorCardProps) {
 
         <div className="flex items-center gap-2">
           {status && <StatusBadge status={status} />}
+          {vendorId && (
+            <a
+              href={`${PATHS.admin.products}?tab=all&vendorId=${vendorId}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Filter and view all products from this vendor in new tab"
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg border border-line-strong/80 bg-surface text-ink text-xs font-semibold hover:border-brand hover:bg-brand-subtle hover:text-brand transition-all shadow-xs"
+            >
+              <span>View Products</span>
+              <ExternalLink className="size-3" />
+            </a>
+          )}
           <a
             href={vendorAdminUrl}
             target="_blank"

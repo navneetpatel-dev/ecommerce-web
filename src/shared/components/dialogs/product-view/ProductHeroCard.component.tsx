@@ -34,6 +34,12 @@ export function ProductHeroCard({ product }: ProductHeroCardProps) {
       : typeof category?.name === "string"
         ? String(category.name)
         : null;
+  const categoryId =
+    typeof category?.id === "string"
+      ? category.id
+      : typeof product.categoryId === "string"
+        ? product.categoryId
+        : null;
 
   const displayPrice =
     product.displayPrice ?? product.basePrice ?? product.price;
@@ -77,7 +83,17 @@ export function ProductHeroCard({ product }: ProductHeroCardProps) {
 
         <div className="min-w-0 flex-1 space-y-2">
           <div className="flex flex-wrap items-center gap-2">
-            {status && <StatusBadge status={status} />}
+            {status && (
+              <a
+                href={`${PATHS.admin.products}?tab=all&status=${status}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                title={`Filter products with status "${status}" in Admin catalog in new tab`}
+                className="hover:opacity-80 transition-opacity"
+              >
+                <StatusBadge status={status} />
+              </a>
+            )}
             {brand && (
               <a
                 href={`${PATHS.admin.products}?tab=all&search=${encodeURIComponent(brand)}`}
@@ -92,10 +108,14 @@ export function ProductHeroCard({ product }: ProductHeroCardProps) {
             )}
             {categoryName && (
               <a
-                href={`${PATHS.admin.products}?tab=all&search=${encodeURIComponent(categoryName)}`}
+                href={
+                  categoryId
+                    ? `${PATHS.admin.products}?tab=all&categoryId=${categoryId}&search=${encodeURIComponent(categoryName)}`
+                    : `${PATHS.admin.products}?tab=all&search=${encodeURIComponent(categoryName)}`
+                }
                 target="_blank"
                 rel="noopener noreferrer"
-                title="Search category in Admin catalog in new tab"
+                title="Filter by category in Admin catalog in new tab"
                 className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-surface text-ink-muted text-[11px] font-medium border border-line hover:bg-brand-subtle hover:text-ink hover:border-brand/40 transition-all"
               >
                 <Tag className="size-3" />

@@ -24,6 +24,9 @@ export function ProductCategoryCard({ product }: ProductCategoryCardProps) {
   const categorySlug = (
     typeof category?.slug === "string" ? category.slug : product.categorySlug
   ) as string | null;
+  const categoryId = (
+    typeof category?.id === "string" ? category.id : product.categoryId
+  ) as string | null;
   const categoryStatus =
     typeof category?.status === "string" ? category.status : null;
   const isCategoryActive = categoryStatus === "ACTIVE";
@@ -32,10 +35,9 @@ export function ProductCategoryCard({ product }: ProductCategoryCardProps) {
   const parent = (category?.parent as Record<string, unknown>) ?? null;
   const parentName = typeof parent?.name === "string" ? parent.name : null;
   const parentSlug = typeof parent?.slug === "string" ? parent.slug : null;
-  const commissionRate = category?.commissionRate;
-  const returnWindowDays = category?.returnWindowDays;
+  const commissionRate = category?.commissionRate,
+    returnWindowDays = category?.returnWindowDays;
   const defaultWarrantyMonths = category?.defaultWarrantyMonths;
-
   const secondaryCategories = Array.isArray(product.secondaryCategories)
     ? (product.secondaryCategories as Array<{ name?: string; slug?: string }>)
     : [];
@@ -52,7 +54,7 @@ export function ProductCategoryCard({ product }: ProductCategoryCardProps) {
       ? parentSlug
         ? PATHS.category(parentSlug, categorySlug)
         : PATHS.category(categorySlug)
-      : `${PATHS.admin.products}?tab=all&search=${encodeURIComponent(categoryName ?? "")}`;
+      : `${PATHS.admin.products}?tab=all${categoryId ? `&categoryId=${categoryId}` : ""}&search=${encodeURIComponent(categoryName ?? "")}`;
 
   return (
     <div className="rounded-2xl border border-line/80 bg-surface p-4 sm:p-5 shadow-xs space-y-4">
@@ -64,6 +66,18 @@ export function ProductCategoryCard({ product }: ProductCategoryCardProps) {
 
         <div className="flex items-center gap-2">
           {categoryStatus && <StatusBadge status={categoryStatus} />}
+          {categoryId && (
+            <a
+              href={`${PATHS.admin.products}?tab=all&categoryId=${categoryId}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Filter and view all products in this category in new tab"
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg border border-line-strong/80 bg-surface text-ink text-xs font-semibold hover:border-brand hover:bg-brand-subtle hover:text-brand transition-all shadow-xs"
+            >
+              <span>Filter Products</span>
+              <ExternalLink className="size-3" />
+            </a>
+          )}
           <a
             href={PATHS.admin.categories}
             target="_blank"

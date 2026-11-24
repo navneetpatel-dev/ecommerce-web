@@ -22,6 +22,11 @@ interface ProductRow {
 interface ProductsTableViewProps {
   search: string;
   status?: string;
+  categoryId?: string;
+  inStock?: string;
+  minPrice?: string;
+  maxPrice?: string;
+  sort?: string;
   isLoading: boolean;
   products?: ProductRow[];
   page: number;
@@ -32,6 +37,11 @@ interface ProductsTableViewProps {
   actionMessage?: string | null;
   onSearchChange: (value: string) => void;
   onStatusChange?: (value: string) => void;
+  onCategoryChange?: (value: string) => void;
+  onInStockChange?: (value: string) => void;
+  onMinPriceChange?: (value: string) => void;
+  onMaxPriceChange?: (value: string) => void;
+  onSortChange?: (value: string) => void;
   onClear?: () => void;
   onPageChange: (page: number) => void;
   onAddProduct?: () => void;
@@ -41,27 +51,38 @@ interface ProductsTableViewProps {
   onManageImages?: (product: ProductRow) => void;
 }
 
-export function ProductsTableView({
-  search,
-  status,
-  isLoading,
-  products,
-  page,
-  totalPages,
-  total,
-  isDeleting,
-  isSubmitting,
-  actionMessage,
-  onSearchChange,
-  onStatusChange,
-  onClear,
-  onPageChange,
-  onAddProduct,
-  onEditProduct,
-  onDeleteProduct,
-  onSubmitForApproval,
-  onManageImages,
-}: ProductsTableViewProps) {
+export function ProductsTableView(props: ProductsTableViewProps) {
+  const {
+    search,
+    status,
+    categoryId,
+    inStock,
+    minPrice,
+    maxPrice,
+    sort,
+    isLoading,
+    products,
+    page,
+    totalPages,
+    total,
+    isDeleting,
+    isSubmitting,
+    actionMessage,
+    onSearchChange,
+    onStatusChange,
+    onCategoryChange,
+    onInStockChange,
+    onMinPriceChange,
+    onMaxPriceChange,
+    onSortChange,
+    onClear,
+    onPageChange,
+    onAddProduct,
+    onEditProduct,
+    onDeleteProduct,
+    onSubmitForApproval,
+    onManageImages,
+  } = props;
   const hasTotal = typeof total === "number" && total > 0;
   const resultFrom = (page - 1) * DEFAULT_PAGE_LIMIT + 1;
   const resultTo = hasTotal ? Math.min(page * DEFAULT_PAGE_LIMIT, total) : 0;
@@ -108,6 +129,16 @@ export function ProductsTableView({
         onSearchChange={onSearchChange}
         status={status}
         onStatusChange={onStatusChange}
+        categoryId={categoryId}
+        onCategoryChange={onCategoryChange}
+        inStock={inStock}
+        onInStockChange={onInStockChange}
+        minPrice={minPrice}
+        onMinPriceChange={onMinPriceChange}
+        maxPrice={maxPrice}
+        onMaxPriceChange={onMaxPriceChange}
+        sort={sort}
+        onSortChange={onSortChange}
         onClear={onClear}
         onAddProduct={onAddProduct}
       />

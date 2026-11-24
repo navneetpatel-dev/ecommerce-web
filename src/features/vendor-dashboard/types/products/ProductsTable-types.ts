@@ -28,6 +28,16 @@ export interface ProductsTableHeaderProps {
   onSearchChange: (value: string) => void;
   status?: string;
   onStatusChange?: (value: string) => void;
+  categoryId?: string;
+  onCategoryChange?: (value: string) => void;
+  inStock?: string;
+  onInStockChange?: (value: string) => void;
+  minPrice?: string;
+  onMinPriceChange?: (value: string) => void;
+  maxPrice?: string;
+  onMaxPriceChange?: (value: string) => void;
+  sort?: string;
+  onSortChange?: (value: string) => void;
   onClear?: () => void;
   onAddProduct?: () => void;
 }

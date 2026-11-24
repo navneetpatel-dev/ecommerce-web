@@ -31,7 +31,16 @@ export function AdminProductsPage() {
     return catalog;
   }
 
-  const hasFilter = Boolean(page.filters.search || page.filters.status);
+  const hasFilter = Boolean(
+    page.filters.search ||
+    page.filters.status ||
+    page.filters.categoryId ||
+    page.filters.vendorId ||
+    page.filters.inStock ||
+    page.filters.minPrice ||
+    page.filters.maxPrice ||
+    page.filters.sort,
+  );
   const defaultTab = hasFilter
     ? "all"
     : page.pendingCount > 0
