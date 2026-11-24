@@ -4,6 +4,7 @@ import { FormFieldFrame } from "@/shared/components/forms";
 import { Input } from "@/shared/components/ui/input";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { StatusDialog } from "@/shared/components/dialogs/StatusDialog.component";
+import { MediaImage } from "@/shared/components/media/MediaImage.component";
 import { LABELS } from "@/shared/constants/labels";
 import { useVendorReturnDisputeDialog } from "../../hooks/returns/useVendorReturnDisputeDialog.hook";
 import { vendorReturnsTableStyles as styles } from "../../styles/returns/vendorReturnsTable.styles";
@@ -103,6 +104,27 @@ export function VendorReturnDisputeDialog({
             disabled={submitting}
           />
         </FormFieldFrame>
+
+        {evidenceUrl.trim() ? (
+          <div className="flex items-center gap-3 rounded-md border border-line bg-paper/40 p-2">
+            <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded border border-line bg-paper">
+              <MediaImage
+                src={evidenceUrl.trim()}
+                alt="Dispute evidence preview"
+                sizes="56px"
+                imageClassName="object-cover"
+              />
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-body-xs font-medium text-ink">
+                Evidence preview
+              </p>
+              <p className="text-[11px] text-ink-muted truncate">
+                {evidenceUrl.trim()}
+              </p>
+            </div>
+          </div>
+        ) : null}
       </div>
     </StatusDialog>
   );

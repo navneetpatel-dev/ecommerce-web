@@ -16,6 +16,7 @@ const PopoverContent = React.forwardRef<
       className,
       align = "center",
       sideOffset = 4,
+      collisionPadding = 8,
       onCloseAutoFocus,
       onPointerDownOutside,
       onEscapeKeyDown,
@@ -31,6 +32,7 @@ const PopoverContent = React.forwardRef<
           ref={ref}
           align={align}
           sideOffset={sideOffset}
+          collisionPadding={collisionPadding}
           className={cn(
             "z-50 w-72 rounded-md border border-line bg-surface-raised p-4 shadow-elevation-2 animate-scale-in outline-none",
             className,

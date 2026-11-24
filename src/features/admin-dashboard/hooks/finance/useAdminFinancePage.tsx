@@ -7,7 +7,6 @@ import { commissionsApi, payoutsApi } from "../../api/finance/finance.api";
 import { AdminConfirmAction } from "../../components/shared/AdminConfirmAction.component";
 import { AdminMarkPayoutPaidAction } from "../../components/finance/AdminMarkPayoutPaidAction.component";
 import { AdminCommissionInvoiceDownloadAction } from "../../components/finance/AdminCommissionInvoiceDownloadAction.component";
-import { adminDataListViewStyles } from "../../styles/shared/adminDataListView.styles";
 import {
   ADMIN_COMMISSION_COLUMN_KEYS,
   ADMIN_COMMISSION_INVOICE_COLUMN_KEYS,
@@ -50,7 +49,7 @@ export function useAdminFinancePage(): AdminFinancePageModel {
       const retryPayout = () => payoutsApi.retry(String(row.id)).then(reload);
       if (status === "PENDING") {
         return (
-          <div className={adminDataListViewStyles.rowActionsEndWrap}>
+          <>
             <AdminMarkPayoutPaidAction
               payoutId={String(row.id)}
               bankDetails={
@@ -69,7 +68,7 @@ export function useAdminFinancePage(): AdminFinancePageModel {
               requireReason
               onConfirm={markPayoutFailed}
             />
-          </div>
+          </>
         );
       }
       if (status === "FAILED" && row.preparedAt) {

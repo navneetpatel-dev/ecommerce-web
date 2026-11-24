@@ -69,7 +69,7 @@ export function useVendorReturnsTablePresentation(returns: ReturnRequest[]) {
               row.status === RETURN_STATUS.PICKUP_SCHEDULED) &&
             !row.disputedAt &&
             !row.restockedAt,
-          isDisputed: Boolean(row.disputedAt),
+          isDisputed: Boolean(row.disputedAt) || Boolean(row.disputeStatus),
           disputeStatus: row.disputeStatus ?? null,
         };
       }),

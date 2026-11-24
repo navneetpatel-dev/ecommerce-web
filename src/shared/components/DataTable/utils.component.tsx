@@ -57,7 +57,19 @@ export function resolveCell<T>(
     }
     const asDate = tryFormatDateTime(value);
     if (asDate) return asDate;
-    if (typeof value === "object") return JSON.stringify(value);
+    if (Array.isArray(value)) {
+      if (value.length === 0) return "—";
+      if (value.every((v) => typeof v === "string" || typeof v === "number")) {
+        return value.join(", ");
+      }
+      return `${value.length} items`;
+    }
+    if (typeof value === "object") {
+      const obj = value as Record<string, unknown>;
+      const name = obj.name ?? obj.title ?? obj.businessName ?? obj.label;
+      if (typeof name === "string" && name.trim()) return name.trim();
+      return "—";
+    }
     return String(value);
   }
   return "—";

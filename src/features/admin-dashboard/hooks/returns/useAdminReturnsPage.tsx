@@ -55,6 +55,7 @@ export function useAdminReturnsPage(): AdminReturnsPageModel {
       "type",
       "status",
       "refundStatus",
+      "disputeStatus",
       "refundAmount",
       "creditNoteNumber",
       "debitNoteNumber",

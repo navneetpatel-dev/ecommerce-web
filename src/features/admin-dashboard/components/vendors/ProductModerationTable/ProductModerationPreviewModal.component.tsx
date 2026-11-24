@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import {
   Dialog,
@@ -15,6 +16,7 @@ import { formatInr } from "@/shared/utils/formatting/orderFormat";
 import type { ProductDetail } from "@/shared/api/types";
 import { AdminConfirmAction } from "../../shared/AdminConfirmAction.component";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
+import { ProductModerationSpecs } from "./ProductModerationSpecs.component";
 
 interface ProductModerationPreviewModalProps {
   product: ProductDetail | null;
@@ -31,6 +33,8 @@ export function ProductModerationPreviewModal({
   onReject,
   rowBusy = false,
 }: ProductModerationPreviewModalProps) {
+  const [activeImageIdx, setActiveImageIdx] = useState(0);
+
   if (!product) return null;
 
   const handleOpenChange = (open: boolean) => {
@@ -49,13 +53,21 @@ export function ProductModerationPreviewModal({
 
   const vendorName = product.vendor?.businessName || "—";
   const categoryName = product.category?.name || product.categoryName || "—";
-  const primaryImage = product.imageUrl || product.images?.[0]?.url;
 
-  const approveDescription = formatLabel(LABELS.confirmApproveProductBody, {
+  const allImages: string[] = [];
+  if (product.imageUrl) allImages.push(product.imageUrl);
+  if (Array.isArray(product.images)) {
+    for (const img of product.images) {
+      const url = typeof img === "string" ? img : img?.url;
+      if (url && !allImages.includes(url)) allImages.push(url);
+    }
+  }
+
+  const currentImage = allImages[activeImageIdx] || allImages[0];
+  const approveDesc = formatLabel(LABELS.confirmApproveProductBody, {
     name: product.name,
   });
-
-  const rejectDescription = formatLabel(LABELS.confirmRejectProductBody, {
+  const rejectDesc = formatLabel(LABELS.confirmRejectProductBody, {
     name: product.name,
   });
 
@@ -72,15 +84,42 @@ export function ProductModerationPreviewModal({
         </DialogHeader>
 
         <div className="space-y-4 py-2">
-          {primaryImage && (
-            <div className="relative aspect-video w-full overflow-hidden rounded-md border border-line bg-paper">
-              <Image
-                src={primaryImage}
-                alt={product.name}
-                fill
-                sizes="(max-width: 768px) 100vw, 600px"
-                className="object-contain"
-              />
+          {currentImage && (
+            <div className="space-y-2">
+              <div className="relative aspect-video w-full overflow-hidden rounded-md border border-line bg-paper">
+                <Image
+                  src={currentImage}
+                  alt={product.name}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 600px"
+                  className="object-contain"
+                />
+              </div>
+
+              {allImages.length > 1 && (
+                <div className="flex flex-wrap gap-2 pt-1">
+                  {allImages.map((imgUrl, idx) => (
+                    <button
+                      key={imgUrl}
+                      type="button"
+                      onClick={() => setActiveImageIdx(idx)}
+                      className={`relative h-14 w-14 overflow-hidden rounded border transition-all ${
+                        activeImageIdx === idx
+                          ? "border-brand ring-2 ring-brand/30"
+                          : "border-line opacity-75 hover:opacity-100"
+                      }`}
+                    >
+                      <Image
+                        src={imgUrl}
+                        alt={`Photo ${idx + 1}`}
+                        fill
+                        sizes="56px"
+                        className="object-cover"
+                      />
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 
@@ -118,53 +157,7 @@ export function ProductModerationPreviewModal({
             </div>
           )}
 
-          {(() => {
-            const rawSpecs = product.specs as unknown;
-            const entries: Array<[string, string]> = [];
-            if (rawSpecs) {
-              if (Array.isArray(rawSpecs)) {
-                for (const item of rawSpecs) {
-                  if (item && typeof item === "object") {
-                    const itemObj = item as Record<string, unknown>;
-                    const k =
-                      "key" in itemObj
-                        ? String(itemObj.key ?? "")
-                        : "name" in itemObj
-                          ? String(itemObj.name ?? "")
-                          : "";
-                    const v =
-                      "value" in itemObj ? String(itemObj.value ?? "") : "";
-                    if (k) entries.push([k, v]);
-                  }
-                }
-              } else if (typeof rawSpecs === "object") {
-                for (const [key, val] of Object.entries(
-                  rawSpecs as Record<string, unknown>,
-                )) {
-                  entries.push([key, String(val ?? "")]);
-                }
-              }
-            }
-            if (!entries.length) return null;
-            return (
-              <div className="space-y-2">
-                <h4 className="text-body-sm font-semibold text-ink">
-                  {LABELS.productPreviewSpecifications}
-                </h4>
-                <dl className="grid grid-cols-2 gap-2 text-body-xs">
-                  {entries.map(([key, val]) => (
-                    <div
-                      key={key}
-                      className="rounded border border-line/40 p-2"
-                    >
-                      <dt className="text-ink-muted">{key}</dt>
-                      <dd className="font-medium text-ink">{val}</dd>
-                    </div>
-                  ))}
-                </dl>
-              </div>
-            );
-          })()}
+          <ProductModerationSpecs specs={product.specs} />
         </div>
 
         <DialogFooter className="flex-wrap items-center justify-between gap-2 border-t border-line/60 pt-4">
@@ -178,7 +171,7 @@ export function ProductModerationPreviewModal({
               tone="danger"
               dialogVariant="danger"
               title={LABELS.confirmRejectProductTitle}
-              description={rejectDescription}
+              description={rejectDesc}
               confirmLabel={LABELS.reject}
               requireReason
               reasonLabel={LABELS.rejectionNote}
@@ -191,7 +184,7 @@ export function ProductModerationPreviewModal({
               tone="success"
               dialogVariant="success"
               title={LABELS.confirmApproveProductTitle}
-              description={approveDescription}
+              description={approveDesc}
               confirmLabel={LABELS.approve}
               onConfirm={handleApprove}
               disabled={rowBusy}

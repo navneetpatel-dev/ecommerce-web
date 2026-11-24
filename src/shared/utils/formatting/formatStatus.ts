@@ -9,3 +9,13 @@ export function formatStatusLabel(status: string): string {
     .replace(/_/g, " ")
     .replace(/\b\w/g, (char) => char.toUpperCase());
 }
+
+export function formatReasonLabel(
+  reasonCode: string | null | undefined,
+): string {
+  if (!reasonCode) return "—";
+  return reasonCode
+    .toLowerCase()
+    .replace(/_/g, " ")
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+}

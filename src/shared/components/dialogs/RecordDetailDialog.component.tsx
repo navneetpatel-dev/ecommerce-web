@@ -1,6 +1,8 @@
 "use client";
 
 import { RecordDetailImage } from "@/shared/components/dialogs/RecordDetailImage.component";
+import { RecordDetailObjectView } from "@/shared/components/dialogs/RecordDetailObjectView.component";
+import { RecordDetailListView } from "@/shared/components/dialogs/RecordDetailListView.component";
 import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import {
   Dialog,
@@ -11,10 +13,16 @@ import {
 } from "@/shared/components/ui/dialog";
 import { LABELS } from "@/shared/constants/labels";
 import { tryFormatDateTime } from "@/shared/utils/formatting/formatDate";
-import { isImageDetailValue } from "@/shared/utils/media/imageField";
+import { formatInr } from "@/shared/utils/formatting/orderFormat";
+import { formatReasonLabel } from "@/shared/utils/formatting/formatStatus";
+import {
+  isImageFieldKey,
+  extractImageUrls,
+} from "@/shared/utils/media/imageField";
 import {
   buildRecordDetailFields,
   getRecordDetailTitle,
+  isMoneyKey,
 } from "@/shared/utils/formatting/recordDetails";
 import { recordDetailDialogStyles } from "../../styles/dialogs/dialogComponents.styles";
 
@@ -24,17 +32,17 @@ interface RecordDetailDialogProps {
   record: Record<string, unknown> | null;
 }
 
-function isPlainObject(value: unknown): value is Record<string, unknown> {
-  return value != null && typeof value === "object" && !Array.isArray(value);
-}
-
 function formatDetailValue(key: string, value: unknown, label: string) {
   if (value == null || value === "") {
     return <span className={recordDetailDialogStyles.dash}>—</span>;
   }
 
-  if (isImageDetailValue(key, value)) {
-    return <RecordDetailImage value={value} alt={label} />;
+  if (isImageFieldKey(key)) {
+    const urls = extractImageUrls(value);
+    if (urls.length > 0) {
+      return <RecordDetailImage value={value} alt={label} />;
+    }
+    return <span className={recordDetailDialogStyles.dash}>—</span>;
   }
 
   if (typeof value === "boolean") {
@@ -44,6 +52,44 @@ function formatDetailValue(key: string, value: unknown, label: string) {
   if (key === "status" || key.endsWith("Status") || key === "paymentStatus") {
     if (typeof value === "string" && value.trim()) {
       return <StatusBadge status={value} />;
+    }
+  }
+
+  if (key === "reasonCode" || key.endsWith("ReasonCode")) {
+    if (typeof value === "string" && value.trim()) {
+      return (
+        <span className={recordDetailDialogStyles.stringVal}>
+          {formatReasonLabel(value)}
+        </span>
+      );
+    }
+  }
+
+  if (
+    key === "orderReference" ||
+    key === "returnReference" ||
+    key === "reference"
+  ) {
+    const str = String(value);
+    return (
+      <span className={recordDetailDialogStyles.stringVal}>
+        {str.startsWith("#") ? str : `#${str}`}
+      </span>
+    );
+  }
+
+  if (isMoneyKey(key)) {
+    if (
+      typeof value === "number" ||
+      (typeof value === "string" &&
+        !isNaN(Number(value)) &&
+        value.trim() !== "")
+    ) {
+      return (
+        <span className={recordDetailDialogStyles.numVal}>
+          {formatInr(Number(value))}
+        </span>
+      );
     }
   }
 
@@ -58,12 +104,18 @@ function formatDetailValue(key: string, value: unknown, label: string) {
     return <span className={recordDetailDialogStyles.numVal}>{value}</span>;
   }
 
-  if (Array.isArray(value) || isPlainObject(value)) {
-    return (
-      <pre className={recordDetailDialogStyles.pre}>
-        {JSON.stringify(value, null, 2)}
-      </pre>
-    );
+  if (Array.isArray(value)) {
+    if (value.length === 0) {
+      return <span className={recordDetailDialogStyles.dash}>—</span>;
+    }
+    return <RecordDetailListView items={value} />;
+  }
+
+  if (typeof value === "object" && value !== null) {
+    if (Object.keys(value).length === 0) {
+      return <span className={recordDetailDialogStyles.dash}>—</span>;
+    }
+    return <RecordDetailObjectView value={value as Record<string, unknown>} />;
   }
 
   return String(value);

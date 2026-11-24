@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useQuery } from "@tanstack/react-query";
 import {
   Dialog,
@@ -16,6 +17,7 @@ import { formatInr, shortOrderId } from "@/shared/utils/formatting/orderFormat";
 import { formatDateTime } from "@/shared/utils/formatting/formatDate";
 import { ordersApi, ordersKeys } from "@/features/orders";
 import type { Order } from "@/shared/api/types";
+import { AdminOrderPriceSummary } from "./AdminOrderPriceSummary.component";
 
 interface AdminOrderDetailDrawerProps {
   order: Order | null;
@@ -64,7 +66,6 @@ export function AdminOrderDetailDrawer({
         </DialogHeader>
 
         <div className="space-y-5 py-2">
-          {/* Customer & Shipping Section */}
           {address && (
             <div className="rounded-lg border border-line bg-paper/40 p-4">
               <h4 className="text-body-sm font-semibold text-ink">
@@ -92,7 +93,6 @@ export function AdminOrderDetailDrawer({
             </div>
           )}
 
-          {/* Line Items grouped by vendor / suborder */}
           <div className="space-y-3">
             <h4 className="text-body-sm font-semibold text-ink">
               {LABELS.ordersColumnItems}
@@ -112,18 +112,31 @@ export function AdminOrderDetailDrawer({
                   {sub.items?.map((item) => (
                     <div
                       key={item.id}
-                      className="flex items-center justify-between gap-4 py-2 text-body-sm"
+                      className="flex items-center justify-between gap-3 py-2 text-body-sm"
                     >
-                      <div className="min-w-0 flex-1">
-                        <p className="truncate font-medium text-ink">
-                          {item.productName}
-                        </p>
-                        <p className="text-body-xs text-ink-muted">
-                          {LABELS.quantity}: {item.quantity} ×{" "}
-                          {formatInr(item.displayUnitPrice ?? item.unitPrice)}
-                        </p>
+                      <div className="flex items-center gap-3 min-w-0 flex-1">
+                        {item.imageUrl && (
+                          <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded border border-line bg-paper">
+                            <Image
+                              src={item.imageUrl}
+                              alt={item.productName}
+                              fill
+                              sizes="40px"
+                              className="object-cover"
+                            />
+                          </div>
+                        )}
+                        <div className="min-w-0 flex-1">
+                          <p className="truncate font-medium text-ink">
+                            {item.productName}
+                          </p>
+                          <p className="text-body-xs text-ink-muted">
+                            {LABELS.quantity}: {item.quantity} ×{" "}
+                            {formatInr(item.displayUnitPrice ?? item.unitPrice)}
+                          </p>
+                        </div>
                       </div>
-                      <span className="font-semibold text-ink">
+                      <span className="font-semibold text-ink shrink-0">
                         {formatInr(item.lineTotal)}
                       </span>
                     </div>
@@ -133,59 +146,7 @@ export function AdminOrderDetailDrawer({
             ))}
           </div>
 
-          {/* Payment & Price Breakdown */}
-          <div className="rounded-lg border border-line bg-paper/40 p-4">
-            <h4 className="text-body-sm font-semibold text-ink">
-              {LABELS.paymentSplitHeading}
-            </h4>
-            <dl className="mt-2 space-y-1.5 text-body-sm">
-              <div className="flex justify-between text-ink-muted">
-                <dt>{LABELS.subtotal}</dt>
-                <dd className="font-medium text-ink">
-                  {formatInr(
-                    active.itemsTotal ??
-                      active.merchandiseSubtotal ??
-                      active.totalAmount,
-                  )}
-                </dd>
-              </div>
-              {active.couponSavings ? (
-                <div className="flex justify-between text-ink-muted">
-                  <dt>{LABELS.couponDiscount}</dt>
-                  <dd className="font-medium text-emerald-600">
-                    -{formatInr(active.couponSavings)}
-                  </dd>
-                </div>
-              ) : null}
-              {active.shippingTotal != null && (
-                <div className="flex justify-between text-ink-muted">
-                  <dt>{LABELS.shipping}</dt>
-                  <dd className="font-medium text-ink">
-                    {active.shippingTotal === 0
-                      ? LABELS.freeShipping
-                      : formatInr(active.shippingTotal)}
-                  </dd>
-                </div>
-              )}
-              {active.taxTotal != null && (
-                <div className="flex justify-between text-ink-muted">
-                  <dt>{LABELS.taxIgst}</dt>
-                  <dd className="font-medium text-ink">
-                    {formatInr(active.taxTotal)}
-                  </dd>
-                </div>
-              )}
-              <div className="flex justify-between border-t border-line/60 pt-2 text-body-base font-semibold text-ink">
-                <dt>{LABELS.total}</dt>
-                <dd>{formatInr(active.totalAmount)}</dd>
-              </div>
-            </dl>
-            {active.paymentMethod && (
-              <p className="mt-2 border-t border-line/40 pt-2 text-body-xs text-ink-muted">
-                {LABELS.paymentMethod}: {active.paymentMethod}
-              </p>
-            )}
-          </div>
+          <AdminOrderPriceSummary order={active} />
         </div>
 
         <DialogFooter className="border-t border-line/60 pt-4">

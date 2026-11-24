@@ -87,6 +87,7 @@ export const tablesLabels = {
   returnReference: "Return ID",
   creditNoteNumber: "Credit Note",
   debitNoteNumber: "Debit Note",
+  disputeStatus: "Dispute Status",
   refundAmount: "Refund",
   saleAmount: "Sale amount",
   commissionRate: "Commission rate",

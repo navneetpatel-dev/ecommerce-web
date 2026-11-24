@@ -44,6 +44,18 @@ export function formatReportCell(
       ? String(value)
       : formatDateTime(value as string | Date);
   }
-  if (typeof value === "object") return JSON.stringify(value);
+  if (typeof value === "object") {
+    if (Array.isArray(value)) {
+      if (value.length === 0) return LABELS.emptyCell;
+      if (value.every((v) => typeof v === "string" || typeof v === "number")) {
+        return value.join(", ");
+      }
+      return `${value.length} items`;
+    }
+    const obj = value as Record<string, unknown>;
+    const name = obj.name ?? obj.title ?? obj.businessName ?? obj.label;
+    if (typeof name === "string" && name.trim()) return name.trim();
+    return LABELS.emptyCell;
+  }
   return String(value);
 }

@@ -64,13 +64,19 @@ function flattenActionNodes(nodes: ReactNode): ReactNode[] {
     if (child == null || typeof child === "boolean") return;
     if (isNonActionSlot(child)) return;
 
-    if (isValidElement(child) && child.type === Fragment) {
-      out.push(
-        ...flattenActionNodes(
-          (child as ReactElement<{ children?: ReactNode }>).props.children,
-        ),
-      );
-      return;
+    if (isValidElement(child)) {
+      if (
+        child.type === Fragment ||
+        (child.type === "div" &&
+          (child.props as Record<string, unknown>).children)
+      ) {
+        out.push(
+          ...flattenActionNodes(
+            (child as ReactElement<{ children?: ReactNode }>).props.children,
+          ),
+        );
+        return;
+      }
     }
 
     out.push(child);
@@ -170,6 +176,8 @@ export function TableRowActions({
         </PopoverTrigger>
         <PopoverContent
           align="end"
+          collisionPadding={12}
+          sideOffset={4}
           className={cn(tableRowActionsStyles.popoverContent, menuClassName)}
           onClick={stopRowEvent}
         >

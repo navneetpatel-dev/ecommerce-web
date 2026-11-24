@@ -3,6 +3,7 @@
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { Button } from "@/shared/components/ui/button";
+import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import { AdminConfirmAction } from "@/features/admin-dashboard";
 import { VendorReturnDisputeDialog } from "../VendorReturnDisputeDialog.component";
 import { useVendorReturnRestockAction } from "../../../hooks/returns/useVendorReturnRestockAction.hook";
@@ -34,8 +35,19 @@ export function VendorReturnRestockAction({
 
   if (row.isDisputed) {
     const disputeLabel =
-      row.disputeStatus === "PENDING" ? "Under Review" : row.disputeStatus;
-    return <span className={styles.disputeBadge}>Dispute: {disputeLabel}</span>;
+      row.disputeStatus === "PENDING"
+        ? "Under Review"
+        : (row.disputeStatus ?? "Disputed");
+    return (
+      <StatusBadge
+        status={
+          row.disputeStatus === "PENDING"
+            ? "PENDING"
+            : (row.disputeStatus ?? "DISPUTED")
+        }
+        label={`Dispute: ${disputeLabel}`}
+      />
+    );
   }
 
   if (!row.canRestock && !row.canDispute) {

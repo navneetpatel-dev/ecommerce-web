@@ -17,12 +17,33 @@ const IMAGE_FIELD_KEYS = new Set([
   "photos",
   "photourl",
   "photourls",
+  "disputeevidenceurls",
+  "disputeevidence",
+  "evidenceurls",
+  "evidence",
+  "evidencephotos",
+  "proof",
+  "proofs",
+  "proofurl",
+  "proofurls",
+  "receipt",
+  "receipts",
+  "receipturl",
+  "receipturls",
+  "screenshot",
+  "screenshots",
+  "attachment",
+  "attachments",
+  "documenturl",
+  "documenturls",
 ]);
 
 export function isImageFieldKey(key: string): boolean {
   const normalized = key.replace(/[_-]/g, "").toLowerCase();
   if (IMAGE_FIELD_KEYS.has(normalized)) return true;
-  return /(?:image|photo|avatar|logo|banner|thumbnail)(?:url|src)?$/i.test(key);
+  return /(?:image|photo|avatar|logo|banner|thumbnail|evidence|proof|receipt|screenshot)(?:urls?|src)?$/i.test(
+    key,
+  );
 }
 
 function isLikelyImageUrl(value: string): boolean {

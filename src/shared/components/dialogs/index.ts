@@ -1,4 +1,6 @@
 export { RecordDetailDialog } from "./RecordDetailDialog.component";
+export { RecordDetailObjectView } from "./RecordDetailObjectView.component";
+export { RecordDetailListView } from "./RecordDetailListView.component";
 export { RecordDetailImage } from "./RecordDetailImage.component";
 export { LoginRequiredDialog } from "./LoginRequiredDialog.component";
 export {
