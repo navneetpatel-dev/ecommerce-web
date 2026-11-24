@@ -46,6 +46,7 @@ export function useAdminOrdersPage(
   useEffect(() => {
     const nextSearch = searchParams.get("search") ?? "";
     const nextStatus = searchParams.get("status") ?? "";
+     
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setSearch((prev) =>
       prev.trim() !== nextSearch.trim() ? nextSearch : prev,
