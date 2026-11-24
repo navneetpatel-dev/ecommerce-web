@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { MediaImage } from "@/shared/components/media/MediaImage.component";
 import { formatInr } from "@/shared/utils/formatting/orderFormat";
 import {
   fieldLabel,
@@ -68,17 +68,14 @@ export function RecordDetailItemSummary({
 
   return (
     <div className="flex gap-3.5 items-start">
-      {imageUrl && (
-        <div className="relative size-12 shrink-0 overflow-hidden rounded-lg border border-line bg-paper">
-          <Image
-            src={imageUrl}
-            alt={heading ?? "Item image"}
-            fill
-            sizes="48px"
-            className="object-cover"
-          />
-        </div>
-      )}
+      <div className="relative size-12 shrink-0 overflow-hidden rounded-lg border border-line bg-paper">
+        <MediaImage
+          src={imageUrl}
+          alt={heading ?? "Item image"}
+          sizes="48px"
+          imageClassName="object-cover"
+        />
+      </div>
       <div className="min-w-0 flex-1 space-y-1.5">
         <div className="flex items-center justify-between gap-2">
           <p className="truncate font-semibold text-ink text-body-sm">

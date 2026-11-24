@@ -7,6 +7,8 @@ import { ProductVariantsCard } from "./ProductVariantsCard.component";
 import { ProductSpecsCard } from "./ProductSpecsCard.component";
 import { ProductPricingPoliciesCard } from "./ProductPricingPoliciesCard.component";
 import { ProductVendorCard } from "./ProductVendorCard.component";
+import { ProductCategoryCard } from "./ProductCategoryCard.component";
+import { ProductAuditMetaCard } from "./ProductAuditMetaCard.component";
 
 interface ProductRecordDetailViewProps {
   product: Record<string, unknown>;
@@ -51,6 +53,8 @@ export function ProductRecordDetailView({
       <ProductSpecsCard product={product} />
       <ProductPricingPoliciesCard product={product} />
       <ProductVendorCard product={product} />
+      <ProductCategoryCard product={product} />
+      <ProductAuditMetaCard product={product} />
     </div>
   );
 }

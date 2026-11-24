@@ -47,9 +47,15 @@ describe("ProductRecordDetailView", () => {
     returnsAllowed: true,
     returnWindowDays: 7,
     vendor: {
+      id: "v-123",
       businessName: "Clay Crafts Ltd",
       slug: "clay-crafts",
+      email: "contact@claycrafts.com",
+      phone: "+91 98765 43210",
+      commissionRate: 12,
+      gstNumber: "27AAAAA0000A1Z5",
     },
+    rejectionReason: "Images require higher resolution backdrop.",
   };
 
   it("correctly identifies product records", () => {
@@ -98,6 +104,14 @@ describe("ProductRecordDetailView", () => {
     // Vendor card
     expect(screen.getByText("Clay Crafts Ltd")).toBeInTheDocument();
     expect(screen.getByText("@clay-crafts")).toBeInTheDocument();
+    expect(screen.getByText("contact@claycrafts.com")).toBeInTheDocument();
+    expect(screen.getByText("+91 98765 43210")).toBeInTheDocument();
+    expect(screen.getByText("27AAAAA0000A1Z5")).toBeInTheDocument();
+
+    // Rejection / Moderation card
+    expect(
+      screen.getByText(/Images require higher resolution backdrop/i),
+    ).toBeInTheDocument();
   });
 
   it("gracefully handles minimal product records without crashing", () => {

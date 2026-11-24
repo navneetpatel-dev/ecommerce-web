@@ -1,7 +1,7 @@
 "use client";
 
-import Image from "next/image";
-import { ExternalLink, Star, Tag, Package } from "lucide-react";
+import { ExternalLink, Star, Tag } from "lucide-react";
+import { MediaImage } from "@/shared/components/media/MediaImage.component";
 import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { RecordDetailCopyButton } from "../RecordDetailCopyButton.component";
@@ -60,30 +60,23 @@ export function ProductHeroCard({ product }: ProductHeroCardProps) {
   return (
     <div className="rounded-2xl border border-line/80 bg-gradient-to-b from-surface-subtle/60 to-surface p-4 sm:p-5 shadow-xs space-y-4">
       <div className="flex flex-col sm:flex-row gap-4 sm:gap-5 items-start">
-        {imageUrl ? (
-          <a
-            href={storeUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            title="Open product on storefront in new tab"
-            className="group relative size-20 sm:size-24 rounded-xl overflow-hidden border border-line bg-paper shrink-0 shadow-xs hover:border-brand/40 transition-colors"
-          >
-            <Image
-              src={imageUrl}
-              alt={name}
-              fill
-              sizes="96px"
-              className="object-cover group-hover:scale-105 transition-transform"
-            />
-            <div className="absolute inset-0 bg-ink/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
-              <ExternalLink className="size-4 drop-shadow" />
-            </div>
-          </a>
-        ) : (
-          <div className="flex size-20 sm:size-24 rounded-xl border border-line bg-paper items-center justify-center text-ink-muted/50 shrink-0">
-            <Package className="size-8" />
+        <a
+          href={storeUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          title="Open product on storefront in new tab"
+          className="group relative size-20 sm:size-24 rounded-xl overflow-hidden border border-line bg-paper shrink-0 shadow-xs hover:border-brand/40 transition-colors"
+        >
+          <MediaImage
+            src={imageUrl}
+            alt={name}
+            sizes="96px"
+            imageClassName="object-cover group-hover:scale-105 transition-transform"
+          />
+          <div className="absolute inset-0 bg-ink/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
+            <ExternalLink className="size-4 drop-shadow" />
           </div>
-        )}
+        </a>
 
         <div className="min-w-0 flex-1 space-y-2">
           <div className="flex flex-wrap items-center gap-2">

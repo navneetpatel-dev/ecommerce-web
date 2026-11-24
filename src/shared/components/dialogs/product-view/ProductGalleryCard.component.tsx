@@ -1,7 +1,7 @@
 "use client";
 
-import Image from "next/image";
 import { ExternalLink, Image as ImageIcon } from "lucide-react";
+import { MediaImage } from "@/shared/components/media/MediaImage.component";
 
 interface ProductGalleryCardProps {
   product: Record<string, unknown>;
@@ -68,12 +68,11 @@ export function ProductGalleryCard({ product }: ProductGalleryCardProps) {
             title="View full image in new tab"
             className="group relative size-24 sm:size-28 rounded-xl overflow-hidden border border-line bg-paper hover:border-brand/40 transition-all shadow-xs shrink-0"
           >
-            <Image
+            <MediaImage
               src={img.url}
               alt={`Product photo ${i + 1}`}
-              fill
               sizes="112px"
-              className="object-cover group-hover:scale-105 transition-transform duration-200"
+              imageClassName="object-cover group-hover:scale-105 transition-transform duration-200"
             />
             {img.isPrimary && (
               <span className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded bg-brand/90 backdrop-blur-xs text-[9px] font-bold text-white shadow-xs">

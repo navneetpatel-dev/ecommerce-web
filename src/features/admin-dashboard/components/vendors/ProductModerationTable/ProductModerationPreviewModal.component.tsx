@@ -1,23 +1,20 @@
 "use client";
 
-import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { Package, X } from "lucide-react";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
   DialogTitle,
-  DialogDescription,
   DialogFooter,
 } from "@/shared/components/ui/dialog";
 import { Button } from "@/shared/components/ui/button";
+import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import { LABELS } from "@/shared/constants/labels";
 import type { ProductDetail } from "@/shared/api/types";
 import { AdminConfirmAction } from "../../shared/AdminConfirmAction.component";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
-import { ProductModerationSpecs } from "./ProductModerationSpecs.component";
-import { ProductModerationGallery } from "./ProductModerationGallery.component";
-import { ProductModerationMetadataGrid } from "./ProductModerationMetadataGrid.component";
+import { ProductRecordDetailView } from "@/shared/components/dialogs/product-view/ProductRecordDetailView.component";
 import { productsApi } from "@/features/products";
 
 interface ProductModerationPreviewModalProps {
@@ -35,8 +32,6 @@ export function ProductModerationPreviewModal({
   onReject,
   rowBusy = false,
 }: ProductModerationPreviewModalProps) {
-  const [activeImageIdx, setActiveImageIdx] = useState(0);
-
   const detailQuery = useQuery({
     queryKey: ["products", "detail", product?.id],
     queryFn: () => productsApi.detail(product!.id),
@@ -61,15 +56,6 @@ export function ProductModerationPreviewModal({
 
   const active = detailQuery.data ?? product;
 
-  const allImages: string[] = [];
-  if (active.imageUrl) allImages.push(active.imageUrl);
-  if (Array.isArray(active.images)) {
-    for (const img of active.images) {
-      const url = typeof img === "string" ? img : img?.url;
-      if (url && !allImages.includes(url)) allImages.push(url);
-    }
-  }
-
   const approveDesc = formatLabel(LABELS.confirmApproveProductBody, {
     name: active.name,
   });
@@ -79,53 +65,61 @@ export function ProductModerationPreviewModal({
 
   return (
     <Dialog open={Boolean(product)} onOpenChange={handleOpenChange}>
-      <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="text-heading-sm font-semibold text-ink">
-            {active.name}
-          </DialogTitle>
-          <DialogDescription className="text-body-sm text-ink-muted">
-            {LABELS.productPreviewTitle}
-          </DialogDescription>
-        </DialogHeader>
-
-        <div className="space-y-4 py-2">
-          <ProductModerationGallery
-            images={allImages}
-            activeIdx={activeImageIdx}
-            productName={active.name}
-            loading={detailQuery.isLoading}
-            onSelectIdx={setActiveImageIdx}
-          />
-
-          <ProductModerationMetadataGrid
-            product={active}
-            loading={detailQuery.isLoading}
-          />
-
-          {active.description && (
-            <div className="space-y-1">
-              <h4 className="text-body-sm font-semibold text-ink">
-                {LABELS.productPreviewDescription}
-              </h4>
-              <p className="whitespace-pre-line text-body-sm text-ink-muted">
-                {active.description}
+      <DialogContent
+        className="max-h-[92vh] max-w-4xl p-0 flex flex-col gap-0 overflow-hidden sm:rounded-2xl border-line/80 shadow-2xl"
+        hideCloseButton
+      >
+        <div className="flex items-center justify-between border-b border-line/80 bg-surface-subtle/50 px-5 py-4">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="flex size-10 items-center justify-center rounded-xl bg-brand/10 text-brand shrink-0">
+              <Package className="size-5" />
+            </div>
+            <div className="min-w-0">
+              <div className="flex items-center gap-2 flex-wrap">
+                <DialogTitle className="text-base sm:text-lg font-bold text-ink truncate">
+                  {active.name}
+                </DialogTitle>
+                <StatusBadge status={active.status} />
+              </div>
+              <p className="text-xs text-ink-muted">
+                Pending Product Moderation Review
               </p>
             </div>
-          )}
-
-          <ProductModerationSpecs specs={active.specs} />
+          </div>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={onClose}
+            aria-label={LABELS.close}
+            className="rounded-full size-8 p-0"
+          >
+            <X className="size-4" />
+          </Button>
         </div>
 
-        <DialogFooter className="flex-wrap items-center justify-between gap-2 border-t border-line/60 pt-4">
-          <Button type="button" variant="outline" size="sm" onClick={onClose}>
+        <div className="overflow-y-auto px-5 py-5 space-y-4 max-h-[calc(92vh-140px)]">
+          <ProductRecordDetailView
+            product={active as unknown as Record<string, unknown>}
+          />
+        </div>
+
+        <DialogFooter className="flex-wrap items-center justify-between gap-3 border-t border-line/80 bg-surface-subtle/30 px-5 py-3.5">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={onClose}
+            className="rounded-xl"
+          >
             {LABELS.close}
           </Button>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5">
             <AdminConfirmAction
               label={LABELS.reject}
               tone="danger"
+              inline
               dialogVariant="danger"
               title={LABELS.confirmRejectProductTitle}
               description={rejectDesc}
@@ -139,6 +133,7 @@ export function ProductModerationPreviewModal({
             <AdminConfirmAction
               label={LABELS.approve}
               tone="success"
+              inline
               dialogVariant="success"
               title={LABELS.confirmApproveProductTitle}
               description={approveDesc}
