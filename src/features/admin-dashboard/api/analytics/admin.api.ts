@@ -2,7 +2,6 @@ import { apiClient } from "@/shared/api/client/client";
 import {
   unwrapPaginatedList,
   buildSearchParams,
-  withQuery,
   type PaginatedList,
   type PaginationQuery,
 } from "@/shared/api/client/pagination";
@@ -14,14 +13,11 @@ import type {
   AdminAnalytics,
   VendorInfo,
   ProductDetail,
-  Coupon,
-  CouponAnalytics,
-  CouponBatch,
-  BulkGenerateResult,
-  CouponStatus,
 } from "@/shared/api/types";
+import { adminCouponsApi } from "./adminCoupons.api";
 
 export const adminApi = {
+  ...adminCouponsApi,
   dashboard: () =>
     apiClient.get<{
       totalOrders: number;
@@ -38,9 +34,7 @@ export const adminApi = {
       API.vendors.list(
         buildSearchParams({
           status: VENDOR_STATUS.PENDING,
-          search: params.search,
-          page: params.page,
-          limit: params.limit,
+          ...params,
         }).toString(),
       ),
     );
@@ -51,14 +45,7 @@ export const adminApi = {
     params: PaginationQuery & { search?: string; status?: string } = {},
   ): Promise<PaginatedList<VendorInfo>> => {
     const res = await apiClient.getWithResponse<VendorInfo[]>(
-      API.vendors.list(
-        buildSearchParams({
-          page: params.page,
-          limit: params.limit,
-          search: params.search,
-          status: params.status,
-        }).toString(),
-      ),
+      API.vendors.list(buildSearchParams({ ...params }).toString()),
     );
     return unwrapPaginatedList(res);
   },
@@ -76,15 +63,22 @@ export const adminApi = {
   deleteVendor: (id: string) => apiClient.delete(API.vendors.delete(id)),
 
   pendingProducts: async (
-    params: PaginationQuery & { search?: string } = {},
+    params: PaginationQuery & {
+      search?: string;
+      categoryId?: string;
+      vendorId?: string;
+      inStock?: boolean;
+      minPrice?: number;
+      maxPrice?: number;
+      sort?: string;
+    } = {},
   ): Promise<PaginatedList<ProductDetail>> => {
     const res = await apiClient.getWithResponse<ProductDetail[]>(
       API.products.list(
         buildSearchParams({
           status: PRODUCT_STATUS.PENDING_APPROVAL,
-          search: params.search,
-          page: params.page,
-          limit: params.limit,
+          ...params,
+          inStock: params.inStock ? true : undefined,
         }).toString(),
       ),
     );
@@ -102,40 +96,6 @@ export const adminApi = {
   unarchiveProduct: (id: string) =>
     apiClient.post<{ message: string }>(API.products.unarchive(id), {}),
 
-  coupons: async (
-    params: PaginationQuery & {
-      vendorId?: string | null;
-      status?: string;
-      search?: string;
-      vendorScoped?: boolean;
-    } = {},
-  ): Promise<PaginatedList<Coupon>> => {
-    const res = await apiClient.getWithResponse<Coupon[]>(
-      withQuery(API.coupons.list, {
-        page: params.page,
-        limit: params.limit,
-        vendorId: params.vendorId,
-        status: params.status,
-        search: params.search,
-        vendorScoped: params.vendorScoped,
-      }),
-    );
-    return unwrapPaginatedList(res);
-  },
-
-  createCoupon: (body: unknown) =>
-    apiClient.post<Coupon>(API.coupons.create, body),
-  updateCoupon: (id: string, body: unknown) =>
-    apiClient.patch<Coupon>(API.coupons.detail(id), body),
-  updateCouponStatus: (id: string, status: CouponStatus) =>
-    apiClient.patch<Coupon>(API.coupons.status(id), { status }),
-  couponAnalytics: (id: string) =>
-    apiClient.get<CouponAnalytics>(API.coupons.analytics(id)),
-  bulkGenerateCoupons: (body: unknown) =>
-    apiClient.post<BulkGenerateResult>(API.coupons.bulk, body),
-  couponBatches: () => apiClient.get<CouponBatch[]>(API.coupons.batches),
-  notifyCouponAlerts: () =>
-    apiClient.post<{ notified: number }>(API.coupons.notifyAlerts),
   analytics: () => apiClient.get<AdminAnalytics>(API.admin.analytics),
   exportAnalytics: (
     format: "xlsx" | "csv" | "pdf" = "xlsx",
@@ -146,11 +106,14 @@ export const adminApi = {
       from: range?.from,
       to: range?.to,
     });
-    const from = range?.from ?? "";
-    const to = range?.to ?? "";
     return downloadReportFile(
       API.admin.analyticsExport(params.toString()),
-      buildReportExportFilenameFallback("platform-analytics", from, to, format),
+      buildReportExportFilenameFallback(
+        "platform-analytics",
+        range?.from ?? "",
+        range?.to ?? "",
+        format,
+      ),
     );
   },
 };

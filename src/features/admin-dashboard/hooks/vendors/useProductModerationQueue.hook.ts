@@ -1,14 +1,33 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { useAdminDataList } from "../shared/useAdminDataList.hook";
 import { useProductModeration } from "./useProductModeration.hook";
 import { adminApi } from "../../api/analytics/admin.api";
 import { useDebouncedValue } from "@/shared/hooks/ui/use-debounce.hook";
 import type { ProductDetail } from "@/shared/api/types";
+import type { AdminProductsFiltersProps } from "../../components/vendors/AdminProductsFilters.component";
 
 export function useProductModerationQueue() {
-  const [search, setSearch] = useState("");
+  const searchParams = useSearchParams();
+  const [userFilters, setUserFilters] = useState<
+    Partial<Record<string, string>>
+  >({});
+  const get = (k: string, alt?: string) =>
+    userFilters[k] ??
+    searchParams.get(k) ??
+    (alt ? searchParams.get(alt) : null) ??
+    "";
+
+  const search = get("search", "q");
+  const categoryId = get("categoryId");
+  const vendorId = get("vendorId");
+  const inStock = get("inStock");
+  const minPrice = get("minPrice");
+  const maxPrice = get("maxPrice");
+  const sort = get("sort");
+
   const debouncedSearch = useDebouncedValue(search.trim(), 350);
 
   const load = useCallback(
@@ -17,19 +36,37 @@ export function useProductModerationQueue() {
         page,
         limit,
         search: debouncedSearch || undefined,
+        categoryId: categoryId || undefined,
+        vendorId: vendorId || undefined,
+        inStock:
+          inStock === "true" || inStock === "in_stock" ? true : undefined,
+        minPrice: minPrice ? Number(minPrice) : undefined,
+        maxPrice: maxPrice ? Number(maxPrice) : undefined,
+        sort: sort || undefined,
       }),
-    [debouncedSearch],
+    [debouncedSearch, categoryId, vendorId, inStock, minPrice, maxPrice, sort],
   );
+
   const list = useAdminDataList(load);
   const { approve, reject } = useProductModeration();
 
-  const handleSearchChange = (value: string) => {
-    setSearch(value);
+  const setFilter = (key: string) => (val: string) => {
+    setUserFilters((prev) => ({ ...prev, [key]: val }));
+    list.onPageChange(1);
   };
 
-  const handleClear = () => {
-    setSearch("");
-  };
+  const onClear = useCallback(() => {
+    setUserFilters({
+      search: "",
+      categoryId: "",
+      vendorId: "",
+      inStock: "",
+      minPrice: "",
+      maxPrice: "",
+      sort: "",
+    });
+    list.onPageChange(1);
+  }, [list]);
 
   const onApprove = useCallback(
     async (id: string) => {
@@ -47,12 +84,42 @@ export function useProductModerationQueue() {
     [reject, list],
   );
 
+  const hasFilters = Boolean(
+    search.trim() ||
+    categoryId ||
+    vendorId ||
+    inStock ||
+    minPrice ||
+    maxPrice ||
+    sort,
+  );
+
+  const filters: AdminProductsFiltersProps = {
+    search,
+    status: "PENDING",
+    categoryId,
+    vendorId,
+    inStock,
+    minPrice,
+    maxPrice,
+    sort,
+    hideStatus: true,
+    onSearchChange: setFilter("search"),
+    onStatusChange: () => {},
+    onCategoryChange: setFilter("categoryId"),
+    onVendorChange: setFilter("vendorId"),
+    onInStockChange: setFilter("inStock"),
+    onMinPriceChange: setFilter("minPrice"),
+    onMaxPriceChange: setFilter("maxPrice"),
+    onSortChange: setFilter("sort"),
+    onClear,
+  };
+
   return {
     products: list.rows as unknown as ProductDetail[],
     isLoading: list.loading,
-    search,
-    onSearchChange: handleSearchChange,
-    onClear: handleClear,
+    filters,
+    hasFilters,
     reload: list.reload,
     pagination: {
       page: list.page,

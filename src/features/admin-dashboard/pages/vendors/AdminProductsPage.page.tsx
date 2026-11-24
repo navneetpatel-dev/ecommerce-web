@@ -33,7 +33,6 @@ export function AdminProductsPage() {
 
   const hasFilter = Boolean(
     page.filters.search ||
-    page.filters.status ||
     page.filters.categoryId ||
     page.filters.vendorId ||
     page.filters.inStock ||
@@ -41,11 +40,14 @@ export function AdminProductsPage() {
     page.filters.maxPrice ||
     page.filters.sort,
   );
-  const defaultTab = hasFilter
-    ? "all"
-    : page.pendingCount > 0
+  const defaultTab =
+    page.filters.status === "PENDING"
       ? "pending"
-      : "all";
+      : hasFilter
+        ? "all"
+        : page.pendingCount > 0
+          ? "pending"
+          : "all";
   const pendingTabContent = (
     <RequirePermission permission={page.approvePermission}>
       <ProductModerationQueue />

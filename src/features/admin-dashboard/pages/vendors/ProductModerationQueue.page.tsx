@@ -2,21 +2,15 @@
 
 import { PackageSearch } from "lucide-react";
 import { EmptyState } from "@/shared/components/display/EmptyState.component";
-import { FormFieldFrame } from "@/shared/components/forms";
-import { SearchInput } from "@/shared/components/ui/SearchInput.component";
-import { CollapsibleTableFilters } from "@/shared/components/filters";
 import { useProductModerationQueue } from "../../hooks/vendors/useProductModerationQueue.hook";
 import { ProductModerationTable } from "../../components/vendors/ProductModerationTable.component";
+import { AdminProductsFilters } from "../../components/vendors/AdminProductsFilters.component";
 import { LABELS } from "@/shared/constants/labels";
 
 export function ProductModerationQueue() {
   const queue = useProductModerationQueue();
 
-  if (
-    !queue.isLoading &&
-    queue.pagination.total === 0 &&
-    !queue.search.trim()
-  ) {
+  if (!queue.isLoading && queue.pagination.total === 0 && !queue.hasFilters) {
     return (
       <EmptyState
         icon={PackageSearch}
@@ -26,29 +20,9 @@ export function ProductModerationQueue() {
     );
   }
 
-  const activeCount = queue.search.trim() ? 1 : 0;
-
   return (
     <div className="space-y-4">
-      <CollapsibleTableFilters
-        activeCount={activeCount}
-        onClear={queue.onClear}
-      >
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 items-end">
-          <FormFieldFrame
-            label={LABELS.search}
-            htmlFor="product-moderation-filter-search"
-          >
-            <SearchInput
-              id="product-moderation-filter-search"
-              value={queue.search}
-              onChange={(e) => queue.onSearchChange(e.target.value)}
-              onClear={() => queue.onSearchChange("")}
-              placeholder="Search by product name or SKU..."
-            />
-          </FormFieldFrame>
-        </div>
-      </CollapsibleTableFilters>
+      <AdminProductsFilters {...queue.filters} />
 
       <ProductModerationTable
         products={queue.products}
