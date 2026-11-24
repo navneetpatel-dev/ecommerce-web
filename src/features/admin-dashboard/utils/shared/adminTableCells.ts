@@ -48,7 +48,7 @@ export function formatAdminCellValue(value: unknown): string {
     if (Array.isArray(value)) {
       if (value.length === 0) return "—";
       return value
-        .map((item) => formatAdminCellValue(item))
+        .map(formatAdminCellValue)
         .filter((item) => item !== "—")
         .join(", ");
     }
@@ -72,6 +72,7 @@ const isMoneyColumnKey = (key: string): boolean => {
     key === "subtotal" ||
     key === "price" ||
     key === "amount" ||
+    key === "priceBandThreshold" ||
     key.endsWith("Amount") ||
     key.endsWith("Price") ||
     key.endsWith("Total") ||
@@ -90,13 +91,13 @@ export function adminCellText(row: AdminDataRow, columnKey: string): string {
   const value = getAdminCellValue(row, columnKey);
 
   if (columnKey === "returnReference") {
-    const ref =
+    const raw =
       typeof value === "string" && value.trim()
         ? value
         : typeof row.id === "string"
           ? `#RET-${row.id.slice(0, 8).toUpperCase()}`
           : "";
-    return ref ? (ref.startsWith("#") ? ref : `#${ref}`) : "—";
+    return raw ? (raw.startsWith("#") ? raw : `#${raw}`) : "—";
   }
 
   if (columnKey === "reasonCode" && typeof value === "string" && value.trim()) {
@@ -104,13 +105,13 @@ export function adminCellText(row: AdminDataRow, columnKey: string): string {
   }
 
   if (columnKey === "orderReference" || columnKey === "reference") {
-    const ref =
+    const raw =
       typeof value === "string" && value.trim()
         ? value
         : typeof row.id === "string"
           ? row.id.slice(0, 8).toUpperCase()
           : "";
-    return ref ? `#${ref.replace(/^#/, "")}` : "—";
+    return raw ? `#${raw.replace(/^#/, "")}` : "—";
   }
 
   if (isMoneyColumnKey(columnKey)) {
@@ -121,6 +122,16 @@ export function adminCellText(row: AdminDataRow, columnKey: string): string {
         value.trim() !== "")
     ) {
       return formatInr(Number(value));
+    }
+  }
+
+  if (
+    columnKey === "gstPercentage" ||
+    columnKey === "gstPercentageAbove" ||
+    columnKey.endsWith("Percentage")
+  ) {
+    if (value != null && value !== "" && !isNaN(Number(value))) {
+      return `${Number(value)}%`;
     }
   }
 

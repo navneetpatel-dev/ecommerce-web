@@ -19,14 +19,25 @@ export function useReassignProducts(open: boolean, onDone: () => void) {
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [categoriesLoading, setCategoriesLoading] = useState(false);
 
   useEffect(() => {
     if (!open) return;
+    let active = true;
+    queueMicrotask(() => {
+      if (active) setCategoriesLoading(true);
+    });
     void categoriesApi
       .listPaginated({ page: 1, limit: MAX_PAGE_LIMIT })
       .then((result) => {
-        setCategories(result.items);
+        if (active) setCategories(result.items);
+      })
+      .finally(() => {
+        if (active) setCategoriesLoading(false);
       });
+    return () => {
+      active = false;
+    };
   }, [open]);
 
   const onSubmit = async () => {
@@ -56,6 +67,7 @@ export function useReassignProducts(open: boolean, onDone: () => void) {
 
   return {
     categories,
+    categoriesLoading,
     fromId,
     setFromId,
     toId,

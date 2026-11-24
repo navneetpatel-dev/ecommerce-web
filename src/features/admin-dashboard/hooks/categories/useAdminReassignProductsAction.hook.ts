@@ -14,6 +14,7 @@ export function useAdminReassignProductsAction({
   const reassign = useReassignProducts(open, onDone);
   const {
     categories,
+    categoriesLoading,
     fromId,
     setFromId,
     toId,
@@ -44,6 +45,7 @@ export function useAdminReassignProductsAction({
   return {
     open,
     categories,
+    categoriesLoading,
     fromId,
     setFromId,
     toId,

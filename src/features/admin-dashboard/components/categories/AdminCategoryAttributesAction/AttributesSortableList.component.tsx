@@ -14,6 +14,7 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
+import { Skeleton } from "@/shared/components/ui/skeleton";
 import { LABELS } from "@/shared/constants/labels";
 import type { CategoryAttribute } from "@/shared/api/types";
 import { AttributesSortableRows } from "./AttributesSortableRows.component";
@@ -42,6 +43,27 @@ export function AttributesSortableList({
   );
   const ids = rows.map((row) => row.id);
   const isEmpty = rows.length === 0;
+
+  if (loading && isEmpty) {
+    return (
+      <ul className={styles.listContainer} data-testid="attributes-skeleton">
+        <li className="flex items-center justify-between rounded-md border border-line/60 p-3">
+          <Skeleton className="h-4 w-32" />
+          <div className="flex gap-2">
+            <Skeleton className="h-7 w-14" />
+            <Skeleton className="h-7 w-14" />
+          </div>
+        </li>
+        <li className="flex items-center justify-between rounded-md border border-line/60 p-3">
+          <Skeleton className="h-4 w-40" />
+          <div className="flex gap-2">
+            <Skeleton className="h-7 w-14" />
+            <Skeleton className="h-7 w-14" />
+          </div>
+        </li>
+      </ul>
+    );
+  }
 
   const emptyRow = <li className={styles.emptyRow}>{LABELS.noRecordsFound}</li>;
 

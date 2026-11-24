@@ -86,52 +86,58 @@ export function VendorProductImagesDialog({
             <Skeleton className="h-16 w-full rounded-md" />
             <Skeleton className="h-16 w-full rounded-md" />
           </div>
-        ) : null}
-        {error ? (
-          <p role="alert" className={vendorProductImagesDialogStyles.errorText}>
-            {error}
-          </p>
-        ) : null}
+        ) : (
+          <>
+            {error ? (
+              <p
+                role="alert"
+                className={vendorProductImagesDialogStyles.errorText}
+              >
+                {error}
+              </p>
+            ) : null}
 
-        <ul className={vendorProductImagesDialogStyles.imageList}>
-          {images.map(renderImageRow)}
-        </ul>
+            <ul className={vendorProductImagesDialogStyles.imageList}>
+              {images.map(renderImageRow)}
+            </ul>
 
-        <FormSection
-          title={LABELS.productFormSectionImages}
-          hint={LABELS.productFormSectionImagesHint}
-          columns={1}
-        >
-          {variants.length > 0 ? (
-            <Select
-              value={variantId || ALL_VARIANTS_VALUE}
-              onValueChange={handleVariantFilter}
+            <FormSection
+              title={LABELS.productFormSectionImages}
+              hint={LABELS.productFormSectionImagesHint}
+              columns={1}
             >
-              <SelectTrigger aria-label={LABELS.productImageVariant}>
-                <SelectValue placeholder={LABELS.productImageAllVariants} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value={ALL_VARIANTS_VALUE}>
-                  {LABELS.productImageAllVariants}
-                </SelectItem>
-                {variants.map((variant) => (
-                  <SelectItem key={variant.id} value={variant.id}>
-                    {variant.sku}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          ) : null}
-          <FileUpload
-            entityType={UPLOAD_ENTITY.PRODUCTS}
-            entityId={productId}
-            purpose={UPLOAD_PURPOSE.IMAGES}
-            accept="image/png,image/jpeg,image/webp"
-            disabled={busyId === "new"}
-            label={LABELS.addProductImage}
-            onUploaded={onAddImage}
-          />
-        </FormSection>
+              {variants.length > 0 ? (
+                <Select
+                  value={variantId || ALL_VARIANTS_VALUE}
+                  onValueChange={handleVariantFilter}
+                >
+                  <SelectTrigger aria-label={LABELS.productImageVariant}>
+                    <SelectValue placeholder={LABELS.productImageAllVariants} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value={ALL_VARIANTS_VALUE}>
+                      {LABELS.productImageAllVariants}
+                    </SelectItem>
+                    {variants.map((variant) => (
+                      <SelectItem key={variant.id} value={variant.id}>
+                        {variant.sku}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              ) : null}
+              <FileUpload
+                entityType={UPLOAD_ENTITY.PRODUCTS}
+                entityId={productId}
+                purpose={UPLOAD_PURPOSE.IMAGES}
+                accept="image/png,image/jpeg,image/webp"
+                disabled={busyId === "new"}
+                label={LABELS.addProductImage}
+                onUploaded={onAddImage}
+              />
+            </FormSection>
+          </>
+        )}
       </DialogContent>
     </Dialog>
   );

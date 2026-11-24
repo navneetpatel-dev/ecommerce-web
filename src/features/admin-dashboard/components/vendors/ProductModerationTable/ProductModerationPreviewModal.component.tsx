@@ -12,12 +12,12 @@ import {
 } from "@/shared/components/ui/dialog";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
-import { formatInr } from "@/shared/utils/formatting/orderFormat";
 import type { ProductDetail } from "@/shared/api/types";
 import { AdminConfirmAction } from "../../shared/AdminConfirmAction.component";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { ProductModerationSpecs } from "./ProductModerationSpecs.component";
 import { ProductModerationGallery } from "./ProductModerationGallery.component";
+import { ProductModerationMetadataGrid } from "./ProductModerationMetadataGrid.component";
 import { productsApi } from "@/features/products";
 
 interface ProductModerationPreviewModalProps {
@@ -60,8 +60,6 @@ export function ProductModerationPreviewModal({
   };
 
   const active = detailQuery.data ?? product;
-  const vendorName = active.vendor?.businessName || "—";
-  const categoryName = active.category?.name || active.categoryName || "—";
 
   const allImages: string[] = [];
   if (active.imageUrl) allImages.push(active.imageUrl);
@@ -100,28 +98,10 @@ export function ProductModerationPreviewModal({
             onSelectIdx={setActiveImageIdx}
           />
 
-          <div className="grid grid-cols-2 gap-4 rounded-md border border-line/60 bg-paper/40 p-3 text-body-sm">
-            <div>
-              <span className="font-medium text-ink-muted">
-                {LABELS.productPreviewVendor}:
-              </span>{" "}
-              <span className="font-semibold text-ink">{vendorName}</span>
-            </div>
-            <div>
-              <span className="font-medium text-ink-muted">
-                {LABELS.productPreviewCategory}:
-              </span>{" "}
-              <span className="font-semibold text-ink">{categoryName}</span>
-            </div>
-            <div>
-              <span className="font-medium text-ink-muted">
-                {LABELS.productPreviewPricing}:
-              </span>{" "}
-              <span className="font-semibold text-ink">
-                {formatInr(active.basePrice)}
-              </span>
-            </div>
-          </div>
+          <ProductModerationMetadataGrid
+            product={active}
+            loading={detailQuery.isLoading}
+          />
 
           {active.description && (
             <div className="space-y-1">

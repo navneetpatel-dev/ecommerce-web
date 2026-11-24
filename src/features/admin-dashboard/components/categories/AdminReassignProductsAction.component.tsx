@@ -35,6 +35,7 @@ export function AdminReassignProductsAction({
   const {
     open,
     categories,
+    categoriesLoading,
     fromId,
     setFromId,
     toId,
@@ -87,22 +88,48 @@ export function AdminReassignProductsAction({
             className={styles.formSection}
           >
             <FormFieldFrame label={LABELS.reassignFrom}>
-              <Select value={fromId} onValueChange={setFromId}>
+              <Select
+                value={fromId}
+                onValueChange={setFromId}
+                disabled={categoriesLoading}
+              >
                 <SelectTrigger>
-                  <SelectValue placeholder={LABELS.selectCategory} />
+                  <SelectValue
+                    placeholder={
+                      categoriesLoading
+                        ? "Loading categories..."
+                        : LABELS.selectCategory
+                    }
+                  />
                 </SelectTrigger>
                 <SelectContent>
-                  <CategoryOptionsList categories={categories} />
+                  <CategoryOptionsList
+                    categories={categories}
+                    loading={categoriesLoading}
+                  />
                 </SelectContent>
               </Select>
             </FormFieldFrame>
             <FormFieldFrame label={LABELS.reassignTo}>
-              <Select value={toId} onValueChange={setToId}>
+              <Select
+                value={toId}
+                onValueChange={setToId}
+                disabled={categoriesLoading}
+              >
                 <SelectTrigger>
-                  <SelectValue placeholder={LABELS.selectCategory} />
+                  <SelectValue
+                    placeholder={
+                      categoriesLoading
+                        ? "Loading categories..."
+                        : LABELS.selectCategory
+                    }
+                  />
                 </SelectTrigger>
                 <SelectContent>
-                  <CategoryOptionsList categories={categories} />
+                  <CategoryOptionsList
+                    categories={categories}
+                    loading={categoriesLoading}
+                  />
                 </SelectContent>
               </Select>
             </FormFieldFrame>

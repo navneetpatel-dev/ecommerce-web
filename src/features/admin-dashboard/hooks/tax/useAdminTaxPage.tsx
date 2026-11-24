@@ -12,6 +12,7 @@ import type { AdminDataRow } from "../shared/useAdminDataList.hook";
 import type { AdminListPageModel } from "../../types/shared/adminListPage.types";
 
 export type AdminTaxPageModel = AdminListPageModel & {
+  fetchDetail: (row: AdminDataRow) => Promise<Record<string, unknown>>;
   filters: {
     search: string;
     onSearchChange: (value: string) => void;
@@ -104,7 +105,13 @@ export function useAdminTaxPage(): AdminTaxPageModel {
     [],
   );
 
+  const fetchDetail = useCallback(
+    async (row: AdminDataRow) => ({ ...row }),
+    [],
+  );
+
   return {
+    fetchDetail,
     filters: {
       search,
       onSearchChange: setSearch,

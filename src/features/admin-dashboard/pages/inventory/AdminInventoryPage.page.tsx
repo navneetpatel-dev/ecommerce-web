@@ -39,6 +39,10 @@ export function AdminInventoryPage() {
 
   const activeCount = search.trim() ? 1 : 0;
   const handleClear = () => setSearch("");
+  const fetchDetail = useCallback(
+    async (row: AdminDataRow) => ({ ...row }),
+    [],
+  );
 
   return (
     <div className={adminPagesStyles.stack6}>
@@ -64,6 +68,7 @@ export function AdminInventoryPage() {
         load={load}
         columnKeys={["productName", "sku", "stock", "lowStockAt"]}
         actions={renderStockEditorAction}
+        fetchRowDetail={fetchDetail}
       />
     </div>
   );

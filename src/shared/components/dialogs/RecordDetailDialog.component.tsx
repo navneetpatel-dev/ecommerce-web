@@ -36,26 +36,23 @@ interface RecordDetailDialogProps {
 }
 
 function formatDetailValue(key: string, value: unknown, label: string) {
-  if (value == null || value === "") {
+  if (value == null || value === "")
     return <span className={recordDetailDialogStyles.dash}>—</span>;
-  }
 
   if (isImageFieldKey(key)) {
     const urls = extractImageUrls(value);
-    if (urls.length > 0) {
-      return <RecordDetailImage value={value} alt={label} />;
-    }
-    return <span className={recordDetailDialogStyles.dash}>—</span>;
+    return urls.length > 0 ? (
+      <RecordDetailImage value={value} alt={label} />
+    ) : (
+      <span className={recordDetailDialogStyles.dash}>—</span>
+    );
   }
 
-  if (typeof value === "boolean") {
-    return value ? LABELS.yes : LABELS.no;
-  }
+  if (typeof value === "boolean") return value ? LABELS.yes : LABELS.no;
 
   if (key === "status" || key.endsWith("Status") || key === "paymentStatus") {
-    if (typeof value === "string" && value.trim()) {
+    if (typeof value === "string" && value.trim())
       return <StatusBadge status={value} />;
-    }
   }
 
   if (key === "reasonCode" || key.endsWith("ReasonCode")) {
@@ -91,6 +88,20 @@ function formatDetailValue(key: string, value: unknown, label: string) {
       return (
         <span className={recordDetailDialogStyles.numVal}>
           {formatInr(Number(value))}
+        </span>
+      );
+    }
+  }
+
+  if (
+    key === "gstPercentage" ||
+    key === "gstPercentageAbove" ||
+    key.endsWith("Percentage")
+  ) {
+    if (!isNaN(Number(value))) {
+      return (
+        <span className={recordDetailDialogStyles.numVal}>
+          {Number(value)}%
         </span>
       );
     }

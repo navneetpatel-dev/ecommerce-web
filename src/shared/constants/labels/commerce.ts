@@ -105,6 +105,7 @@ export const commerceLabels = {
   selectedOptions: "Selected options",
   listPrice: "MRP",
   variantPrice: "Price",
+  variants: "Variants",
   soldBy: "Sold by",
   shipment: "Shipment",
   visitStore: "Visit store",

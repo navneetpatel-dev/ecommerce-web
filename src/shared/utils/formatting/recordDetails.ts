@@ -38,6 +38,10 @@ const CUSTOM_LABELS: Record<string, string> = {
   shippingRefundAmount: "Shipping Refund",
   againstInvoiceNumber: "Tax Invoice Reference",
   rejectionReason: "Rejection Reason",
+  gstPercentage: "GST Rate",
+  gstPercentageAbove: "GST Rate (Above Threshold)",
+  priceBandThreshold: "Price Band Threshold",
+  lowStockAt: "Low Stock Threshold",
   disputeReason: "Dispute Reason",
   disputeDescription: "Dispute Details",
   disputeStatus: "Dispute Status",
@@ -60,6 +64,7 @@ const UUID_REGEX =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export const isMoneyKey = (k: string): boolean => {
+  if (k === "priceBandThreshold") return true;
   const lower = k.toLowerCase();
   if (
     lower.includes("count") ||

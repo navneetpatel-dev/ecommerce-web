@@ -6,7 +6,7 @@ import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 
 export function useInventoryStockEditor(
   currentStock: number,
-  productId: string,
+  variantId: string,
 ) {
   const [stock, setStock] = useState(String(currentStock));
   const [pending, setPending] = useState(false);
@@ -21,7 +21,7 @@ export function useInventoryStockEditor(
     setPending(true);
     setError(null);
     try {
-      await inventoryApi.updateStock(productId, nextStock, currentStock);
+      await inventoryApi.updateStock(variantId, nextStock, currentStock);
       onSaved();
     } catch (saveError) {
       setError(getApiErrorMessage(saveError, "Could not update stock."));
