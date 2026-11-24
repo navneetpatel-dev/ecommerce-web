@@ -1,5 +1,6 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
 import {
   Dialog,
   DialogContent,
@@ -11,8 +12,9 @@ import {
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
-import { formatInr } from "@/shared/utils/formatting/orderFormat";
+import { formatInr, shortOrderId } from "@/shared/utils/formatting/orderFormat";
 import { formatDateTime } from "@/shared/utils/formatting/formatDate";
+import { ordersApi, ordersKeys } from "@/features/orders";
 import type { Order } from "@/shared/api/types";
 
 interface AdminOrderDetailDrawerProps {
@@ -24,15 +26,24 @@ export function AdminOrderDetailDrawer({
   order,
   onClose,
 }: AdminOrderDetailDrawerProps) {
+  const detailQuery = useQuery({
+    queryKey: ordersKeys.detail(order?.id ?? ""),
+    queryFn: () => ordersApi.detail(order!.id),
+    enabled: Boolean(order?.id),
+  });
+
   if (!order) return null;
 
   const handleOpenChange = (open: boolean) => {
     if (!open) onClose();
   };
 
-  const address = order.shippingAddress;
-  const items = order.subOrders?.flatMap((sub) => sub.items) ?? [];
-  const placedDate = order.createdAt ? formatDateTime(order.createdAt) : "—";
+  const active = detailQuery.data ?? order;
+  const address = active.shippingAddress;
+  const subOrders = active.subOrders ?? [];
+  const placedDate = active.createdAt ? formatDateTime(active.createdAt) : "—";
+  const refCode = active.orderReference ?? shortOrderId(active.id);
+  const customerLabel = active.customerName ? ` • ${active.customerName}` : "";
 
   return (
     <Dialog open={Boolean(order)} onOpenChange={handleOpenChange}>
@@ -40,15 +51,15 @@ export function AdminOrderDetailDrawer({
         <DialogHeader>
           <div className="flex flex-wrap items-center justify-between gap-2 pr-6">
             <DialogTitle className="text-heading-sm font-semibold text-ink">
-              {placedDate}
+              {`Order #${refCode}${customerLabel}`}
             </DialogTitle>
             <div className="flex items-center gap-2">
-              <Badge variant="outline">{order.status}</Badge>
-              <Badge variant="secondary">{order.paymentStatus}</Badge>
+              <Badge variant="outline">{active.status}</Badge>
+              <Badge variant="secondary">{active.paymentStatus}</Badge>
             </div>
           </div>
           <DialogDescription className="text-body-sm text-ink-muted">
-            {LABELS.orderDetails}
+            {placedDate} • {LABELS.orderDetails}
           </DialogDescription>
         </DialogHeader>
 
@@ -81,32 +92,45 @@ export function AdminOrderDetailDrawer({
             </div>
           )}
 
-          {/* Line Items */}
-          <div className="space-y-2">
+          {/* Line Items grouped by vendor / suborder */}
+          <div className="space-y-3">
             <h4 className="text-body-sm font-semibold text-ink">
-              {LABELS.ordersColumnItems} ({items.length})
+              {LABELS.ordersColumnItems}
             </h4>
-            <div className="divide-y divide-line/60 rounded-lg border border-line bg-surface">
-              {items.map((item) => (
-                <div
-                  key={item.id}
-                  className="flex items-center justify-between gap-4 p-3 text-body-sm"
-                >
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate font-medium text-ink">
-                      {item.productName}
-                    </p>
-                    <p className="text-body-xs text-ink-muted">
-                      {LABELS.quantity}: {item.quantity} ×{" "}
-                      {formatInr(item.displayUnitPrice ?? item.unitPrice)}
-                    </p>
-                  </div>
-                  <span className="font-semibold text-ink">
-                    {formatInr(item.lineTotal)}
-                  </span>
+            {subOrders.map((sub) => (
+              <div
+                key={sub.id}
+                className="rounded-lg border border-line bg-surface p-3 space-y-2"
+              >
+                <div className="flex items-center justify-between text-body-xs font-medium text-ink-muted border-b border-line/50 pb-1.5">
+                  <span>{sub.vendor?.businessName ?? "Vendor"}</span>
+                  <Badge variant="outline" className="text-[10px]">
+                    {sub.status}
+                  </Badge>
                 </div>
-              ))}
-            </div>
+                <div className="divide-y divide-line/40">
+                  {sub.items?.map((item) => (
+                    <div
+                      key={item.id}
+                      className="flex items-center justify-between gap-4 py-2 text-body-sm"
+                    >
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate font-medium text-ink">
+                          {item.productName}
+                        </p>
+                        <p className="text-body-xs text-ink-muted">
+                          {LABELS.quantity}: {item.quantity} ×{" "}
+                          {formatInr(item.displayUnitPrice ?? item.unitPrice)}
+                        </p>
+                      </div>
+                      <span className="font-semibold text-ink">
+                        {formatInr(item.lineTotal)}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
 
           {/* Payment & Price Breakdown */}
@@ -119,46 +143,46 @@ export function AdminOrderDetailDrawer({
                 <dt>{LABELS.subtotal}</dt>
                 <dd className="font-medium text-ink">
                   {formatInr(
-                    order.itemsTotal ??
-                      order.merchandiseSubtotal ??
-                      order.totalAmount,
+                    active.itemsTotal ??
+                      active.merchandiseSubtotal ??
+                      active.totalAmount,
                   )}
                 </dd>
               </div>
-              {order.couponSavings ? (
+              {active.couponSavings ? (
                 <div className="flex justify-between text-ink-muted">
                   <dt>{LABELS.couponDiscount}</dt>
                   <dd className="font-medium text-emerald-600">
-                    -{formatInr(order.couponSavings)}
+                    -{formatInr(active.couponSavings)}
                   </dd>
                 </div>
               ) : null}
-              {order.shippingTotal != null && (
+              {active.shippingTotal != null && (
                 <div className="flex justify-between text-ink-muted">
                   <dt>{LABELS.shipping}</dt>
                   <dd className="font-medium text-ink">
-                    {order.shippingTotal === 0
+                    {active.shippingTotal === 0
                       ? LABELS.freeShipping
-                      : formatInr(order.shippingTotal)}
+                      : formatInr(active.shippingTotal)}
                   </dd>
                 </div>
               )}
-              {order.taxTotal != null && (
+              {active.taxTotal != null && (
                 <div className="flex justify-between text-ink-muted">
                   <dt>{LABELS.taxIgst}</dt>
                   <dd className="font-medium text-ink">
-                    {formatInr(order.taxTotal)}
+                    {formatInr(active.taxTotal)}
                   </dd>
                 </div>
               )}
               <div className="flex justify-between border-t border-line/60 pt-2 text-body-base font-semibold text-ink">
                 <dt>{LABELS.total}</dt>
-                <dd>{formatInr(order.totalAmount)}</dd>
+                <dd>{formatInr(active.totalAmount)}</dd>
               </div>
             </dl>
-            {order.paymentMethod && (
+            {active.paymentMethod && (
               <p className="mt-2 border-t border-line/40 pt-2 text-body-xs text-ink-muted">
-                {LABELS.paymentMethod}: {order.paymentMethod}
+                {LABELS.paymentMethod}: {active.paymentMethod}
               </p>
             )}
           </div>

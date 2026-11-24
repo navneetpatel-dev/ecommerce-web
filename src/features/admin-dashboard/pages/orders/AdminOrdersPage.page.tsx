@@ -32,10 +32,12 @@ export function AdminOrdersPage() {
         columnKeys={page.columnKeys}
         onRowClick={handleRowClick}
       />
-      <AdminOrderDetailDrawer
-        order={selectedOrder}
-        onClose={handleCloseDrawer}
-      />
+      {selectedOrder ? (
+        <AdminOrderDetailDrawer
+          order={selectedOrder}
+          onClose={handleCloseDrawer}
+        />
+      ) : null}
     </div>
   );
 }

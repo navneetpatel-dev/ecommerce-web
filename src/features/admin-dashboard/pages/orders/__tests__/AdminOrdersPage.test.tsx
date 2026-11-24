@@ -1,5 +1,6 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AdminOrdersPage } from "../AdminOrdersPage.page";
 import { ordersApi } from "@/features/orders";
 
@@ -39,6 +40,10 @@ vi.mock("@/features/orders", () => ({
     }),
     updateStatus: vi.fn().mockResolvedValue({ message: "Updated" }),
     cancel: vi.fn().mockResolvedValue({ orderId: "ord-1", cancelled: true }),
+    detail: vi.fn().mockResolvedValue(null),
+  },
+  ordersKeys: {
+    detail: vi.fn((id: string) => ["orders", "detail", id]),
   },
 }));
 
@@ -49,7 +54,14 @@ describe("AdminOrdersPage", () => {
   });
 
   it("renders orders table and calls ordersApi.myOrders exactly once on mount", async () => {
-    render(<AdminOrdersPage />);
+    const queryClient = new QueryClient({
+      defaultOptions: { queries: { retry: false } },
+    });
+    render(
+      <QueryClientProvider client={queryClient}>
+        <AdminOrdersPage />
+      </QueryClientProvider>,
+    );
 
     await waitFor(() => {
       expect(screen.getAllByText(/pending/i).length).toBeGreaterThanOrEqual(1);

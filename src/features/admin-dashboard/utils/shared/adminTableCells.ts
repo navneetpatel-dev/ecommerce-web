@@ -1,5 +1,6 @@
 import { LABELS } from "@/shared/constants/labels";
 import { tryFormatDateTime } from "@/shared/utils/formatting/formatDate";
+import { formatInr } from "@/shared/utils/formatting/orderFormat";
 import type { AdminDataRow } from "../../hooks/shared/useAdminDataList.hook";
 
 const SKIP_COLUMN_KEYS = new Set([
@@ -62,6 +63,21 @@ export function shouldInferAdminColumn(key: string): boolean {
   return true;
 }
 
+const isMoneyColumnKey = (key: string): boolean => {
+  const lower = key.toLowerCase();
+  if (lower.includes("count") || lower.includes("quantity")) return false;
+  return (
+    key === "totalAmount" ||
+    key === "subtotal" ||
+    key === "price" ||
+    key === "amount" ||
+    key.endsWith("Amount") ||
+    key.endsWith("Price") ||
+    key.endsWith("Total") ||
+    key.endsWith("Fee")
+  );
+};
+
 /**
  * A plain-text admin cell (not an image, not a status badge) as a string, so
  * the table treats it as text: cut short with the full value on hover in the
@@ -71,6 +87,28 @@ export function shouldInferAdminColumn(key: string): boolean {
 export function adminCellText(row: AdminDataRow, columnKey: string): string {
   if (row == null || typeof row !== "object") return "—";
   const value = getAdminCellValue(row, columnKey);
+
+  if (columnKey === "orderReference" || columnKey === "reference") {
+    const ref =
+      typeof value === "string" && value.trim()
+        ? value
+        : typeof row.id === "string"
+          ? row.id.slice(0, 8).toUpperCase()
+          : "";
+    return ref ? `#${ref.replace(/^#/, "")}` : "—";
+  }
+
+  if (isMoneyColumnKey(columnKey)) {
+    if (
+      typeof value === "number" ||
+      (typeof value === "string" &&
+        !isNaN(Number(value)) &&
+        value.trim() !== "")
+    ) {
+      return formatInr(Number(value));
+    }
+  }
+
   if (columnKey === "id" && typeof value === "string" && value.trim()) {
     const humanName =
       row.name ??

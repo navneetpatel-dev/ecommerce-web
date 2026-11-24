@@ -1,4 +1,9 @@
-import type { Shipment, VendorInfo } from "@/shared/api/types";
+import type {
+  Address,
+  OrderItem,
+  Shipment,
+  VendorInfo,
+} from "@/shared/api/types";
 
 /**
  * Read-only return/exchange visibility for a vendor sub-order — vendors can
@@ -15,12 +20,16 @@ export interface VendorSubOrder {
   id: string;
   /** Parent order id — the backend returns a flat list of sub-orders, each carrying its own orderId. */
   orderId: string;
+  orderReference?: string | null;
   vendor: VendorInfo;
   subtotal: number;
   status: string;
   taxInvoiceNumber?: string | null;
   shipment?: Shipment | null;
   returnRequests?: VendorReturnRequest[];
+  items?: OrderItem[];
+  shippingAddress?: Address | null;
+  customer?: { id?: string; name?: string; email?: string } | null;
 }
 
 /** A flattened order/sub-order pair for table rows. */

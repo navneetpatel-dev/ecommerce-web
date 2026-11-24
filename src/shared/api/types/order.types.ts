@@ -70,6 +70,7 @@ export interface Shipment {
 export interface SubOrder {
   id: string;
   orderId: string;
+  orderReference?: string | null;
   vendorId: string;
   vendor: VendorInfo;
   status: OrderStatus;
@@ -96,10 +97,14 @@ export interface SubOrder {
   cancelledByRole?: string | null;
   items: OrderItem[];
   shipment?: Shipment | null;
+  shippingAddress?: Address | null;
+  customer?: { id?: string; name?: string; email?: string } | null;
 }
 
 export interface Order {
   id: string;
+  orderReference?: string | null;
+  customerName?: string | null;
   userId: string;
   totalAmount: number;
   discountTotal: number;

@@ -79,10 +79,10 @@ export function VendorOrdersTable(props: VendorOrdersTableProps) {
           <TableHeader>
             <TableRow>
               <TableHead className={VENDOR_ORDERS_TABLE_STYLES.cellData}>
-                {LABELS.taxInvoiceNumber}
+                {LABELS.ordersColumnOrder}
               </TableHead>
               <TableHead className={VENDOR_ORDERS_TABLE_STYLES.cellData}>
-                {LABELS.vendorColumn}
+                {LABELS.ordersColumnItems}
               </TableHead>
               <TableHead className={VENDOR_ORDERS_TABLE_STYLES.cellData}>
                 {LABELS.subtotal}

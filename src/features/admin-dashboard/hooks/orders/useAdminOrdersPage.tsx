@@ -43,7 +43,6 @@ export function useAdminOrdersPage(
   const [search, setSearch] = useState(initialSearch);
   const [status, setStatus] = useState(initialStatus);
   const debouncedSearch = useDebouncedValue(search.trim(), 350);
-
   // Sync from URL changes (e.g. browser back/forward)
   useEffect(() => {
     const nextSearch = searchParams.get("search") ?? "";
@@ -83,7 +82,6 @@ export function useAdminOrdersPage(
     setStatus("");
     update({ search: undefined, status: undefined });
   }, [update]);
-
   const actions = useCallback(
     (row: AdminDataRow, reload: () => void): ReactNode => {
       const name = adminRowLabel(row);
@@ -139,7 +137,13 @@ export function useAdminOrdersPage(
     permission: PERMISSIONS.ORDER_MANAGE,
     load,
     actions,
-    columnKeys: ["customerName", "status", "totalAmount", "createdAt"],
+    columnKeys: [
+      "orderReference",
+      "customerName",
+      "status",
+      "totalAmount",
+      "createdAt",
+    ],
     filters: {
       search,
       status,
