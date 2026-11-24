@@ -75,6 +75,7 @@ export function ProductModerationTable({
         getRowId={getRowId}
         pagination={pagination}
         actions={renderActions}
+        onRowClick={(p) => setPreviewProduct(p)}
         fetchRowDetail={fetchRowDetail}
         tableId="admin-product-moderation"
         enableColumnVisibility

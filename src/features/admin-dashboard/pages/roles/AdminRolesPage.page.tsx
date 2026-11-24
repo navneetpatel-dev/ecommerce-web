@@ -168,7 +168,7 @@ function AdminRolesContent() {
             name: role.name,
             isSystemRole: role.isSystemRole,
             permissionsCount: role.permissionKeys?.length ?? 0,
-            permissionKeys: role.permissionKeys?.join(", ") ?? "—",
+            permissionKeys: role.permissionKeys ?? [],
           }) as unknown as Record<string, unknown>
         }
       />

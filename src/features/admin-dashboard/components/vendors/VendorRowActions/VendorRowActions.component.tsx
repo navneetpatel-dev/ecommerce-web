@@ -1,12 +1,8 @@
 "use client";
 
 import type { ReactNode } from "react";
-import Link from "next/link";
-import { Eye } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
-import { Button } from "@/shared/components/ui/button";
-import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { usePermissions } from "@/shared/hooks/auth/usePermissions.hook";
 import { AdminConfirmAction } from "../../shared/AdminConfirmAction.component";
@@ -31,17 +27,6 @@ export function VendorRowActions({ row, onReload }: VendorRowActionsProps) {
 
   return (
     <>
-      <Button
-        size="sm"
-        variant="outline"
-        className={tableMenuButtonClass("neutral")}
-        asChild
-      >
-        <Link href={`/admin/vendors/${vendorId}`}>
-          <Eye strokeWidth={2.25} aria-hidden />
-          <span>{LABELS.view}</span>
-        </Link>
-      </Button>
       <VendorKycDocumentsMenuAction vendorId={vendorId} vendorName={name} />
       {canManage && row.status === "SUSPENDED" ? (
         <AdminConfirmAction

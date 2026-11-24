@@ -1,14 +1,10 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Eye } from "lucide-react";
 import { DataTable } from "@/shared/components/DataTable";
-import { TableRowAction } from "@/shared/components/DataTable/TableRowActions.component";
-import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { FormFieldFrame } from "@/shared/components/forms";
 import { CollapsibleTableFilters } from "@/shared/components/filters";
-import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
 import { LABELS } from "@/shared/constants/labels";
 import type { CouponBatch } from "@/shared/api/types";
 import { useCouponBatches } from "../../hooks/coupons/useCouponBatches.hook";
@@ -40,27 +36,6 @@ export function CouponBatchesTab() {
     setBatchDetail(null);
   };
 
-  const renderBatchActions = (row: CouponBatch) => {
-    const openBatchDetail = () => {
-      setBatchDetail(row);
-    };
-
-    return (
-      <TableRowAction>
-        <Button
-          type="button"
-          size="sm"
-          variant="outline"
-          className={tableMenuButtonClass("neutral")}
-          onClick={openBatchDetail}
-        >
-          <Eye strokeWidth={2.25} aria-hidden />
-          <span>{LABELS.view}</span>
-        </Button>
-      </TableRowAction>
-    );
-  };
-
   return (
     <section className={styles.batchesSection}>
       <CollapsibleTableFilters activeCount={activeCount} onClear={handleClear}>
@@ -90,7 +65,8 @@ export function CouponBatchesTab() {
         onRefresh={batches.onRetry}
         emptyMessage={LABELS.noCouponBatches}
         getRowId={(row: CouponBatch) => row.id}
-        actions={renderBatchActions}
+        showViewButton
+        onRowClick={(row) => setBatchDetail(row)}
       />
       <CouponBatchDetailDialog
         batchDetail={batchDetail}

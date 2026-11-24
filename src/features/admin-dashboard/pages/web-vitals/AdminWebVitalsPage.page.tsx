@@ -117,7 +117,8 @@ export function AdminWebVitalsPage() {
         error={page.error}
         emptyMessage={LABELS.webVitalsEmpty}
         getRowId={(row) => `${row.name}:${row.path}`}
-        rowDetails={false}
+        rowDetails
+        showViewButton
       />
     </div>
   );

@@ -88,7 +88,8 @@ export function RtoQueuePanel() {
         getRowId={getRowId}
         loading={loading}
         emptyMessage={LABELS.rtoQueueEmpty}
-        rowDetails={false}
+        rowDetails
+        showViewButton
         tableId="admin-rto-queue"
         enableColumnVisibility
         enableDensityToggle

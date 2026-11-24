@@ -53,7 +53,8 @@ export function MyGiftCardsPage() {
         error={page.error}
         emptyMessage={LABELS.giftCardsPurchasedEmpty}
         actions={renderResend}
-        rowDetails={false}
+        rowDetails
+        showViewButton
       />
       <InfiniteLoadMore {...page.purchasedPaging} />
 
@@ -65,7 +66,8 @@ export function MyGiftCardsPage() {
         getRowId={getRowId}
         loading={page.redeemedLoading}
         emptyMessage={LABELS.giftCardsRedeemedEmpty}
-        rowDetails={false}
+        rowDetails
+        showViewButton
       />
       <InfiniteLoadMore {...page.redeemedPaging} />
     </div>

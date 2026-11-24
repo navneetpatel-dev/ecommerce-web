@@ -57,7 +57,8 @@ export function VendorBulkImportResultsTable({
         rows={results}
         getRowId={(row, index) => `${row.row}-${index}`}
         emptyMessage={LABELS.noRecordsFound}
-        rowDetails={false}
+        rowDetails
+        showViewButton
       />
     </div>
   );

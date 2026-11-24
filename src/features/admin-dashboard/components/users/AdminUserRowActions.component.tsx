@@ -1,10 +1,6 @@
-import Link from "next/link";
-import { Eye } from "lucide-react";
 import { USER_STATUS } from "@/shared/constants/statuses";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
-import { Button } from "@/shared/components/ui/button";
-import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
 import { AdminConfirmAction } from "../shared/AdminConfirmAction.component";
 import { adminRowLabel } from "../../utils/shared/adminRowLabel";
 import { isSelfAdminTarget } from "../../utils/shared/isSelfAdminTarget";
@@ -38,17 +34,6 @@ export function AdminUserRowActions({
 
   return (
     <>
-      <Button
-        size="sm"
-        variant="outline"
-        className={tableMenuButtonClass("neutral")}
-        asChild
-      >
-        <Link href={`/admin/users/${row.id}`}>
-          <Eye strokeWidth={2.25} aria-hidden />
-          <span>{LABELS.view}</span>
-        </Link>
-      </Button>
       {isSelf ? null : (
         <AdminConfirmAction
           label={isBlocked ? LABELS.activate : LABELS.block}

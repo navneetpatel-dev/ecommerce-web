@@ -1,8 +1,12 @@
 "use client";
 
 import type { KeyboardEvent, ReactNode } from "react";
+import { Eye } from "lucide-react";
 import { Checkbox } from "@/shared/components/ui/checkbox";
+import { Button } from "@/shared/components/ui/button";
 import { TableRowActions } from "@/shared/components/DataTable/TableRowActions.component";
+import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
+import { LABELS } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/dom/cn";
 import { dataTableMobileStyles } from "../../styles/data-table/dataTable.styles";
 import type { DataTableColumn } from "../../types/data-table/types";
@@ -17,6 +21,7 @@ export type DataTableMobileCardsProps<T> = {
   selectedIds?: string[];
   onToggleSelectRow?: (rowId: string) => void;
   actions?: (row: T, index: number) => ReactNode;
+  showViewButton?: boolean;
   onActivateRow: (row: T, index: number) => void;
   onRowKeyDown: (
     event: KeyboardEvent<HTMLElement>,
@@ -34,10 +39,12 @@ export function DataTableMobileCards<T>({
   selectedIds,
   onToggleSelectRow,
   actions,
+  showViewButton = true,
   onActivateRow,
   onRowKeyDown,
 }: DataTableMobileCardsProps<T>) {
   const mobileColumns = columns.filter((column) => !column.hideOnMobile);
+  const hasActions = Boolean(actions) || (showViewButton && rowsInteractive);
 
   return (
     <ul className={dataTableMobileStyles.list}>
@@ -50,9 +57,7 @@ export function DataTableMobileCards<T>({
         const primaryContent = primary
           ? resolveCell(primary, row, index)
           : null;
-        // Interactive rows get role/handlers as a block: a conditional `role`
-        // alone reads as a static element, and non-activatable rows must not
-        // advertise button semantics at all.
+
         const rowActivationProps = rowsInteractive
           ? {
               role: "button" as const,
@@ -85,8 +90,6 @@ export function DataTableMobileCards<T>({
                 </label>
               </div>
             )}
-            {/* Activation sits on an inner region so the action buttons below
-                are siblings — never nested inside a button-role element. */}
             <div
               className={cn(
                 rowsInteractive && dataTableMobileStyles.cardInteractive,
@@ -147,16 +150,23 @@ export function DataTableMobileCards<T>({
               ) : null}
             </div>
 
-            {actions ? (
-              <div
-                className={cn(
-                  primary || rest.length > 0
-                    ? dataTableMobileStyles.actionsWrapper
-                    : undefined,
-                )}
-              >
-                <TableRowActions className={dataTableMobileStyles.actionsAlign}>
-                  {actions(row, index)}
+            {hasActions ? (
+              <div className="flex items-center justify-end gap-2 pt-2 border-t border-line">
+                <TableRowActions>
+                  {showViewButton && rowsInteractive ? (
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="outline"
+                      className={tableMenuButtonClass("neutral")}
+                      onClick={() => onActivateRow(row, index)}
+                      aria-label={LABELS.view}
+                    >
+                      <Eye className="size-3.5" strokeWidth={2} aria-hidden />
+                      <span>{LABELS.view}</span>
+                    </Button>
+                  ) : null}
+                  {actions?.(row, index)}
                 </TableRowActions>
               </div>
             ) : null}

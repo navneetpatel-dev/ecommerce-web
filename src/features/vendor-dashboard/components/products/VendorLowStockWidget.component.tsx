@@ -95,7 +95,8 @@ export function VendorLowStockWidget() {
         columns={COLUMNS}
         rows={visible}
         getRowId={(row) => row.id}
-        rowDetails={false}
+        rowDetails
+        showViewButton
       />
       {remainingNotice}
     </>

@@ -98,7 +98,8 @@ export function CashbackWriteOffReportTable({
         getRowId={(row) => row.id}
         loading={loading}
         emptyMessage={LABELS.noReportData}
-        rowDetails={false}
+        rowDetails
+        showViewButton
         pagination={tablePagination}
       />
     </div>

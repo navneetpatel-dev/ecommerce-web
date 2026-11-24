@@ -89,7 +89,8 @@ export function ReportTable({
         onRefresh={onRefresh}
         emptyMessage={result ? LABELS.reportNoRowsHint : LABELS.noResults}
         pagination={pagination}
-        rowDetails={false}
+        rowDetails
+        showViewButton
         tableLayout="fixed"
       />
     </div>

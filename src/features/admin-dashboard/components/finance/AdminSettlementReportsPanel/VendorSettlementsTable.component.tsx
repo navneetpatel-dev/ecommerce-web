@@ -184,7 +184,8 @@ export function VendorSettlementsTable({
         columns={COLUMNS}
         rows={filteredVendors}
         getRowId={(row) => row.vendorId}
-        rowDetails={false}
+        rowDetails
+        showViewButton
         emptyMessage={LABELS.noReportData}
       />
     </div>

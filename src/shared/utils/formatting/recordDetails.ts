@@ -1,88 +1,15 @@
 import { LABELS } from "@/shared/constants/labels";
-
-const SKIP_DETAIL_KEYS = new Set([
-  "passwordHash",
-  "password",
-  "token",
-  "refreshToken",
-  "accessToken",
-  "orderItemId",
-  "subOrderId",
-  "userId",
-  "creditNoteId",
-  "debitNoteId",
-  "resolvedById",
-  "variantId",
-  "productId",
-  "shippingAddressId",
-  "billingAddressId",
-  "roleId",
-  "razorpayRefundId",
-]);
-
-const CUSTOM_LABELS: Record<string, string> = {
-  photoUrls: "Customer Photos",
-  disputeEvidenceUrls: "Dispute Evidence Photos",
-  returnReference: "Return ID",
-  orderReference: "Order",
-  reasonCode: "Return Reason",
-  refundAmount: "Refund Amount",
-  refundTaxAmount: "Tax Refund Amount",
-  refundMerchandiseAmount: "Merchandise Refund",
-  refundCommissionAmount: "Commission Clawback",
-  refundTcsAmount: "TCS Adjustment",
-  refundNetClawback: "Net Clawback",
-  walletRefundAmount: "Wallet Refund",
-  razorpayRefundAmount: "Bank/Card Refund",
-  returnShippingFeeAmount: "Return Shipping Fee",
-  shippingRefundAmount: "Shipping Refund",
-  againstInvoiceNumber: "Tax Invoice Reference",
-  rejectionReason: "Rejection Reason",
-  gstPercentage: "GST Rate",
-  gstPercentageAbove: "GST Rate (Above Threshold)",
-  priceBandThreshold: "Price Band Threshold",
-  lowStockAt: "Low Stock Threshold",
-  disputeReason: "Dispute Reason",
-  disputeDescription: "Dispute Details",
-  disputeStatus: "Dispute Status",
-  disputeResolutionNotes: "Dispute Resolution",
-  disputedAt: "Dispute Date",
-  receivedAt: "Received Date",
-  restockedAt: "Restocked Date",
-  resolvedAt: "Resolved Date",
-  createdAt: "Date Created",
-  updatedAt: "Last Updated",
-  cashbackType: "Cashback Type",
-  cashbackValue: "Cashback Value",
-  maxCashbackAmount: "Max Cashback",
-  minOrderAmount: "Min Order Amount",
-  initialBalance: "Initial Balance",
-  currentBalance: "Current Balance",
-  recipientEmail: "Recipient Email",
-  discountType: "Discount Type",
-  discountValue: "Discount Value",
-  maxDiscountAmount: "Max Discount",
-  entityType: "Entity Type",
-  entityId: "Entity ID",
-  actorName: "Actor / Admin",
-  channel: "Delivery Channel",
-  errorCategory: "Failure Category",
-  sentAt: "Sent Date",
-  permissionsCount: "Total Permissions",
-  isSystemRole: "System Role",
-  emailVerified: "Email Verified",
-  twoFactorEnabled: "Two-Factor Auth",
-  lastLoginAt: "Last Login Date",
-};
+import {
+  CUSTOM_LABELS,
+  SKIP_DETAIL_KEYS,
+  UUID_REGEX,
+} from "./recordDetailConstants";
 
 export type RecordDetailField = {
   key: string;
   label: string;
   value: unknown;
 };
-
-const UUID_REGEX =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export const isMoneyKey = (k: string): boolean => {
   if (k === "priceBandThreshold") return true;

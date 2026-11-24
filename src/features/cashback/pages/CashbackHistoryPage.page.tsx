@@ -37,7 +37,8 @@ export function CashbackHistoryPage() {
         error={page.error}
         emptyMessage={LABELS.cashbackEmpty}
         pagination={page.pagination}
-        rowDetails={false}
+        rowDetails
+        showViewButton
       />
     </div>
   );

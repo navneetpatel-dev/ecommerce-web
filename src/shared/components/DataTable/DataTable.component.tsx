@@ -48,6 +48,7 @@ export function DataTable<T>({
   className,
   tableLayout = "auto",
   rowDetails = true,
+  showViewButton,
   fetchRowDetail,
   onRowClick,
   tableId,
@@ -333,6 +334,8 @@ export function DataTable<T>({
     pagination.total > 0;
 
   const rowsInteractive = Boolean(onRowClick) || rowDetails;
+  const shouldShowViewButton =
+    showViewButton ?? (Boolean(actions) && rowsInteractive && rowDetails);
 
   const activateRow = (row: T, index: number) => {
     if (onRowClick) onRowClick(row, index);
@@ -468,6 +471,7 @@ export function DataTable<T>({
               selectedIds={selectedIds}
               onToggleSelectRow={handleToggleSelectRow}
               actions={actions}
+              showViewButton={shouldShowViewButton}
               onActivateRow={activateRow}
               onRowKeyDown={onRowKeyDown}
             />
@@ -490,6 +494,7 @@ export function DataTable<T>({
               actions={actions}
               actionsHeader={actionsHeader}
               actionsClassName={actionsClassName}
+              showViewButton={shouldShowViewButton}
               enableSorting={enableSorting}
               sortStates={sortStates}
               onSortColumn={handleSortColumn}

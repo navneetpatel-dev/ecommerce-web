@@ -209,7 +209,8 @@ export function WalletTransactionsTable({
         error={error}
         emptyMessage={LABELS.walletNoTransactions}
         onRefresh={onRetry}
-        rowDetails={false}
+        rowDetails
+        showViewButton
         tableLayout="fixed"
         getRowId={(row) => row.id}
         pagination={{

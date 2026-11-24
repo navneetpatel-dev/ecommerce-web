@@ -131,7 +131,8 @@ export function LiabilityRowsTable({
         getRowId={(row, index) => row.userId ?? String(index)}
         loading={loading}
         emptyMessage={LABELS.noReportData}
-        rowDetails={false}
+        rowDetails
+        showViewButton
         pagination={pagination}
       />
     </div>

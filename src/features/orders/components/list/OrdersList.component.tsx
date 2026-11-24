@@ -140,6 +140,7 @@ export function OrdersList({ orders, filters, pagination }: OrdersListProps) {
           rows={orders}
           getRowId={getRowId}
           rowDetails={false}
+          showViewButton
           tableLayout="fixed"
           onRowClick={handleRowClick}
           pagination={paginationConfig}

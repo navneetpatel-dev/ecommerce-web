@@ -77,7 +77,8 @@ export function VendorTopProductsCard({
             columns={COLUMNS}
             rows={topProducts}
             getRowId={(row) => row.id}
-            rowDetails={false}
+            rowDetails
+            showViewButton
           />
         )}
       </CardContent>

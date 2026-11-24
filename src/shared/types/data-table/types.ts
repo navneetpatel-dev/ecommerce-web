@@ -78,6 +78,11 @@ export type DataTableProps<T> = {
    */
   rowDetails?: boolean;
   /**
+   * Whether to display the generic "View" button in the table actions column.
+   * Defaults to true whenever rows are interactive (rowDetails or onRowClick).
+   */
+  showViewButton?: boolean;
+  /**
    * Optional async fetcher to retrieve the complete record when a row is viewed.
    * If omitted, RecordDetailDialog displays the row data directly.
    */

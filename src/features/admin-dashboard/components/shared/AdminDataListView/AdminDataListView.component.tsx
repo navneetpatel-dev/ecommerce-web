@@ -68,6 +68,7 @@ export function AdminDataListView({
       getRowId={getRowId}
       pagination={paginationConfig}
       actions={renderActions}
+      showViewButton
       onRowClick={onRowClick}
       fetchRowDetail={fetchRowDetail}
       tableId={`admin-${title.toLowerCase().replace(/\s+/g, "-")}`}

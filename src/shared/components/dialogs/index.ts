@@ -1,4 +1,8 @@
 export { RecordDetailDialog } from "./RecordDetailDialog.component";
+export { RecordDetailHeader } from "./RecordDetailHeader.component";
+export { RecordDetailHighlights } from "./RecordDetailHighlights.component";
+export { RecordDetailFieldGrid } from "./RecordDetailFieldGrid.component";
+export { RecordDetailCopyButton } from "./RecordDetailCopyButton.component";
 export { RecordDetailObjectView } from "./RecordDetailObjectView.component";
 export { RecordDetailListView } from "./RecordDetailListView.component";
 export { RecordDetailImage } from "./RecordDetailImage.component";
