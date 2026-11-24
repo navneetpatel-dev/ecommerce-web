@@ -6,6 +6,7 @@ import { useAdminDataList } from "../shared/useAdminDataList.hook";
 import { useProductModeration } from "./useProductModeration.hook";
 import { adminApi } from "../../api/analytics/admin.api";
 import { useDebouncedValue } from "@/shared/hooks/ui/use-debounce.hook";
+import { PRODUCT_STATUS } from "@/shared/constants/statuses";
 import type { ProductDetail } from "@/shared/api/types";
 import type { AdminProductsFiltersProps } from "../../components/vendors/AdminProductsFilters.component";
 
@@ -96,14 +97,14 @@ export function useProductModerationQueue() {
 
   const filters: AdminProductsFiltersProps = {
     search,
-    status: "PENDING",
+    status: PRODUCT_STATUS.PENDING_APPROVAL,
+    statusDisabled: true,
     categoryId,
     vendorId,
     inStock,
     minPrice,
     maxPrice,
     sort,
-    hideStatus: true,
     onSearchChange: setFilter("search"),
     onStatusChange: () => {},
     onCategoryChange: setFilter("categoryId"),

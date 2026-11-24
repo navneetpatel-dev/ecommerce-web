@@ -28,6 +28,7 @@ export interface AdminProductsFiltersProps {
   maxPrice?: string;
   sort?: string;
   hideStatus?: boolean;
+  statusDisabled?: boolean;
   onSearchChange: (value: string) => void;
   onStatusChange: (value: string) => void;
   onCategoryChange?: (value: string) => void;
@@ -40,42 +41,28 @@ export interface AdminProductsFiltersProps {
 }
 
 const ALL_OPTION = "__ALL__";
+const STATUS_OPTIONS: readonly string[] = Object.values(PRODUCT_STATUS);
 
 export function AdminProductsFilters(props: AdminProductsFiltersProps) {
-  const {
-    search,
-    status,
-    categoryId = "",
-    vendorId = "",
-    inStock = "",
-    minPrice = "",
-    maxPrice = "",
-    sort = "",
-    hideStatus = false,
-    onSearchChange,
-    onStatusChange,
-    onCategoryChange,
-    onVendorChange,
-    onInStockChange,
-    onMinPriceChange,
-    onMaxPriceChange,
-    onSortChange,
-    onClear,
-  } = props;
+  const { search, status, categoryId = "", vendorId = "" } = props;
+  const { hideStatus = false, statusDisabled = false, onClear } = props;
+  const { onSearchChange, onStatusChange, onCategoryChange, onVendorChange } =
+    props;
 
   const { data: categories } = useCategories();
   const { data: vendorsData } = useAdminVendorsList();
   const vendors = vendorsData?.items ?? [];
 
-  const activeCount =
-    (search.trim() ? 1 : 0) +
-    (!hideStatus && status ? 1 : 0) +
-    (categoryId ? 1 : 0) +
-    (vendorId ? 1 : 0) +
-    (inStock ? 1 : 0) +
-    (minPrice ? 1 : 0) +
-    (maxPrice ? 1 : 0) +
-    (sort ? 1 : 0);
+  const activeCount = [
+    search.trim(),
+    !hideStatus && !statusDisabled && status,
+    categoryId,
+    vendorId,
+    props.inStock,
+    props.minPrice,
+    props.maxPrice,
+    props.sort,
+  ].filter(Boolean).length;
 
   const handleSelect = (setter?: (val: string) => void) => (val: string) => {
     setter?.(val === ALL_OPTION ? "" : val);
@@ -105,15 +92,28 @@ export function AdminProductsFilters(props: AdminProductsFiltersProps) {
               htmlFor="admin-products-status"
             >
               <Select
+                disabled={statusDisabled}
                 value={status || ALL_OPTION}
                 onValueChange={handleSelect(onStatusChange)}
               >
-                <SelectTrigger id="admin-products-status">
-                  <SelectValue placeholder="All Statuses" />
+                <SelectTrigger
+                  id="admin-products-status"
+                  className={
+                    statusDisabled ? "cursor-not-allowed opacity-80" : undefined
+                  }
+                >
+                  <SelectValue placeholder="All Statuses">
+                    {status ? formatStatusLabel(status) : "All Statuses"}
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value={ALL_OPTION}>All Statuses</SelectItem>
-                  {Object.values(PRODUCT_STATUS).map((s) => (
+                  {status && !STATUS_OPTIONS.includes(status) && (
+                    <SelectItem value={status}>
+                      {formatStatusLabel(status)}
+                    </SelectItem>
+                  )}
+                  {STATUS_OPTIONS.map((s) => (
                     <SelectItem key={s} value={s}>
                       {formatStatusLabel(s)}
                     </SelectItem>
@@ -165,16 +165,7 @@ export function AdminProductsFilters(props: AdminProductsFiltersProps) {
           </FormFieldFrame>
         </div>
 
-        <AdminProductsPriceSortRow
-          inStock={inStock}
-          minPrice={minPrice}
-          maxPrice={maxPrice}
-          sort={sort}
-          onInStockChange={onInStockChange}
-          onMinPriceChange={onMinPriceChange}
-          onMaxPriceChange={onMaxPriceChange}
-          onSortChange={onSortChange}
-        />
+        <AdminProductsPriceSortRow {...props} />
       </div>
     </CollapsibleTableFilters>
   );
