@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, type ReactNode } from "react";
+import { useSearchParams } from "next/navigation";
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { LABELS } from "@/shared/constants/labels";
 import { reviewsApi } from "@/features/reviews";
@@ -44,7 +45,14 @@ export type AdminReviewsPageModel = AdminListPageModel & {
 };
 
 export function useAdminReviewsPage(): AdminReviewsPageModel {
-  const [search, setSearch] = useState("");
+  const searchParams = useSearchParams();
+  const paramSearch =
+    searchParams.get("search") ??
+    searchParams.get("q") ??
+    searchParams.get("product") ??
+    "";
+  const [userSearch, setUserSearch] = useState<string | null>(null);
+  const search = userSearch ?? paramSearch;
 
   const load = useCallback(
     async ({ page, limit }: { page: number; limit: number }) => {
@@ -88,8 +96,8 @@ export function useAdminReviewsPage(): AdminReviewsPageModel {
   return {
     filters: {
       search,
-      onSearchChange: setSearch,
-      onClear: () => setSearch(""),
+      onSearchChange: setUserSearch,
+      onClear: () => setUserSearch(""),
     },
     title: LABELS.reviews,
     permission: PERMISSIONS.REVIEW_MODERATE,

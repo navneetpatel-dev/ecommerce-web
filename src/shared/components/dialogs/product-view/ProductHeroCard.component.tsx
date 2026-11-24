@@ -55,7 +55,7 @@ export function ProductHeroCard({ product }: ProductHeroCardProps) {
   const slug = typeof product.slug === "string" ? product.slug : null;
   const storeUrl = slug
     ? PATHS.product(slug)
-    : `/products/${String(product.id)}`;
+    : `${PATHS.products}?search=${encodeURIComponent(name)}`;
 
   return (
     <div className="rounded-2xl border border-line/80 bg-gradient-to-b from-surface-subtle/60 to-surface p-4 sm:p-5 shadow-xs space-y-4">
@@ -83,11 +83,11 @@ export function ProductHeroCard({ product }: ProductHeroCardProps) {
             {status && <StatusBadge status={status} />}
             {brand && (
               <a
-                href={`/products?brand=${encodeURIComponent(brand)}`}
+                href={`${PATHS.products}?brand=${encodeURIComponent(brand)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 title="View brand products in new tab"
-                className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-brand/10 text-brand text-[11px] font-semibold border border-brand/20 hover:bg-brand/20 transition-colors"
+                className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-brand-subtle text-brand text-[11px] font-semibold border border-brand/30 hover:bg-brand hover:text-paper hover:border-brand transition-all"
               >
                 <span>{brand}</span>
                 <ExternalLink className="size-2.5 opacity-70" />
@@ -101,7 +101,7 @@ export function ProductHeroCard({ product }: ProductHeroCardProps) {
                 target="_blank"
                 rel="noopener noreferrer"
                 title="View category in new tab"
-                className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-paper text-ink-muted text-[11px] font-medium border border-line hover:bg-surface-raised hover:text-ink transition-colors"
+                className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-surface text-ink-muted text-[11px] font-medium border border-line hover:bg-brand-subtle hover:text-ink hover:border-brand/40 transition-all"
               >
                 <Tag className="size-3" />
                 <span>{categoryName}</span>
@@ -126,7 +126,11 @@ export function ProductHeroCard({ product }: ProductHeroCardProps) {
           <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-ink-muted">
             {avgRating != null && avgRating > 0 && (
               <a
-                href={slug ? PATHS.productReviews(slug) : "/admin/reviews"}
+                href={
+                  slug
+                    ? PATHS.productReviews(slug)
+                    : `${PATHS.admin.reviews}?search=${encodeURIComponent(name)}`
+                }
                 target="_blank"
                 rel="noopener noreferrer"
                 title="View reviews in new tab"
@@ -166,7 +170,7 @@ export function ProductHeroCard({ product }: ProductHeroCardProps) {
           href={storeUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg border border-line bg-paper text-ink font-semibold hover:border-brand/40 hover:text-brand transition-all shadow-xs"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-line-strong/80 bg-surface text-ink font-semibold hover:border-brand hover:bg-brand-subtle hover:text-brand transition-all shadow-xs"
         >
           <ExternalLink className="size-3.5 text-brand" />
           <span>View on Storefront</span>

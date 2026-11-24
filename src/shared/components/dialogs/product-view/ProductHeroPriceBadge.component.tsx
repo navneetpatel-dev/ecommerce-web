@@ -33,7 +33,7 @@ export function ProductHeroPriceBadge({
 
       <div className="flex items-center gap-1.5 mt-1">
         {discountPercent != null && Number(discountPercent) > 0 && (
-          <span className="px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 text-[10px] font-bold">
+          <span className="px-1.5 py-0.5 rounded bg-success-subtle text-success border border-success/30 text-[10px] font-bold">
             {Number(discountPercent)}% OFF
           </span>
         )}
@@ -41,10 +41,10 @@ export function ProductHeroPriceBadge({
           <span
             className={`px-2 py-0.5 rounded text-[10px] font-semibold ${
               stock === 0
-                ? "bg-rose-500/10 text-rose-600 border border-rose-500/20"
+                ? "bg-danger-subtle text-danger border border-danger/30"
                 : stock <= 5
-                  ? "bg-amber-500/10 text-amber-700 border border-amber-500/20"
-                  : "bg-emerald-500/10 text-emerald-700 border border-emerald-500/20"
+                  ? "bg-warning-subtle text-warning border border-warning/30"
+                  : "bg-success-subtle text-success border border-success/30"
             }`}
           >
             {stock === 0

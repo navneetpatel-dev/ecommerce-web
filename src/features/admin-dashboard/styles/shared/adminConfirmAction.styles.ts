@@ -7,31 +7,29 @@ import type { AdminActionTone } from "../../utils/shared/adminActionTone";
 
 const inlineToneClass: Record<string, string> = {
   danger: cn(
-    "border border-rose-200/80 bg-rose-50/80 text-rose-700 shadow-xs",
-    "hover:border-rose-600 hover:bg-rose-600 hover:text-white",
-    "dark:border-rose-900/60 dark:bg-rose-950/40 dark:text-rose-300 dark:hover:border-rose-600 dark:hover:bg-rose-600 dark:hover:text-white",
-    "transition-all font-semibold",
+    "border border-danger/35 bg-danger-subtle text-danger shadow-xs",
+    "hover:border-danger hover:bg-danger hover:text-paper",
+    "focus-visible:outline-danger transition-all font-semibold rounded-lg",
   ),
   success: cn(
-    "border border-emerald-200/80 bg-emerald-50/80 text-emerald-700 shadow-xs",
-    "hover:border-emerald-600 hover:bg-emerald-600 hover:text-white",
-    "dark:border-emerald-900/60 dark:bg-emerald-950/40 dark:text-emerald-300 dark:hover:border-emerald-600 dark:hover:bg-emerald-600 dark:hover:text-white",
-    "transition-all font-semibold",
+    "border border-success/35 bg-success-subtle text-success shadow-xs",
+    "hover:border-success hover:bg-success hover:text-paper",
+    "focus-visible:outline-success transition-all font-semibold rounded-lg",
   ),
   neutral: cn(
-    "border border-line/80 bg-surface text-ink shadow-xs",
+    "border border-line-strong/80 bg-surface text-ink shadow-xs",
     "hover:border-ink hover:bg-ink hover:text-paper",
-    "transition-all font-medium",
+    "transition-all font-medium rounded-lg",
   ),
   edit: cn(
-    "border border-brand/30 bg-brand/10 text-brand shadow-xs",
+    "border border-brand/35 bg-brand-subtle text-brand shadow-xs",
     "hover:border-brand hover:bg-brand hover:text-paper",
-    "transition-all font-medium",
+    "transition-all font-medium rounded-lg",
   ),
   archive: cn(
-    "border border-warning/30 bg-warning/10 text-warning shadow-xs",
+    "border border-warning/35 bg-warning-subtle text-warning shadow-xs",
     "hover:border-warning hover:bg-warning hover:text-paper",
-    "transition-all font-medium",
+    "transition-all font-medium rounded-lg",
   ),
 };
 

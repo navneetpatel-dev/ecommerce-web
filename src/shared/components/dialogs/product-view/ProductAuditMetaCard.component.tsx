@@ -59,12 +59,12 @@ export function ProductAuditMetaCard({ product }: ProductAuditMetaCardProps) {
   return (
     <div className="rounded-2xl border border-line/80 bg-surface p-4 sm:p-5 shadow-xs space-y-4">
       {rejectionReason && (
-        <div className="p-4 rounded-xl border border-rose-300/80 bg-rose-50/80 dark:border-rose-900/60 dark:bg-rose-950/40 space-y-1.5 shadow-xs">
-          <div className="flex items-center gap-2 text-rose-800 dark:text-rose-300 font-bold text-xs uppercase tracking-wider">
-            <AlertTriangle className="size-4 shrink-0 text-rose-600 dark:text-rose-400" />
+        <div className="p-4 rounded-xl border border-danger/35 bg-danger-subtle space-y-1.5 shadow-xs">
+          <div className="flex items-center gap-2 text-danger font-bold text-xs uppercase tracking-wider">
+            <AlertTriangle className="size-4 shrink-0 text-danger" />
             <span>Rejection Reason / Moderation Notice</span>
           </div>
-          <p className="text-sm font-medium text-rose-950 dark:text-rose-200 whitespace-pre-line leading-relaxed">
+          <p className="text-sm font-medium text-ink whitespace-pre-line leading-relaxed">
             {rejectionReason}
           </p>
         </div>
@@ -88,7 +88,7 @@ export function ProductAuditMetaCard({ product }: ProductAuditMetaCardProps) {
               href={videoUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg border border-line bg-paper text-ink text-xs font-semibold hover:border-brand/40 hover:text-brand transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-line-strong/80 bg-surface text-ink text-xs font-semibold hover:border-brand hover:bg-brand-subtle hover:text-brand transition-all shadow-xs"
             >
               <Video className="size-3.5 text-brand" />
               <span>Product Video</span>
@@ -100,7 +100,7 @@ export function ProductAuditMetaCard({ product }: ProductAuditMetaCardProps) {
               href={sizeChartUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg border border-line bg-paper text-ink text-xs font-semibold hover:border-brand/40 hover:text-brand transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-line-strong/80 bg-surface text-ink text-xs font-semibold hover:border-brand hover:bg-brand-subtle hover:text-brand transition-all shadow-xs"
             >
               <FileText className="size-3.5 text-brand" />
               <span>Size Chart</span>

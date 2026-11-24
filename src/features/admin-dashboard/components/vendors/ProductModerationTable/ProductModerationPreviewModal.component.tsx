@@ -110,7 +110,7 @@ export function ProductModerationPreviewModal({
             variant="outline"
             size="sm"
             onClick={onClose}
-            className="rounded-xl"
+            className="rounded-lg border-line-strong/80 hover:bg-brand-subtle hover:text-brand"
           >
             {LABELS.close}
           </Button>

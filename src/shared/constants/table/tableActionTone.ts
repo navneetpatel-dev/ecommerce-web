@@ -21,14 +21,14 @@ export const tableActionTone = {
     "[&_svg]:!size-3.5 [&_svg]:shrink-0",
   ),
   danger: cn(
-    "border border-rose-200/70 bg-rose-50/70 text-rose-700 shadow-none dark:border-rose-900/50 dark:bg-rose-950/30 dark:text-rose-300",
-    "hover:border-rose-600 hover:bg-rose-600 hover:text-white dark:hover:border-rose-600 dark:hover:bg-rose-600 dark:hover:text-white",
+    "border border-danger/30 bg-danger-subtle text-danger shadow-none",
+    "hover:border-danger hover:bg-danger hover:text-paper",
     "gap-1.5 px-3 font-semibold tracking-wide transition-all rounded-md",
     "[&_svg]:!size-3.5 [&_svg]:shrink-0",
   ),
   success: cn(
-    "border border-emerald-200/70 bg-emerald-50/70 text-emerald-700 shadow-none dark:border-emerald-900/50 dark:bg-emerald-950/30 dark:text-emerald-300",
-    "hover:border-emerald-600 hover:bg-emerald-600 hover:text-white dark:hover:border-emerald-600 dark:hover:bg-emerald-600 dark:hover:text-white",
+    "border border-success/30 bg-success-subtle text-success shadow-none",
+    "hover:border-success hover:bg-success hover:text-paper",
     "gap-1.5 px-3 font-semibold tracking-wide transition-all rounded-md",
     "[&_svg]:!size-3.5 [&_svg]:shrink-0",
   ),

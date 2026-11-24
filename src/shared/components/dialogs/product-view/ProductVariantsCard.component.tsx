@@ -66,7 +66,7 @@ export function ProductVariantsCard({ product }: ProductVariantsCardProps) {
                     target="_blank"
                     rel="noopener noreferrer"
                     title={`Search ${sku} in Admin Inventory in new tab`}
-                    className="inline-flex items-center gap-1 font-mono text-xs font-semibold text-ink bg-surface-subtle px-2 py-0.5 rounded border border-line/70 hover:border-brand hover:text-brand transition-colors"
+                    className="inline-flex items-center gap-1 font-mono text-xs font-semibold text-ink bg-surface px-2 py-0.5 rounded border border-line hover:border-brand hover:text-brand hover:bg-brand-subtle transition-all"
                   >
                     <span>{sku}</span>
                     <ExternalLink className="size-2.5 opacity-60" />
@@ -102,10 +102,10 @@ export function ProductVariantsCard({ product }: ProductVariantsCardProps) {
                 <span
                   className={`px-2 py-0.5 rounded text-[10px] font-semibold ${
                     stock === 0
-                      ? "bg-rose-500/10 text-rose-600 border border-rose-500/20"
+                      ? "bg-danger-subtle text-danger border border-danger/30"
                       : lowStockAt != null && stock <= lowStockAt
-                        ? "bg-amber-500/10 text-amber-700 border border-amber-500/20"
-                        : "bg-emerald-500/10 text-emerald-700 border border-emerald-500/20"
+                        ? "bg-warning-subtle text-warning border border-warning/30"
+                        : "bg-success-subtle text-success border border-success/30"
                   }`}
                 >
                   {stock === 0 ? "Out of Stock" : `${stock} in stock`}

@@ -65,7 +65,7 @@ export function ProductCategoryCard({ product }: ProductCategoryCardProps) {
             target="_blank"
             rel="noopener noreferrer"
             title="Browse all categories in new tab"
-            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-line bg-paper text-ink text-xs font-semibold hover:border-brand/50 hover:text-brand transition-colors"
+            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg border border-line-strong/80 bg-surface text-ink text-xs font-semibold hover:border-brand hover:bg-brand-subtle hover:text-brand transition-all shadow-xs"
           >
             <span>All Categories</span>
             <ExternalLink className="size-3" />
@@ -181,7 +181,7 @@ export function ProductCategoryCard({ product }: ProductCategoryCardProps) {
                 target="_blank"
                 rel="noopener noreferrer"
                 title={`Open ${sc.name ?? sc.slug} in new tab`}
-                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-surface-subtle text-[11px] font-medium text-ink-muted border border-line hover:border-brand/40 hover:text-brand transition-colors"
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-surface text-[11px] font-medium text-ink-muted border border-line hover:border-brand hover:bg-brand-subtle hover:text-brand transition-all"
               >
                 <span>{sc.name ?? sc.slug}</span>
                 <ExternalLink className="size-2.5 opacity-60" />

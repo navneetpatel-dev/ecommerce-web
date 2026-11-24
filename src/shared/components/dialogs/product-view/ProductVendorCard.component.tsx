@@ -48,15 +48,26 @@ export function ProductVendorCard({ product }: ProductVendorCardProps) {
 
         <div className="flex items-center gap-2">
           {status && <StatusBadge status={status} />}
-          {vendorId && (
+          {vendorId ? (
             <a
-              href={`/admin/vendors/${vendorId}`}
+              href={PATHS.admin.vendorDetail(vendorId)}
               target="_blank"
               rel="noopener noreferrer"
               title="Open vendor admin profile in new tab"
-              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-line bg-paper text-ink text-xs font-semibold hover:border-brand/50 hover:text-brand transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg border border-line-strong/80 bg-surface text-ink text-xs font-semibold hover:border-brand hover:bg-brand-subtle hover:text-brand transition-all shadow-xs"
             >
               <span>Admin Profile</span>
+              <ExternalLink className="size-3" />
+            </a>
+          ) : (
+            <a
+              href={PATHS.admin.vendors}
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Open vendors in admin in new tab"
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg border border-line-strong/80 bg-surface text-ink text-xs font-semibold hover:border-brand hover:bg-brand-subtle hover:text-brand transition-all shadow-xs"
+            >
+              <span>All Vendors</span>
               <ExternalLink className="size-3" />
             </a>
           )}
@@ -83,8 +94,8 @@ export function ProductVendorCard({ product }: ProductVendorCardProps) {
               </span>
             )}
             {kycComplete && (
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 text-[10px] font-bold border border-emerald-500/20">
-                <ShieldCheck className="size-3 text-emerald-600" />
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-success-subtle text-success text-[10px] font-bold border border-success/30">
+                <ShieldCheck className="size-3 text-success" />
                 KYC Verified
               </span>
             )}
@@ -100,7 +111,7 @@ export function ProductVendorCard({ product }: ProductVendorCardProps) {
           )}
         </div>
 
-        {vendorSlug && (
+        {vendorSlug ? (
           <a
             href={PATHS.vendorPage(vendorSlug)}
             target="_blank"
@@ -108,6 +119,16 @@ export function ProductVendorCard({ product }: ProductVendorCardProps) {
             className="inline-flex items-center gap-1 text-xs font-semibold text-brand hover:underline shrink-0"
           >
             <span>Visit Storefront</span>
+            <ExternalLink className="size-3" />
+          </a>
+        ) : (
+          <a
+            href={PATHS.vendors}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1 text-xs font-semibold text-brand hover:underline shrink-0"
+          >
+            <span>Browse Merchants</span>
             <ExternalLink className="size-3" />
           </a>
         )}

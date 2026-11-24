@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import { useSearchParams } from "next/navigation";
 import { AdminDataPage } from "../shared/AdminDataPage.page";
 import {
   inventoryApi,
@@ -23,7 +24,10 @@ function renderStockEditorAction(row: AdminDataRow, reload: () => void) {
 }
 
 export function AdminInventoryPage() {
-  const [search, setSearch] = useState("");
+  const searchParams = useSearchParams();
+  const paramSearch = searchParams.get("search") ?? searchParams.get("q") ?? "";
+  const [userSearch, setUserSearch] = useState<string | null>(null);
+  const search = userSearch ?? paramSearch;
   const debouncedSearch = useDebouncedValue(search.trim(), 350);
 
   const load = useCallback(async () => {
@@ -38,7 +42,7 @@ export function AdminInventoryPage() {
   }, [debouncedSearch]);
 
   const activeCount = search.trim() ? 1 : 0;
-  const handleClear = () => setSearch("");
+  const handleClear = () => setUserSearch("");
   const fetchDetail = useCallback(
     async (row: AdminDataRow) => ({ ...row }),
     [],
@@ -55,7 +59,7 @@ export function AdminInventoryPage() {
             <Input
               id="inventory-filter-search"
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => setUserSearch(e.target.value)}
               placeholder="Search by product name or SKU..."
             />
           </FormFieldFrame>

@@ -1,6 +1,7 @@
 "use client";
 
 import { CheckCircle2, Tag, Sparkles, ExternalLink } from "lucide-react";
+import { PATHS } from "@/shared/constants/paths/paths";
 
 interface ProductDescriptionCardProps {
   product: Record<string, unknown>;
@@ -59,7 +60,7 @@ export function ProductDescriptionCard({
                 key={idx}
                 className="flex items-start gap-2 bg-paper/60 p-2.5 rounded-xl border border-line/50"
               >
-                <CheckCircle2 className="size-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
+                <CheckCircle2 className="size-4 text-success shrink-0 mt-0.5" />
                 <span className="leading-snug">{item}</span>
               </li>
             ))}
@@ -76,11 +77,11 @@ export function ProductDescriptionCard({
             {tags.map((tag, idx) => (
               <a
                 key={idx}
-                href={`/products?search=${encodeURIComponent(tag)}`}
+                href={`${PATHS.products}?search=${encodeURIComponent(tag)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 title={`Find all products tagged "${tag}" in new tab`}
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-surface-subtle text-[11px] font-medium text-ink-muted border border-line hover:border-brand/40 hover:text-brand hover:bg-surface-raised transition-all"
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-surface text-[11px] font-medium text-ink-muted border border-line hover:border-brand hover:text-brand hover:bg-brand-subtle transition-all"
               >
                 <Tag className="size-3 text-ink-muted/70" />
                 <span>{tag}</span>
