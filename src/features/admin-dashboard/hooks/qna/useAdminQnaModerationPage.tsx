@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useCallback, type ReactNode } from "react";
+import { useCallback, type ReactNode } from "react";
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { LABELS } from "@/shared/constants/labels";
 import { productQnaApi } from "@/features/productQna";
 import type { QnaModerationItem } from "@/features/productQna";
+import { useUrlFilterParams } from "@/shared/hooks/navigation/useUrlFilterParams.hook";
 import { QnaModerationActions } from "../../components/qna/QnaModerationActions.component";
 import type { AdminDataRow } from "../shared/useAdminDataList.hook";
 import type { AdminListPageModel } from "../../types/shared/adminListPage.types";
@@ -49,10 +50,13 @@ export type AdminQnaModerationPageModel = AdminListPageModel & {
  * live text keeps showing until an edit is approved; rejecting drops only the edit).
  */
 export function useAdminQnaModerationPage(): AdminQnaModerationPageModel {
-  const [search, setSearch] = useState("");
-  const [kind, setKind] = useState("");
-  const [submission, setSubmission] = useState("");
-  const [authorType, setAuthorType] = useState("");
+  const urlFilters = useUrlFilterParams<
+    "search" | "kind" | "submission" | "authorType"
+  >({ search: ["q"] });
+  const search = urlFilters.get("search");
+  const kind = urlFilters.get("kind");
+  const submission = urlFilters.get("submission");
+  const authorType = urlFilters.get("authorType");
 
   const load = useCallback(
     async ({ page, limit }: { page: number; limit: number }) => {
@@ -101,16 +105,12 @@ export function useAdminQnaModerationPage(): AdminQnaModerationPageModel {
       kind,
       submission,
       authorType,
-      onSearchChange: setSearch,
-      onKindChange: setKind,
-      onSubmissionChange: setSubmission,
-      onAuthorTypeChange: setAuthorType,
-      onClear: () => {
-        setSearch("");
-        setKind("");
-        setSubmission("");
-        setAuthorType("");
-      },
+      onSearchChange: urlFilters.set("search"),
+      onKindChange: urlFilters.set("kind"),
+      onSubmissionChange: urlFilters.set("submission"),
+      onAuthorTypeChange: urlFilters.set("authorType"),
+      onClear: () =>
+        urlFilters.clearAll(["search", "kind", "submission", "authorType"]),
     },
     title: LABELS.adminQnaModerationTitle,
     permission: PERMISSIONS.REVIEW_MODERATE,

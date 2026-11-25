@@ -1,10 +1,11 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { LABELS } from "@/shared/constants/labels";
 import { returnsApi } from "@/features/returns";
 import { useDebouncedValue } from "@/shared/hooks/ui/use-debounce.hook";
+import { useUrlFilterParams } from "@/shared/hooks/navigation/useUrlFilterParams.hook";
 import { buildReturnRowActions } from "../../utils/returns/returnRowActions";
 import type { AdminDataRow } from "../shared/useAdminDataList.hook";
 import type { AdminListPageModel } from "../../types/shared/adminListPage.types";
@@ -15,8 +16,9 @@ export type AdminReturnsPageModel = AdminListPageModel & {
 };
 
 export function useAdminReturnsPage(): AdminReturnsPageModel {
-  const [search, setSearch] = useState("");
-  const [status, setStatus] = useState("");
+  const urlFilters = useUrlFilterParams<"search" | "status">({ search: ["q"] });
+  const search = urlFilters.get("search");
+  const status = urlFilters.get("status");
   const debouncedSearch = useDebouncedValue(search.trim(), 350);
 
   const load = useCallback(
@@ -31,9 +33,8 @@ export function useAdminReturnsPage(): AdminReturnsPageModel {
   );
 
   const onClear = useCallback(() => {
-    setSearch("");
-    setStatus("");
-  }, []);
+    urlFilters.clearAll(["search", "status"]);
+  }, [urlFilters]);
 
   const actions = useCallback(
     (row: AdminDataRow, reload: () => void) =>
@@ -74,8 +75,8 @@ export function useAdminReturnsPage(): AdminReturnsPageModel {
     filters: {
       search,
       status,
-      onSearchChange: setSearch,
-      onStatusChange: setStatus,
+      onSearchChange: urlFilters.set("search"),
+      onStatusChange: urlFilters.set("status"),
       onClear,
     },
   };

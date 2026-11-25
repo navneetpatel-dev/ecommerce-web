@@ -44,6 +44,7 @@ export function useInfiniteSelectPages({
 
   const requestIdRef = useRef(0);
   const loadingMoreRef = useRef(false);
+  const loadedQueryRef = useRef<string | null>(null);
 
   const loadMore = useCallback(
     async (pageToLoad: number) => {
@@ -87,6 +88,10 @@ export function useInfiniteSelectPages({
 
   useEffect(() => {
     if (!open) return;
+    if (loadedQueryRef.current === debouncedQuery) {
+      setInitialLoading(false);
+      return;
+    }
     let cancelled = false;
     const requestId = ++requestIdRef.current;
 
@@ -98,6 +103,7 @@ export function useInfiniteSelectPages({
           search: searchable && debouncedQuery ? debouncedQuery : undefined,
         });
         if (cancelled || requestId !== requestIdRef.current) return;
+        loadedQueryRef.current = debouncedQuery;
         setOptions(
           mergePageOptions({
             previous: [],

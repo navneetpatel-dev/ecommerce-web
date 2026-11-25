@@ -5,6 +5,7 @@ import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
+import { useUrlFilterParams } from "@/shared/hooks/navigation/useUrlFilterParams.hook";
 import { taxApi } from "@/features/admin-dashboard/api/tax/tax.api";
 import { AdminConfirmAction } from "../../components/shared/AdminConfirmAction.component";
 import { adminRowLabel } from "../../utils/shared/adminRowLabel";
@@ -12,9 +13,12 @@ import { filterTaxRules } from "../../utils/tax/taxFilters.utils";
 import type { AdminDataRow } from "../shared/useAdminDataList.hook";
 
 export function useAdminTaxPage() {
-  const [search, setSearch] = useState("");
-  const [gstTier, setGstTier] = useState("");
-  const [hasPriceBand, setHasPriceBand] = useState("");
+  const urlFilters = useUrlFilterParams<"search" | "gstTier" | "hasPriceBand">({
+    search: ["q"],
+  });
+  const search = urlFilters.get("search");
+  const gstTier = urlFilters.get("gstTier");
+  const hasPriceBand = urlFilters.get("hasPriceBand");
   const [gstPercentage, setGstPercentage] = useState("18");
   const [hsnCode, setHsnCode] = useState("");
   // Optional per-piece price band: above this value, the higher GST % applies.
@@ -91,14 +95,10 @@ export function useAdminTaxPage() {
       search,
       gstTier,
       hasPriceBand,
-      onSearchChange: setSearch,
-      onGstTierChange: setGstTier,
-      onHasPriceBandChange: setHasPriceBand,
-      onClear: () => {
-        setSearch("");
-        setGstTier("");
-        setHasPriceBand("");
-      },
+      onSearchChange: urlFilters.set("search"),
+      onGstTierChange: urlFilters.set("gstTier"),
+      onHasPriceBandChange: urlFilters.set("hasPriceBand"),
+      onClear: () => urlFilters.clearAll(["search", "gstTier", "hasPriceBand"]),
     },
     form: {
       gstPercentage,

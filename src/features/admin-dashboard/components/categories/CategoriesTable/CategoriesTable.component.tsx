@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useMemo, useState, type ReactNode } from "react";
+import { useCallback, useMemo, type ReactNode } from "react";
+import { useUrlFilterParams } from "@/shared/hooks/navigation/useUrlFilterParams.hook";
 import { DndContext, closestCenter } from "@dnd-kit/core";
 import {
   SortableContext,
@@ -35,8 +36,9 @@ export function CategoriesTable({
   pagination,
   actions,
 }: CategoriesTableProps) {
-  const [search, setSearch] = useState("");
-  const [status, setStatus] = useState("");
+  const urlFilters = useUrlFilterParams<"search" | "status">({ search: ["q"] });
+  const search = urlFilters.get("search");
+  const status = urlFilters.get("status");
 
   const filteredCategories = useMemo(() => {
     return categories.filter((cat) => {
@@ -79,12 +81,9 @@ export function CategoriesTable({
       <CategoriesFilters
         search={search}
         status={status}
-        onSearchChange={setSearch}
-        onStatusChange={setStatus}
-        onClear={() => {
-          setSearch("");
-          setStatus("");
-        }}
+        onSearchChange={urlFilters.set("search")}
+        onStatusChange={urlFilters.set("status")}
+        onClear={() => urlFilters.clearAll(["search", "status"])}
       />
       <DndContext
         sensors={sensors}

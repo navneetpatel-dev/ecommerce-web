@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useMemo } from "react";
 import { useUrlTabState } from "@/shared/hooks/navigation/useUrlTabState.hook";
+import { useUrlFilterParams } from "@/shared/hooks/navigation/useUrlFilterParams.hook";
 import { useAdminCoupons } from "../../api/analytics/admin.queries";
 import { useCreateCoupon } from "./useCreateCoupon.hook";
 import { DEFAULT_PAGE_LIMIT } from "@/shared/constants/pagination/pagination";
@@ -13,9 +14,12 @@ const COUPON_TABS: readonly CouponsTab[] = ["platform", "vendor", "batches"];
 
 export function useAdminCouponsPage() {
   const [page, setPage] = useState(1);
-  const [search, setSearch] = useState("");
-  const [status, setStatus] = useState("");
-  const [vendorId, setVendorId] = useState("");
+  const urlFilters = useUrlFilterParams<"search" | "status" | "vendorId">({
+    search: ["q"],
+  });
+  const search = urlFilters.get("search");
+  const status = urlFilters.get("status");
+  const vendorId = urlFilters.get("vendorId");
   const debouncedSearch = useDebouncedValue(search.trim(), 350);
 
   const [tab, setTab] = useUrlTabState(COUPON_TABS, "platform");
@@ -52,27 +56,34 @@ export function useAdminCouponsPage() {
     setPage(1);
   };
 
-  const handleSearchChange = useCallback((value: string) => {
-    setSearch(value);
-    setPage(1);
-  }, []);
+  const handleSearchChange = useCallback(
+    (value: string) => {
+      urlFilters.set("search")(value);
+      setPage(1);
+    },
+    [urlFilters],
+  );
 
-  const handleStatusChange = useCallback((value: string) => {
-    setStatus(value);
-    setPage(1);
-  }, []);
+  const handleStatusChange = useCallback(
+    (value: string) => {
+      urlFilters.set("status")(value);
+      setPage(1);
+    },
+    [urlFilters],
+  );
 
-  const handleVendorChange = useCallback((value: string) => {
-    setVendorId(value);
-    setPage(1);
-  }, []);
+  const handleVendorChange = useCallback(
+    (value: string) => {
+      urlFilters.set("vendorId")(value);
+      setPage(1);
+    },
+    [urlFilters],
+  );
 
   const handleClearFilters = useCallback(() => {
-    setSearch("");
-    setStatus("");
-    setVendorId("");
+    urlFilters.clearAll(["search", "status", "vendorId"]);
     setPage(1);
-  }, []);
+  }, [urlFilters]);
 
   const onSubmit = (data: CouponFormInput) => {
     if (createCoupon.isPending) return;

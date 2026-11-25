@@ -41,7 +41,11 @@ export function CategoriesFilters({
   const activeCount = (search.trim() ? 1 : 0) + (status ? 1 : 0);
 
   return (
-    <CollapsibleTableFilters activeCount={activeCount} onClear={onClear}>
+    <CollapsibleTableFilters
+      activeCount={activeCount}
+      onClear={onClear}
+      defaultOpen={activeCount > 0}
+    >
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 items-end">
         <FormFieldFrame
           label={LABELS.search}

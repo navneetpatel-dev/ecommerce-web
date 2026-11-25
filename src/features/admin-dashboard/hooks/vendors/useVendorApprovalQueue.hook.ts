@@ -1,15 +1,19 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import { useAdminDataList } from "../shared/useAdminDataList.hook";
 import { useVendorApproval } from "./useVendorApproval.hook";
 import { adminApi } from "../../api/analytics/admin.api";
 import { useDebouncedValue } from "@/shared/hooks/ui/use-debounce.hook";
+import { useUrlFilterParams } from "@/shared/hooks/navigation/useUrlFilterParams.hook";
 import type { VendorInfo } from "@/shared/api/types";
 
 export function useVendorApprovalQueue() {
-  const [search, setSearch] = useState("");
-  const [kycFilter, setKycFilter] = useState("");
+  const urlFilters = useUrlFilterParams<"search" | "kycFilter">({
+    search: ["q"],
+  });
+  const search = urlFilters.get("search");
+  const kycFilter = urlFilters.get("kycFilter");
   const debouncedSearch = useDebouncedValue(search.trim(), 350);
 
   const load = useCallback(
@@ -31,14 +35,9 @@ export function useVendorApprovalQueue() {
   const list = useAdminDataList(load);
   const { approve, reject } = useVendorApproval();
 
-  const handleSearchChange = (value: string) => {
-    setSearch(value);
-  };
-
-  const handleClear = () => {
-    setSearch("");
-    setKycFilter("");
-  };
+  const handleClear = useCallback(() => {
+    urlFilters.clearAll(["search", "kycFilter"]);
+  }, [urlFilters]);
 
   const onApprove = useCallback(
     async (id: string, commissionRate?: number) => {
@@ -61,8 +60,8 @@ export function useVendorApprovalQueue() {
     isLoading: list.loading,
     search,
     kycFilter,
-    onSearchChange: handleSearchChange,
-    onKycFilterChange: setKycFilter,
+    onSearchChange: urlFilters.set("search"),
+    onKycFilterChange: urlFilters.set("kycFilter"),
     onClear: handleClear,
     reload: list.reload,
     pagination: {

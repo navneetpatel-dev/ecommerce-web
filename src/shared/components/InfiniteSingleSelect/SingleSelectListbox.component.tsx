@@ -1,6 +1,6 @@
 "use client";
 
-import type { ChangeEvent } from "react";
+import { forwardRef, type ButtonHTMLAttributes, type ChangeEvent } from "react";
 import { ChevronDown } from "lucide-react";
 import { Input } from "@/shared/components/ui/input";
 import { LABELS } from "@/shared/constants/labels";
@@ -136,34 +136,44 @@ export function SearchField(props: {
   );
 }
 
-export function TriggerButton(props: {
+interface TriggerButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   open: boolean;
   listboxId: string;
   label: string | null;
   error: boolean;
   muted: boolean;
   disabled: boolean;
-}) {
-  return (
-    <button
-      type="button"
-      disabled={props.disabled}
-      aria-haspopup="listbox"
-      aria-expanded={props.open}
-      aria-controls={props.listboxId}
-      className={cn(
-        infiniteSingleSelectStyles.listbox.triggerButton,
-        props.error && infiniteSingleSelectStyles.listbox.triggerButtonError,
-        props.muted && infiniteSingleSelectStyles.listbox.triggerButtonMuted,
-      )}
-    >
-      <span className={infiniteSingleSelectStyles.listbox.triggerButtonLabel}>
-        {props.label}
-      </span>
-      <ChevronDown
-        size={16}
-        className={infiniteSingleSelectStyles.listbox.triggerButtonIcon}
-      />
-    </button>
-  );
 }
+
+export const TriggerButton = forwardRef<HTMLButtonElement, TriggerButtonProps>(
+  function TriggerButton(
+    { open, listboxId, label, error, muted, disabled, className, ...rest },
+    ref,
+  ) {
+    return (
+      <button
+        ref={ref}
+        type="button"
+        disabled={disabled}
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        aria-controls={listboxId}
+        {...rest}
+        className={cn(
+          infiniteSingleSelectStyles.listbox.triggerButton,
+          error && infiniteSingleSelectStyles.listbox.triggerButtonError,
+          muted && infiniteSingleSelectStyles.listbox.triggerButtonMuted,
+          className,
+        )}
+      >
+        <span className={infiniteSingleSelectStyles.listbox.triggerButtonLabel}>
+          {label}
+        </span>
+        <ChevronDown
+          size={16}
+          className={infiniteSingleSelectStyles.listbox.triggerButtonIcon}
+        />
+      </button>
+    );
+  },
+);

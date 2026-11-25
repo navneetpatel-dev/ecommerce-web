@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { LABELS } from "@/shared/constants/labels";
 import { useDebouncedValue } from "@/shared/hooks/ui/use-debounce.hook";
+import { useUrlFilterParams } from "@/shared/hooks/navigation/useUrlFilterParams.hook";
 import { useAuthStore } from "@/shared/stores/auth/auth.store";
 import { adminUsersApi } from "../../api/users/users.api.hook";
 import { AdminUserRowActions } from "../../components/users/AdminUserRowActions.component";
@@ -17,9 +18,13 @@ export type AdminUsersPageModel = AdminListPageModel & {
 
 export function useAdminUsersPage(): AdminUsersPageModel {
   const currentUserId = useAuthStore((s) => s.currentUser?.id);
-  const [search, setSearch] = useState("");
-  const [status, setStatus] = useState("");
-  const [roleId, setRoleId] = useState("");
+  const urlFilters = useUrlFilterParams<"search" | "status" | "roleId">({
+    search: ["q"],
+    roleId: ["role"],
+  });
+  const search = urlFilters.get("search");
+  const status = urlFilters.get("status");
+  const roleId = urlFilters.get("roleId");
   const [roles, setRoles] = useState<{ id: string; name: string }[]>([]);
   const debouncedSearch = useDebouncedValue(search.trim(), 350);
 
@@ -43,10 +48,8 @@ export function useAdminUsersPage(): AdminUsersPageModel {
   );
 
   const onClear = useCallback(() => {
-    setSearch("");
-    setStatus("");
-    setRoleId("");
-  }, []);
+    urlFilters.clearAll(["search", "status", "roleId"]);
+  }, [urlFilters]);
 
   const actions = useCallback(
     (row: AdminDataRow, reload: () => void): ReactNode => (
@@ -80,9 +83,9 @@ export function useAdminUsersPage(): AdminUsersPageModel {
       status,
       roleId,
       roles,
-      onSearchChange: setSearch,
-      onStatusChange: setStatus,
-      onRoleIdChange: setRoleId,
+      onSearchChange: urlFilters.set("search"),
+      onStatusChange: urlFilters.set("status"),
+      onRoleIdChange: urlFilters.set("roleId"),
       onClear,
     },
   };

@@ -22,6 +22,8 @@ interface AdminVendorFilterSelectProps {
   status?: string;
 }
 
+const vendorPageCache = new Map<string, InfiniteSingleSelectPageResult>();
+
 function formatVendorSublabel(v: VendorInfo): string {
   const parts: string[] = [];
   if (v.slug) parts.push(`@${v.slug}`);
@@ -57,13 +59,17 @@ export function AdminVendorFilterSelect({
     async (
       query: InfiniteSingleSelectPageQuery,
     ): Promise<InfiniteSingleSelectPageResult> => {
+      const cacheKey = `${status ?? ""}:${query.search ?? ""}:${query.page}:${query.limit}`;
+      const cached = vendorPageCache.get(cacheKey);
+      if (cached) return cached;
+
       const res = await adminApi.vendors({
         page: query.page,
         limit: query.limit,
         search: query.search,
         status,
       });
-      return {
+      const pageResult: InfiniteSingleSelectPageResult = {
         items: res.items.map((v) => ({
           id: v.id,
           label: v.businessName,
@@ -73,6 +79,8 @@ export function AdminVendorFilterSelect({
         totalPages: res.totalPages,
         total: res.total,
       };
+      vendorPageCache.set(cacheKey, pageResult);
+      return pageResult;
     },
     [status],
   );
