@@ -74,6 +74,12 @@ export const notificationsRoutes = {
   health: "/api/notifications/health",
   resend: (id: string) =>
     `/api/notifications/logs/${encodeURIComponent(id)}/resend`,
+  bulkResend: "/api/notifications/logs/bulk-resend",
+  broadcastRetryFailed: (id: string) =>
+    `/api/notifications/broadcasts/${encodeURIComponent(id)}/retry-failed`,
+  suppressions: (search: string, page = 1, limit = 25) =>
+    `/api/notifications/suppressions?search=${encodeURIComponent(search)}&page=${page}&limit=${limit}`,
+  suppressionsClear: "/api/notifications/suppressions/clear",
   templates: "/api/notifications/templates",
   templatePreview: (type: string, theme: "light" | "dark") =>
     `/api/notifications/templates/${encodeURIComponent(type)}/preview?theme=${theme}`,

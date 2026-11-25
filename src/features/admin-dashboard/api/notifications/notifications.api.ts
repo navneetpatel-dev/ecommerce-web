@@ -10,6 +10,7 @@ export type NotificationLogRow = {
   /** Why a failed email failed (TEMPORARY, PERMANENT, RENDER, RECIPIENT, CONFIG, UNCERTAIN). */
   errorCategory: string | null;
   error: string | null;
+  attempts?: number;
   sentAt: string | null;
   createdAt: string;
 };
@@ -20,6 +21,7 @@ export type NotificationLogFilters = {
   channel?: string;
   status?: string;
   errorCategory?: string;
+  referenceId?: string;
 };
 
 export type BroadcastChannel = "EMAIL" | "PUSH" | "IN_APP";
@@ -125,8 +127,30 @@ export type AdminBroadcastRecord = {
   sentAt: string | null;
   targetedCount: number;
   queuedCount: number;
+  error?: string | null;
+  stats?: {
+    sentCount: number;
+    failedCount: number;
+    bouncedCount: number;
+    pendingCount: number;
+  };
   createdAt: string;
   actor?: { id: string; name: string; email: string } | null;
+};
+
+export type EmailSuppressionRow = {
+  id: string;
+  email: string;
+  reason: string;
+  expiresAt: string;
+  updatedAt: string;
+};
+
+export type BulkResendResult = {
+  attempted: number;
+  requeued: number;
+  skipped: number;
+  errors: string[];
 };
 
 type NotificationLogResponse = Omit<NotificationLogRow, "recipient"> & {
@@ -178,6 +202,7 @@ export const notificationsApi = {
     if (filters.status) query.set("status", filters.status);
     if (filters.errorCategory)
       query.set("errorCategory", filters.errorCategory);
+    if (filters.referenceId) query.set("referenceId", filters.referenceId);
     const qs = query.toString();
     const rows = await apiClient.get<NotificationLogResponse[]>(
       qs ? `${API.notifications.logs}?${qs}` : API.notifications.logs,
@@ -190,6 +215,7 @@ export const notificationsApi = {
       status: row.status,
       errorCategory: row.errorCategory ?? null,
       error: row.error ?? null,
+      attempts: row.attempts ?? 0,
       sentAt: row.sentAt,
       createdAt: row.createdAt,
     }));
@@ -200,6 +226,26 @@ export const notificationsApi = {
       API.notifications.resend(id),
       {},
     ),
+  bulkResend: (payload: {
+    ids?: string[];
+    referenceId?: string;
+    type?: string;
+    errorCategory?: string;
+    includeStuckPending?: boolean;
+  }) => apiClient.post<BulkResendResult>(API.notifications.bulkResend, payload),
+  retryBroadcastFailed: (id: string) =>
+    apiClient.post<BulkResendResult>(
+      API.notifications.broadcastRetryFailed(id),
+      {},
+    ),
+  listSuppressions: (search = "", page = 1, limit = 25) =>
+    apiClient.get<PaginatedLookupResult<EmailSuppressionRow>>(
+      API.notifications.suppressions(search, page, limit),
+    ),
+  clearSuppression: (email: string) =>
+    apiClient.post<{ cleared: boolean }>(API.notifications.suppressionsClear, {
+      email,
+    }),
   templates: () =>
     apiClient.get<EmailTemplateSummary[]>(API.notifications.templates),
   previewTemplate: (type: string, theme: "light" | "dark") =>

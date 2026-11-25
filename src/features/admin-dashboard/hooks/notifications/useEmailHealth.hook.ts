@@ -43,6 +43,10 @@ export function useEmailHealth() {
             error: failure.error,
           })
         : null,
+    rawLastError: health?.status !== "OK" ? (failure?.error ?? null) : null,
+    failuresByCategory: health?.failuresByCategory ?? {},
+    isFetching: query.isFetching,
+    refresh: () => void query.refetch(),
     loadError: query.isError ? LABELS.emailHealthLoadFailed : null,
   };
 }

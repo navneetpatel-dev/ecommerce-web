@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useResendNotification } from "../../hooks/notifications/useResendNotification.hook";
 import { emailHealthBannerStyles as styles } from "../../styles/notifications/emailHealthBanner.styles";
 import { ResendNotificationButton } from "./ResendNotificationButton.component";
@@ -7,18 +8,28 @@ import { ResendNotificationButton } from "./ResendNotificationButton.component";
 interface NotificationLogRowActionsProps {
   id: string;
   status: string;
+  createdAt?: string;
   reload: () => void;
 }
 
-/** Actions for one row of the delivery log: a failed email can be sent again. */
+const STUCK_AFTER_MS = 15 * 60 * 1000;
+
+/** Actions for one row of the delivery log: failed or >15m stuck pending emails can be resent. */
 export function NotificationLogRowActions({
   id,
   status,
+  createdAt,
   reload,
 }: NotificationLogRowActionsProps) {
   const resend = useResendNotification(reload);
+  const [mountTime] = useState(() => Date.now());
 
-  if (status !== "FAILED") return null;
+  const isStuckPending =
+    status === "PENDING" &&
+    Boolean(createdAt) &&
+    mountTime - new Date(createdAt!).getTime() >= STUCK_AFTER_MS;
+
+  if (status !== "FAILED" && !isStuckPending) return null;
 
   return (
     <div>
