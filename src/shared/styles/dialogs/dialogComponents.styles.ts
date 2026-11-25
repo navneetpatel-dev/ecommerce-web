@@ -90,10 +90,14 @@ export const recordDetailDialogStyles = {
 } as const;
 
 export const recordDetailImageStyles = {
-  container: "flex flex-wrap gap-3",
+  container: "grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-2.5",
+  singleBannerContainer: "w-full",
+  singleBannerLink: "group block w-full",
+  singleBannerThumb:
+    "relative aspect-[16/6] max-h-48 w-full overflow-hidden rounded-xl border border-line/60 bg-paper transition-all hover:border-brand/40",
   link: "group block shrink-0",
   thumb:
-    "relative h-28 w-28 overflow-hidden rounded-xl border border-line bg-paper transition-all hover:border-brand/40 hover:shadow-sm sm:h-32 sm:w-32",
+    "relative aspect-square w-full overflow-hidden rounded-xl border border-line/60 bg-paper transition-all hover:border-brand/40 hover:shadow-sm",
   image:
     "object-cover transition-transform duration-200 group-hover:scale-[1.03]",
   dash: "text-ink-faint",

@@ -44,17 +44,27 @@ function resolveRecordIcon(record: Record<string, unknown>) {
   return <FileText className="size-5" aria-hidden />;
 }
 
-function getRecordReference(record: Record<string, unknown>): string | null {
+function getRecordReference(
+  record: Record<string, unknown>,
+): { short: string; full: string } | null {
   const ref =
     record.returnReference ??
     record.orderReference ??
     record.reference ??
     record.code;
   if (typeof ref === "string" && ref.trim()) {
-    return ref.trim().startsWith("#") ? ref.trim() : `#${ref.trim()}`;
+    const clean = ref.trim();
+    return {
+      short: clean.startsWith("#") ? clean : `#${clean}`,
+      full: clean.replace(/^#/, ""),
+    };
   }
-  if (typeof record.id === "string" && record.id.length <= 16) {
-    return `#${record.id}`;
+  if (typeof record.id === "string" && record.id.trim()) {
+    const clean = record.id.trim();
+    return {
+      short: clean.length > 12 ? `#${clean.slice(0, 8)}` : `#${clean}`,
+      full: clean,
+    };
   }
   return null;
 }
@@ -86,12 +96,23 @@ export function RecordDetailHeader({ record, title }: RecordDetailHeaderProps) {
 
           <div className={styles.badgeRow}>
             {status ? <StatusBadge status={status} /> : null}
+            {typeof record.kind === "string" && record.kind.trim() ? (
+              <span className="inline-flex items-center rounded-md bg-brand/10 px-2 py-0.5 text-[11px] font-semibold text-brand">
+                {record.kind}
+              </span>
+            ) : null}
+            {typeof record.submission === "string" &&
+            record.submission.trim() ? (
+              <span className="inline-flex items-center rounded-md bg-paper px-2 py-0.5 text-[11px] font-medium text-ink-muted border border-line/60">
+                {record.submission}
+              </span>
+            ) : null}
             {reference ? (
               <span className={styles.referenceBadge}>
-                <span>{reference}</span>
+                <span>{reference.short}</span>
                 <RecordDetailCopyButton
-                  value={reference.replace(/^#/, "")}
-                  label="Copy reference ID"
+                  value={reference.full}
+                  label="Copy ID"
                 />
               </span>
             ) : null}

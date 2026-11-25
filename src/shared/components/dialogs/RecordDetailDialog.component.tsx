@@ -9,15 +9,17 @@ import { LABELS } from "@/shared/constants/labels";
 import {
   buildRecordDetailFields,
   getRecordDetailTitle,
-  type RecordDetailField,
 } from "@/shared/utils/formatting/recordDetails";
-import { isImageFieldKey } from "@/shared/utils/media/imageField";
+import { categorizeDetailFields } from "@/shared/utils/formatting/recordDetailCategorize";
 import { recordDetailDialogStyles as styles } from "../../styles/dialogs/dialogComponents.styles";
 import { RecordDetailHeader } from "./RecordDetailHeader.component";
 import { RecordDetailHighlights } from "./RecordDetailHighlights.component";
+import { RecordDetailSpotlight } from "./RecordDetailSpotlight.component";
 import { RecordDetailFieldGrid } from "./RecordDetailFieldGrid.component";
 import { RecordDetailObjectView } from "./RecordDetailObjectView.component";
 import { RecordDetailListView } from "./RecordDetailListView.component";
+import { RecordDetailImage } from "./RecordDetailImage.component";
+import { RecordDetailSystemSection } from "./RecordDetailSystemSection.component";
 import {
   isProductRecord,
   ProductRecordDetailView,
@@ -29,32 +31,6 @@ interface RecordDetailDialogProps {
   record: Record<string, unknown> | null;
   loading?: boolean;
   error?: string | null;
-}
-
-interface CategorizedFields {
-  primitives: RecordDetailField[];
-  objects: RecordDetailField[];
-  arrays: RecordDetailField[];
-}
-
-function categorizeFields(fields: RecordDetailField[]): CategorizedFields {
-  const primitives: RecordDetailField[] = [];
-  const objects: RecordDetailField[] = [];
-  const arrays: RecordDetailField[] = [];
-
-  for (const f of fields) {
-    if (isImageFieldKey(f.key)) {
-      arrays.push(f);
-    } else if (Array.isArray(f.value)) {
-      arrays.push(f);
-    } else if (typeof f.value === "object" && f.value !== null) {
-      objects.push(f);
-    } else {
-      primitives.push(f);
-    }
-  }
-
-  return { primitives, objects, arrays };
 }
 
 export function RecordDetailDialog({
@@ -78,8 +54,8 @@ export function RecordDetailDialog({
     [record],
   );
 
-  const { primitives, objects, arrays } = useMemo(
-    () => categorizeFields(fields),
+  const { media, spotlight, properties, objects, arrays, system } = useMemo(
+    () => categorizeDetailFields(fields),
     [fields],
   );
 
@@ -108,11 +84,24 @@ export function RecordDetailDialog({
                 </div>
               )}
 
+              {media.map((m) => (
+                <div key={m.key} className="space-y-2">
+                  <span className="block text-[10px] font-semibold uppercase tracking-wider text-ink-muted">
+                    {m.label}
+                  </span>
+                  <RecordDetailImage
+                    value={m.value}
+                    alt={m.label}
+                    fieldKey={m.key}
+                  />
+                </div>
+              ))}
+
               {record && <RecordDetailHighlights record={record} />}
 
-              {primitives.length > 0 && (
-                <RecordDetailFieldGrid fields={primitives} />
-              )}
+              <RecordDetailSpotlight fields={spotlight} />
+
+              <RecordDetailFieldGrid fields={properties} />
 
               {objects.map((obj) => (
                 <RecordDetailObjectView
@@ -129,6 +118,8 @@ export function RecordDetailDialog({
                   fieldKey={arr.key}
                 />
               ))}
+
+              <RecordDetailSystemSection fields={system} />
             </>
           )}
         </div>

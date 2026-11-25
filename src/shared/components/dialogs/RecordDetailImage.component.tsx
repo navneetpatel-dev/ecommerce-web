@@ -11,36 +11,72 @@ const stopLinkPropagation = (event: { stopPropagation: () => void }) =>
 interface RecordDetailImageProps {
   value: unknown;
   alt: string;
+  fieldKey?: string;
 }
 
-/** Detail-view image preview — larger than table thumbnails; click to open full size. */
-export function RecordDetailImage({ value, alt }: RecordDetailImageProps) {
+/** Adaptive detail-view media preview: wide banner for single banner/hero images, responsive square grid for multi-image arrays. */
+export function RecordDetailImage({
+  value,
+  alt,
+  fieldKey = "",
+}: RecordDetailImageProps) {
   const urls = extractImageUrls(value);
 
   if (urls.length === 0) {
     return <span className={recordDetailImageStyles.dash}>—</span>;
   }
 
-  const imageLinks = urls.map((url) => (
-    <a
-      key={url}
-      href={url}
-      target="_blank"
-      rel="noopener noreferrer"
-      className={recordDetailImageStyles.link}
-      onClick={stopLinkPropagation}
-    >
-      <div className={recordDetailImageStyles.thumb}>
-        <MediaImage
-          src={url}
-          alt={alt}
-          unavailableLabel={LABELS.imageNotAvailable}
-          sizes="(max-width: 640px) 112px, 128px"
-          imageClassName={recordDetailImageStyles.image}
-        />
-      </div>
-    </a>
-  ));
+  const isBanner =
+    urls.length === 1 &&
+    (fieldKey.toLowerCase().includes("banner") ||
+      fieldKey.toLowerCase().includes("cover"));
 
-  return <div className={recordDetailImageStyles.container}>{imageLinks}</div>;
+  if (isBanner) {
+    return (
+      <div className={recordDetailImageStyles.singleBannerContainer}>
+        <a
+          href={urls[0]}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={recordDetailImageStyles.singleBannerLink}
+          onClick={stopLinkPropagation}
+        >
+          <div className={recordDetailImageStyles.singleBannerThumb}>
+            <MediaImage
+              src={urls[0]}
+              alt={alt}
+              unavailableLabel={LABELS.imageNotAvailable}
+              sizes="(max-width: 768px) 100vw, 720px"
+              imageClassName={recordDetailImageStyles.image}
+            />
+          </div>
+        </a>
+      </div>
+    );
+  }
+
+  return (
+    <div className={recordDetailImageStyles.container}>
+      {urls.map((url) => (
+        <a
+          key={url}
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={recordDetailImageStyles.link}
+          onClick={stopLinkPropagation}
+        >
+          <div className={recordDetailImageStyles.thumb}>
+            <MediaImage
+              src={url}
+              alt={alt}
+              unavailableLabel={LABELS.imageNotAvailable}
+              sizes="(max-width: 640px) 140px, 160px"
+              imageClassName={recordDetailImageStyles.image}
+            />
+          </div>
+        </a>
+      ))}
+    </div>
+  );
 }

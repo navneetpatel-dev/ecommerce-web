@@ -96,35 +96,45 @@ function renderFieldValue(key: string, value: unknown): ReactNode {
 export function RecordDetailFieldGrid({ fields }: RecordDetailFieldGridProps) {
   if (fields.length === 0) return null;
 
+  const useTwoCols = fields.length >= 5;
+
   return (
-    <div className="rounded-2xl border border-line/80 bg-surface p-4 sm:p-5 shadow-xs space-y-4">
-      <div className="flex items-center justify-between pb-3 border-b border-line/60">
-        <h3 className="text-body-sm font-semibold text-ink">
-          General Information
+    <section className="space-y-2">
+      <div className="flex items-center justify-between border-b border-line/60 pb-2">
+        <h3 className="text-xs font-semibold uppercase tracking-wider text-ink-muted">
+          Details
         </h3>
-        <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-paper border border-line/70 text-ink-muted">
+        <span className="text-[11px] font-mono text-ink-muted/80">
           {fields.length} {fields.length === 1 ? "field" : "fields"}
         </span>
       </div>
-      <dl className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+      <dl
+        className={cn(
+          useTwoCols
+            ? "grid grid-cols-1 md:grid-cols-2 gap-x-8"
+            : "flex flex-col",
+        )}
+      >
         {fields.map((field) => {
           const isLong = isLongField(field.key, field.value);
           return (
             <div
               key={field.key}
               className={cn(
-                styles.fieldRow,
-                isLong && "sm:col-span-2 lg:col-span-3",
+                "flex items-baseline justify-between gap-4 border-b border-line/40 py-2.5",
+                isLong && useTwoCols && "md:col-span-2",
               )}
             >
-              <dt className={styles.fieldLabel}>{field.label}</dt>
-              <dd className={styles.fieldValue}>
+              <dt className="text-xs font-medium text-ink-muted shrink-0 max-w-[42%] truncate">
+                {field.label}
+              </dt>
+              <dd className="text-body-sm font-medium text-ink text-right min-w-0 break-words">
                 {renderFieldValue(field.key, field.value)}
               </dd>
             </div>
           );
         })}
       </dl>
-    </div>
+    </section>
   );
 }

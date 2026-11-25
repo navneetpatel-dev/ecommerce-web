@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Package } from "lucide-react";
 import { RecordDetailImage } from "@/shared/components/dialogs/RecordDetailImage.component";
 import { fieldLabel } from "@/shared/utils/formatting/recordDetails";
@@ -21,6 +22,8 @@ export function RecordDetailListView({
   fieldKey,
   nestedLevel = 0,
 }: RecordDetailListViewProps) {
+  const [showAllTags, setShowAllTags] = useState(false);
+
   if (!Array.isArray(items) || items.length === 0) {
     return <span className="text-ink-faint">—</span>;
   }
@@ -31,31 +34,48 @@ export function RecordDetailListView({
   if (allStrings) {
     const urls = extractImageUrls(items);
     if (urls.length === items.length) {
-      return <RecordDetailImage value={items} alt={title ?? "Images"} />;
+      return (
+        <RecordDetailImage
+          value={items}
+          alt={title ?? "Images"}
+          fieldKey={fieldKey}
+        />
+      );
     }
+    const visibleTags = showAllTags ? items : items.slice(0, 18);
+    const hiddenCount = items.length - visibleTags.length;
     return (
-      <div className="rounded-xl border border-line/70 bg-surface-subtle/30 p-4 space-y-2.5">
+      <section className="space-y-2.5">
         {title && (
-          <div className="flex items-center justify-between pb-1 border-b border-line/60">
+          <div className="flex items-center justify-between pb-2 border-b border-line/60">
             <span className="text-xs font-semibold uppercase tracking-wider text-ink-muted">
               {title}
             </span>
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-paper border border-line/70 text-ink-muted">
+            <span className="text-[11px] font-mono text-ink-muted/80">
               {items.length}
             </span>
           </div>
         )}
         <div className="flex flex-wrap gap-1.5">
-          {items.map((val, i) => (
+          {visibleTags.map((val, i) => (
             <span
               key={i}
-              className="inline-flex items-center rounded-lg bg-paper px-2.5 py-1 text-body-xs font-medium text-ink border border-line shadow-xs"
+              className="inline-flex items-center rounded-full bg-paper/80 px-2.5 py-0.5 text-body-xs font-medium text-ink border border-line/60"
             >
               {String(val)}
             </span>
           ))}
+          {hiddenCount > 0 && (
+            <button
+              type="button"
+              onClick={() => setShowAllTags(true)}
+              className="inline-flex items-center rounded-full bg-brand/10 px-2.5 py-0.5 text-body-xs font-semibold text-brand hover:bg-brand/20 transition-colors cursor-pointer"
+            >
+              +{hiddenCount} more
+            </button>
+          )}
         </div>
-      </div>
+      </section>
     );
   }
 
@@ -73,29 +93,29 @@ export function RecordDetailListView({
   }
 
   return (
-    <div
+    <section
       className={
         nestedLevel === 0
-          ? "rounded-2xl border border-line/80 bg-surface p-4 sm:p-5 shadow-xs space-y-4 w-full"
-          : "rounded-xl border border-line/60 bg-paper/60 p-3.5 space-y-3 w-full"
+          ? "space-y-2.5 w-full"
+          : "rounded-xl bg-paper/45 px-3.5 py-2.5 space-y-2 w-full"
       }
     >
       {title && (
-        <div className="flex items-center justify-between pb-3 border-b border-line/60">
-          <div className="flex items-center gap-2 text-ink font-semibold text-body-sm">
-            <Package className="size-4 text-brand" aria-hidden />
+        <div className="flex items-center justify-between pb-2 border-b border-line/60">
+          <div className="flex items-center gap-2 text-ink-muted font-semibold text-xs uppercase tracking-wider">
+            <Package className="size-3.5 text-brand" aria-hidden />
             <span>{title}</span>
           </div>
-          <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-paper border border-line/70 text-ink-muted">
+          <span className="text-[11px] font-mono text-ink-muted/80">
             {items.length} {items.length === 1 ? "item" : "items"}
           </span>
         </div>
       )}
-      <div className="space-y-2.5">
+      <div className="divide-y divide-line/50 rounded-xl bg-paper/40 px-4">
         {items.map((item, idx) => {
           if (!item || typeof item !== "object") {
             return (
-              <span key={idx} className="text-body-xs text-ink block">
+              <span key={idx} className="text-body-xs text-ink block py-2.5">
                 {String(item)}
               </span>
             );
@@ -103,10 +123,7 @@ export function RecordDetailListView({
           const obj = item as Record<string, unknown>;
 
           return (
-            <div
-              key={idx}
-              className="rounded-xl border border-line/60 bg-paper/60 p-3.5 shadow-xs hover:border-line transition-colors"
-            >
+            <div key={idx} className="py-3">
               {hasItemSummary(obj) ? (
                 <RecordDetailItemSummary item={obj} />
               ) : (
@@ -119,6 +136,6 @@ export function RecordDetailListView({
           );
         })}
       </div>
-    </div>
+    </section>
   );
 }

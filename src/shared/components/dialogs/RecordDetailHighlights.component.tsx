@@ -56,11 +56,11 @@ export function RecordDetailHighlights({
   if (highlights.length === 0) return null;
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
       {highlights.map((h) => (
         <div
           key={h.key}
-          className="flex flex-col justify-between gap-1.5 rounded-xl border border-line/70 bg-surface-subtle/50 p-3.5 shadow-sm transition-colors hover:border-line"
+          className="flex flex-col justify-between gap-1 rounded-xl bg-paper/65 px-3.5 py-2.5"
         >
           <span className="text-[10px] font-semibold uppercase tracking-wider text-ink-muted truncate">
             {h.label}

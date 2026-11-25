@@ -145,39 +145,45 @@ export function RecordDetailObjectView({
   const icon = resolveObjectIcon(fieldKey);
 
   return (
-    <div
+    <section
       className={
         nestedLevel === 0
-          ? "rounded-2xl border border-line/80 bg-surface p-4 sm:p-5 shadow-xs space-y-4 w-full"
-          : "rounded-xl border border-line/60 bg-paper/60 p-3.5 space-y-3 w-full"
+          ? "space-y-2 w-full"
+          : "rounded-xl bg-paper/45 px-3.5 py-2.5 space-y-2 w-full"
       }
     >
       {title && (
-        <div className="flex items-center justify-between gap-2 pb-3 border-b border-line/60">
-          <div className="flex items-center gap-2 text-ink font-semibold text-body-sm">
+        <div className="flex items-center justify-between gap-2 pb-2 border-b border-line/60">
+          <div className="flex items-center gap-2 text-ink-muted font-semibold text-xs uppercase tracking-wider">
             <span className="text-brand">{icon}</span>
             <span>{title}</span>
           </div>
-          <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-paper border border-line/70 text-ink-muted">
+          <span className="text-[11px] font-mono text-ink-muted/80">
             {entries.length} {entries.length === 1 ? "field" : "fields"}
           </span>
         </div>
       )}
-      <dl className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+      <dl
+        className={
+          entries.length >= 4
+            ? "grid grid-cols-1 md:grid-cols-2 gap-x-8"
+            : "flex flex-col"
+        }
+      >
         {entries.map(([k, val]) => (
           <div
             key={k}
-            className="flex flex-col gap-1 rounded-xl border border-line/60 bg-paper/60 p-3"
+            className="flex items-baseline justify-between gap-4 border-b border-line/40 py-2"
           >
-            <dt className="text-[10px] font-semibold uppercase tracking-wider text-ink-muted truncate">
+            <dt className="text-xs font-medium text-ink-muted shrink-0 max-w-[42%] truncate">
               {fieldLabel(k)}
             </dt>
-            <dd className="text-body-xs font-medium text-ink break-words">
+            <dd className="text-body-xs font-medium text-ink text-right min-w-0 break-words">
               {formatObjectFieldValue(k, val, nestedLevel)}
             </dd>
           </div>
         ))}
       </dl>
-    </div>
+    </section>
   );
 }
