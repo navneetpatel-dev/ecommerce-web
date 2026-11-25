@@ -136,51 +136,55 @@ export function CartDrawer({
     />
   ) : null;
 
-  const drawerElement = isOpen ? (
-    <>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.3 }}
-        aria-hidden
-        className={styles.backdrop}
-        onClick={onClose}
-      />
-      <motion.aside
-        ref={panelRef}
-        role="dialog"
-        aria-modal="true"
-        aria-label={LABELS.yourCart}
-        initial={{ x: "100%" }}
-        animate={{ x: 0 }}
-        exit={{ x: "100%" }}
-        transition={{ type: "spring", damping: 28, stiffness: 280 }}
-        className={styles.drawer}
-      >
-        <div className={styles.header}>
-          <h2 className={styles.title}>{LABELS.yourCart}</h2>
-          <div className={styles.headerActions}>
-            {clearCartActionElement}
-            <Button
-              ref={closeButtonRef}
-              type="button"
-              variant="ghost"
-              size="icon-sm"
-              onClick={onClose}
-              aria-label={LABELS.closeCart}
-            >
-              <X size={20} />
-            </Button>
+  return (
+    <AnimatePresence>
+      {isOpen ? (
+        <motion.div
+          key="cart-drawer-backdrop"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+          aria-hidden
+          className={styles.backdrop}
+          onClick={onClose}
+        />
+      ) : null}
+      {isOpen ? (
+        <motion.aside
+          key="cart-drawer-panel"
+          ref={panelRef}
+          role="dialog"
+          aria-modal="true"
+          aria-label={LABELS.yourCart}
+          initial={{ x: "100%" }}
+          animate={{ x: 0 }}
+          exit={{ x: "100%" }}
+          transition={{ type: "spring", damping: 28, stiffness: 280 }}
+          className={styles.drawer}
+        >
+          <div className={styles.header}>
+            <h2 className={styles.title}>{LABELS.yourCart}</h2>
+            <div className={styles.headerActions}>
+              {clearCartActionElement}
+              <Button
+                ref={closeButtonRef}
+                type="button"
+                variant="ghost"
+                size="icon-sm"
+                onClick={onClose}
+                aria-label={LABELS.closeCart}
+              >
+                <X size={20} />
+              </Button>
+            </div>
           </div>
-        </div>
 
-        <div className={styles.scrollArea}>{bodyContent}</div>
+          <div className={styles.scrollArea}>{bodyContent}</div>
 
-        {summaryElement}
-      </motion.aside>
-    </>
-  ) : null;
-
-  return <AnimatePresence>{drawerElement}</AnimatePresence>;
+          {summaryElement}
+        </motion.aside>
+      ) : null}
+    </AnimatePresence>
+  );
 }

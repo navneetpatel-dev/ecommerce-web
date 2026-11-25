@@ -94,6 +94,11 @@ async function isMissing(pathname: string): Promise<boolean> {
       return rest.length === 1 && !getArticleBySlug(slug);
     case "blog":
       return rest.length === 1 && !getBlogPost(slug);
+    case "s":
+      return (
+        rest.length === 1 &&
+        apiSaysMissing(`/api/short-links/${encodeURIComponent(slug)}`)
+      );
     default:
       return false;
   }
