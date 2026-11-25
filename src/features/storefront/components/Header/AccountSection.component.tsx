@@ -12,6 +12,7 @@ import {
 import type { CurrentUser } from "@/shared/api/types";
 import { useAuthStore } from "@/shared/stores/auth/auth.store";
 import { useIsAuthenticated } from "@/shared/hooks/auth/useRequireAuth.hook";
+import { InAppNotificationsBell } from "@/shared/components/notifications/InAppNotificationsBell.component";
 import { AccountMenu } from "./AccountMenu.component";
 import {
   AccountMenuSkeleton,
@@ -53,6 +54,7 @@ export function AccountSection({
 
   return (
     <>
+      <InAppNotificationsBell />
       {isCustomerRole(currentUser.role) && showStorefrontChrome ? (
         <div className={styles.ordersLinkWrapper}>
           <Link

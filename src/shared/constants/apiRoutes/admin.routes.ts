@@ -47,6 +47,18 @@ export const notificationsRoutes = {
   logs: "/api/notifications/logs",
   test: "/api/notifications/test",
   broadcast: "/api/notifications/broadcast",
+  broadcastPreview: "/api/notifications/broadcast/preview",
+  broadcastRenderPreview: "/api/notifications/broadcast/render-preview",
+  broadcastTest: "/api/notifications/broadcast/test",
+  broadcasts: "/api/notifications/broadcasts",
+  broadcastCancel: (id: string) =>
+    `/api/notifications/broadcasts/${encodeURIComponent(id)}/cancel`,
+  broadcastUsers: (q: string) =>
+    `/api/notifications/broadcast-users?q=${encodeURIComponent(q)}`,
+  inApp: "/api/notifications/in-app",
+  inAppRead: (id: string) =>
+    `/api/notifications/in-app/${encodeURIComponent(id)}/read`,
+  inAppReadAll: "/api/notifications/in-app/read-all",
   pushPublicKey: "/api/notifications/push/public-key",
   pushSubscribe: "/api/notifications/push/subscribe",
   unsubscribe: "/api/notifications/unsubscribe",

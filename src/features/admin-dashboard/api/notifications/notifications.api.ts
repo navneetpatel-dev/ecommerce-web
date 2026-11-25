@@ -22,19 +22,97 @@ export type NotificationLogFilters = {
   errorCategory?: string;
 };
 
-export type BroadcastTarget =
-  | { role: string; userIds?: undefined }
-  | { userIds: string[]; role?: undefined };
+export type BroadcastChannel = "EMAIL" | "PUSH" | "IN_APP";
+export type BroadcastClassification = "operational" | "marketing";
+export type BroadcastPriority = "standard" | "high";
+export type BroadcastMode =
+  "roles" | "users" | "user_segment" | "vendor_segment";
 
-export type BroadcastNotificationPayload = BroadcastTarget & {
+export type BroadcastTargetConfig = {
+  mode?: BroadcastMode;
+  allUsers?: boolean;
+  role?: string;
+  roles?: string[];
+  userIds?: string[];
+  emails?: string[];
+  userSegment?: {
+    status?: "ACTIVE" | "BLOCKED" | "ALL";
+    emailVerified?: boolean;
+    emailMarketingConsent?: boolean;
+    signedUpWithinDays?: number;
+    activity?:
+      | "ordered_last_30d"
+      | "inactive_30d"
+      | "inactive_90d"
+      | "repeat_buyers"
+      | "abandoned_cart";
+    state?: string;
+    city?: string;
+  };
+  vendorSegment?: {
+    vendorStatus?: "APPROVED" | "PENDING" | "SUSPENDED";
+    kycVerified?: boolean;
+    categoryIds?: string[];
+    state?: string;
+    minPerformanceScore?: number;
+    maxPerformanceScore?: number;
+  };
+  excludeUserIds?: string[];
+  excludeRoles?: string[];
+};
+
+export type BroadcastNotificationPayload = BroadcastTargetConfig & {
   subject: string;
   message: string;
+  ctaLabel?: string;
+  ctaUrl?: string;
+  classification?: BroadcastClassification;
+  priority?: BroadcastPriority;
+  channels?: BroadcastChannel[];
+  scheduledAt?: string | null;
 };
 
 export type BroadcastResult = {
   broadcastId: string;
+  status?: string;
+  scheduledAt?: string | null;
   targeted: number;
   queued: number;
+};
+
+export type BroadcastTargetUser = {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  businessName?: string | null;
+};
+
+export type BroadcastTargetsPreview = {
+  total: number;
+  emailEligible: number;
+  pushEligible: number;
+  inAppEligible: number;
+  sampleRecipients: BroadcastTargetUser[];
+};
+
+export type AdminBroadcastRecord = {
+  id: string;
+  subject: string;
+  message: string;
+  ctaLabel: string | null;
+  ctaUrl: string | null;
+  classification: BroadcastClassification;
+  priority: BroadcastPriority;
+  channels: BroadcastChannel[];
+  targetConfig: BroadcastTargetConfig;
+  status: "SCHEDULED" | "PROCESSING" | "SENT" | "CANCELLED" | "FAILED";
+  scheduledAt: string | null;
+  sentAt: string | null;
+  targetedCount: number;
+  queuedCount: number;
+  createdAt: string;
+  actor?: { id: string; name: string; email: string } | null;
 };
 
 type NotificationLogResponse = Omit<NotificationLogRow, "recipient"> & {
@@ -123,4 +201,39 @@ export const notificationsApi = {
     apiClient.post<{ message: string }>(API.notifications.test, {}),
   broadcast: (payload: BroadcastNotificationPayload) =>
     apiClient.post<BroadcastResult>(API.notifications.broadcast, payload),
+  previewBroadcastTargets: (payload: {
+    targetConfig: BroadcastTargetConfig;
+    classification?: BroadcastClassification;
+    channels?: BroadcastChannel[];
+  }) =>
+    apiClient.post<BroadcastTargetsPreview>(
+      API.notifications.broadcastPreview,
+      payload,
+    ),
+  renderBroadcastPreview: (payload: {
+    subject: string;
+    message: string;
+    ctaLabel?: string;
+    ctaUrl?: string;
+    classification?: BroadcastClassification;
+    theme?: "light" | "dark";
+  }) =>
+    apiClient.post<EmailTemplatePreview>(
+      API.notifications.broadcastRenderPreview,
+      payload,
+    ),
+  sendBroadcastTest: (payload: BroadcastNotificationPayload) =>
+    apiClient.post<{ sentTo: string; queued: number }>(
+      API.notifications.broadcastTest,
+      payload,
+    ),
+  listBroadcasts: () =>
+    apiClient.get<AdminBroadcastRecord[]>(API.notifications.broadcasts),
+  cancelBroadcast: (id: string) =>
+    apiClient.post<AdminBroadcastRecord>(
+      API.notifications.broadcastCancel(id),
+      {},
+    ),
+  searchBroadcastUsers: (q: string) =>
+    apiClient.get<BroadcastTargetUser[]>(API.notifications.broadcastUsers(q)),
 };
