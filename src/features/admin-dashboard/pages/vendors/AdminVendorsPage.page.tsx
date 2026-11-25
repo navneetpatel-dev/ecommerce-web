@@ -27,12 +27,15 @@ export function AdminVendorsPage() {
     </div>
   );
 
-  const hasFilter = Boolean(page.filters.search || page.filters.status);
-  const defaultTab = hasFilter
-    ? "all"
-    : page.pendingCount > 0
+  const hasFilter = Boolean(page.filters.search);
+  const defaultTab =
+    page.filters.status === "PENDING"
       ? "pending"
-      : "all";
+      : hasFilter || page.filters.status
+        ? "all"
+        : page.pendingCount > 0
+          ? "pending"
+          : "all";
 
   return (
     <RequirePermission permission={page.gatePermission}>

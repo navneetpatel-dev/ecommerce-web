@@ -7,6 +7,7 @@ export {
   useAdminAnalytics,
   useAdminVendorsList,
 } from "./api/analytics/admin.queries";
+export { AdminVendorFilterSelect } from "./components/vendors/AdminVendorFilterSelect.component";
 export { adminApi } from "./api/analytics/admin.api";
 export {
   commissionsApi,
