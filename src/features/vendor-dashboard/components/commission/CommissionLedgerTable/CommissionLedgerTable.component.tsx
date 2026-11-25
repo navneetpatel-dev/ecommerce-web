@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { useDebouncedValue } from "@/shared/hooks/ui/use-debounce.hook";
 import { commissionLedgerTableStyles } from "../../../styles/commission/commissionLedgerTable.styles";
 import {
   useCommissionLedgerPresentation,
@@ -30,11 +31,12 @@ export function CommissionLedgerTable({
   const { isEmpty, rows } = useCommissionLedgerPresentation(commissions);
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("");
+  const debouncedSearch = useDebouncedValue(search.trim(), 350);
 
   const filteredRows = useMemo(() => {
     return rows.filter((r) => {
-      if (search.trim()) {
-        const q = search.trim().toLowerCase();
+      if (debouncedSearch) {
+        const q = debouncedSearch.toLowerCase();
         const matchesId = r.id.toLowerCase().includes(q);
         const matchesDate = r.dateLabel.toLowerCase().includes(q);
         const matchesSale = r.saleAmountLabel.toLowerCase().includes(q);
@@ -48,7 +50,7 @@ export function CommissionLedgerTable({
       }
       return true;
     });
-  }, [rows, search, status]);
+  }, [rows, debouncedSearch, status]);
 
   const uniqueStatuses = useMemo(() => {
     return Array.from(new Set(rows.map((r) => r.status).filter(Boolean)));

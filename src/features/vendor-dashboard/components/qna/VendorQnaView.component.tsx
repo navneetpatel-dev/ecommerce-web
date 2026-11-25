@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { useDebouncedValue } from "@/shared/hooks/ui/use-debounce.hook";
 import { LABELS } from "@/shared/constants/labels";
 import type { ProductQuestion } from "@/shared/api/types";
 import { FormFieldFrame } from "@/shared/components/forms";
@@ -47,10 +48,12 @@ export function VendorQnaView({
     handleAnswerSubmit,
   } = useVendorQnaViewState({ questions, onAnswer, onUpdateAnswer });
 
+  const debouncedSearch = useDebouncedValue(search.trim(), 350);
+
   const filteredQuestions = useMemo(() => {
     return questions.filter((q) => {
-      if (search.trim()) {
-        const query = search.trim().toLowerCase();
+      if (debouncedSearch) {
+        const query = debouncedSearch.toLowerCase();
         const text = String(q.question ?? "").toLowerCase();
         const answersText = (q.answers ?? [])
           .map((a) => a.answer)
@@ -74,7 +77,7 @@ export function VendorQnaView({
       if (status === "ANSWERED" && !hasAnswer) return false;
       return true;
     });
-  }, [questions, search, status]);
+  }, [questions, debouncedSearch, status]);
 
   const activeCount = (search.trim() ? 1 : 0) + (status ? 1 : 0);
   const handleClear = () => {

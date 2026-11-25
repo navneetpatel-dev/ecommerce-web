@@ -49,6 +49,8 @@ export function useAdminProductsPage(): AdminProductsPageModel {
   const maxPrice = get("maxPrice");
   const sort = get("sort");
   const debouncedSearch = useDebouncedValue(search.trim(), 350);
+  const debouncedMinPrice = useDebouncedValue(minPrice.trim(), 350);
+  const debouncedMaxPrice = useDebouncedValue(maxPrice.trim(), 350);
 
   const load = useCallback(
     ({ page, limit }: { page: number; limit: number }) =>
@@ -61,8 +63,8 @@ export function useAdminProductsPage(): AdminProductsPageModel {
         vendorId: vendorId || undefined,
         inStock:
           inStock === "true" || inStock === "in_stock" ? true : undefined,
-        minPrice: minPrice ? Number(minPrice) : undefined,
-        maxPrice: maxPrice ? Number(maxPrice) : undefined,
+        minPrice: debouncedMinPrice ? Number(debouncedMinPrice) : undefined,
+        maxPrice: debouncedMaxPrice ? Number(debouncedMaxPrice) : undefined,
         sort: sort || undefined,
       }),
     [
@@ -71,8 +73,8 @@ export function useAdminProductsPage(): AdminProductsPageModel {
       categoryId,
       vendorId,
       inStock,
-      minPrice,
-      maxPrice,
+      debouncedMinPrice,
+      debouncedMaxPrice,
       sort,
     ],
   );

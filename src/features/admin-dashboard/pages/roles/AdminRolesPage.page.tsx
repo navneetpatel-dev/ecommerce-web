@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo, type ChangeEvent } from "react";
+import { useDebouncedValue } from "@/shared/hooks/ui/use-debounce.hook";
 import { RequirePermission } from "@/shared/components/system/RequirePermission.component";
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { LABELS } from "@/shared/constants/labels";
@@ -39,11 +40,13 @@ function AdminRolesContent() {
   };
   const closePermissions = () => page.setEditingRoleId(null);
 
+  const debouncedSearch = useDebouncedValue(search.trim(), 350);
+
   const filteredRoles = useMemo(() => {
     return page.roles.filter((role) => {
       if (
-        search.trim() &&
-        !role.name.toLowerCase().includes(search.trim().toLowerCase())
+        debouncedSearch &&
+        !role.name.toLowerCase().includes(debouncedSearch.toLowerCase())
       ) {
         return false;
       }
@@ -51,7 +54,7 @@ function AdminRolesContent() {
       if (roleType === "custom" && role.isSystemRole) return false;
       return true;
     });
-  }, [page.roles, search, roleType]);
+  }, [page.roles, debouncedSearch, roleType]);
 
   const handleClear = () => {
     setSearch("");

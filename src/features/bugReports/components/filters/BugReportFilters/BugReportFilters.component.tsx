@@ -1,9 +1,11 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { CollapsibleTableFilters } from "@/shared/components/filters";
 import { FormFieldFrame } from "@/shared/components/forms";
 import { SearchInput } from "@/shared/components/ui/SearchInput.component";
 import { LABELS } from "@/shared/constants/labels";
+import { useDebouncedCallback } from "@/shared/hooks/ui/use-debounce.hook";
 import {
   useBugReportFiltersHandlers,
   ALL,
@@ -34,22 +36,40 @@ export function BugReportFilters({ variant = "admin" }: BugReportFiltersProps) {
     handleReporterRoleChange,
   } = useBugReportFiltersHandlers();
 
+  const [searchDraft, setSearchDraft] = useState(currentSearch);
+  useEffect(() => {
+    setSearchDraft(currentSearch);
+  }, [currentSearch]);
+  const debouncedSearch = useDebouncedCallback(handleSearchChange, 350);
+
   const activeCount =
-    (currentSearch.trim() ? 1 : 0) +
+    (searchDraft.trim() ? 1 : 0) +
     (currentStatus && currentStatus !== ALL ? 1 : 0) +
     (currentSeverity && currentSeverity !== ALL ? 1 : 0) +
     (currentModule && currentModule !== ALL ? 1 : 0) +
     (currentReporterRole && currentReporterRole !== ALL ? 1 : 0);
 
   return (
-    <CollapsibleTableFilters activeCount={activeCount} onClear={handleClear}>
+    <CollapsibleTableFilters
+      activeCount={activeCount}
+      onClear={() => {
+        setSearchDraft("");
+        handleClear();
+      }}
+    >
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 items-end">
         <FormFieldFrame label={LABELS.search} htmlFor="bug-filter-search">
           <SearchInput
             id="bug-filter-search"
-            value={currentSearch}
-            onChange={(e) => handleSearchChange(e.target.value)}
-            onClear={() => handleSearchChange("")}
+            value={searchDraft}
+            onChange={(e) => {
+              setSearchDraft(e.target.value);
+              debouncedSearch(e.target.value);
+            }}
+            onClear={() => {
+              setSearchDraft("");
+              handleSearchChange("");
+            }}
             placeholder="Search by title or BUG-#"
           />
         </FormFieldFrame>

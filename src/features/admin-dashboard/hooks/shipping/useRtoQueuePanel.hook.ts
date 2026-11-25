@@ -7,6 +7,7 @@ import { notifyError } from "@/shared/stores/notifications/errorToast.store";
 import { notifySuccess } from "@/shared/stores/notifications/toast.store";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
+import { useDebouncedValue } from "@/shared/hooks/ui/use-debounce.hook";
 import {
   adminShippingApi,
   adminShippingKeys,
@@ -31,14 +32,15 @@ export function useRtoQueuePanel() {
 
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("ALL");
+  const debouncedSearch = useDebouncedValue(search.trim(), 350);
 
   const filteredShipments = useMemo(() => {
     return shipments.filter((item) => {
       if (statusFilter !== "ALL" && item.status !== statusFilter) {
         return false;
       }
-      if (search.trim()) {
-        const q = search.trim().toLowerCase();
+      if (debouncedSearch) {
+        const q = debouncedSearch.toLowerCase();
         const trackingMatch = item.trackingNumber?.toLowerCase().includes(q);
         const customerMatch = item.subOrder?.order?.user?.name
           ?.toLowerCase()
@@ -60,7 +62,7 @@ export function useRtoQueuePanel() {
       }
       return true;
     });
-  }, [shipments, search, statusFilter]);
+  }, [shipments, debouncedSearch, statusFilter]);
 
   const onClearFilters = useCallback(() => {
     setSearch("");

@@ -13,6 +13,7 @@ import {
   SelectValue,
 } from "@/shared/components/ui/select";
 import { CollapsibleTableFilters } from "@/shared/components/filters";
+import { useDebouncedValue } from "@/shared/hooks/ui/use-debounce.hook";
 import type { VendorSettlementRow } from "../../../api/finance/reports.api";
 import { adminSettlementReportsPanelStyles as styles } from "../../../styles/finance/adminSettlementReportsPanel.styles";
 
@@ -78,6 +79,7 @@ export function VendorSettlementsTable({
 }: VendorSettlementsTableProps) {
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("");
+  const debouncedSearch = useDebouncedValue(search.trim(), 350);
 
   const handleExportExcel = () => onExport("xlsx");
   const handleExportCsv = () => onExport("csv");
@@ -85,8 +87,8 @@ export function VendorSettlementsTable({
 
   const filteredVendors = useMemo(() => {
     return vendors.filter((v) => {
-      if (search.trim()) {
-        const query = search.trim().toLowerCase();
+      if (debouncedSearch) {
+        const query = debouncedSearch.toLowerCase();
         const matchesName = v.vendorName?.toLowerCase().includes(query);
         const matchesId = v.vendorId?.toLowerCase().includes(query);
         if (!matchesName && !matchesId) return false;
@@ -96,7 +98,7 @@ export function VendorSettlementsTable({
       }
       return true;
     });
-  }, [vendors, search, status]);
+  }, [vendors, debouncedSearch, status]);
 
   const uniqueStatuses = useMemo(() => {
     return Array.from(

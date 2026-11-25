@@ -35,6 +35,8 @@ export function useVendorProductsTable() {
   const sort = get("sort");
 
   const debouncedSearch = useDebouncedValue(search.trim(), 350);
+  const debouncedMinPrice = useDebouncedValue(minPrice.trim(), 350);
+  const debouncedMaxPrice = useDebouncedValue(maxPrice.trim(), 350);
 
   const [deleteTarget, setDeleteTarget] = useState<{
     id: string;
@@ -48,11 +50,19 @@ export function useVendorProductsTable() {
       status: status || undefined,
       categoryId: categoryId || undefined,
       inStock: inStock === "true" || inStock === "in_stock" ? true : undefined,
-      minPrice: minPrice ? Number(minPrice) : undefined,
-      maxPrice: maxPrice ? Number(maxPrice) : undefined,
+      minPrice: debouncedMinPrice ? Number(debouncedMinPrice) : undefined,
+      maxPrice: debouncedMaxPrice ? Number(debouncedMaxPrice) : undefined,
       sort: sort || undefined,
     }),
-    [debouncedSearch, status, categoryId, inStock, minPrice, maxPrice, sort],
+    [
+      debouncedSearch,
+      status,
+      categoryId,
+      inStock,
+      debouncedMinPrice,
+      debouncedMaxPrice,
+      sort,
+    ],
   );
 
   const { data, isLoading } = useVendorProducts(page, filters);

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { useDebouncedValue } from "@/shared/hooks/ui/use-debounce.hook";
 import { UserPlus } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
@@ -40,11 +41,12 @@ export function VendorTeamPage() {
 
   const [search, setSearch] = useState("");
   const [role, setRole] = useState("");
+  const debouncedSearch = useDebouncedValue(search.trim(), 350);
 
   const filteredMembers = useMemo(() => {
     return members.filter((m) => {
-      if (search.trim()) {
-        const q = search.trim().toLowerCase();
+      if (debouncedSearch) {
+        const q = debouncedSearch.toLowerCase();
         const match =
           m.name?.toLowerCase().includes(q) ||
           m.email?.toLowerCase().includes(q);
@@ -53,7 +55,7 @@ export function VendorTeamPage() {
       if (role && m.roleName !== role) return false;
       return true;
     });
-  }, [members, search, role]);
+  }, [members, debouncedSearch, role]);
 
   const uniqueRoles = useMemo(() => {
     const set = new Set<string>();

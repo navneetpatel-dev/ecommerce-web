@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useDebouncedValue } from "@/shared/hooks/ui/use-debounce.hook";
 import { Plus } from "lucide-react";
 import { RequirePermission } from "@/shared/components/system/RequirePermission.component";
 import { StatusDialog } from "@/shared/components/dialogs/StatusDialog.component";
@@ -25,14 +26,15 @@ export function AdminPromoBannersPage() {
   const promo = usePromoBanners();
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("ALL");
+  const debouncedSearch = useDebouncedValue(searchQuery.trim(), 350);
 
   const filteredBanners = useMemo(() => {
     return promo.banners.filter((banner) => {
       if (statusFilter !== "ALL" && banner.status !== statusFilter) {
         return false;
       }
-      if (!searchQuery.trim()) return true;
-      const q = searchQuery.toLowerCase().trim();
+      if (!debouncedSearch) return true;
+      const q = debouncedSearch.toLowerCase();
       return (
         banner.title.toLowerCase().includes(q) ||
         (banner.linkUrl ? banner.linkUrl.toLowerCase().includes(q) : false) ||
@@ -42,7 +44,7 @@ export function AdminPromoBannersPage() {
         (banner.linkSlug ? banner.linkSlug.toLowerCase().includes(q) : false)
       );
     });
-  }, [promo.banners, statusFilter, searchQuery]);
+  }, [promo.banners, statusFilter, debouncedSearch]);
 
   const handleResetFilters = () => {
     setSearchQuery("");

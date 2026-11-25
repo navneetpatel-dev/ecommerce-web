@@ -6,6 +6,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { shippingRatesLabels } from "@/shared/constants/labels/shippingRates";
 import { adminShippingApi } from "@/features/admin-dashboard/api/shipping/shipping.api";
 import { adminApi } from "../../api/analytics/admin.api";
+import { useDebouncedValue } from "@/shared/hooks/ui/use-debounce.hook";
 import { AdminConfirmAction } from "../../components/shared/AdminConfirmAction.component";
 import { useShippingRateForm } from "./useShippingRateForm.hook";
 import {
@@ -40,6 +41,7 @@ export function useAdminShippingRatesPage(): AdminShippingRatesPageModel {
   const [listVersion, setListVersion] = useState(0);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [search, setSearch] = useState("");
+  const debouncedSearch = useDebouncedValue(search.trim(), 350);
   const [zoneFilter, setZoneFilter] = useState("ALL");
   const [methodFilter, setMethodFilter] = useState("ALL");
   const [vendorFilter, setVendorFilter] = useState("ALL");
@@ -84,7 +86,7 @@ export function useAdminShippingRatesPage(): AdminShippingRatesPageModel {
       zoneFilter,
       methodFilter,
       vendorFilter,
-      search,
+      search: debouncedSearch,
     });
   }, [
     zones,
@@ -93,7 +95,7 @@ export function useAdminShippingRatesPage(): AdminShippingRatesPageModel {
     zoneFilter,
     methodFilter,
     vendorFilter,
-    search,
+    debouncedSearch,
   ]);
 
   const onClearFilters = useCallback(() => {

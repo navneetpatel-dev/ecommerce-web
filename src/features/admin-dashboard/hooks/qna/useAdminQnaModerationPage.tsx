@@ -6,6 +6,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { productQnaApi } from "@/features/productQna";
 import type { QnaModerationItem } from "@/features/productQna";
 import { useUrlFilterParams } from "@/shared/hooks/navigation/useUrlFilterParams.hook";
+import { useDebouncedValue } from "@/shared/hooks/ui/use-debounce.hook";
 import { QnaModerationActions } from "../../components/qna/QnaModerationActions.component";
 import type { AdminDataRow } from "../shared/useAdminDataList.hook";
 import type { AdminListPageModel } from "../../types/shared/adminListPage.types";
@@ -57,12 +58,13 @@ export function useAdminQnaModerationPage(): AdminQnaModerationPageModel {
   const kind = urlFilters.get("kind");
   const submission = urlFilters.get("submission");
   const authorType = urlFilters.get("authorType");
+  const debouncedSearch = useDebouncedValue(search.trim(), 350);
 
   const load = useCallback(
     async ({ page, limit }: { page: number; limit: number }) => {
       const result = await productQnaApi.moderationQueue({ page, limit });
       const mapped = result.items.map(toRow);
-      const q = search.trim().toLowerCase();
+      const q = debouncedSearch.toLowerCase();
       const filtered = mapped.filter((r) => {
         if (q) {
           const text = String(r.text ?? "").toLowerCase();
@@ -84,7 +86,7 @@ export function useAdminQnaModerationPage(): AdminQnaModerationPageModel {
         total: filtered.length,
       };
     },
-    [search, kind, submission, authorType],
+    [debouncedSearch, kind, submission, authorType],
   );
 
   const actions = useCallback(

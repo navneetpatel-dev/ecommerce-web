@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { useDebouncedValue } from "@/shared/hooks/ui/use-debounce.hook";
 import { DataTable } from "@/shared/components/DataTable";
 import { Input } from "@/shared/components/ui/input";
 import { FormFieldFrame } from "@/shared/components/forms";
@@ -15,19 +16,20 @@ import { couponsPageHeaderStyles as styles } from "../../styles/coupons/couponsP
 export function CouponBatchesTab() {
   const [batchDetail, setBatchDetail] = useState<CouponBatch | null>(null);
   const [search, setSearch] = useState("");
+  const debouncedSearch = useDebouncedValue(search.trim(), 350);
   const batches = useCouponBatches();
   const batchColumns = buildCouponBatchColumns();
 
   const filteredBatches = useMemo(() => {
     const list = batches.batches ?? [];
-    if (!search.trim()) return list;
-    const q = search.trim().toLowerCase();
+    if (!debouncedSearch) return list;
+    const q = debouncedSearch.toLowerCase();
     return list.filter((b) => {
       const name = String(b.name ?? "").toLowerCase();
       const id = String(b.id ?? "").toLowerCase();
       return name.includes(q) || id.includes(q);
     });
-  }, [batches.batches, search]);
+  }, [batches.batches, debouncedSearch]);
 
   const activeCount = search.trim() ? 1 : 0;
   const handleClear = () => setSearch("");

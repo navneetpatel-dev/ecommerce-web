@@ -6,6 +6,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 import { useUrlFilterParams } from "@/shared/hooks/navigation/useUrlFilterParams.hook";
+import { useDebouncedValue } from "@/shared/hooks/ui/use-debounce.hook";
 import { taxApi } from "@/features/admin-dashboard/api/tax/tax.api";
 import { AdminConfirmAction } from "../../components/shared/AdminConfirmAction.component";
 import { adminRowLabel } from "../../utils/shared/adminRowLabel";
@@ -19,6 +20,7 @@ export function useAdminTaxPage() {
   const search = urlFilters.get("search");
   const gstTier = urlFilters.get("gstTier");
   const hasPriceBand = urlFilters.get("hasPriceBand");
+  const debouncedSearch = useDebouncedValue(search.trim(), 350);
   const [gstPercentage, setGstPercentage] = useState("18");
   const [hsnCode, setHsnCode] = useState("");
   // Optional per-piece price band: above this value, the higher GST % applies.
@@ -57,13 +59,13 @@ export function useAdminTaxPage() {
       const result = await taxApi.getRules({ page, limit });
       const filtered = filterTaxRules(
         result.items,
-        search,
+        debouncedSearch,
         gstTier,
         hasPriceBand,
       );
       return { ...result, items: filtered, total: filtered.length };
     },
-    [listVersion, search, gstTier, hasPriceBand],
+    [listVersion, debouncedSearch, gstTier, hasPriceBand],
   );
 
   const actions = useCallback(

@@ -8,6 +8,7 @@ import {
 import { LABELS } from "@/shared/constants/labels";
 import { notifySuccess } from "@/shared/stores/notifications/toast.store";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
+import { useDebouncedValue } from "@/shared/hooks/ui/use-debounce.hook";
 import { buildCashbackOfferColumns } from "../../utils/cashback-offers/cashbackOfferColumns";
 
 const PAGE_SIZE = 20;
@@ -17,6 +18,7 @@ export function useAdminCashbackOffersPage() {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("");
+  const debouncedSearch = useDebouncedValue(search.trim(), 350);
   const list = useAdminCashbackOffers({ page, limit: PAGE_SIZE });
   const remove = useDeleteCashbackOffer();
   const columns = useMemo(() => buildCashbackOfferColumns(), []);
@@ -26,8 +28,8 @@ export function useAdminCashbackOffersPage() {
     const items = data?.items ?? [];
     return items.filter((item) => {
       if (
-        search.trim() &&
-        !item.name.toLowerCase().includes(search.trim().toLowerCase())
+        debouncedSearch &&
+        !item.name.toLowerCase().includes(debouncedSearch.toLowerCase())
       ) {
         return false;
       }
@@ -35,7 +37,7 @@ export function useAdminCashbackOffersPage() {
       if (status === "INACTIVE" && item.isActive) return false;
       return true;
     });
-  }, [data?.items, search, status]);
+  }, [data?.items, debouncedSearch, status]);
 
   const activeCount = (search.trim() ? 1 : 0) + (status ? 1 : 0);
   const handleClear = () => {

@@ -2,6 +2,7 @@
 
 import { useCallback, useMemo, type ReactNode } from "react";
 import { useUrlFilterParams } from "@/shared/hooks/navigation/useUrlFilterParams.hook";
+import { useDebouncedValue } from "@/shared/hooks/ui/use-debounce.hook";
 import { DndContext, closestCenter } from "@dnd-kit/core";
 import {
   SortableContext,
@@ -39,11 +40,12 @@ export function CategoriesTable({
   const urlFilters = useUrlFilterParams<"search" | "status">({ search: ["q"] });
   const search = urlFilters.get("search");
   const status = urlFilters.get("status");
+  const debouncedSearch = useDebouncedValue(search.trim(), 350);
 
   const filteredCategories = useMemo(() => {
     return categories.filter((cat) => {
-      if (search.trim()) {
-        const q = search.trim().toLowerCase();
+      if (debouncedSearch) {
+        const q = debouncedSearch.toLowerCase();
         const match =
           cat.name?.toLowerCase().includes(q) ||
           cat.slug?.toLowerCase().includes(q) ||
@@ -54,7 +56,7 @@ export function CategoriesTable({
       if (status === "inactive" && cat.status === "ACTIVE") return false;
       return true;
     });
-  }, [categories, search, status]);
+  }, [categories, debouncedSearch, status]);
 
   const { rows, ids, sensors, reorderError, onDragEnd } = useCategoriesReorder(
     filteredCategories,

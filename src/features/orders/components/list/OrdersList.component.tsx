@@ -1,6 +1,8 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { motion } from "motion/react";
+import { useDebouncedCallback } from "@/shared/hooks/ui/use-debounce.hook";
 import { LABELS } from "@/shared/constants/labels";
 import type { Order } from "@/shared/api/types";
 import { DataTable } from "@/shared/components/DataTable";
@@ -51,8 +53,17 @@ export function OrdersList({ orders, filters, pagination }: OrdersListProps) {
   const { exportHistory, handleRowClick, getRowId, paginationConfig } =
     useOrdersList({ pagination });
 
+  const [searchDraft, setSearchDraft] = useState(filters?.search ?? "");
+  useEffect(() => {
+    setSearchDraft(filters?.search ?? "");
+  }, [filters?.search]);
+  const debouncedSearch = useDebouncedCallback(
+    (val: string) => filters?.onSearchChange(val),
+    350,
+  );
+
   const activeCount = filters
-    ? (filters.search.trim() ? 1 : 0) +
+    ? (searchDraft.trim() ? 1 : 0) +
       (filters.status && filters.status !== ALL_STATUSES ? 1 : 0)
     : 0;
 
@@ -90,7 +101,10 @@ export function OrdersList({ orders, filters, pagination }: OrdersListProps) {
         {filters && (
           <CollapsibleTableFilters
             activeCount={activeCount}
-            onClear={filters.onClear}
+            onClear={() => {
+              setSearchDraft("");
+              filters.onClear();
+            }}
           >
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 items-end">
               <FormFieldFrame
@@ -99,9 +113,15 @@ export function OrdersList({ orders, filters, pagination }: OrdersListProps) {
               >
                 <SearchInput
                   id="customer-orders-search"
-                  value={filters.search}
-                  onChange={(e) => filters.onSearchChange(e.target.value)}
-                  onClear={() => filters.onSearchChange("")}
+                  value={searchDraft}
+                  onChange={(e) => {
+                    setSearchDraft(e.target.value);
+                    debouncedSearch(e.target.value);
+                  }}
+                  onClear={() => {
+                    setSearchDraft("");
+                    filters.onSearchChange("");
+                  }}
                   placeholder={LABELS.searchOrdersPlaceholder}
                 />
               </FormFieldFrame>

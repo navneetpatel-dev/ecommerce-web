@@ -1,10 +1,12 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { notificationsAdminLabels as LABELS } from "@/shared/constants/labels/notificationsAdmin";
 import { LABELS as EMAIL_LABELS } from "@/shared/constants/labels";
 import { CollapsibleTableFilters } from "@/shared/components/filters";
 import { FormFieldFrame } from "@/shared/components/forms";
 import { Input } from "@/shared/components/ui/input";
+import { useDebouncedCallback } from "@/shared/hooks/ui/use-debounce.hook";
 import type { NotificationLogFilters } from "../../../api/notifications/notifications.api";
 import { NOTIFICATION_TYPE_OPTIONS } from "../../../constants/notifications/notificationTypes";
 import { NotificationFilterSelect } from "./NotificationFilterSelect.component";
@@ -44,14 +46,23 @@ export function NotificationLogFiltersBar({
     handleErrorCategoryChange,
   } = useNotificationLogFiltersBar({ filters, onChange });
 
+  const [searchDraft, setSearchDraft] = useState(filters.search ?? "");
+  useEffect(() => {
+    setSearchDraft(filters.search ?? "");
+  }, [filters.search]);
+  const debouncedSearchChange = useDebouncedCallback(handleSearchChange, 350);
+
   const activeCount =
-    (filters.search?.trim() ? 1 : 0) +
+    (searchDraft.trim() ? 1 : 0) +
     (filters.type ? 1 : 0) +
     (filters.channel ? 1 : 0) +
     (filters.status ? 1 : 0) +
     (filters.errorCategory ? 1 : 0);
 
-  const handleClear = () => onChange({});
+  const handleClear = () => {
+    setSearchDraft("");
+    onChange({});
+  };
 
   return (
     <CollapsibleTableFilters activeCount={activeCount} onClear={handleClear}>
@@ -59,8 +70,11 @@ export function NotificationLogFiltersBar({
         <FormFieldFrame label="Recipient" htmlFor="notification-filter-search">
           <Input
             id="notification-filter-search"
-            value={filters.search ?? ""}
-            onChange={(e) => handleSearchChange(e.target.value)}
+            value={searchDraft}
+            onChange={(e) => {
+              setSearchDraft(e.target.value);
+              debouncedSearchChange(e.target.value);
+            }}
             placeholder="Search by recipient email..."
           />
         </FormFieldFrame>

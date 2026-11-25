@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useDebouncedValue } from "@/shared/hooks/ui/use-debounce.hook";
 import {
   webVitalsAdminApi,
   type WebVitalSummaryRow,
@@ -18,6 +19,7 @@ export function useAdminWebVitalsPage() {
   const [from, setFrom] = useState(isoDate(DEFAULT_FROM));
   const [to, setTo] = useState(isoDate(DEFAULT_TO));
   const [path, setPath] = useState("");
+  const debouncedPath = useDebouncedValue(path.trim(), 350);
   const [rows, setRows] = useState<WebVitalSummaryRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -38,9 +40,9 @@ export function useAdminWebVitalsPage() {
   }
 
   useEffect(() => {
-    load(from, to, path);
+    load(from, to, debouncedPath);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [debouncedPath]);
 
   return {
     from,

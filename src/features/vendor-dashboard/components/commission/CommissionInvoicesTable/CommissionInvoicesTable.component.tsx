@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { useDebouncedValue } from "@/shared/hooks/ui/use-debounce.hook";
 import { Input } from "@/shared/components/ui/input";
 import { Table } from "@/shared/components/ui/table";
 import { TableScrollShell } from "@/shared/components/DataTable/TableScrollShell.component";
@@ -23,17 +24,18 @@ export function CommissionInvoicesTable({
 }: CommissionInvoicesTableProps) {
   const { invoiceViewModels, handleDownload } = useCommissionInvoices(invoices);
   const [search, setSearch] = useState("");
+  const debouncedSearch = useDebouncedValue(search.trim(), 350);
 
   const filteredInvoices = useMemo(() => {
-    if (!search.trim()) return invoiceViewModels;
-    const q = search.trim().toLowerCase();
+    if (!debouncedSearch) return invoiceViewModels;
+    const q = debouncedSearch.toLowerCase();
     return invoiceViewModels.filter(
       (inv) =>
         inv.number?.toLowerCase().includes(q) ||
         inv.formattedDate?.toLowerCase().includes(q) ||
         inv.formattedAmount?.toLowerCase().includes(q),
     );
-  }, [invoiceViewModels, search]);
+  }, [invoiceViewModels, debouncedSearch]);
 
   const activeCount = search.trim() ? 1 : 0;
   const handleClear = () => setSearch("");

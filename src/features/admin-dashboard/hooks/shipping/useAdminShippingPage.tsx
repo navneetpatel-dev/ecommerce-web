@@ -5,6 +5,7 @@ import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
+import { useDebouncedValue } from "@/shared/hooks/ui/use-debounce.hook";
 import { adminShippingApi } from "@/features/admin-dashboard/api/shipping/shipping.api";
 import { AdminConfirmAction } from "../../components/shared/AdminConfirmAction.component";
 import { AdminEditShippingZoneAction } from "../../components/shipping/AdminEditShippingZoneAction.component";
@@ -38,6 +39,7 @@ export function useAdminShippingPage(): AdminShippingPageModel {
   const [createError, setCreateError] = useState<string | null>(null);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [search, setSearch] = useState("");
+  const debouncedSearch = useDebouncedValue(search.trim(), 350);
   const [listVersion, setListVersion] = useState(0);
 
   const handleCreate = useCallback(
@@ -72,8 +74,8 @@ export function useAdminShippingPage(): AdminShippingPageModel {
       void listVersion;
       const res = await adminShippingApi.zones({ page: 1, limit: 100 });
       let items = res.items;
-      if (search.trim()) {
-        const q = search.trim().toLowerCase();
+      if (debouncedSearch) {
+        const q = debouncedSearch.toLowerCase();
         items = items.filter((zone) => {
           const nameMatch = String(zone.name ?? "")
             .toLowerCase()
@@ -93,7 +95,7 @@ export function useAdminShippingPage(): AdminShippingPageModel {
       }
       return items;
     },
-    [listVersion, search],
+    [listVersion, debouncedSearch],
   );
 
   const onClearFilters = useCallback(() => {

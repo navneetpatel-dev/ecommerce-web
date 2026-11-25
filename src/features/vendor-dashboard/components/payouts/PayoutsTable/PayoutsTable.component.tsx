@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { useDebouncedValue } from "@/shared/hooks/ui/use-debounce.hook";
 import { Input } from "@/shared/components/ui/input";
 import {
   Select,
@@ -26,11 +27,12 @@ export function PayoutsTable({ payouts }: PayoutsTableProps) {
   const { isEmpty, rows } = usePayoutsTablePresentation(payouts);
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("");
+  const debouncedSearch = useDebouncedValue(search.trim(), 350);
 
   const filteredRows = useMemo(() => {
     return rows.filter((r) => {
-      if (search.trim()) {
-        const q = search.trim().toLowerCase();
+      if (debouncedSearch) {
+        const q = debouncedSearch.toLowerCase();
         const match =
           r.id.toLowerCase().includes(q) ||
           r.periodLabel.toLowerCase().includes(q) ||
@@ -41,7 +43,7 @@ export function PayoutsTable({ payouts }: PayoutsTableProps) {
       if (status && r.status !== status) return false;
       return true;
     });
-  }, [rows, search, status]);
+  }, [rows, debouncedSearch, status]);
 
   return (
     <div>

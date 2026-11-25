@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { LABELS } from "@/shared/constants/labels";
 import { reviewsApi } from "@/features/reviews";
+import { useDebouncedValue } from "@/shared/hooks/ui/use-debounce.hook";
 import type { Review } from "@/shared/api/types";
 import { ReviewModerationActions } from "../../components/reviews/ReviewModerationActions.component";
 import type { AdminDataRow } from "../shared/useAdminDataList.hook";
@@ -59,12 +60,13 @@ export function useAdminReviewsPage(): AdminReviewsPageModel {
   const [rating, setRating] = useState("");
   const [submission, setSubmission] = useState("");
   const search = userSearch ?? paramSearch;
+  const debouncedSearch = useDebouncedValue(search.trim(), 350);
 
   const load = useCallback(
     async ({ page, limit }: { page: number; limit: number }) => {
       const result = await reviewsApi.pending({ page, limit });
       const mapped = result.items.map(toModerationRow);
-      const q = search.trim().toLowerCase();
+      const q = debouncedSearch.toLowerCase();
       const filtered = mapped.filter((r) => {
         if (q) {
           const prod = String(r.productName ?? "").toLowerCase();
@@ -92,7 +94,7 @@ export function useAdminReviewsPage(): AdminReviewsPageModel {
         total: filtered.length,
       };
     },
-    [search, rating, submission],
+    [debouncedSearch, rating, submission],
   );
 
   const actions = useCallback(
