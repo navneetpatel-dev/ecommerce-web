@@ -9,6 +9,7 @@ import {
   type AdminBroadcastRecord,
 } from "../../api/notifications/notifications.api";
 import { BroadcastHistoryItem } from "./BroadcastHistoryItem.component";
+import { SendTestConfirmDialog } from "./SendTestConfirmDialog.component";
 
 interface BroadcastHistoryTabProps {
   refreshSignal: number;
@@ -26,6 +27,9 @@ export function BroadcastHistoryTab({
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
   const [busyId, setBusyId] = useState<string | null>(null);
+  const [testTarget, setTestTarget] = useState<AdminBroadcastRecord | null>(
+    null,
+  );
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -124,12 +128,20 @@ export function BroadcastHistoryTab({
               busy={busyId === row.id}
               onViewLogs={onViewLogs}
               onRetryFailed={handleRetryFailed}
+              onSendTest={setTestTarget}
               onCancel={handleCancel}
               onDuplicate={onDuplicate}
             />
           ))}
         </div>
       )}
+
+      <SendTestConfirmDialog
+        open={testTarget != null}
+        onOpenChange={(open) => !open && setTestTarget(null)}
+        broadcast={testTarget}
+        onSuccess={(msg) => setNotice(msg)}
+      />
     </div>
   );
 }

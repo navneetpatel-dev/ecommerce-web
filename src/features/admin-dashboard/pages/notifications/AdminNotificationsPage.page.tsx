@@ -16,18 +16,16 @@ import { AdminDataPage } from "../shared/AdminDataPage.page";
 import { NotificationLogFiltersBar } from "../../components/notifications/NotificationLogFiltersBar.component";
 import { BroadcastHistoryTab } from "../../components/notifications/BroadcastHistoryTab.component";
 import { BroadcastNotificationDialog } from "../../components/notifications/BroadcastNotificationDialog.component";
+import { BulkRetryConfirmDialog } from "../../components/notifications/BulkRetryConfirmDialog.component";
+import { SendTestConfirmDialog } from "../../components/notifications/SendTestConfirmDialog.component";
 import { SuppressedEmailsTab } from "../../components/notifications/SuppressedEmailsTab.component";
-import {
-  notificationsApi,
-  type AdminBroadcastRecord,
-} from "../../api/notifications/notifications.api";
+import type { AdminBroadcastRecord } from "../../api/notifications/notifications.api";
 import { EmailHealthBanner } from "../../components/notifications/EmailHealthBanner.component";
 import { NotificationLogRowActions } from "../../components/notifications/NotificationLogRowActions.component";
 import type { AdminDataRow } from "../../hooks/shared/useAdminDataList.hook";
 import { notificationsAdminLabels } from "@/shared/constants/labels/notificationsAdmin";
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { Button } from "@/shared/components/ui/button";
-import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 import { cn } from "@/shared/utils/dom/cn";
 import { adminPagesStyles } from "../shared/adminPages.styles";
 import { useAdminNotificationsPage } from "../../hooks/notifications/useAdminNotificationsPage.hook";
@@ -40,18 +38,17 @@ function emailTemplateHref(type: unknown, channel: unknown): string | null {
 }
 
 export function AdminNotificationsPage() {
-  const { pending, message, error, filters, setFilters, loadLogs, sendTest } =
-    useAdminNotificationsPage();
+  const { filters, setFilters, loadLogs } = useAdminNotificationsPage();
   const [broadcastOpen, setBroadcastOpen] = useState(false);
+  const [sendTestOpen, setSendTestOpen] = useState(false);
+  const [bulkRetryOpen, setBulkRetryOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<
     "logs" | "broadcasts" | "suppressions"
   >("logs");
   const [duplicateRecord, setDuplicateRecord] =
     useState<AdminBroadcastRecord | null>(null);
   const [historyRefresh, setHistoryRefresh] = useState(0);
-  const [bulkBusy, setBulkBusy] = useState(false);
-  const [bulkNotice, setBulkNotice] = useState<string | null>(null);
-  const [bulkError, setBulkError] = useState<string | null>(null);
+  const [pageNotice, setPageNotice] = useState<string | null>(null);
 
   const renderRowActions = (row: AdminDataRow, reload: () => void) => (
     <NotificationLogRowActions
@@ -61,32 +58,6 @@ export function AdminNotificationsPage() {
       reload={reload}
     />
   );
-
-  const handleBulkRetry = async () => {
-    setBulkBusy(true);
-    setBulkNotice(null);
-    setBulkError(null);
-    try {
-      const res = await notificationsApi.bulkResend({
-        referenceId: filters.referenceId,
-        type: filters.type,
-        errorCategory: filters.errorCategory,
-        includeStuckPending: true,
-      });
-      setBulkNotice(
-        res.attempted === 0
-          ? "No failed or stuck emails matched the current filters."
-          : `Requeued ${res.requeued} of ${res.attempted} failed/stuck emails.`,
-      );
-      setFilters((prev) => ({ ...prev }));
-    } catch (err) {
-      setBulkError(
-        getApiErrorMessage(err, "Unable to bulk-retry failed emails."),
-      );
-    } finally {
-      setBulkBusy(false);
-    }
-  };
 
   return (
     <div className={adminPagesStyles.stack5}>
@@ -107,11 +78,7 @@ export function AdminNotificationsPage() {
               {LABELS.emailTemplatesOpen}
             </Link>
           </Button>
-          <Button
-            variant="outline"
-            loading={pending}
-            onClick={() => void sendTest()}
-          >
+          <Button variant="outline" onClick={() => setSendTestOpen(true)}>
             <Send className={adminPagesStyles.iconSm} aria-hidden="true" />
             Send test
           </Button>
@@ -122,12 +89,9 @@ export function AdminNotificationsPage() {
         </div>
       </div>
 
-      {message ? (
-        <p className={adminPagesStyles.successSmText}>{message}</p>
-      ) : null}
-      {error ? (
-        <p role="alert" className={adminPagesStyles.errorSmText}>
-          {error}
+      {pageNotice ? (
+        <p role="status" className={adminPagesStyles.successSmText}>
+          {pageNotice}
         </p>
       ) : null}
 
@@ -172,8 +136,7 @@ export function AdminNotificationsPage() {
             type="button"
             size="sm"
             variant="outline"
-            loading={bulkBusy}
-            onClick={handleBulkRetry}
+            onClick={() => setBulkRetryOpen(true)}
             className="mb-1.5"
           >
             <RotateCcw className="size-3.5" aria-hidden="true" />
@@ -181,17 +144,6 @@ export function AdminNotificationsPage() {
           </Button>
         )}
       </div>
-
-      {bulkNotice ? (
-        <p role="status" className={adminPagesStyles.successSmText}>
-          {bulkNotice}
-        </p>
-      ) : null}
-      {bulkError ? (
-        <p role="alert" className={adminPagesStyles.errorSmText}>
-          {bulkError}
-        </p>
-      ) : null}
 
       {activeTab === "logs" ? (
         <>
@@ -289,6 +241,22 @@ export function AdminNotificationsPage() {
         }}
         duplicateRecord={duplicateRecord}
         onSuccess={() => setHistoryRefresh((n) => n + 1)}
+      />
+
+      <SendTestConfirmDialog
+        open={sendTestOpen}
+        onOpenChange={setSendTestOpen}
+        onSuccess={(msg) => setPageNotice(msg)}
+      />
+
+      <BulkRetryConfirmDialog
+        open={bulkRetryOpen}
+        onOpenChange={setBulkRetryOpen}
+        filters={filters}
+        onSuccess={(summary) => {
+          setPageNotice(summary);
+          setFilters((prev) => ({ ...prev }));
+        }}
       />
     </div>
   );

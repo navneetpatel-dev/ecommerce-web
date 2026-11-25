@@ -45,6 +45,14 @@ export function useEmailHealth() {
         : null,
     rawLastError: health?.status !== "OK" ? (failure?.error ?? null) : null,
     failuresByCategory: health?.failuresByCategory ?? {},
+    counts: health
+      ? {
+          windowMinutes: health.windowMinutes,
+          sent: health.sent,
+          failed: health.failed,
+          stuck: health.stuck,
+        }
+      : null,
     isFetching: query.isFetching,
     refresh: () => void query.refetch(),
     loadError: query.isError ? LABELS.emailHealthLoadFailed : null,

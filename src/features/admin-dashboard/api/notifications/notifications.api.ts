@@ -153,6 +153,25 @@ export type BulkResendResult = {
   errors: string[];
 };
 
+export type BulkResendPreview = {
+  totalEligible: number;
+  failedCount: number;
+  stuckPendingCount: number;
+  skippedNoPayloadCount: number;
+  byCategory: Record<string, number>;
+  byType: Record<string, number>;
+  sampleRows: Array<{
+    id: string;
+    type: string;
+    recipient: string;
+    status: string;
+    errorCategory: string | null;
+    error: string | null;
+    attempts: number;
+    createdAt: string;
+  }>;
+};
+
 type NotificationLogResponse = Omit<NotificationLogRow, "recipient"> & {
   user?: { email?: string | null } | null;
   /** Set for recipients without an account (subscribers, contact enquiries, gift-card recipients). */
@@ -226,6 +245,17 @@ export const notificationsApi = {
       API.notifications.resend(id),
       {},
     ),
+  previewBulkResend: (payload: {
+    ids?: string[];
+    referenceId?: string;
+    type?: string;
+    errorCategory?: string;
+    includeStuckPending?: boolean;
+  }) =>
+    apiClient.post<BulkResendPreview>(
+      API.notifications.bulkResendPreview,
+      payload,
+    ),
   bulkResend: (payload: {
     ids?: string[];
     referenceId?: string;
@@ -236,6 +266,11 @@ export const notificationsApi = {
   retryBroadcastFailed: (id: string) =>
     apiClient.post<BulkResendResult>(
       API.notifications.broadcastRetryFailed(id),
+      {},
+    ),
+  sendBroadcastRecordTest: (id: string) =>
+    apiClient.post<{ sentTo: string; queued: number }>(
+      API.notifications.broadcastSendTest(id),
       {},
     ),
   listSuppressions: (search = "", page = 1, limit = 25) =>

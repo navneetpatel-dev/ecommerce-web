@@ -6,6 +6,7 @@ import { Button } from "@/shared/components/ui/button";
 import type { BroadcastBuilderState } from "../../hooks/notifications/broadcastBuilder.types";
 import { BroadcastComposerControls } from "./BroadcastComposerControls.component";
 import { BroadcastPreviewPane } from "./BroadcastPreviewPane.component";
+import { BroadcastSendConfirmModal } from "./BroadcastSendConfirmModal.component";
 
 interface BroadcastComposerStepProps {
   state: BroadcastBuilderState;
@@ -16,8 +17,8 @@ interface BroadcastComposerStepProps {
   onThemeChange: (t: "light" | "dark") => void;
   onApplyPreset: (id: string) => void;
   onBack: () => void;
-  onSendTest: () => void;
-  onSubmit: () => void;
+  onSendTest: () => Promise<void> | void;
+  onSubmit: () => Promise<void> | void;
   pending: boolean;
   error: string | null;
   testNotice: string | null;
@@ -40,16 +41,33 @@ export function BroadcastComposerStep({
   testNotice,
   resultMsg,
 }: BroadcastComposerStepProps) {
-  const [confirmLargeSend, setConfirmLargeSend] = useState(false);
+  const [confirmMode, setConfirmMode] = useState<"test" | "broadcast" | null>(
+    null,
+  );
+  const [localError, setLocalError] = useState<string | null>(null);
 
-  const handlePrimaryClick = () => {
-    if (totalRecipients > 50 && !confirmLargeSend) {
-      setConfirmLargeSend(true);
+  const openConfirm = (mode: "test" | "broadcast") => {
+    setLocalError(null);
+    if (!state.subject.trim() || !state.message.trim()) {
+      setLocalError("Enter a subject and message before sending.");
       return;
     }
-    setConfirmLargeSend(false);
-    onSubmit();
+    if (mode === "broadcast" && state.scheduleEnabled && !state.scheduledAt) {
+      setLocalError("Select a schedule date and time before scheduling.");
+      return;
+    }
+    setConfirmMode(mode);
   };
+
+  const handleConfirm = async () => {
+    const mode = confirmMode;
+    if (!mode) return;
+    if (mode === "test") await onSendTest();
+    else await onSubmit();
+    setConfirmMode(null);
+  };
+
+  const activeError = localError || error;
 
   return (
     <div className="flex flex-col h-full">
@@ -61,18 +79,24 @@ export function BroadcastComposerStep({
             onApplyPreset={onApplyPreset}
           />
 
-          {error && (
+          {activeError && (
             <p role="alert" className="text-xs font-medium text-danger">
-              {error}
+              {activeError}
             </p>
           )}
           {testNotice && (
-            <p role="status" className="text-xs font-medium text-success">
+            <p
+              role="status"
+              className="text-xs font-medium text-emerald-600 dark:text-emerald-400"
+            >
               {testNotice}
             </p>
           )}
           {resultMsg && (
-            <p role="status" className="text-xs font-medium text-success">
+            <p
+              role="status"
+              className="text-xs font-medium text-emerald-600 dark:text-emerald-400"
+            >
               {resultMsg}
             </p>
           )}
@@ -91,39 +115,11 @@ export function BroadcastComposerStep({
         </div>
       </div>
 
-      {confirmLargeSend && (
-        <div className="flex flex-wrap items-center justify-between gap-2 border-t border-amber-500/30 bg-amber-500/10 px-4 sm:px-6 py-2.5 text-xs text-ink shrink-0">
-          <span>
-            Confirm sending to <strong>{totalRecipients}</strong> recipients via{" "}
-            {state.channels.join(", ")}?
-          </span>
-          <div className="flex gap-2">
-            <Button
-              type="button"
-              size="sm"
-              variant="outline"
-              className="h-8"
-              onClick={() => setConfirmLargeSend(false)}
-            >
-              Cancel
-            </Button>
-            <Button
-              type="button"
-              size="sm"
-              className="h-8"
-              loading={pending}
-              onClick={handlePrimaryClick}
-            >
-              Confirm & Send
-            </Button>
-          </div>
-        </div>
-      )}
-
       <div className="border-t border-line/80 bg-surface px-4 sm:px-6 py-3.5 flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-2.5 shrink-0">
         <Button
           type="button"
           variant="outline"
+          disabled={pending}
           onClick={onBack}
           className="w-full sm:w-auto h-9"
         >
@@ -134,16 +130,18 @@ export function BroadcastComposerStep({
           <Button
             type="button"
             variant="outline"
-            loading={pending}
-            onClick={onSendTest}
+            disabled={pending}
+            loading={pending && confirmMode === "test"}
+            onClick={() => openConfirm("test")}
             className="h-9"
           >
             Send test to me
           </Button>
           <Button
             type="button"
-            loading={pending}
-            onClick={handlePrimaryClick}
+            disabled={pending}
+            loading={pending && confirmMode === "broadcast"}
+            onClick={() => openConfirm("broadcast")}
             className="h-9 px-5"
           >
             <Send className="size-4 mr-1.5" aria-hidden />
@@ -153,6 +151,15 @@ export function BroadcastComposerStep({
           </Button>
         </div>
       </div>
+
+      <BroadcastSendConfirmModal
+        mode={confirmMode}
+        onClose={() => setConfirmMode(null)}
+        state={state}
+        totalRecipients={totalRecipients}
+        pending={pending}
+        onConfirm={() => void handleConfirm()}
+      />
     </div>
   );
 }

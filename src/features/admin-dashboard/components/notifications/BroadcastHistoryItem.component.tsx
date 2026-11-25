@@ -1,6 +1,6 @@
 "use client";
 
-import { Copy, ExternalLink, RotateCcw, XCircle } from "lucide-react";
+import { Copy, ExternalLink, RotateCcw, Send, XCircle } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import { formatDateTime } from "@/shared/utils/formatting/formatDate";
@@ -11,6 +11,7 @@ interface BroadcastHistoryItemProps {
   busy: boolean;
   onViewLogs: (id: string) => void;
   onRetryFailed: (id: string) => void;
+  onSendTest: (row: AdminBroadcastRecord) => void;
   onCancel: (id: string) => void;
   onDuplicate: (row: AdminBroadcastRecord) => void;
 }
@@ -20,6 +21,7 @@ export function BroadcastHistoryItem({
   busy,
   onViewLogs,
   onRetryFailed,
+  onSendTest,
   onCancel,
   onDuplicate,
 }: BroadcastHistoryItemProps) {
@@ -69,6 +71,15 @@ export function BroadcastHistoryItem({
         </div>
 
         <div className="flex flex-wrap items-center gap-2 shrink-0">
+          <Button
+            type="button"
+            size="sm"
+            variant="outline"
+            onClick={() => onSendTest(row)}
+          >
+            <Send className="size-3.5" aria-hidden />
+            Send test
+          </Button>
           <Button
             type="button"
             size="sm"

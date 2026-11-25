@@ -1,6 +1,6 @@
 "use client";
 
-import { RefreshCw } from "lucide-react";
+import { AlertTriangle, CheckCircle2, RefreshCw, XCircle } from "lucide-react";
 import { RecordDetailCopyButton } from "@/shared/components/dialogs/RecordDetailCopyButton.component";
 import { cn } from "@/shared/utils/dom/cn";
 import { useEmailHealth } from "../../hooks/notifications/useEmailHealth.hook";
@@ -11,6 +11,23 @@ const TONE = {
   DEGRADED: styles.degraded,
   DOWN: styles.down,
 } as const;
+
+const STATUS_BADGE = {
+  OK: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/25",
+  DEGRADED:
+    "bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/25",
+  DOWN: "bg-danger/10 text-danger border-danger/25",
+} as const;
+
+function categoryTone(category: string): string {
+  if (category === "CONFIG" || category === "PERMANENT") {
+    return "border-danger/30 bg-danger/10 text-danger";
+  }
+  if (category === "TEMPORARY" || category === "RECIPIENT") {
+    return "border-amber-500/30 bg-amber-500/10 text-amber-700 dark:text-amber-400";
+  }
+  return "border-line bg-paper text-ink";
+}
 
 interface EmailHealthBannerProps {
   onFilterCategory?: (category: string) => void;
@@ -31,11 +48,11 @@ export function EmailHealthBanner({
           "flex items-center justify-between gap-2",
         )}
       >
-        <p>{health.loadError}</p>
+        <p className="text-ink">{health.loadError}</p>
         <button
           type="button"
           onClick={health.refresh}
-          className="inline-flex items-center gap-1 text-caption font-medium hover:underline cursor-pointer"
+          className="inline-flex items-center gap-1 text-caption font-medium text-brand hover:underline cursor-pointer"
         >
           <RefreshCw className="size-3.5" aria-hidden />
           Retry
@@ -44,6 +61,13 @@ export function EmailHealthBanner({
     );
   }
   if (!health.status) return null;
+
+  const StatusIcon =
+    health.status === "OK"
+      ? CheckCircle2
+      : health.status === "DEGRADED"
+        ? AlertTriangle
+        : XCircle;
 
   const categoryEntries = Object.entries(health.failuresByCategory).filter(
     ([, count]) => count > 0,
@@ -55,16 +79,56 @@ export function EmailHealthBanner({
       className={cn(styles.base, TONE[health.status])}
     >
       <div className="flex items-start justify-between gap-3">
-        <div className="space-y-1 min-w-0">
-          <p className={styles.title}>{health.statusLabel}</p>
+        <div className="space-y-1.5 min-w-0">
+          <div className="flex flex-wrap items-center gap-2">
+            <span
+              className={cn(
+                "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-caption font-semibold",
+                STATUS_BADGE[health.status],
+              )}
+            >
+              <StatusIcon className="size-3.5" aria-hidden />
+              {health.statusLabel}
+            </span>
+            {health.counts && (
+              <div className="flex flex-wrap items-center gap-2 text-caption text-ink-muted">
+                <span>Last {health.counts.windowMinutes}m:</span>
+                <span className="font-mono text-emerald-600 dark:text-emerald-400">
+                  {health.counts.sent} sent
+                </span>
+                <span>·</span>
+                <span
+                  className={cn(
+                    "font-mono",
+                    health.counts.failed > 0
+                      ? "text-danger font-semibold"
+                      : "text-ink-muted",
+                  )}
+                >
+                  {health.counts.failed} failed
+                </span>
+                <span>·</span>
+                <span
+                  className={cn(
+                    "font-mono",
+                    health.counts.stuck > 0
+                      ? "text-amber-600 dark:text-amber-400 font-semibold"
+                      : "text-ink-muted",
+                  )}
+                >
+                  {health.counts.stuck} waiting
+                </span>
+              </div>
+            )}
+          </div>
           <p className={styles.headline}>{health.headline}</p>
-          <p className={styles.detail}>{health.stats}</p>
         </div>
+
         <button
           type="button"
           onClick={health.refresh}
           aria-label="Refresh email health"
-          className="inline-flex items-center gap-1 rounded-md border border-current/20 px-2.5 py-1 text-caption font-medium opacity-80 hover:opacity-100 cursor-pointer shrink-0"
+          className="inline-flex items-center gap-1.5 rounded-md border border-line bg-paper px-2.5 py-1 text-caption font-medium text-ink-muted hover:text-ink cursor-pointer shrink-0"
         >
           <RefreshCw
             className={cn("size-3", health.isFetching && "animate-spin")}
@@ -75,8 +139,10 @@ export function EmailHealthBanner({
       </div>
 
       {health.lastFailure ? (
-        <div className="mt-1.5 flex items-center gap-2">
-          <p className={cn(styles.detail, "truncate")}>{health.lastFailure}</p>
+        <div className="flex items-center gap-2 rounded-lg border border-line/70 bg-paper/55 px-3 py-1.5">
+          <p className={cn(styles.detail, "truncate text-ink")}>
+            {health.lastFailure}
+          </p>
           {health.rawLastError && (
             <RecordDetailCopyButton
               value={health.rawLastError}
@@ -87,8 +153,8 @@ export function EmailHealthBanner({
       ) : null}
 
       {categoryEntries.length > 0 && (
-        <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
-          <span className="text-[11px] font-medium opacity-75">
+        <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
+          <span className="text-[11px] font-medium text-ink-muted">
             Failures by category:
           </span>
           {categoryEntries.map(([category, count]) => (
@@ -96,7 +162,10 @@ export function EmailHealthBanner({
               key={category}
               type="button"
               onClick={() => onFilterCategory?.(category)}
-              className="inline-flex items-center gap-1 rounded-full border border-current/25 bg-surface/60 px-2.5 py-0.5 text-[11px] font-mono font-medium hover:bg-surface cursor-pointer transition-colors"
+              className={cn(
+                "inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-[11px] font-mono font-medium hover:opacity-85 cursor-pointer transition-opacity",
+                categoryTone(category),
+              )}
             >
               <span>{category}:</span>
               <strong>{count}</strong>
