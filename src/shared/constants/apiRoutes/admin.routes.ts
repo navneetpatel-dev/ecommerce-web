@@ -53,8 +53,17 @@ export const notificationsRoutes = {
   broadcasts: "/api/notifications/broadcasts",
   broadcastCancel: (id: string) =>
     `/api/notifications/broadcasts/${encodeURIComponent(id)}/cancel`,
-  broadcastUsers: (q: string) =>
-    `/api/notifications/broadcast-users?q=${encodeURIComponent(q)}`,
+  broadcastUsers: (q: string, page = 1, limit = 20) =>
+    `/api/notifications/broadcast-users?q=${encodeURIComponent(q)}&page=${page}&limit=${limit}`,
+  broadcastCategories: (q: string, page = 1, limit = 20) =>
+    `/api/notifications/broadcast-categories?q=${encodeURIComponent(q)}&page=${page}&limit=${limit}`,
+  broadcastLocations: (
+    field: "state" | "city",
+    q: string,
+    page = 1,
+    limit = 20,
+  ) =>
+    `/api/notifications/broadcast-locations?field=${field}&q=${encodeURIComponent(q)}&page=${page}&limit=${limit}`,
   inApp: "/api/notifications/in-app",
   inAppRead: (id: string) =>
     `/api/notifications/in-app/${encodeURIComponent(id)}/read`,

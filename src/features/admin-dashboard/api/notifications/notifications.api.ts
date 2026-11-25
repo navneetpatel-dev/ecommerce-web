@@ -94,6 +94,20 @@ export type BroadcastTargetsPreview = {
   pushEligible: number;
   inAppEligible: number;
   sampleRecipients: BroadcastTargetUser[];
+  sampleHasMore?: boolean;
+};
+
+export type PaginatedLookupResult<T> = {
+  items: T[];
+  total: number;
+  page: number;
+  hasMore: boolean;
+};
+
+export type BroadcastCategoryOption = {
+  id: string;
+  name: string;
+  slug: string;
 };
 
 export type AdminBroadcastRecord = {
@@ -205,6 +219,8 @@ export const notificationsApi = {
     targetConfig: BroadcastTargetConfig;
     classification?: BroadcastClassification;
     channels?: BroadcastChannel[];
+    page?: number;
+    limit?: number;
   }) =>
     apiClient.post<BroadcastTargetsPreview>(
       API.notifications.broadcastPreview,
@@ -234,6 +250,21 @@ export const notificationsApi = {
       API.notifications.broadcastCancel(id),
       {},
     ),
-  searchBroadcastUsers: (q: string) =>
-    apiClient.get<BroadcastTargetUser[]>(API.notifications.broadcastUsers(q)),
+  searchBroadcastUsers: (q: string, page = 1, limit = 20) =>
+    apiClient.get<PaginatedLookupResult<BroadcastTargetUser>>(
+      API.notifications.broadcastUsers(q, page, limit),
+    ),
+  searchBroadcastCategories: (q: string, page = 1, limit = 20) =>
+    apiClient.get<PaginatedLookupResult<BroadcastCategoryOption>>(
+      API.notifications.broadcastCategories(q, page, limit),
+    ),
+  searchBroadcastLocations: (
+    field: "state" | "city",
+    q: string,
+    page = 1,
+    limit = 20,
+  ) =>
+    apiClient.get<PaginatedLookupResult<string>>(
+      API.notifications.broadcastLocations(field, q, page, limit),
+    ),
 };

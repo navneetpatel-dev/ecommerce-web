@@ -1,4 +1,5 @@
 import type {
+  BroadcastCategoryOption,
   BroadcastChannel,
   BroadcastClassification,
   BroadcastMode,
@@ -72,6 +73,7 @@ export interface BroadcastBuilderState {
   emailsText: string;
   userSegment: NonNullable<BroadcastTargetConfig["userSegment"]>;
   vendorSegment: NonNullable<BroadcastTargetConfig["vendorSegment"]>;
+  selectedCategories: BroadcastCategoryOption[];
   excludeUsers: BroadcastTargetUser[];
   excludeRoles: string[];
   channels: BroadcastChannel[];
@@ -95,6 +97,7 @@ export const INITIAL_BROADCAST_STATE: BroadcastBuilderState = {
   emailsText: "",
   userSegment: { status: "ACTIVE" },
   vendorSegment: { vendorStatus: "APPROVED" },
+  selectedCategories: [],
   excludeUsers: [],
   excludeRoles: [],
   channels: ["EMAIL", "IN_APP"],

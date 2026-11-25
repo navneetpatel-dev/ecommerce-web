@@ -1,6 +1,6 @@
 "use client";
 
-import { Input } from "@/shared/components/ui/input";
+import { useCallback } from "react";
 import { FormFieldFrame } from "@/shared/components/forms";
 import {
   Select,
@@ -9,8 +9,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select";
+import { notificationsApi } from "../../api/notifications/notifications.api";
 import type { BroadcastBuilderState } from "../../hooks/notifications/broadcastBuilder.types";
 import { BroadcastVendorSegmentFields } from "./BroadcastVendorSegmentFields.component";
+import { InfiniteSearchSelect } from "./InfiniteSearchSelect.component";
 
 interface BroadcastSegmentFieldsProps {
   mode: "user_segment" | "vendor_segment";
@@ -23,12 +25,23 @@ export function BroadcastSegmentFields({
   state,
   patch,
 }: BroadcastSegmentFieldsProps) {
+  const loadStates = useCallback(
+    (q: string, page: number) =>
+      notificationsApi.searchBroadcastLocations("state", q, page, 20),
+    [],
+  );
+  const loadCities = useCallback(
+    (q: string, page: number) =>
+      notificationsApi.searchBroadcastLocations("city", q, page, 20),
+    [],
+  );
+
   if (mode === "vendor_segment") {
     return <BroadcastVendorSegmentFields state={state} patch={patch} />;
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
       <FormFieldFrame label="Account status" htmlFor="seg-status">
         <Select
           value={state.userSegment.status ?? "ACTIVE"}
@@ -135,33 +148,39 @@ export function BroadcastSegmentFields({
         </Select>
       </FormFieldFrame>
       <FormFieldFrame label="State / Region" htmlFor="seg-state">
-        <Input
-          id="seg-state"
-          value={state.userSegment.state ?? ""}
-          onChange={(e) =>
+        <InfiniteSearchSelect<string>
+          placeholder="Select state..."
+          loadPage={loadStates}
+          getId={(s) => s}
+          getLabel={(s) => s}
+          selected={state.userSegment.state ? [state.userSegment.state] : []}
+          multiple={false}
+          onChange={(next) =>
             patch({
               userSegment: {
                 ...state.userSegment,
-                state: e.target.value || undefined,
+                state: next[0] ?? undefined,
               },
             })
           }
-          placeholder="e.g. Maharashtra"
         />
       </FormFieldFrame>
       <FormFieldFrame label="City" htmlFor="seg-city">
-        <Input
-          id="seg-city"
-          value={state.userSegment.city ?? ""}
-          onChange={(e) =>
+        <InfiniteSearchSelect<string>
+          placeholder="Select city..."
+          loadPage={loadCities}
+          getId={(c) => c}
+          getLabel={(c) => c}
+          selected={state.userSegment.city ? [state.userSegment.city] : []}
+          multiple={false}
+          onChange={(next) =>
             patch({
               userSegment: {
                 ...state.userSegment,
-                city: e.target.value || undefined,
+                city: next[0] ?? undefined,
               },
             })
           }
-          placeholder="e.g. Bengaluru"
         />
       </FormFieldFrame>
     </div>

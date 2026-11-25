@@ -10,7 +10,6 @@ import { cn } from "@/shared/utils/dom/cn";
 import type {
   BroadcastMode,
   BroadcastTargetsPreview,
-  BroadcastTargetUser,
 } from "../../api/notifications/notifications.api";
 import type { BroadcastBuilderState } from "../../hooks/notifications/broadcastBuilder.types";
 import { BroadcastRecipientSummary } from "./BroadcastRecipientSummary.component";
@@ -22,8 +21,8 @@ interface BroadcastAudienceStepProps {
   patch: (partial: Partial<BroadcastBuilderState>) => void;
   preview: BroadcastTargetsPreview | null;
   previewLoading: boolean;
-  userSearchResults: BroadcastTargetUser[];
-  onSearchUsers: (q: string) => void;
+  onLoadMoreSamples: () => void;
+  sampleLoadingMore: boolean;
   error?: string | null;
   onNext: () => void;
 }
@@ -40,8 +39,8 @@ export function BroadcastAudienceStep({
   patch,
   preview,
   previewLoading,
-  userSearchResults,
-  onSearchUsers,
+  onLoadMoreSamples,
+  sampleLoadingMore,
   error,
   onNext,
 }: BroadcastAudienceStepProps) {
@@ -63,150 +62,163 @@ export function BroadcastAudienceStep({
   };
 
   return (
-    <div className="space-y-4">
-      <div className="flex flex-wrap gap-1.5 rounded-lg border border-line bg-paper p-1">
-        {MODES.map((m) => (
-          <button
-            key={m.id}
-            type="button"
-            onClick={() => patch({ mode: m.id })}
-            className={cn(
-              "flex-1 min-w-[7rem] rounded-md px-3 py-1.5 text-body-xs font-medium transition-colors cursor-pointer",
-              state.mode === m.id
-                ? "bg-brand text-paper"
-                : "text-ink-muted hover:text-ink",
-            )}
-          >
-            {m.label}
-          </button>
-        ))}
-      </div>
-
-      {state.mode === "roles" && (
-        <div className="space-y-3">
-          <div className="flex items-center justify-between">
-            <span className="text-body-xs font-medium text-ink-muted">
-              Select one or more roles
-            </span>
-            <button
-              type="button"
-              onClick={() => patch({ allUsers: !state.allUsers })}
-              className={cn(
-                "rounded-full border px-3 py-1 text-caption font-medium cursor-pointer transition-colors",
-                state.allUsers
-                  ? "border-brand bg-brand/15 text-brand"
-                  : "border-line text-ink-muted hover:text-ink",
-              )}
-            >
-              {state.allUsers ? "✓ All Active Users" : "Target All Users"}
-            </button>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {ROLE_VALUES.map((role) => (
+    <div className="flex flex-col h-full justify-between gap-5">
+      <div className="grid grid-cols-1 lg:grid-cols-[1.25fr_1fr] gap-6 items-start">
+        <div className="space-y-5">
+          <div className="flex flex-wrap gap-1.5 rounded-xl border border-line bg-paper p-1.5">
+            {MODES.map((m) => (
               <button
-                key={role}
+                key={m.id}
                 type="button"
-                onClick={() => toggleRole(role)}
+                onClick={() => patch({ mode: m.id })}
                 className={cn(
-                  "rounded-full border px-3 py-1 text-body-xs font-medium transition-colors cursor-pointer",
-                  !state.allUsers && state.roles.includes(role)
-                    ? "border-brand bg-brand/15 text-brand"
-                    : "border-line bg-paper text-ink-muted hover:text-ink",
+                  "flex-1 min-w-[7rem] rounded-lg px-3 py-2 text-body-xs font-medium transition-colors cursor-pointer",
+                  state.mode === m.id
+                    ? "bg-brand text-paper"
+                    : "text-ink-muted hover:text-ink",
                 )}
               >
-                {ROLE_LABELS[role]}
+                {m.label}
               </button>
             ))}
           </div>
-        </div>
-      )}
 
-      {state.mode === "users" && (
-        <div className="space-y-3">
-          <FormFieldFrame label="Search & select users" htmlFor="user-picker">
-            <BroadcastUserPicker
-              placeholder="Search users by name or email..."
-              selected={state.selectedUsers}
-              results={userSearchResults}
-              onSearch={onSearchUsers}
-              onChange={(selectedUsers) => patch({ selectedUsers })}
-            />
-          </FormFieldFrame>
-          <FormFieldFrame
-            label="Or paste email addresses (comma or newline separated)"
-            htmlFor="paste-emails"
-          >
-            <Textarea
-              id="paste-emails"
-              rows={2}
-              value={state.emailsText}
-              onChange={(e) => patch({ emailsText: e.target.value })}
-              placeholder="alice@example.com, bob@example.com"
-            />
-          </FormFieldFrame>
-        </div>
-      )}
-
-      {(state.mode === "user_segment" || state.mode === "vendor_segment") && (
-        <BroadcastSegmentFields mode={state.mode} state={state} patch={patch} />
-      )}
-
-      <div className="border-t border-line/60 pt-2">
-        <button
-          type="button"
-          onClick={() => setShowExclusions((p) => !p)}
-          className="inline-flex items-center gap-1.5 text-caption font-medium text-ink-muted hover:text-ink cursor-pointer"
-        >
-          <ChevronRight
-            className={cn(
-              "size-3.5 transition-transform",
-              showExclusions && "rotate-90",
-            )}
-          />
-          Exclusions ({state.excludeUsers.length + state.excludeRoles.length})
-        </button>
-        {showExclusions && (
-          <div className="mt-2.5 space-y-3 rounded-lg border border-line/60 bg-paper/40 p-3">
-            <BroadcastUserPicker
-              placeholder="Exclude specific users..."
-              selected={state.excludeUsers}
-              results={userSearchResults}
-              onSearch={onSearchUsers}
-              onChange={(excludeUsers) => patch({ excludeUsers })}
-            />
-            <div className="flex flex-wrap gap-1.5">
-              {ROLE_VALUES.map((role) => (
+          {state.mode === "roles" && (
+            <div className="space-y-3 rounded-xl border border-line/60 bg-paper/40 p-4">
+              <div className="flex items-center justify-between">
+                <span className="text-body-xs font-medium text-ink-muted">
+                  Select one or more roles
+                </span>
                 <button
-                  key={role}
                   type="button"
-                  onClick={() => toggleExcludeRole(role)}
+                  onClick={() => patch({ allUsers: !state.allUsers })}
                   className={cn(
-                    "rounded-full border px-2.5 py-0.5 text-[11px] font-medium cursor-pointer",
-                    state.excludeRoles.includes(role)
-                      ? "border-danger/50 bg-danger/10 text-danger"
+                    "rounded-full border px-3 py-1 text-caption font-medium cursor-pointer transition-colors",
+                    state.allUsers
+                      ? "border-brand bg-brand/15 text-brand"
                       : "border-line text-ink-muted hover:text-ink",
                   )}
                 >
-                  Exclude {ROLE_LABELS[role]}
+                  {state.allUsers ? "✓ All Active Users" : "Target All Users"}
                 </button>
-              ))}
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {ROLE_VALUES.map((role) => (
+                  <button
+                    key={role}
+                    type="button"
+                    onClick={() => toggleRole(role)}
+                    className={cn(
+                      "rounded-full border px-3.5 py-1.5 text-body-xs font-medium transition-colors cursor-pointer",
+                      !state.allUsers && state.roles.includes(role)
+                        ? "border-brand bg-brand/15 text-brand"
+                        : "border-line bg-paper text-ink-muted hover:text-ink",
+                    )}
+                  >
+                    {ROLE_LABELS[role]}
+                  </button>
+                ))}
+              </div>
             </div>
+          )}
+
+          {state.mode === "users" && (
+            <div className="space-y-4 rounded-xl border border-line/60 bg-paper/40 p-4">
+              <FormFieldFrame
+                label="Search & select users"
+                htmlFor="user-picker"
+              >
+                <BroadcastUserPicker
+                  placeholder="Search users by name or email..."
+                  selected={state.selectedUsers}
+                  onChange={(selectedUsers) => patch({ selectedUsers })}
+                />
+              </FormFieldFrame>
+              <FormFieldFrame
+                label="Or paste email addresses (comma or newline separated)"
+                htmlFor="paste-emails"
+              >
+                <Textarea
+                  id="paste-emails"
+                  rows={3}
+                  value={state.emailsText}
+                  onChange={(e) => patch({ emailsText: e.target.value })}
+                  placeholder="alice@example.com, bob@example.com"
+                />
+              </FormFieldFrame>
+            </div>
+          )}
+
+          {(state.mode === "user_segment" ||
+            state.mode === "vendor_segment") && (
+            <div className="rounded-xl border border-line/60 bg-paper/40 p-4">
+              <BroadcastSegmentFields
+                mode={state.mode}
+                state={state}
+                patch={patch}
+              />
+            </div>
+          )}
+
+          <div className="border-t border-line/60 pt-3">
+            <button
+              type="button"
+              onClick={() => setShowExclusions((p) => !p)}
+              className="inline-flex items-center gap-1.5 text-body-xs font-medium text-ink-muted hover:text-ink cursor-pointer"
+            >
+              <ChevronRight
+                className={cn(
+                  "size-3.5 transition-transform",
+                  showExclusions && "rotate-90",
+                )}
+              />
+              Exclusions (
+              {state.excludeUsers.length + state.excludeRoles.length})
+            </button>
+            {showExclusions && (
+              <div className="mt-3 space-y-3 rounded-xl border border-line/60 bg-paper/40 p-4">
+                <BroadcastUserPicker
+                  placeholder="Exclude specific users..."
+                  selected={state.excludeUsers}
+                  onChange={(excludeUsers) => patch({ excludeUsers })}
+                />
+                <div className="flex flex-wrap gap-1.5">
+                  {ROLE_VALUES.map((role) => (
+                    <button
+                      key={role}
+                      type="button"
+                      onClick={() => toggleExcludeRole(role)}
+                      className={cn(
+                        "rounded-full border px-2.5 py-1 text-[11px] font-medium cursor-pointer",
+                        state.excludeRoles.includes(role)
+                          ? "border-danger/50 bg-danger/10 text-danger"
+                          : "border-line text-ink-muted hover:text-ink",
+                      )}
+                    >
+                      Exclude {ROLE_LABELS[role]}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
-        )}
+
+          {error ? (
+            <p role="alert" className="text-body-sm text-danger">
+              {error}
+            </p>
+          ) : null}
+        </div>
+
+        <BroadcastRecipientSummary
+          preview={preview}
+          previewLoading={previewLoading}
+          onLoadMore={onLoadMoreSamples}
+          loadingMore={sampleLoadingMore}
+        />
       </div>
 
-      <BroadcastRecipientSummary
-        preview={preview}
-        previewLoading={previewLoading}
-      />
-
-      {error ? (
-        <p role="alert" className="text-body-sm text-danger">
-          {error}
-        </p>
-      ) : null}
-
-      <div className="flex justify-end">
+      <div className="flex justify-end border-t border-line pt-4">
         <Button type="button" onClick={onNext}>
           Next: Message & Delivery →
         </Button>

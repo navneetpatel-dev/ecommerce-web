@@ -8,7 +8,6 @@ import {
   type BroadcastNotificationPayload,
   type BroadcastTargetConfig,
   type BroadcastTargetsPreview,
-  type BroadcastTargetUser,
 } from "../../api/notifications/notifications.api";
 import {
   BROADCAST_PRESETS,
@@ -39,7 +38,15 @@ export function buildTargetConfig(
         ? parseEmails(s.emailsText)
         : undefined,
     userSegment: s.mode === "user_segment" ? s.userSegment : undefined,
-    vendorSegment: s.mode === "vendor_segment" ? s.vendorSegment : undefined,
+    vendorSegment:
+      s.mode === "vendor_segment"
+        ? {
+            ...s.vendorSegment,
+            categoryIds: s.selectedCategories.length
+              ? s.selectedCategories.map((c) => c.id)
+              : undefined,
+          }
+        : undefined,
     excludeUserIds: s.excludeUsers.length
       ? s.excludeUsers.map((u) => u.id)
       : undefined,
@@ -53,9 +60,8 @@ export function useBroadcastBuilder(onSuccess?: () => void) {
   );
   const [preview, setPreview] = useState<BroadcastTargetsPreview | null>(null);
   const [previewLoading, setPreviewLoading] = useState(false);
-  const [userSearchResults, setUserSearchResults] = useState<
-    BroadcastTargetUser[]
-  >([]);
+  const [samplePage, setSamplePage] = useState(1);
+  const [sampleLoadingMore, setSampleLoadingMore] = useState(false);
   const [renderPreview, setRenderPreview] = useState<{
     subject: string;
     html: string;
@@ -77,11 +83,14 @@ export function useBroadcastBuilder(onSuccess?: () => void) {
   useEffect(() => {
     const t = setTimeout(() => {
       setPreviewLoading(true);
+      setSamplePage(1);
       void notificationsApi
         .previewBroadcastTargets({
           targetConfig,
           classification: state.classification,
           channels: state.channels,
+          page: 1,
+          limit: 25,
         })
         .then((res) => {
           setError(null);
@@ -95,6 +104,43 @@ export function useBroadcastBuilder(onSuccess?: () => void) {
     }, 300);
     return () => clearTimeout(t);
   }, [targetConfig, state.classification, state.channels]);
+
+  const loadMoreSamples = useCallback(async () => {
+    if (!preview?.sampleHasMore || sampleLoadingMore) return;
+    const nextPage = samplePage + 1;
+    setSampleLoadingMore(true);
+    try {
+      const res = await notificationsApi.previewBroadcastTargets({
+        targetConfig,
+        classification: state.classification,
+        channels: state.channels,
+        page: nextPage,
+        limit: 25,
+      });
+      setPreview((prev) =>
+        prev
+          ? {
+              ...prev,
+              sampleRecipients: [
+                ...prev.sampleRecipients,
+                ...res.sampleRecipients,
+              ],
+              sampleHasMore: res.sampleHasMore,
+            }
+          : res,
+      );
+      setSamplePage(nextPage);
+    } finally {
+      setSampleLoadingMore(false);
+    }
+  }, [
+    preview?.sampleHasMore,
+    sampleLoadingMore,
+    samplePage,
+    targetConfig,
+    state.classification,
+    state.channels,
+  ]);
 
   useEffect(() => {
     if (state.step !== 2) return;
@@ -124,15 +170,6 @@ export function useBroadcastBuilder(onSuccess?: () => void) {
     state.classification,
     previewTheme,
   ]);
-
-  const searchUsers = useCallback(async (q: string) => {
-    try {
-      const users = await notificationsApi.searchBroadcastUsers(q);
-      setUserSearchResults(users);
-    } catch {
-      setUserSearchResults([]);
-    }
-  }, []);
 
   const applyPreset = useCallback((presetId: string) => {
     const preset = BROADCAST_PRESETS.find((p) => p.id === presetId);
@@ -198,7 +235,9 @@ export function useBroadcastBuilder(onSuccess?: () => void) {
       setResultMsg(
         res.status === "SCHEDULED"
           ? `Broadcast scheduled for ${res.targeted} recipients.`
-          : `Queued for ${res.queued} of ${res.targeted} targeted recipients.`,
+          : res.status === "PROCESSING"
+            ? `Broadcast queued for background delivery to ${res.targeted} recipients.`
+            : `Queued for ${res.queued} of ${res.targeted} targeted recipients.`,
       );
       onSuccess?.();
     } catch (err) {
@@ -237,8 +276,8 @@ export function useBroadcastBuilder(onSuccess?: () => void) {
     patch,
     preview,
     previewLoading,
-    userSearchResults,
-    searchUsers,
+    loadMoreSamples,
+    sampleLoadingMore,
     renderPreview,
     previewTheme,
     setPreviewTheme,
