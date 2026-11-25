@@ -1,6 +1,6 @@
 "use client";
 
-import { CalendarClock } from "lucide-react";
+import { CalendarClock, Link2 } from "lucide-react";
 import { Input } from "@/shared/components/ui/input";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { FormFieldFrame } from "@/shared/components/forms";
@@ -44,29 +44,32 @@ export function BroadcastComposerControls({
   };
 
   return (
-    <div className="space-y-3.5">
-      <div className="flex flex-wrap items-center justify-between gap-2">
+    <div className="space-y-4">
+      <div className="flex flex-wrap items-center justify-between gap-2.5">
         <div className="flex flex-wrap gap-1.5">
-          {CHANNELS.map((ch) => (
-            <button
-              key={ch.id}
-              type="button"
-              onClick={() => toggleChannel(ch.id)}
-              className={cn(
-                "rounded-full border px-3 py-1 text-caption font-medium cursor-pointer transition-colors",
-                state.channels.includes(ch.id)
-                  ? "border-brand bg-brand/15 text-brand"
-                  : "border-line text-ink-muted hover:text-ink",
-              )}
-            >
-              {state.channels.includes(ch.id) ? "✓ " : ""}
-              {ch.label}
-            </button>
-          ))}
+          {CHANNELS.map((ch) => {
+            const active = state.channels.includes(ch.id);
+            return (
+              <button
+                key={ch.id}
+                type="button"
+                onClick={() => toggleChannel(ch.id)}
+                className={cn(
+                  "h-8 rounded-lg border px-3 text-xs font-medium cursor-pointer transition-colors",
+                  active
+                    ? "border-brand bg-brand/15 text-brand"
+                    : "border-line bg-paper text-ink-muted hover:text-ink",
+                )}
+              >
+                {active ? "✓ " : ""}
+                {ch.label}
+              </button>
+            );
+          })}
         </div>
         <Select onValueChange={onApplyPreset}>
-          <SelectTrigger className="w-44 h-8 text-caption">
-            <SelectValue placeholder="Load preset…" />
+          <SelectTrigger className="w-full sm:w-48 h-8 text-xs">
+            <SelectValue placeholder="Load preset template…" />
           </SelectTrigger>
           <SelectContent>
             {BROADCAST_PRESETS.map((p) => (
@@ -78,7 +81,7 @@ export function BroadcastComposerControls({
         </Select>
       </div>
 
-      <div className="grid grid-cols-2 gap-2.5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <FormFieldFrame label="Classification" htmlFor="bc-class">
           <Select
             value={state.classification}
@@ -86,25 +89,25 @@ export function BroadcastComposerControls({
               patch({ classification: v as "operational" | "marketing" })
             }
           >
-            <SelectTrigger id="bc-class">
+            <SelectTrigger id="bc-class" className="h-9">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="operational">Operational</SelectItem>
-              <SelectItem value="marketing">Marketing (opt-in)</SelectItem>
+              <SelectItem value="operational">Operational (Service)</SelectItem>
+              <SelectItem value="marketing">Marketing (Opt-in)</SelectItem>
             </SelectContent>
           </Select>
         </FormFieldFrame>
-        <FormFieldFrame label="Priority" htmlFor="bc-prio">
+        <FormFieldFrame label="Queue priority" htmlFor="bc-prio">
           <Select
             value={state.priority}
             onValueChange={(v) => patch({ priority: v as "standard" | "high" })}
           >
-            <SelectTrigger id="bc-prio">
+            <SelectTrigger id="bc-prio" className="h-9">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="standard">Standard queue</SelectItem>
+              <SelectItem value="standard">Standard (Batched)</SelectItem>
               <SelectItem value="high">High priority</SelectItem>
             </SelectContent>
           </Select>
@@ -114,83 +117,91 @@ export function BroadcastComposerControls({
       <FormFieldFrame label="Subject" htmlFor="bc-subject">
         <Input
           id="bc-subject"
+          className="h-9"
           value={state.subject}
           onChange={(e) => patch({ subject: e.target.value })}
-          placeholder="e.g. Scheduled maintenance tonight"
+          placeholder="e.g. Scheduled platform maintenance tonight"
           maxLength={200}
         />
       </FormFieldFrame>
 
-      <div className="space-y-1.5">
-        <div className="flex flex-wrap items-center gap-1">
-          <span className="text-[11px] text-ink-muted mr-1">Insert:</span>
+      <div className="space-y-2">
+        <FormFieldFrame label="Message body" htmlFor="bc-message">
+          <Textarea
+            id="bc-message"
+            rows={6}
+            value={state.message}
+            onChange={(e) => patch({ message: e.target.value })}
+            placeholder="Write the message body shown to recipients…"
+            maxLength={5000}
+            className="min-h-[8.5rem]"
+          />
+        </FormFieldFrame>
+        <div className="flex flex-wrap items-center gap-1.5">
+          <span className="text-[11px] text-ink-muted mr-0.5">Variables:</span>
           {PERSONALIZATION_TOKENS.map((tok) => (
             <button
               key={tok}
               type="button"
               onClick={() => patch({ message: `${state.message}${tok}` })}
-              className="rounded border border-line bg-paper px-1.5 py-0.5 font-mono text-[10px] text-ink-muted hover:text-ink hover:border-brand/40 cursor-pointer"
+              className="h-6 rounded-md border border-line bg-paper px-2 font-mono text-[10px] text-ink-muted hover:text-ink hover:border-brand/40 cursor-pointer transition-colors"
             >
               {tok}
             </button>
           ))}
         </div>
-        <FormFieldFrame label="Message" htmlFor="bc-message">
-          <Textarea
-            id="bc-message"
-            rows={4}
-            value={state.message}
-            onChange={(e) => patch({ message: e.target.value })}
-            placeholder="Write the message body shown to recipients…"
-            maxLength={5000}
-          />
-        </FormFieldFrame>
       </div>
 
-      <div className="flex flex-wrap items-center gap-4 text-caption">
-        <label className="inline-flex items-center gap-1.5 cursor-pointer text-ink">
-          <input
-            type="checkbox"
-            checked={state.ctaEnabled}
-            onChange={(e) => patch({ ctaEnabled: e.target.checked })}
-          />
-          Add CTA button
-        </label>
-        <label className="inline-flex items-center gap-1.5 cursor-pointer text-ink">
-          <input
-            type="checkbox"
-            checked={state.scheduleEnabled}
-            onChange={(e) => patch({ scheduleEnabled: e.target.checked })}
-          />
-          <CalendarClock className="size-3.5 text-brand" />
-          Schedule for later
-        </label>
-      </div>
-
-      {state.ctaEnabled && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-          <Input
-            value={state.ctaLabel}
-            onChange={(e) => patch({ ctaLabel: e.target.value })}
-            placeholder="Button label (e.g. View details)"
-            maxLength={80}
-          />
-          <Input
-            value={state.ctaUrl}
-            onChange={(e) => patch({ ctaUrl: e.target.value })}
-            placeholder="https://..."
-            maxLength={500}
-          />
+      <div className="rounded-xl border border-line/70 bg-paper/40 p-3.5 space-y-3">
+        <div className="flex flex-wrap items-center gap-4 text-xs">
+          <label className="inline-flex items-center gap-2 cursor-pointer text-ink font-medium">
+            <input
+              type="checkbox"
+              checked={state.ctaEnabled}
+              onChange={(e) => patch({ ctaEnabled: e.target.checked })}
+            />
+            <Link2 className="size-3.5 text-brand" />
+            <span>Action button (CTA)</span>
+          </label>
+          <label className="inline-flex items-center gap-2 cursor-pointer text-ink font-medium">
+            <input
+              type="checkbox"
+              checked={state.scheduleEnabled}
+              onChange={(e) => patch({ scheduleEnabled: e.target.checked })}
+            />
+            <CalendarClock className="size-3.5 text-brand" />
+            <span>Schedule for later</span>
+          </label>
         </div>
-      )}
 
-      {state.scheduleEnabled && (
-        <Input
-          type="datetime-local"
-          value={state.scheduledAt}
-          onChange={(e) => patch({ scheduledAt: e.target.value })}
-        />
-      )}
+        {state.ctaEnabled && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+            <Input
+              className="h-9"
+              value={state.ctaLabel}
+              onChange={(e) => patch({ ctaLabel: e.target.value })}
+              placeholder="Button label (e.g. Open Dashboard)"
+              maxLength={80}
+            />
+            <Input
+              className="h-9"
+              value={state.ctaUrl}
+              onChange={(e) => patch({ ctaUrl: e.target.value })}
+              placeholder="https://..."
+              maxLength={500}
+            />
+          </div>
+        )}
+
+        {state.scheduleEnabled && (
+          <Input
+            type="datetime-local"
+            className="h-9"
+            value={state.scheduledAt}
+            onChange={(e) => patch({ scheduledAt: e.target.value })}
+          />
+        )}
+      </div>
     </div>
   );
 }

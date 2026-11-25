@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Bell, Mail, Moon, Smartphone, Sun } from "lucide-react";
-import { Button } from "@/shared/components/ui/button";
+import { cn } from "@/shared/utils/dom/cn";
 import type { BroadcastChannel } from "../../api/notifications/notifications.api";
 
 interface BroadcastPreviewPaneProps {
@@ -42,96 +42,100 @@ export function BroadcastPreviewPane({
   );
 
   return (
-    <div className="flex flex-col rounded-xl border border-line bg-paper/60 overflow-hidden h-full min-h-[24rem]">
-      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-line px-3.5 py-2.5 bg-surface/60">
-        <div className="flex items-center gap-1">
-          {channels.includes("EMAIL") && (
-            <Button
-              type="button"
-              size="sm"
-              variant={activeTab === "EMAIL" ? "secondary" : "ghost"}
-              onClick={() => setTab("EMAIL")}
-            >
-              <Mail className="size-3.5" aria-hidden />
-              Email
-            </Button>
-          )}
-          {channels.includes("PUSH") && (
-            <Button
-              type="button"
-              size="sm"
-              variant={activeTab === "PUSH" ? "secondary" : "ghost"}
-              onClick={() => setTab("PUSH")}
-            >
-              <Smartphone className="size-3.5" aria-hidden />
-              Push
-            </Button>
-          )}
-          {channels.includes("IN_APP") && (
-            <Button
-              type="button"
-              size="sm"
-              variant={activeTab === "IN_APP" ? "secondary" : "ghost"}
-              onClick={() => setTab("IN_APP")}
-            >
-              <Bell className="size-3.5" aria-hidden />
-              In-App
-            </Button>
-          )}
+    <div className="flex flex-col rounded-xl border border-line/80 bg-surface overflow-hidden h-full min-h-[26rem] lg:min-h-0">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-line/80 px-3.5 py-2.5 bg-paper/60 shrink-0">
+        <div className="inline-flex items-center rounded-lg border border-line bg-surface p-0.5 gap-0.5">
+          {(
+            [
+              { id: "EMAIL", label: "Email", icon: Mail },
+              { id: "PUSH", label: "Web Push", icon: Smartphone },
+              { id: "IN_APP", label: "In-App", icon: Bell },
+            ] as const
+          )
+            .filter((item) => channels.includes(item.id))
+            .map(({ id, label, icon: Icon }) => (
+              <button
+                key={id}
+                type="button"
+                onClick={() => setTab(id)}
+                className={cn(
+                  "inline-flex items-center gap-1.5 h-7 rounded-md px-2.5 text-xs font-medium transition-colors cursor-pointer",
+                  activeTab === id
+                    ? "bg-brand/15 text-brand"
+                    : "text-ink-muted hover:text-ink",
+                )}
+              >
+                <Icon className="size-3.5" aria-hidden />
+                <span>{label}</span>
+              </button>
+            ))}
         </div>
+
         {activeTab === "EMAIL" && (
-          <div className="flex items-center gap-1">
-            <Button
+          <div className="inline-flex items-center rounded-lg border border-line bg-surface p-0.5 gap-0.5">
+            <button
               type="button"
-              size="sm"
-              variant={previewTheme === "light" ? "secondary" : "ghost"}
               onClick={() => onThemeChange("light")}
               aria-label="Light preview"
+              className={cn(
+                "inline-flex items-center justify-center size-7 rounded-md cursor-pointer transition-colors",
+                previewTheme === "light"
+                  ? "bg-brand/15 text-brand"
+                  : "text-ink-muted hover:text-ink",
+              )}
             >
               <Sun className="size-3.5" />
-            </Button>
-            <Button
+            </button>
+            <button
               type="button"
-              size="sm"
-              variant={previewTheme === "dark" ? "secondary" : "ghost"}
               onClick={() => onThemeChange("dark")}
               aria-label="Dark preview"
+              className={cn(
+                "inline-flex items-center justify-center size-7 rounded-md cursor-pointer transition-colors",
+                previewTheme === "dark"
+                  ? "bg-brand/15 text-brand"
+                  : "text-ink-muted hover:text-ink",
+              )}
             >
               <Moon className="size-3.5" />
-            </Button>
+            </button>
           </div>
         )}
       </div>
 
       {activeTab === "EMAIL" ? (
-        renderPreview?.html ? (
-          <iframe
-            title="Broadcast email preview"
-            sandbox=""
-            srcDoc={renderPreview.html}
-            className="w-full flex-1 min-h-[22rem] bg-paper"
-          />
-        ) : (
-          <div className="p-6 text-body-sm text-ink-muted">
-            Rendering email preview…
+        <div className="flex flex-col flex-1 min-h-0">
+          <div className="border-b border-line/60 bg-paper/40 px-4 py-2 text-xs text-ink-muted truncate shrink-0">
+            <span className="font-medium text-ink">Subject:</span>{" "}
+            {renderPreview?.subject || sampleTitle}
           </div>
-        )
+          {renderPreview?.html ? (
+            <iframe
+              title="Broadcast email preview"
+              sandbox=""
+              srcDoc={renderPreview.html}
+              className="w-full flex-1 min-h-[24rem] lg:min-h-0 bg-paper border-0"
+            />
+          ) : (
+            <div className="flex-1 flex items-center justify-center p-6 text-xs text-ink-muted">
+              Rendering email preview…
+            </div>
+          )}
+        </div>
       ) : activeTab === "PUSH" ? (
-        <div className="p-5 flex-1 flex items-center justify-center">
-          <div className="w-full max-w-sm rounded-xl border border-line bg-surface p-4 shadow-sm space-y-1.5">
+        <div className="p-6 flex-1 flex items-center justify-center bg-paper/30">
+          <div className="w-full max-w-sm rounded-xl border border-line bg-surface p-4 shadow-md space-y-1.5">
             <div className="flex items-center gap-2 text-caption text-ink-muted">
               <Smartphone className="size-3.5 text-brand" />
               <span>Marketplace · now</span>
             </div>
-            <p className="text-body-sm font-semibold text-ink">{sampleTitle}</p>
-            <p className="text-body-xs text-ink-muted line-clamp-3">
-              {sampleBody}
-            </p>
+            <p className="text-sm font-semibold text-ink">{sampleTitle}</p>
+            <p className="text-xs text-ink-muted line-clamp-3">{sampleBody}</p>
           </div>
         </div>
       ) : (
-        <div className="p-5 flex-1 flex items-center justify-center">
-          <div className="w-full max-w-sm rounded-xl border border-line bg-surface p-4 space-y-2">
+        <div className="p-6 flex-1 flex items-center justify-center bg-paper/30">
+          <div className="w-full max-w-sm rounded-xl border border-line bg-surface p-4 shadow-md space-y-2">
             <div className="flex items-center justify-between text-caption text-ink-muted">
               <span className="inline-flex items-center gap-1.5 font-medium text-brand">
                 <Bell className="size-3.5" />
@@ -139,12 +143,12 @@ export function BroadcastPreviewPane({
               </span>
               <span>Just now</span>
             </div>
-            <p className="text-body-sm font-semibold text-ink">{sampleTitle}</p>
-            <p className="text-body-xs text-ink-muted whitespace-pre-line">
+            <p className="text-sm font-semibold text-ink">{sampleTitle}</p>
+            <p className="text-xs text-ink-muted whitespace-pre-line">
               {sampleBody}
             </p>
             {ctaLabel ? (
-              <span className="inline-block rounded-md bg-brand/15 px-2.5 py-1 text-caption font-medium text-brand">
+              <span className="inline-block rounded-md bg-brand/15 px-2.5 py-1 text-xs font-medium text-brand">
                 {ctaLabel} →
               </span>
             ) : null}

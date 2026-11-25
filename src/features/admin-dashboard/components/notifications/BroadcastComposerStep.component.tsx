@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Send } from "lucide-react";
+import { ArrowLeft, Send } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import type { BroadcastBuilderState } from "../../hooks/notifications/broadcastBuilder.types";
 import { BroadcastComposerControls } from "./BroadcastComposerControls.component";
@@ -52,43 +52,47 @@ export function BroadcastComposerStep({
   };
 
   return (
-    <div className="space-y-5">
-      <div className="grid grid-cols-1 lg:grid-cols-[1.05fr_1fr] gap-6">
-        <BroadcastComposerControls
-          state={state}
-          patch={patch}
-          onApplyPreset={onApplyPreset}
-        />
+    <div className="flex flex-col h-full">
+      <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-[1fr_1.15fr] divide-y lg:divide-y-0 lg:divide-x divide-line/80">
+        <div className="lg:overflow-y-auto px-4 sm:px-6 py-5 space-y-4">
+          <BroadcastComposerControls
+            state={state}
+            patch={patch}
+            onApplyPreset={onApplyPreset}
+          />
 
-        <BroadcastPreviewPane
-          subject={state.subject}
-          message={state.message}
-          ctaLabel={state.ctaEnabled ? state.ctaLabel : undefined}
-          channels={state.channels}
-          renderPreview={renderPreview}
-          previewTheme={previewTheme}
-          onThemeChange={onThemeChange}
-        />
+          {error && (
+            <p role="alert" className="text-xs font-medium text-danger">
+              {error}
+            </p>
+          )}
+          {testNotice && (
+            <p role="status" className="text-xs font-medium text-success">
+              {testNotice}
+            </p>
+          )}
+          {resultMsg && (
+            <p role="status" className="text-xs font-medium text-success">
+              {resultMsg}
+            </p>
+          )}
+        </div>
+
+        <div className="lg:overflow-hidden p-4 sm:p-5 bg-paper/20 flex flex-col">
+          <BroadcastPreviewPane
+            subject={state.subject}
+            message={state.message}
+            ctaLabel={state.ctaEnabled ? state.ctaLabel : undefined}
+            channels={state.channels}
+            renderPreview={renderPreview}
+            previewTheme={previewTheme}
+            onThemeChange={onThemeChange}
+          />
+        </div>
       </div>
 
-      {error && (
-        <p role="alert" className="text-body-sm text-danger">
-          {error}
-        </p>
-      )}
-      {testNotice && (
-        <p role="status" className="text-body-sm text-success">
-          {testNotice}
-        </p>
-      )}
-      {resultMsg && (
-        <p role="status" className="text-body-sm text-success">
-          {resultMsg}
-        </p>
-      )}
-
       {confirmLargeSend && (
-        <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-amber-500/40 bg-amber-500/10 px-3.5 py-2.5 text-body-xs text-ink">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-t border-amber-500/30 bg-amber-500/10 px-4 sm:px-6 py-2.5 text-xs text-ink shrink-0">
           <span>
             Confirm sending to <strong>{totalRecipients}</strong> recipients via{" "}
             {state.channels.join(", ")}?
@@ -98,6 +102,7 @@ export function BroadcastComposerStep({
               type="button"
               size="sm"
               variant="outline"
+              className="h-8"
               onClick={() => setConfirmLargeSend(false)}
             >
               Cancel
@@ -105,6 +110,7 @@ export function BroadcastComposerStep({
             <Button
               type="button"
               size="sm"
+              className="h-8"
               loading={pending}
               onClick={handlePrimaryClick}
             >
@@ -114,21 +120,33 @@ export function BroadcastComposerStep({
         </div>
       )}
 
-      <div className="flex flex-wrap items-center justify-between gap-2 border-t border-line pt-3">
-        <Button type="button" variant="outline" onClick={onBack}>
-          ← Back to targeting
+      <div className="border-t border-line/80 bg-surface px-4 sm:px-6 py-3.5 flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-2.5 shrink-0">
+        <Button
+          type="button"
+          variant="outline"
+          onClick={onBack}
+          className="w-full sm:w-auto h-9"
+        >
+          <ArrowLeft className="size-4 mr-1.5" aria-hidden />
+          Back to targeting
         </Button>
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
           <Button
             type="button"
             variant="outline"
             loading={pending}
             onClick={onSendTest}
+            className="h-9"
           >
             Send test to me
           </Button>
-          <Button type="button" loading={pending} onClick={handlePrimaryClick}>
-            <Send className="size-4" aria-hidden />
+          <Button
+            type="button"
+            loading={pending}
+            onClick={handlePrimaryClick}
+            className="h-9 px-5"
+          >
+            <Send className="size-4 mr-1.5" aria-hidden />
             {state.scheduleEnabled
               ? `Schedule for ${totalRecipients} users`
               : `Send to ${totalRecipients} users`}

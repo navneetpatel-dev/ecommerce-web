@@ -39,22 +39,25 @@ export function BroadcastNotificationDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[95vw] max-w-6xl sm:max-w-6xl h-[88vh] max-h-[88vh] flex flex-col p-0 gap-0 overflow-hidden">
-        <DialogHeader className="border-b border-line px-6 py-4 shrink-0">
-          <div className="flex flex-wrap items-center justify-between gap-3 pr-8">
-            <div>
-              <DialogTitle>{LABELS.broadcastTitle}</DialogTitle>
-              <DialogDescription className="mt-0.5">
+      <DialogContent className="w-screen sm:w-[96vw] max-w-7xl sm:max-w-7xl h-[100dvh] sm:h-[90vh] max-h-[100dvh] sm:max-h-[90vh] rounded-none sm:rounded-2xl flex flex-col p-0 gap-0 overflow-hidden bg-surface">
+        <DialogHeader className="border-b border-line/80 px-4 sm:px-6 py-3.5 shrink-0 bg-surface">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pr-8">
+            <div className="min-w-0">
+              <DialogTitle className="text-base sm:text-lg font-semibold tracking-tight">
+                {LABELS.broadcastTitle}
+              </DialogTitle>
+              <DialogDescription className="text-xs text-ink-muted mt-0.5">
                 {builder.state.step === 1
-                  ? "Choose roles, specific users, smart customer segments, or vendor filters."
-                  : "Select delivery channels, personalize your message, preview, and schedule."}
+                  ? "Configure audience rules, exclusions, and verify live recipient counts."
+                  : "Select channels, personalize your message, and preview across formats."}
               </DialogDescription>
             </div>
-            <div className="flex items-center gap-2 text-caption">
+
+            <div className="inline-flex items-center rounded-lg border border-line bg-paper p-0.5 self-start sm:self-auto">
               {(
                 [
-                  { step: 1, label: "1. Audience & Targeting" },
-                  { step: 2, label: "2. Message & Delivery" },
+                  { step: 1, label: "1. Audience" },
+                  { step: 2, label: "2. Compose & Preview" },
                 ] as const
               ).map((item) => (
                 <button
@@ -62,10 +65,10 @@ export function BroadcastNotificationDialog({
                   type="button"
                   onClick={() => builder.patch({ step: item.step })}
                   className={cn(
-                    "rounded-full border px-3 py-1 font-medium transition-colors cursor-pointer",
+                    "rounded-md px-3 py-1.5 text-xs font-medium transition-all cursor-pointer",
                     builder.state.step === item.step
-                      ? "border-brand bg-brand/15 text-brand"
-                      : "border-line text-ink-muted hover:text-ink",
+                      ? "bg-brand text-paper shadow-xs"
+                      : "text-ink-muted hover:text-ink",
                   )}
                 >
                   {item.label}
@@ -75,7 +78,7 @@ export function BroadcastNotificationDialog({
           </div>
         </DialogHeader>
 
-        <div className="flex-1 overflow-y-auto px-6 py-5">
+        <div className="flex-1 min-h-0 overflow-y-auto lg:overflow-hidden">
           {builder.state.step === 1 ? (
             <BroadcastAudienceStep
               state={builder.state}

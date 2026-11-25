@@ -1,7 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import { ChevronRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { FormFieldFrame } from "@/shared/components/forms";
@@ -44,8 +43,6 @@ export function BroadcastAudienceStep({
   error,
   onNext,
 }: BroadcastAudienceStepProps) {
-  const [showExclusions, setShowExclusions] = useState(false);
-
   const toggleRole = (role: string) => {
     const next = state.roles.includes(role)
       ? state.roles.filter((r) => r !== role)
@@ -62,19 +59,19 @@ export function BroadcastAudienceStep({
   };
 
   return (
-    <div className="flex flex-col h-full justify-between gap-5">
-      <div className="grid grid-cols-1 lg:grid-cols-[1.25fr_1fr] gap-6 items-start">
-        <div className="space-y-5">
-          <div className="flex flex-wrap gap-1.5 rounded-xl border border-line bg-paper p-1.5">
+    <div className="flex flex-col h-full">
+      <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] divide-y lg:divide-y-0 lg:divide-x divide-line/80">
+        <div className="lg:overflow-y-auto px-4 sm:px-6 py-5 space-y-5">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-1 rounded-xl border border-line bg-paper p-1">
             {MODES.map((m) => (
               <button
                 key={m.id}
                 type="button"
                 onClick={() => patch({ mode: m.id })}
                 className={cn(
-                  "flex-1 min-w-[7rem] rounded-lg px-3 py-2 text-body-xs font-medium transition-colors cursor-pointer",
+                  "h-9 rounded-lg px-2.5 text-xs font-medium transition-all cursor-pointer truncate",
                   state.mode === m.id
-                    ? "bg-brand text-paper"
+                    ? "bg-brand text-paper shadow-xs"
                     : "text-ink-muted hover:text-ink",
                 )}
               >
@@ -84,19 +81,19 @@ export function BroadcastAudienceStep({
           </div>
 
           {state.mode === "roles" && (
-            <div className="space-y-3 rounded-xl border border-line/60 bg-paper/40 p-4">
-              <div className="flex items-center justify-between">
-                <span className="text-body-xs font-medium text-ink-muted">
-                  Select one or more roles
+            <section className="rounded-xl border border-line/80 bg-paper/45 p-4 space-y-3">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <span className="text-xs font-semibold uppercase tracking-wider text-ink-muted">
+                  Target Roles
                 </span>
                 <button
                   type="button"
                   onClick={() => patch({ allUsers: !state.allUsers })}
                   className={cn(
-                    "rounded-full border px-3 py-1 text-caption font-medium cursor-pointer transition-colors",
+                    "h-7 rounded-full border px-3 text-xs font-medium cursor-pointer transition-colors",
                     state.allUsers
                       ? "border-brand bg-brand/15 text-brand"
-                      : "border-line text-ink-muted hover:text-ink",
+                      : "border-line bg-surface text-ink-muted hover:text-ink",
                   )}
                 >
                   {state.allUsers ? "✓ All Active Users" : "Target All Users"}
@@ -109,21 +106,21 @@ export function BroadcastAudienceStep({
                     type="button"
                     onClick={() => toggleRole(role)}
                     className={cn(
-                      "rounded-full border px-3.5 py-1.5 text-body-xs font-medium transition-colors cursor-pointer",
+                      "h-8 rounded-lg border px-3 text-xs font-medium transition-colors cursor-pointer",
                       !state.allUsers && state.roles.includes(role)
                         ? "border-brand bg-brand/15 text-brand"
-                        : "border-line bg-paper text-ink-muted hover:text-ink",
+                        : "border-line bg-surface text-ink-muted hover:text-ink",
                     )}
                   >
                     {ROLE_LABELS[role]}
                   </button>
                 ))}
               </div>
-            </div>
+            </section>
           )}
 
           {state.mode === "users" && (
-            <div className="space-y-4 rounded-xl border border-line/60 bg-paper/40 p-4">
+            <section className="rounded-xl border border-line/80 bg-paper/45 p-4 space-y-4">
               <FormFieldFrame
                 label="Search & select users"
                 htmlFor="user-picker"
@@ -146,81 +143,78 @@ export function BroadcastAudienceStep({
                   placeholder="alice@example.com, bob@example.com"
                 />
               </FormFieldFrame>
-            </div>
+            </section>
           )}
 
           {(state.mode === "user_segment" ||
             state.mode === "vendor_segment") && (
-            <div className="rounded-xl border border-line/60 bg-paper/40 p-4">
+            <section className="rounded-xl border border-line/80 bg-paper/45 p-4">
               <BroadcastSegmentFields
                 mode={state.mode}
                 state={state}
                 patch={patch}
               />
-            </div>
+            </section>
           )}
 
-          <div className="border-t border-line/60 pt-3">
-            <button
-              type="button"
-              onClick={() => setShowExclusions((p) => !p)}
-              className="inline-flex items-center gap-1.5 text-body-xs font-medium text-ink-muted hover:text-ink cursor-pointer"
-            >
-              <ChevronRight
-                className={cn(
-                  "size-3.5 transition-transform",
-                  showExclusions && "rotate-90",
-                )}
-              />
-              Exclusions (
-              {state.excludeUsers.length + state.excludeRoles.length})
-            </button>
-            {showExclusions && (
-              <div className="mt-3 space-y-3 rounded-xl border border-line/60 bg-paper/40 p-4">
-                <BroadcastUserPicker
-                  placeholder="Exclude specific users..."
-                  selected={state.excludeUsers}
-                  onChange={(excludeUsers) => patch({ excludeUsers })}
-                />
-                <div className="flex flex-wrap gap-1.5">
-                  {ROLE_VALUES.map((role) => (
-                    <button
-                      key={role}
-                      type="button"
-                      onClick={() => toggleExcludeRole(role)}
-                      className={cn(
-                        "rounded-full border px-2.5 py-1 text-[11px] font-medium cursor-pointer",
-                        state.excludeRoles.includes(role)
-                          ? "border-danger/50 bg-danger/10 text-danger"
-                          : "border-line text-ink-muted hover:text-ink",
-                      )}
-                    >
-                      Exclude {ROLE_LABELS[role]}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
+          <section className="rounded-xl border border-line/80 bg-paper/35 p-4 space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold uppercase tracking-wider text-ink-muted">
+                Exclusions
+              </span>
+              <span className="text-[11px] font-mono text-ink-muted">
+                {state.excludeUsers.length + state.excludeRoles.length} active
+              </span>
+            </div>
+            <BroadcastUserPicker
+              placeholder="Exclude specific users by name or email..."
+              selected={state.excludeUsers}
+              onChange={(excludeUsers) => patch({ excludeUsers })}
+            />
+            <div className="flex flex-wrap gap-1.5 pt-1">
+              {ROLE_VALUES.map((role) => (
+                <button
+                  key={role}
+                  type="button"
+                  onClick={() => toggleExcludeRole(role)}
+                  className={cn(
+                    "h-7 rounded-lg border px-2.5 text-[11px] font-medium cursor-pointer transition-colors",
+                    state.excludeRoles.includes(role)
+                      ? "border-danger/50 bg-danger/10 text-danger"
+                      : "border-line bg-surface text-ink-muted hover:text-ink",
+                  )}
+                >
+                  Exclude {ROLE_LABELS[role]}
+                </button>
+              ))}
+            </div>
+          </section>
 
           {error ? (
-            <p role="alert" className="text-body-sm text-danger">
+            <p role="alert" className="text-xs font-medium text-danger">
               {error}
             </p>
           ) : null}
         </div>
 
-        <BroadcastRecipientSummary
-          preview={preview}
-          previewLoading={previewLoading}
-          onLoadMore={onLoadMoreSamples}
-          loadingMore={sampleLoadingMore}
-        />
+        <div className="lg:overflow-y-auto px-4 sm:px-6 py-5 bg-paper/20">
+          <BroadcastRecipientSummary
+            preview={preview}
+            previewLoading={previewLoading}
+            onLoadMore={onLoadMoreSamples}
+            loadingMore={sampleLoadingMore}
+          />
+        </div>
       </div>
 
-      <div className="flex justify-end border-t border-line pt-4">
-        <Button type="button" onClick={onNext}>
-          Next: Message & Delivery →
+      <div className="border-t border-line/80 bg-surface px-4 sm:px-6 py-3.5 flex items-center justify-end shrink-0">
+        <Button
+          type="button"
+          onClick={onNext}
+          className="w-full sm:w-auto h-9 px-5"
+        >
+          <span>Continue to Message & Preview</span>
+          <ArrowRight className="size-4 ml-1.5" aria-hidden />
         </Button>
       </div>
     </div>
