@@ -63,7 +63,6 @@ export function useProductModerationQueue() {
 
   const setFilter = (key: string) => (val: string) => {
     setUserFilters((prev) => ({ ...prev, [key]: val }));
-    list.onPageChange(1);
   };
 
   const onClear = useCallback(() => {
@@ -76,8 +75,7 @@ export function useProductModerationQueue() {
       maxPrice: "",
       sort: "",
     });
-    list.onPageChange(1);
-  }, [list]);
+  }, []);
 
   const onApprove = useCallback(
     async (id: string) => {
