@@ -177,10 +177,12 @@ export function useBroadcastBuilder(onSuccess?: () => void) {
     setState((prev) => ({
       ...prev,
       classification: preset.classification,
+      priority: preset.priority ?? prev.priority,
       subject: preset.subject,
       message: preset.message,
-      ctaEnabled: Boolean(preset.ctaLabel),
+      ctaEnabled: Boolean(preset.ctaLabel || preset.ctaUrl),
       ctaLabel: preset.ctaLabel ?? "",
+      ctaUrl: preset.ctaUrl ?? "",
     }));
   }, []);
 
