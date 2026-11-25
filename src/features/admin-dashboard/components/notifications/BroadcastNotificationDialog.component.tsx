@@ -58,6 +58,7 @@ export function BroadcastNotificationDialog({
             previewLoading={builder.previewLoading}
             userSearchResults={builder.userSearchResults}
             onSearchUsers={builder.searchUsers}
+            error={builder.error}
             onNext={() => builder.patch({ step: 2 })}
           />
         ) : (

@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Copy, RefreshCw, XCircle } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
+import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 import { formatDateTime } from "@/shared/utils/formatting/formatDate";
 import {
   notificationsApi,
@@ -21,12 +22,16 @@ export function BroadcastHistoryTab({
 }: BroadcastHistoryTabProps) {
   const [rows, setRows] = useState<AdminBroadcastRecord[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [busyId, setBusyId] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
+    setError(null);
     try {
       setRows(await notificationsApi.listBroadcasts());
+    } catch (err) {
+      setError(getApiErrorMessage(err, "Unable to load broadcast history."));
     } finally {
       setLoading(false);
     }
@@ -38,9 +43,14 @@ export function BroadcastHistoryTab({
 
   const handleCancel = async (id: string) => {
     setBusyId(id);
+    setError(null);
     try {
       await notificationsApi.cancelBroadcast(id);
       await load();
+    } catch (err) {
+      setError(
+        getApiErrorMessage(err, "Unable to cancel scheduled broadcast."),
+      );
     } finally {
       setBusyId(null);
     }
@@ -57,6 +67,15 @@ export function BroadcastHistoryTab({
           Refresh
         </Button>
       </div>
+
+      {error ? (
+        <div
+          role="alert"
+          className="rounded-xl border border-danger/30 bg-danger/10 px-4 py-3 text-body-sm text-danger"
+        >
+          {error}
+        </div>
+      ) : null}
 
       {loading ? (
         <p className="py-8 text-center text-body-sm text-ink-muted">

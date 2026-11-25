@@ -83,8 +83,14 @@ export function useBroadcastBuilder(onSuccess?: () => void) {
           classification: state.classification,
           channels: state.channels,
         })
-        .then(setPreview)
-        .catch(() => setPreview(null))
+        .then((res) => {
+          setError(null);
+          setPreview(res);
+        })
+        .catch((err) => {
+          setPreview(null);
+          setError(getApiErrorMessage(err, "Unable to estimate recipients."));
+        })
         .finally(() => setPreviewLoading(false));
     }, 300);
     return () => clearTimeout(t);

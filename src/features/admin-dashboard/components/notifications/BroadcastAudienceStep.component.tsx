@@ -24,6 +24,7 @@ interface BroadcastAudienceStepProps {
   previewLoading: boolean;
   userSearchResults: BroadcastTargetUser[];
   onSearchUsers: (q: string) => void;
+  error?: string | null;
   onNext: () => void;
 }
 
@@ -41,6 +42,7 @@ export function BroadcastAudienceStep({
   previewLoading,
   userSearchResults,
   onSearchUsers,
+  error,
   onNext,
 }: BroadcastAudienceStepProps) {
   const [showExclusions, setShowExclusions] = useState(false);
@@ -197,6 +199,12 @@ export function BroadcastAudienceStep({
         preview={preview}
         previewLoading={previewLoading}
       />
+
+      {error ? (
+        <p role="alert" className="text-body-sm text-danger">
+          {error}
+        </p>
+      ) : null}
 
       <div className="flex justify-end">
         <Button type="button" onClick={onNext}>
