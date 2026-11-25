@@ -21,9 +21,14 @@ export interface AdminDataListViewProps {
   actions?: (row: AdminDataRow, reload: () => void) => ReactNode;
   /** Prefer explicit columns; falls back to inferred keys from the first row. */
   columnKeys?: string[];
+  cellOverrides?: Record<string, (row: AdminDataRow) => ReactNode>;
   titleLevel?: 1 | 2;
   onRowClick?: (row: AdminDataRow) => void;
   fetchRowDetail?: (row: AdminDataRow) => Promise<Record<string, unknown>>;
+  detailFieldLinks?: Record<
+    string,
+    (value: unknown, record: Record<string, unknown>) => string | null
+  >;
 }
 
 export function AdminDataListView({
@@ -41,15 +46,18 @@ export function AdminDataListView({
   onPageChange,
   actions,
   columnKeys,
+  cellOverrides,
   titleLevel,
   onRowClick,
   fetchRowDetail,
+  detailFieldLinks,
 }: AdminDataListViewProps) {
   const { columns, getRowId, renderActions } = useAdminDataListView(
     rows,
     columnKeys,
     actions,
     onRefresh,
+    cellOverrides,
   );
 
   const paginationConfig = { page, totalPages, total, from, to, onPageChange };
@@ -71,6 +79,7 @@ export function AdminDataListView({
       showViewButton
       onRowClick={onRowClick}
       fetchRowDetail={fetchRowDetail}
+      detailFieldLinks={detailFieldLinks}
       tableId={`admin-${title.toLowerCase().replace(/\s+/g, "-")}`}
       enableColumnVisibility
       enableDensityToggle

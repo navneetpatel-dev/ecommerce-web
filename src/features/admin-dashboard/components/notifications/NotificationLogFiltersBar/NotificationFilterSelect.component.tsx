@@ -1,11 +1,11 @@
-import { useCallback } from "react";
+import { useCallback, useId } from "react";
+import { FormFieldFrame } from "@/shared/components/forms";
 import {
   Select,
   SelectContent,
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select";
-import { notificationLogFiltersBarStyles } from "../../../styles/notifications/notificationLogFiltersBar.styles";
 import {
   NotificationFilterOptionsList,
   ALL,
@@ -26,6 +26,7 @@ export function NotificationFilterSelect({
   options,
   onChange,
 }: NotificationFilterSelectProps) {
+  const selectId = useId();
   const handleValueChange = useCallback(
     (next: string) => {
       onChange(next === ALL ? undefined : next);
@@ -34,10 +35,9 @@ export function NotificationFilterSelect({
   );
 
   return (
-    <div className={notificationLogFiltersBarStyles.filterSelect}>
-      <span className={notificationLogFiltersBarStyles.label}>{label}</span>
+    <FormFieldFrame label={label} htmlFor={selectId}>
       <Select value={value ?? ALL} onValueChange={handleValueChange}>
-        <SelectTrigger>
+        <SelectTrigger id={selectId}>
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
         <SelectContent>
@@ -47,6 +47,6 @@ export function NotificationFilterSelect({
           />
         </SelectContent>
       </Select>
-    </div>
+    </FormFieldFrame>
   );
 }

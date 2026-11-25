@@ -17,11 +17,16 @@ interface AdminDataPageProps {
   load: AdminListLoadFn;
   actions?: (row: AdminDataRow, reload: () => void) => ReactNode;
   columnKeys?: string[];
+  cellOverrides?: Record<string, (row: AdminDataRow) => ReactNode>;
   /** Hide the list title when the parent page already provides one (e.g. tabs). */
   hideTitle?: boolean;
   titleLevel?: 1 | 2;
   onRowClick?: (row: AdminDataRow) => void;
   fetchRowDetail?: (row: AdminDataRow) => Promise<Record<string, unknown>>;
+  detailFieldLinks?: Record<
+    string,
+    (value: unknown, record: Record<string, unknown>) => string | null
+  >;
 }
 
 export function AdminDataPage({
@@ -30,10 +35,12 @@ export function AdminDataPage({
   load,
   actions,
   columnKeys,
+  cellOverrides,
   hideTitle = false,
   titleLevel,
   onRowClick,
   fetchRowDetail,
+  detailFieldLinks,
 }: AdminDataPageProps) {
   const stableLoad = useCallback<AdminListLoadFn>(
     (params) => load(params),
@@ -60,8 +67,10 @@ export function AdminDataPage({
         onPageChange={list.onPageChange}
         actions={actions}
         columnKeys={columnKeys}
+        cellOverrides={cellOverrides}
         onRowClick={onRowClick}
         fetchRowDetail={fetchRowDetail}
+        detailFieldLinks={detailFieldLinks}
       />
     </RequirePermission>
   );

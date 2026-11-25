@@ -24,6 +24,7 @@ export function useAdminDataListView(
   columnKeys?: string[],
   actions?: (row: AdminDataRow, reload: () => void) => ReactNode,
   onRefresh?: () => void,
+  cellOverrides?: Record<string, (row: AdminDataRow) => ReactNode>,
 ) {
   const keys = useMemo(
     () => columnKeys ?? inferAdminColumns(rows),
@@ -32,24 +33,30 @@ export function useAdminDataListView(
 
   const columns: DataTableColumn<AdminDataRow>[] = useMemo(
     () =>
-      keys.map((key) => ({
-        id: key,
-        header: columnHeader(key),
-        truncate:
-          key !== "product" &&
-          key !== "status" &&
-          !key.endsWith(".status") &&
-          !isImageFieldKey(key),
-        // Badges and images render as components; everything else as text, so
-        // the table can shorten it (desktop) or show it whole (phone cards).
-        cell: (row) =>
-          isRichCell(key) ? (
-            <AdminDataCell row={row} columnKey={key} />
-          ) : (
-            adminCellText(row, key)
-          ),
-      })),
-    [keys],
+      keys.map((key) => {
+        const override = cellOverrides?.[key];
+        return {
+          id: key,
+          header: columnHeader(key),
+          truncate:
+            !override &&
+            key !== "product" &&
+            key !== "status" &&
+            !key.endsWith(".status") &&
+            !isImageFieldKey(key),
+          // Badges and images render as components; everything else as text, so
+          // the table can shorten it (desktop) or show it whole (phone cards).
+          cell: (row) =>
+            override ? (
+              override(row)
+            ) : isRichCell(key) ? (
+              <AdminDataCell row={row} columnKey={key} />
+            ) : (
+              adminCellText(row, key)
+            ),
+        };
+      }),
+    [keys, cellOverrides],
   );
 
   const getRowId = (row: AdminDataRow, index: number) =>

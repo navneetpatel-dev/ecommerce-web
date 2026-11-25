@@ -1,12 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import { Mail, Send } from "lucide-react";
+import { ArrowUpRight, Mail, Megaphone, Send } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { AdminDataPage } from "../shared/AdminDataPage.page";
 import { NotificationLogFiltersBar } from "../../components/notifications/NotificationLogFiltersBar.component";
-import { BroadcastNotificationForm } from "../../components/notifications/BroadcastNotificationForm.component";
+import { BroadcastNotificationDialog } from "../../components/notifications/BroadcastNotificationDialog.component";
 import { EmailHealthBanner } from "../../components/notifications/EmailHealthBanner.component";
 import { NotificationLogRowActions } from "../../components/notifications/NotificationLogRowActions.component";
 import type { AdminDataRow } from "../../hooks/shared/useAdminDataList.hook";
@@ -16,9 +17,17 @@ import { Button } from "@/shared/components/ui/button";
 import { adminPagesStyles } from "../shared/adminPages.styles";
 import { useAdminNotificationsPage } from "../../hooks/notifications/useAdminNotificationsPage.hook";
 
+function emailTemplateHref(type: unknown, channel: unknown): string | null {
+  if (channel !== "EMAIL" || typeof type !== "string" || !type.trim()) {
+    return null;
+  }
+  return `${PATHS.admin.emailTemplates}?type=${encodeURIComponent(type)}`;
+}
+
 export function AdminNotificationsPage() {
   const { pending, message, error, filters, setFilters, loadLogs, sendTest } =
     useAdminNotificationsPage();
+  const [broadcastOpen, setBroadcastOpen] = useState(false);
 
   const renderRowActions = (row: AdminDataRow, reload: () => void) => (
     <NotificationLogRowActions
@@ -51,9 +60,13 @@ export function AdminNotificationsPage() {
               {LABELS.emailTemplatesOpen}
             </Link>
           </Button>
-          <Button loading={pending} onClick={handleSendTest}>
+          <Button variant="outline" loading={pending} onClick={handleSendTest}>
             <Send className={adminPagesStyles.iconSm} aria-hidden="true" />
             Send test
+          </Button>
+          <Button onClick={() => setBroadcastOpen(true)}>
+            <Megaphone className={adminPagesStyles.iconSm} aria-hidden="true" />
+            {notificationsAdminLabels.broadcastTitle}
           </Button>
         </div>
       </div>
@@ -68,14 +81,7 @@ export function AdminNotificationsPage() {
 
       <EmailHealthBanner />
 
-      <BroadcastNotificationForm />
-
-      <div>
-        <h2 className={adminPagesStyles.subheadingMedium}>
-          {notificationsAdminLabels.notificationLogFilters}
-        </h2>
-        <NotificationLogFiltersBar filters={filters} onChange={setFilters} />
-      </div>
+      <NotificationLogFiltersBar filters={filters} onChange={setFilters} />
 
       <AdminDataPage
         title="Notification logs"
@@ -92,10 +98,36 @@ export function AdminNotificationsPage() {
           "sentAt",
           "createdAt",
         ]}
+        cellOverrides={{
+          type: (row) => {
+            const href = emailTemplateHref(row.type, row.channel);
+            const label = String(row.type ?? "—");
+            if (!href) return label;
+            return (
+              <Link
+                href={href}
+                onClick={(e) => e.stopPropagation()}
+                className="inline-flex items-center gap-1 font-mono text-body-xs text-brand hover:underline"
+                title="View email template"
+              >
+                <span>{label}</span>
+                <ArrowUpRight className="size-3 shrink-0" aria-hidden="true" />
+              </Link>
+            );
+          },
+        }}
+        detailFieldLinks={{
+          type: (val, rec) => emailTemplateHref(val, rec.channel),
+        }}
         actions={renderRowActions}
         fetchRowDetail={async (row) =>
           row as unknown as Record<string, unknown>
         }
+      />
+
+      <BroadcastNotificationDialog
+        open={broadcastOpen}
+        onOpenChange={setBroadcastOpen}
       />
     </div>
   );

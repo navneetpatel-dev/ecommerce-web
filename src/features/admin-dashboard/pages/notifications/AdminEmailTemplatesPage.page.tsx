@@ -1,9 +1,13 @@
 "use client";
 
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 import { RequirePermission } from "@/shared/components/system/RequirePermission.component";
 import { LABELS } from "@/shared/constants/labels";
+import { PATHS } from "@/shared/constants/paths/paths";
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { EmailHealthBanner } from "../../components/notifications/EmailHealthBanner.component";
+import { EmailTemplateEmptyState } from "../../components/notifications/EmailTemplateEmptyState.component";
 import { EmailTemplateGroupList } from "../../components/notifications/EmailTemplateGroupList.component";
 import { EmailTemplatePreview } from "../../components/notifications/EmailTemplatePreview.component";
 import { useEmailTemplatesPage } from "../../hooks/notifications/useEmailTemplatesPage.hook";
@@ -16,7 +20,14 @@ export function AdminEmailTemplatesPage() {
   return (
     <RequirePermission permission={PERMISSIONS.SETTINGS_MANAGE}>
       <div className={adminPagesStyles.stack5}>
-        <div>
+        <div className={adminPagesStyles.stack1}>
+          <Link
+            href={PATHS.admin.notifications}
+            className={adminPagesStyles.backLink}
+          >
+            <ArrowLeft className={adminPagesStyles.iconSm} aria-hidden="true" />
+            <span>Back to notifications</span>
+          </Link>
           <h1 className={adminPagesStyles.pageHeadingLgNormal}>
             {LABELS.emailTemplatesTitle}
           </h1>
@@ -56,7 +67,10 @@ export function AdminEmailTemplatesPage() {
               onSendTest={page.handleSendTest}
             />
           ) : (
-            <p className={styles.empty}>{LABELS.emailTemplatesSelectPrompt}</p>
+            <EmailTemplateEmptyState
+              groups={page.groups}
+              onSelect={page.handleSelect}
+            />
           )}
         </div>
       </div>

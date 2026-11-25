@@ -5,7 +5,7 @@ import { notificationsAdminLabels as LABELS } from "@/shared/constants/labels/no
 import { LABELS as EMAIL_LABELS } from "@/shared/constants/labels";
 import { CollapsibleTableFilters } from "@/shared/components/filters";
 import { FormFieldFrame } from "@/shared/components/forms";
-import { Input } from "@/shared/components/ui/input";
+import { SearchInput } from "@/shared/components/ui/SearchInput.component";
 import { useDebouncedCallback } from "@/shared/hooks/ui/use-debounce.hook";
 import type { NotificationLogFilters } from "../../../api/notifications/notifications.api";
 import { NOTIFICATION_TYPE_OPTIONS } from "../../../constants/notifications/notificationTypes";
@@ -68,12 +68,16 @@ export function NotificationLogFiltersBar({
     <CollapsibleTableFilters activeCount={activeCount} onClear={handleClear}>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5 items-end">
         <FormFieldFrame label="Recipient" htmlFor="notification-filter-search">
-          <Input
+          <SearchInput
             id="notification-filter-search"
             value={searchDraft}
             onChange={(e) => {
               setSearchDraft(e.target.value);
               debouncedSearchChange(e.target.value);
+            }}
+            onClear={() => {
+              setSearchDraft("");
+              handleSearchChange("");
             }}
             placeholder="Search by recipient email..."
           />

@@ -1,7 +1,8 @@
 "use client";
 
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
@@ -40,9 +41,18 @@ function groupTemplates(
 
 /** The email catalogue: pick a template, preview it (light or dark), and send yourself a test. */
 export function useEmailTemplatesPage() {
-  const [selectedType, setSelectedType] = useState<string | null>(null);
+  const searchParams = useSearchParams();
+  const initialType = searchParams?.get("type") || null;
+  const [selectedType, setSelectedType] = useState<string | null>(initialType);
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const [notice, setNotice] = useState<string | null>(null);
+
+  useEffect(() => {
+    const paramType = searchParams?.get("type") || null;
+    if (paramType) {
+      setSelectedType(paramType);
+    }
+  }, [searchParams]);
 
   const catalogue = useQuery({
     queryKey: ["admin", "email-templates"],

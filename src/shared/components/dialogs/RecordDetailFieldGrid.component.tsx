@@ -1,6 +1,8 @@
 "use client";
 
 import type { ReactNode } from "react";
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import { formatReasonLabel } from "@/shared/utils/formatting/formatStatus";
 import { tryFormatDateTime } from "@/shared/utils/formatting/formatDate";
@@ -14,8 +16,16 @@ import { cn } from "@/shared/utils/dom/cn";
 import { recordDetailDialogStyles as styles } from "../../styles/dialogs/dialogComponents.styles";
 import { RecordDetailCopyButton } from "./RecordDetailCopyButton.component";
 
+export type RecordDetailFieldLinks = Record<
+  string,
+  (value: unknown, record: Record<string, unknown>) => string | null
+>;
+
 interface RecordDetailFieldGridProps {
   fields: RecordDetailField[];
+  record?: Record<string, unknown> | null;
+  fieldLinks?: RecordDetailFieldLinks;
+  onNavigate?: () => void;
 }
 
 function isLongField(key: string, value: unknown): boolean {
@@ -93,7 +103,12 @@ function renderFieldValue(key: string, value: unknown): ReactNode {
   );
 }
 
-export function RecordDetailFieldGrid({ fields }: RecordDetailFieldGridProps) {
+export function RecordDetailFieldGrid({
+  fields,
+  record,
+  fieldLinks,
+  onNavigate,
+}: RecordDetailFieldGridProps) {
   if (fields.length === 0) return null;
 
   const useTwoCols = fields.length >= 5;
@@ -117,6 +132,10 @@ export function RecordDetailFieldGrid({ fields }: RecordDetailFieldGridProps) {
       >
         {fields.map((field) => {
           const isLong = isLongField(field.key, field.value);
+          const linkHref =
+            record && fieldLinks?.[field.key]
+              ? fieldLinks[field.key](field.value, record)
+              : null;
           return (
             <div
               key={field.key}
@@ -129,7 +148,19 @@ export function RecordDetailFieldGrid({ fields }: RecordDetailFieldGridProps) {
                 {field.label}
               </dt>
               <dd className="text-body-sm font-medium text-ink text-right min-w-0 break-words">
-                {renderFieldValue(field.key, field.value)}
+                {linkHref ? (
+                  <Link
+                    href={linkHref}
+                    onClick={onNavigate}
+                    className="inline-flex items-center gap-1 font-mono text-brand hover:underline"
+                    title="View email template"
+                  >
+                    <span>{String(field.value)}</span>
+                    <ArrowUpRight className="size-3.5 shrink-0" aria-hidden />
+                  </Link>
+                ) : (
+                  renderFieldValue(field.key, field.value)
+                )}
               </dd>
             </div>
           );

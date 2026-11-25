@@ -15,7 +15,10 @@ import { recordDetailDialogStyles as styles } from "../../styles/dialogs/dialogC
 import { RecordDetailHeader } from "./RecordDetailHeader.component";
 import { RecordDetailHighlights } from "./RecordDetailHighlights.component";
 import { RecordDetailSpotlight } from "./RecordDetailSpotlight.component";
-import { RecordDetailFieldGrid } from "./RecordDetailFieldGrid.component";
+import {
+  RecordDetailFieldGrid,
+  type RecordDetailFieldLinks,
+} from "./RecordDetailFieldGrid.component";
 import { RecordDetailObjectView } from "./RecordDetailObjectView.component";
 import { RecordDetailListView } from "./RecordDetailListView.component";
 import { RecordDetailImage } from "./RecordDetailImage.component";
@@ -31,6 +34,7 @@ interface RecordDetailDialogProps {
   record: Record<string, unknown> | null;
   loading?: boolean;
   error?: string | null;
+  fieldLinks?: RecordDetailFieldLinks;
 }
 
 export function RecordDetailDialog({
@@ -39,6 +43,7 @@ export function RecordDetailDialog({
   record,
   loading = false,
   error = null,
+  fieldLinks,
 }: RecordDetailDialogProps) {
   const isProduct = useMemo(
     () => (record ? isProductRecord(record) : false),
@@ -101,7 +106,12 @@ export function RecordDetailDialog({
 
               <RecordDetailSpotlight fields={spotlight} />
 
-              <RecordDetailFieldGrid fields={properties} />
+              <RecordDetailFieldGrid
+                fields={properties}
+                record={record}
+                fieldLinks={fieldLinks}
+                onNavigate={() => onOpenChange(false)}
+              />
 
               {objects.map((obj) => (
                 <RecordDetailObjectView

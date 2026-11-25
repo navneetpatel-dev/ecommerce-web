@@ -50,6 +50,7 @@ export function DataTable<T>({
   rowDetails = true,
   showViewButton,
   fetchRowDetail,
+  detailFieldLinks,
   onRowClick,
   tableId,
   enableColumnVisibility = false,
@@ -536,6 +537,7 @@ export function DataTable<T>({
             record={detailRecord}
             loading={isDetailLoading}
             error={detailError}
+            fieldLinks={detailFieldLinks}
           />
         ) : null}
       </section>

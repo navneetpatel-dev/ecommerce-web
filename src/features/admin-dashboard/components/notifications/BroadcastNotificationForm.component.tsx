@@ -18,7 +18,13 @@ import { adminFormWidgetsStyles } from "../../styles/shared/adminFormWidgets.sty
 import { useBroadcastNotificationForm } from "../../hooks/notifications/useBroadcastNotificationForm.hook";
 import { BroadcastRoleOptions } from "./BroadcastRoleOptions.component";
 
-export function BroadcastNotificationForm() {
+interface BroadcastNotificationFormProps {
+  embedded?: boolean;
+}
+
+export function BroadcastNotificationForm({
+  embedded = false,
+}: BroadcastNotificationFormProps) {
   const form = useBroadcastNotificationForm();
 
   const handleRoleChange = (value: string) => {
@@ -38,15 +44,19 @@ export function BroadcastNotificationForm() {
   };
 
   return (
-    <div className={adminFormWidgetsStyles.broadcastCard}>
-      <div>
-        <h2 className={adminFormWidgetsStyles.broadcastTitle}>
-          {LABELS.broadcastTitle}
-        </h2>
-        <p className={adminFormWidgetsStyles.broadcastHint}>
-          {LABELS.broadcastHint}
-        </p>
-      </div>
+    <div
+      className={embedded ? "space-y-4" : adminFormWidgetsStyles.broadcastCard}
+    >
+      {!embedded && (
+        <div>
+          <h2 className={adminFormWidgetsStyles.broadcastTitle}>
+            {LABELS.broadcastTitle}
+          </h2>
+          <p className={adminFormWidgetsStyles.broadcastHint}>
+            {LABELS.broadcastHint}
+          </p>
+        </div>
+      )}
       <div className={adminFormWidgetsStyles.gridSm2}>
         <FormFieldFrame
           label={LABELS.broadcastTargetRole}

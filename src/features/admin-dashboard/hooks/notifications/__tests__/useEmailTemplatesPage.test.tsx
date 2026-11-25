@@ -5,6 +5,12 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { notificationsApi } from "../../../api/notifications/notifications.api";
 import { useEmailTemplatesPage } from "../useEmailTemplatesPage.hook";
 
+const mockSearchParams = vi.fn(() => new URLSearchParams());
+
+vi.mock("next/navigation", () => ({
+  useSearchParams: () => mockSearchParams(),
+}));
+
 vi.mock("../../../api/notifications/notifications.api", () => ({
   notificationsApi: {
     templates: vi.fn(),
@@ -52,6 +58,7 @@ function setup() {
 
 describe("useEmailTemplatesPage", () => {
   beforeEach(() => {
+    mockSearchParams.mockReturnValue(new URLSearchParams());
     vi.mocked(notificationsApi.templates).mockResolvedValue(CATALOGUE as never);
     vi.mocked(notificationsApi.previewTemplate).mockResolvedValue({
       subject: "Welcome aboard",
@@ -115,5 +122,22 @@ describe("useEmailTemplatesPage", () => {
     vi.mocked(notificationsApi.templates).mockRejectedValue(new Error("boom"));
     const { result } = setup();
     await waitFor(() => expect(result.current.loadError).toBeTruthy());
+  });
+
+  it("auto-selects and previews a template when ?type= is provided", async () => {
+    mockSearchParams.mockReturnValue(
+      new URLSearchParams("type=PASSWORD_RESET"),
+    );
+    const { result } = setup();
+
+    await waitFor(() =>
+      expect(result.current.selectedType).toBe("PASSWORD_RESET"),
+    );
+    await waitFor(() =>
+      expect(notificationsApi.previewTemplate).toHaveBeenCalledWith(
+        "PASSWORD_RESET",
+        "light",
+      ),
+    );
   });
 });

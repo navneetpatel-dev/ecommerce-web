@@ -3,9 +3,12 @@
 import { useState } from "react";
 import { Package } from "lucide-react";
 import { RecordDetailImage } from "@/shared/components/dialogs/RecordDetailImage.component";
+import { UUID_REGEX } from "@/shared/utils/formatting/recordDetailConstants";
 import { fieldLabel } from "@/shared/utils/formatting/recordDetails";
 import { extractImageUrls } from "@/shared/utils/media/imageField";
+import { RecordDetailIdList } from "./RecordDetailIdList.component";
 import { RecordDetailObjectView } from "./RecordDetailObjectView.component";
+import { RecordDetailPermissionList } from "./RecordDetailPermissionList.component";
 import {
   hasItemSummary,
   RecordDetailItemSummary,
@@ -42,6 +45,25 @@ export function RecordDetailListView({
         />
       );
     }
+    const strItems = items as string[];
+    const isPermissionArray =
+      fieldKey === "permissionKeys" ||
+      ((fieldKey?.toLowerCase().includes("permission") ?? false) &&
+        strItems.every((s) => s.includes(".")));
+    if (isPermissionArray) {
+      return <RecordDetailPermissionList title={title} items={strItems} />;
+    }
+
+    const isIdArray =
+      (fieldKey
+        ? /(?:^|_|-)(?:id|ids)$/i.test(fieldKey) ||
+          fieldKey.endsWith("Ids") ||
+          fieldKey.endsWith("Id")
+        : false) || strItems.every((s) => UUID_REGEX.test(s.trim()));
+    if (isIdArray) {
+      return <RecordDetailIdList title={title} items={strItems} />;
+    }
+
     const visibleTags = showAllTags ? items : items.slice(0, 18);
     const hiddenCount = items.length - visibleTags.length;
     return (
