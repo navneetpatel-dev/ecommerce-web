@@ -21,22 +21,34 @@ export function AdminDataCell({
   row,
   columnKey,
 }: AdminDataCellProps): ReactNode {
+  if (columnKey === "product") {
+    const title = String(row.name ?? row.productName ?? "—");
+    const img =
+      typeof row.imageUrl === "string" && row.imageUrl.trim()
+        ? row.imageUrl.trim()
+        : null;
+    return (
+      <div className="flex items-center gap-3 min-w-0">
+        <TableCellImage src={img} alt={title} />
+        <span className="truncate font-medium text-ink">{title}</span>
+      </div>
+    );
+  }
+
   const value = getAdminCellValue(row, columnKey);
 
   if (isImageFieldKey(columnKey)) {
     const urls = extractImageUrls(value);
-    if (urls.length === 1) {
-      const alt =
-        typeof row.name === "string"
-          ? row.name
-          : typeof row.businessName === "string"
-            ? row.businessName
-            : columnKey;
-      return <TableCellImage src={urls[0]} alt={alt} />;
+    const alt =
+      typeof row.name === "string"
+        ? row.name
+        : typeof row.businessName === "string"
+          ? row.businessName
+          : columnKey;
+    if (urls.length <= 1) {
+      return <TableCellImage src={urls[0] ?? null} alt={alt} />;
     }
-    if (urls.length > 1) {
-      return <TableCellImagesList urls={urls} alt={columnKey} />;
-    }
+    return <TableCellImagesList urls={urls} alt={columnKey} />;
   }
 
   if (

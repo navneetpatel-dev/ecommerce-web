@@ -35,7 +35,7 @@ export function InventoryStockEditor({
   );
 
   const handleStockChange = (event: ChangeEvent<HTMLInputElement>) =>
-    setStock(event.target.value.replace(/\D/g, ""));
+    setStock(event.target.value.replace(/\D/g, "").replace(/^0+(?=\d)/, ""));
 
   const handleSave = async (e: FormEvent) => {
     e.preventDefault();

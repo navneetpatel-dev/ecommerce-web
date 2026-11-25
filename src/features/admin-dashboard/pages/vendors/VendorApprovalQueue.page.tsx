@@ -4,6 +4,13 @@ import { ClipboardCheck } from "lucide-react";
 import { EmptyState } from "@/shared/components/display/EmptyState.component";
 import { FormFieldFrame } from "@/shared/components/forms";
 import { SearchInput } from "@/shared/components/ui/SearchInput.component";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/shared/components/ui/select";
 import { CollapsibleTableFilters } from "@/shared/components/filters";
 import { useVendorApprovalQueue } from "../../hooks/vendors/useVendorApprovalQueue.hook";
 import { VendorApprovalTable } from "../../components/vendors/VendorApprovalTable.component";
@@ -15,7 +22,8 @@ export function VendorApprovalQueue() {
   if (
     !queue.isLoading &&
     queue.pagination.total === 0 &&
-    !queue.search.trim()
+    !queue.search.trim() &&
+    !queue.kycFilter
   ) {
     return (
       <EmptyState
@@ -26,7 +34,9 @@ export function VendorApprovalQueue() {
     );
   }
 
-  const activeCount = queue.search.trim() ? 1 : 0;
+  const activeCount = [queue.search.trim(), queue.kycFilter].filter(
+    Boolean,
+  ).length;
 
   return (
     <div className="space-y-4">
@@ -46,6 +56,44 @@ export function VendorApprovalQueue() {
               onClear={() => queue.onSearchChange("")}
               placeholder="Search by vendor name, store, email..."
             />
+          </FormFieldFrame>
+
+          <FormFieldFrame
+            label={LABELS.status}
+            htmlFor="vendor-approval-filter-status"
+          >
+            <Select disabled value="PENDING">
+              <SelectTrigger
+                id="vendor-approval-filter-status"
+                className="cursor-not-allowed opacity-80"
+              >
+                <SelectValue>Pending</SelectValue>
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="PENDING">Pending</SelectItem>
+              </SelectContent>
+            </Select>
+          </FormFieldFrame>
+
+          <FormFieldFrame
+            label="KYC Status"
+            htmlFor="vendor-approval-filter-kyc"
+          >
+            <Select
+              value={queue.kycFilter || "__ALL__"}
+              onValueChange={(v) =>
+                queue.onKycFilterChange(v === "__ALL__" ? "" : v)
+              }
+            >
+              <SelectTrigger id="vendor-approval-filter-kyc">
+                <SelectValue placeholder="All KYC Statuses" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="__ALL__">All KYC Statuses</SelectItem>
+                <SelectItem value="COMPLETE">KYC Complete</SelectItem>
+                <SelectItem value="INCOMPLETE">KYC Incomplete</SelectItem>
+              </SelectContent>
+            </Select>
           </FormFieldFrame>
         </div>
       </CollapsibleTableFilters>

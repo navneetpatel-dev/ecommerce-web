@@ -15,6 +15,7 @@ export function useAdminCouponsPage() {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("");
+  const [vendorId, setVendorId] = useState("");
   const debouncedSearch = useDebouncedValue(search.trim(), 350);
 
   const [tab, setTab] = useUrlTabState(COUPON_TABS, "platform");
@@ -24,8 +25,9 @@ export function useAdminCouponsPage() {
     () => ({
       search: debouncedSearch || undefined,
       status: status || undefined,
+      vendorId: vendorScoped && vendorId ? vendorId : undefined,
     }),
-    [debouncedSearch, status],
+    [debouncedSearch, status, vendorScoped, vendorId],
   );
 
   const { data, isLoading } = useAdminCoupons(
@@ -60,9 +62,15 @@ export function useAdminCouponsPage() {
     setPage(1);
   }, []);
 
+  const handleVendorChange = useCallback((value: string) => {
+    setVendorId(value);
+    setPage(1);
+  }, []);
+
   const handleClearFilters = useCallback(() => {
     setSearch("");
     setStatus("");
+    setVendorId("");
     setPage(1);
   }, []);
 
@@ -87,8 +95,10 @@ export function useAdminCouponsPage() {
     filters: {
       search,
       status,
+      vendorId,
       onSearchChange: handleSearchChange,
       onStatusChange: handleStatusChange,
+      onVendorChange: vendorScoped ? handleVendorChange : undefined,
       onClear: handleClearFilters,
     },
     open,

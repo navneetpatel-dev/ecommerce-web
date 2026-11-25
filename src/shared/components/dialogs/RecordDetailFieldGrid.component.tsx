@@ -97,10 +97,15 @@ export function RecordDetailFieldGrid({ fields }: RecordDetailFieldGridProps) {
   if (fields.length === 0) return null;
 
   return (
-    <div className="rounded-2xl border border-line/70 bg-surface p-4 sm:p-5 shadow-xs space-y-3">
-      <h3 className="text-xs font-semibold uppercase tracking-wider text-ink-muted">
-        General Information
-      </h3>
+    <div className="rounded-2xl border border-line/80 bg-surface p-4 sm:p-5 shadow-xs space-y-4">
+      <div className="flex items-center justify-between pb-3 border-b border-line/60">
+        <h3 className="text-body-sm font-semibold text-ink">
+          General Information
+        </h3>
+        <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-paper border border-line/70 text-ink-muted">
+          {fields.length} {fields.length === 1 ? "field" : "fields"}
+        </span>
+      </div>
       <dl className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
         {fields.map((field) => {
           const isLong = isLongField(field.key, field.value);

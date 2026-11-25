@@ -47,6 +47,7 @@ export function AdminCategoryPolicyFields({
         <Input
           id={`${idPrefix}-return-window`}
           inputMode="numeric"
+          normalizeNumeric="integer"
           error={returnWindowHasError}
           {...register("returnWindowDays")}
         />
@@ -75,6 +76,7 @@ export function AdminCategoryPolicyFields({
         <Input
           id={`${idPrefix}-warranty-months`}
           inputMode="numeric"
+          normalizeNumeric="integer"
           error={warrantyMonthsHasError}
           {...register("defaultWarrantyMonths")}
         />

@@ -147,7 +147,13 @@ export function useAdminProductsPage(): AdminProductsPageModel {
     load,
     actions,
     fetchDetail,
-    columnKeys: ["name", "vendorName", "categoryName", "status", "basePrice"],
+    columnKeys: [
+      "product",
+      "vendorName",
+      "categoryName",
+      "status",
+      "basePrice",
+    ],
     showApprovalQueue: hasPermission(PERMISSIONS.PRODUCT_APPROVE),
     pendingCount: pendingProducts?.total ?? 0,
     filters: {

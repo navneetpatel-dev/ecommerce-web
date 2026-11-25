@@ -1,6 +1,7 @@
 export type InfiniteSingleSelectOption = {
   id: string;
   label: string;
+  sublabel?: string;
 };
 
 export type InfiniteSingleSelectPageQuery = {

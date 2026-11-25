@@ -20,7 +20,7 @@ export const adminKeys = {
       page: number,
       limit: number,
       vendorScoped?: boolean,
-      filters?: { search?: string; status?: string },
+      filters?: { search?: string; status?: string; vendorId?: string },
     ) =>
       [...adminKeys.coupons.all, page, limit, vendorScoped, filters] as const,
   },
@@ -63,7 +63,7 @@ export function useAdminCoupons(
   page = 1,
   limit = DEFAULT_PAGE_LIMIT,
   vendorScoped?: boolean,
-  filters?: { search?: string; status?: string },
+  filters?: { search?: string; status?: string; vendorId?: string },
   options?: { enabled?: boolean },
 ) {
   return useQuery({

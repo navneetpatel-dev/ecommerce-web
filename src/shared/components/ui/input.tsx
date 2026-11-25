@@ -8,16 +8,39 @@ import {
   useFieldControl,
 } from "@/shared/components/forms/fieldControl.context";
 import { inputStyles } from "../../styles/ui/input.styles";
+import {
+  sanitizeNumericText,
+  stripLeadingZeros,
+} from "@/shared/utils/validation/sanitizeNumericInput";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   error?: boolean;
+  /** Strip leading zeros (e.g. 01000 -> 1000). Enabled automatically for type="number". */
+  normalizeNumeric?: boolean | "integer" | "decimal";
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, error, ...props }, ref) => {
+  ({ className, type, error, normalizeNumeric, onChange, ...props }, ref) => {
     const field = useFieldControl();
     const ariaInvalid =
       props["aria-invalid"] ?? (error || field?.invalid ? true : undefined);
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (type === "number") {
+        const next = stripLeadingZeros(event.target.value);
+        if (next !== event.target.value) {
+          event.target.value = next;
+        }
+      } else if (normalizeNumeric) {
+        const next = sanitizeNumericText(event.target.value, {
+          allowDecimal: normalizeNumeric !== "integer",
+        });
+        if (next !== event.target.value) {
+          event.target.value = next;
+        }
+      }
+      onChange?.(event);
+    };
 
     return (
       <input
@@ -32,6 +55,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         )}
         ref={ref}
         {...props}
+        onChange={handleChange}
         id={props.id ?? field?.controlId}
         aria-invalid={ariaInvalid}
         aria-describedby={joinAriaIds(

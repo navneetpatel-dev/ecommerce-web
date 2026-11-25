@@ -8,32 +8,13 @@ import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 import { taxApi } from "@/features/admin-dashboard/api/tax/tax.api";
 import { AdminConfirmAction } from "../../components/shared/AdminConfirmAction.component";
 import { adminRowLabel } from "../../utils/shared/adminRowLabel";
+import { filterTaxRules } from "../../utils/tax/taxFilters.utils";
 import type { AdminDataRow } from "../shared/useAdminDataList.hook";
-import type { AdminListPageModel } from "../../types/shared/adminListPage.types";
 
-export type AdminTaxPageModel = AdminListPageModel & {
-  fetchDetail: (row: AdminDataRow) => Promise<Record<string, unknown>>;
-  filters: {
-    search: string;
-    onSearchChange: (value: string) => void;
-    onClear: () => void;
-  };
-  form: {
-    gstPercentage: string;
-    hsnCode: string;
-    priceBandThreshold: string;
-    gstPercentageAbove: string;
-    createError: string | null;
-    onGstChange: (value: string) => void;
-    onHsnChange: (value: string) => void;
-    onPriceBandThresholdChange: (value: string) => void;
-    onGstPercentageAboveChange: (value: string) => void;
-    onSubmit: (e: FormEvent) => Promise<void>;
-  };
-};
-
-export function useAdminTaxPage(): AdminTaxPageModel {
+export function useAdminTaxPage() {
   const [search, setSearch] = useState("");
+  const [gstTier, setGstTier] = useState("");
+  const [hasPriceBand, setHasPriceBand] = useState("");
   const [gstPercentage, setGstPercentage] = useState("18");
   const [hsnCode, setHsnCode] = useState("");
   // Optional per-piece price band: above this value, the higher GST % applies.
@@ -70,21 +51,15 @@ export function useAdminTaxPage(): AdminTaxPageModel {
     async ({ page, limit }: { page: number; limit: number }) => {
       void listVersion;
       const result = await taxApi.getRules({ page, limit });
-      if (!search.trim()) return result;
-      const q = search.trim().toLowerCase();
-      const filtered = result.items.filter((item) => {
-        const hsn = String(item.hsnCode ?? "").toLowerCase();
-        const cat = String(item.categoryName ?? "").toLowerCase();
-        const gst = String(item.gstPercentage ?? "");
-        return hsn.includes(q) || cat.includes(q) || gst.includes(q);
-      });
-      return {
-        ...result,
-        items: filtered,
-        total: filtered.length,
-      };
+      const filtered = filterTaxRules(
+        result.items,
+        search,
+        gstTier,
+        hasPriceBand,
+      );
+      return { ...result, items: filtered, total: filtered.length };
     },
-    [listVersion, search],
+    [listVersion, search, gstTier, hasPriceBand],
   );
 
   const actions = useCallback(
@@ -114,8 +89,16 @@ export function useAdminTaxPage(): AdminTaxPageModel {
     fetchDetail,
     filters: {
       search,
+      gstTier,
+      hasPriceBand,
       onSearchChange: setSearch,
-      onClear: () => setSearch(""),
+      onGstTierChange: setGstTier,
+      onHasPriceBandChange: setHasPriceBand,
+      onClear: () => {
+        setSearch("");
+        setGstTier("");
+        setHasPriceBand("");
+      },
     },
     form: {
       gstPercentage,

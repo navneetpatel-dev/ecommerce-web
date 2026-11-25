@@ -145,25 +145,31 @@ export function RecordDetailObjectView({
   const icon = resolveObjectIcon(fieldKey);
 
   return (
-    <div className="rounded-xl border border-line/70 bg-surface-subtle/40 p-4 shadow-sm space-y-3 w-full">
+    <div
+      className={
+        nestedLevel === 0
+          ? "rounded-2xl border border-line/80 bg-surface p-4 sm:p-5 shadow-xs space-y-4 w-full"
+          : "rounded-xl border border-line/60 bg-paper/60 p-3.5 space-y-3 w-full"
+      }
+    >
       {title && (
-        <div className="flex items-center justify-between gap-2 pb-2 border-b border-line/60">
+        <div className="flex items-center justify-between gap-2 pb-3 border-b border-line/60">
           <div className="flex items-center gap-2 text-ink font-semibold text-body-sm">
             <span className="text-brand">{icon}</span>
             <span>{title}</span>
           </div>
-          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-paper border border-line/70 text-ink-muted">
+          <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-paper border border-line/70 text-ink-muted">
             {entries.length} {entries.length === 1 ? "field" : "fields"}
           </span>
         </div>
       )}
-      <dl className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+      <dl className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
         {entries.map(([k, val]) => (
           <div
             key={k}
-            className="flex flex-col gap-0.5 rounded-lg border border-line/50 bg-paper/70 p-2.5"
+            className="flex flex-col gap-1 rounded-xl border border-line/60 bg-paper/60 p-3"
           >
-            <dt className="text-[10px] font-semibold uppercase tracking-wider text-ink-muted/80 truncate">
+            <dt className="text-[10px] font-semibold uppercase tracking-wider text-ink-muted truncate">
               {fieldLabel(k)}
             </dt>
             <dd className="text-body-xs font-medium text-ink break-words">

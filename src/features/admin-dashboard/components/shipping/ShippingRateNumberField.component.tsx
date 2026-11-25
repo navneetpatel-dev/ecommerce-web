@@ -3,6 +3,7 @@
 import type { ChangeEvent } from "react";
 import { FormFieldFrame } from "@/shared/components/forms";
 import { Input } from "@/shared/components/ui/input";
+import { sanitizeNumericText } from "@/shared/utils/validation/sanitizeNumericInput";
 
 interface ShippingRateNumberFieldProps {
   label: string;
@@ -23,9 +24,7 @@ export function ShippingRateNumberField({
   // type="text" + inputMode keeps mobile numeric keyboards without the
   // scroll-wheel/`e` pitfalls of type="number"; non-numeric input is stripped.
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const cleaned = event.target.value.replace(/[^0-9.]/g, "");
-    const [whole, ...decimals] = cleaned.split(".");
-    onChange(decimals.length ? `${whole}.${decimals.join("")}` : whole);
+    onChange(sanitizeNumericText(event.target.value, { allowDecimal: true }));
   };
 
   return (

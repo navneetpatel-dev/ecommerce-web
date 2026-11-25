@@ -39,7 +39,11 @@ function toModerationRow(
 export type AdminReviewsPageModel = AdminListPageModel & {
   filters: {
     search: string;
+    rating: string;
+    submission: string;
     onSearchChange: (value: string) => void;
+    onRatingChange: (value: string) => void;
+    onSubmissionChange: (value: string) => void;
     onClear: () => void;
   };
 };
@@ -52,25 +56,35 @@ export function useAdminReviewsPage(): AdminReviewsPageModel {
     searchParams.get("product") ??
     "";
   const [userSearch, setUserSearch] = useState<string | null>(null);
+  const [rating, setRating] = useState("");
+  const [submission, setSubmission] = useState("");
   const search = userSearch ?? paramSearch;
 
   const load = useCallback(
     async ({ page, limit }: { page: number; limit: number }) => {
       const result = await reviewsApi.pending({ page, limit });
       const mapped = result.items.map(toModerationRow);
-      if (!search.trim()) return { ...result, items: mapped };
       const q = search.trim().toLowerCase();
       const filtered = mapped.filter((r) => {
-        const prod = String(r.productName ?? "").toLowerCase();
-        const cust = String(r.customerName ?? "").toLowerCase();
-        const title = String(r.title ?? "").toLowerCase();
-        const body = String(r.body ?? "").toLowerCase();
-        return (
-          prod.includes(q) ||
-          cust.includes(q) ||
-          title.includes(q) ||
-          body.includes(q)
-        );
+        if (q) {
+          const prod = String(r.productName ?? "").toLowerCase();
+          const cust = String(r.customerName ?? "").toLowerCase();
+          const title = String(r.title ?? "").toLowerCase();
+          const body = String(r.body ?? "").toLowerCase();
+          if (
+            !prod.includes(q) &&
+            !cust.includes(q) &&
+            !title.includes(q) &&
+            !body.includes(q)
+          ) {
+            return false;
+          }
+        }
+        if (rating && Number(r.rating) !== Number(rating)) return false;
+        if (submission === "EDIT" && !r.isEdit) return false;
+        if (submission === "NEW" && r.isEdit) return false;
+        if (submission === "FLAGGED" && !r.flaggedReason) return false;
+        return true;
       });
       return {
         ...result,
@@ -78,7 +92,7 @@ export function useAdminReviewsPage(): AdminReviewsPageModel {
         total: filtered.length,
       };
     },
-    [search],
+    [search, rating, submission],
   );
 
   const actions = useCallback(
@@ -96,8 +110,16 @@ export function useAdminReviewsPage(): AdminReviewsPageModel {
   return {
     filters: {
       search,
+      rating,
+      submission,
       onSearchChange: setUserSearch,
-      onClear: () => setUserSearch(""),
+      onRatingChange: setRating,
+      onSubmissionChange: setSubmission,
+      onClear: () => {
+        setUserSearch("");
+        setRating("");
+        setSubmission("");
+      },
     },
     title: LABELS.reviews,
     permission: PERMISSIONS.REVIEW_MODERATE,

@@ -73,19 +73,25 @@ export function RecordDetailListView({
   }
 
   return (
-    <div className="rounded-xl border border-line/70 bg-surface-subtle/30 p-4 space-y-3 w-full">
+    <div
+      className={
+        nestedLevel === 0
+          ? "rounded-2xl border border-line/80 bg-surface p-4 sm:p-5 shadow-xs space-y-4 w-full"
+          : "rounded-xl border border-line/60 bg-paper/60 p-3.5 space-y-3 w-full"
+      }
+    >
       {title && (
-        <div className="flex items-center justify-between pb-2 border-b border-line/60">
+        <div className="flex items-center justify-between pb-3 border-b border-line/60">
           <div className="flex items-center gap-2 text-ink font-semibold text-body-sm">
             <Package className="size-4 text-brand" aria-hidden />
             <span>{title}</span>
           </div>
-          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-paper border border-line/70 text-ink-muted">
+          <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-paper border border-line/70 text-ink-muted">
             {items.length} {items.length === 1 ? "item" : "items"}
           </span>
         </div>
       )}
-      <div className="space-y-2">
+      <div className="space-y-2.5">
         {items.map((item, idx) => {
           if (!item || typeof item !== "object") {
             return (
@@ -99,7 +105,7 @@ export function RecordDetailListView({
           return (
             <div
               key={idx}
-              className="rounded-xl border border-line/70 bg-paper p-3 shadow-xs hover:border-line transition-colors"
+              className="rounded-xl border border-line/60 bg-paper/60 p-3.5 shadow-xs hover:border-line transition-colors"
             >
               {hasItemSummary(obj) ? (
                 <RecordDetailItemSummary item={obj} />

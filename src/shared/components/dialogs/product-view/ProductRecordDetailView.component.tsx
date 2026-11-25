@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { ProductHeroCard } from "./ProductHeroCard.component";
 import { ProductGalleryCard } from "./ProductGalleryCard.component";
 import { ProductDescriptionCard } from "./ProductDescriptionCard.component";
@@ -9,6 +10,10 @@ import { ProductPricingPoliciesCard } from "./ProductPricingPoliciesCard.compone
 import { ProductVendorCard } from "./ProductVendorCard.component";
 import { ProductCategoryCard } from "./ProductCategoryCard.component";
 import { ProductAuditMetaCard } from "./ProductAuditMetaCard.component";
+import {
+  CategoryDetailModal,
+  type CategoryModalTarget,
+} from "./CategoryDetailModal.component";
 
 interface ProductRecordDetailViewProps {
   product: Record<string, unknown>;
@@ -44,17 +49,30 @@ export function isProductRecord(record: Record<string, unknown>): boolean {
 export function ProductRecordDetailView({
   product,
 }: ProductRecordDetailViewProps) {
+  const [categoryModal, setCategoryModal] =
+    useState<CategoryModalTarget | null>(null);
+
   return (
-    <div className="space-y-4 sm:space-y-5">
-      <ProductHeroCard product={product} />
-      <ProductGalleryCard product={product} />
-      <ProductDescriptionCard product={product} />
-      <ProductVariantsCard product={product} />
-      <ProductSpecsCard product={product} />
-      <ProductPricingPoliciesCard product={product} />
-      <ProductVendorCard product={product} />
-      <ProductCategoryCard product={product} />
-      <ProductAuditMetaCard product={product} />
-    </div>
+    <>
+      <div className="space-y-4 sm:space-y-5">
+        <ProductHeroCard product={product} onCategoryClick={setCategoryModal} />
+        <ProductGalleryCard product={product} />
+        <ProductDescriptionCard product={product} />
+        <ProductVariantsCard product={product} />
+        <ProductSpecsCard product={product} />
+        <ProductPricingPoliciesCard product={product} />
+        <ProductVendorCard product={product} />
+        <ProductCategoryCard
+          product={product}
+          onCategoryClick={setCategoryModal}
+        />
+        <ProductAuditMetaCard product={product} />
+      </div>
+      <CategoryDetailModal
+        target={categoryModal}
+        onClose={() => setCategoryModal(null)}
+        onSelectCategory={setCategoryModal}
+      />
+    </>
   );
 }

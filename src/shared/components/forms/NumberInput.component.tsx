@@ -5,6 +5,7 @@ import { cn } from "@/shared/utils/dom/cn";
 import { joinAriaIds, useFieldControl } from "./fieldControl.context";
 import { NumberInputSteppers } from "./NumberInputSteppers.component";
 import { clamp, parseValue } from "@/shared/utils/validation/numberInputMath";
+import { stripLeadingZeros } from "@/shared/utils/validation/sanitizeNumericInput";
 
 import { numberInputStyles } from "../../styles/forms/numberInput.styles";
 
@@ -74,7 +75,7 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
       onFocus?.(e);
     };
     const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const raw = e.target.value;
+      const raw = stripLeadingZeros(e.target.value);
       if (raw !== "" && !/^-?\d*\.?\d*$/.test(raw)) return;
 
       if (raw.trim() === "") {

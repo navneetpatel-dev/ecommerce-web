@@ -9,12 +9,14 @@ export function OptionRow({
   optionId,
   selected,
   label,
+  sublabel,
   disabled,
   onSelect,
 }: {
   optionId: string;
   selected: boolean;
   label: string;
+  sublabel?: string;
   disabled?: boolean;
   onSelect: (optionId: string) => void;
 }) {
@@ -34,8 +36,15 @@ export function OptionRow({
         selected && infiniteSingleSelectStyles.optionRow.selected,
       )}
     >
-      <span className={infiniteSingleSelectStyles.optionRow.label}>
-        {label}
+      <span className={infiniteSingleSelectStyles.optionRow.labelWrapper}>
+        <span className={infiniteSingleSelectStyles.optionRow.label}>
+          {label}
+        </span>
+        {sublabel ? (
+          <span className={infiniteSingleSelectStyles.optionRow.sublabel}>
+            {sublabel}
+          </span>
+        ) : null}
       </span>
       {selected ? (
         <span className={infiniteSingleSelectStyles.optionRow.checkWrapper}>

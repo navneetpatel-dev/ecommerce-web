@@ -33,7 +33,13 @@ function toRow(item: QnaModerationItem) {
 export type AdminQnaModerationPageModel = AdminListPageModel & {
   filters: {
     search: string;
+    kind: string;
+    submission: string;
+    authorType: string;
     onSearchChange: (value: string) => void;
+    onKindChange: (value: string) => void;
+    onSubmissionChange: (value: string) => void;
+    onAuthorTypeChange: (value: string) => void;
     onClear: () => void;
   };
 };
@@ -44,18 +50,29 @@ export type AdminQnaModerationPageModel = AdminListPageModel & {
  */
 export function useAdminQnaModerationPage(): AdminQnaModerationPageModel {
   const [search, setSearch] = useState("");
+  const [kind, setKind] = useState("");
+  const [submission, setSubmission] = useState("");
+  const [authorType, setAuthorType] = useState("");
 
   const load = useCallback(
     async ({ page, limit }: { page: number; limit: number }) => {
       const result = await productQnaApi.moderationQueue({ page, limit });
       const mapped = result.items.map(toRow);
-      if (!search.trim()) return { ...result, items: mapped };
       const q = search.trim().toLowerCase();
       const filtered = mapped.filter((r) => {
-        const text = String(r.text ?? "").toLowerCase();
-        const prod = String(r.productName ?? "").toLowerCase();
-        const author = String(r.authorName ?? "").toLowerCase();
-        return text.includes(q) || prod.includes(q) || author.includes(q);
+        if (q) {
+          const text = String(r.text ?? "").toLowerCase();
+          const prod = String(r.productName ?? "").toLowerCase();
+          const author = String(r.authorName ?? "").toLowerCase();
+          if (!text.includes(q) && !prod.includes(q) && !author.includes(q)) {
+            return false;
+          }
+        }
+        if (kind && r.rawKind !== kind) return false;
+        if (submission === "EDIT" && !r.isEdit) return false;
+        if (submission === "NEW" && r.isEdit) return false;
+        if (authorType && r.authorType !== authorType) return false;
+        return true;
       });
       return {
         ...result,
@@ -63,7 +80,7 @@ export function useAdminQnaModerationPage(): AdminQnaModerationPageModel {
         total: filtered.length,
       };
     },
-    [search],
+    [search, kind, submission, authorType],
   );
 
   const actions = useCallback(
@@ -81,8 +98,19 @@ export function useAdminQnaModerationPage(): AdminQnaModerationPageModel {
   return {
     filters: {
       search,
+      kind,
+      submission,
+      authorType,
       onSearchChange: setSearch,
-      onClear: () => setSearch(""),
+      onKindChange: setKind,
+      onSubmissionChange: setSubmission,
+      onAuthorTypeChange: setAuthorType,
+      onClear: () => {
+        setSearch("");
+        setKind("");
+        setSubmission("");
+        setAuthorType("");
+      },
     },
     title: LABELS.adminQnaModerationTitle,
     permission: PERMISSIONS.REVIEW_MODERATE,

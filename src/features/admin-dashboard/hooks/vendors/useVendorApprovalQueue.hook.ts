@@ -9,16 +9,24 @@ import type { VendorInfo } from "@/shared/api/types";
 
 export function useVendorApprovalQueue() {
   const [search, setSearch] = useState("");
+  const [kycFilter, setKycFilter] = useState("");
   const debouncedSearch = useDebouncedValue(search.trim(), 350);
 
   const load = useCallback(
-    ({ page, limit }: { page: number; limit: number }) =>
-      adminApi.pendingVendors({
+    async ({ page, limit }: { page: number; limit: number }) => {
+      const res = await adminApi.pendingVendors({
         page,
         limit,
         search: debouncedSearch || undefined,
-      }),
-    [debouncedSearch],
+      });
+      if (!kycFilter) return res;
+      const wantComplete = kycFilter === "COMPLETE";
+      const filtered = res.items.filter(
+        (v) => Boolean(v.kycComplete) === wantComplete,
+      );
+      return { ...res, items: filtered, total: filtered.length };
+    },
+    [debouncedSearch, kycFilter],
   );
   const list = useAdminDataList(load);
   const { approve, reject } = useVendorApproval();
@@ -29,6 +37,7 @@ export function useVendorApprovalQueue() {
 
   const handleClear = () => {
     setSearch("");
+    setKycFilter("");
   };
 
   const onApprove = useCallback(
@@ -51,7 +60,9 @@ export function useVendorApprovalQueue() {
     vendors: list.rows as unknown as VendorInfo[],
     isLoading: list.loading,
     search,
+    kycFilter,
     onSearchChange: handleSearchChange,
+    onKycFilterChange: setKycFilter,
     onClear: handleClear,
     reload: list.reload,
     pagination: {

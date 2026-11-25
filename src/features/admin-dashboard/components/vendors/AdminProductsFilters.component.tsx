@@ -15,8 +15,8 @@ import { formatStatusLabel } from "@/shared/utils/formatting/formatStatus";
 import { LABELS } from "@/shared/constants/labels";
 import { CollapsibleTableFilters } from "@/shared/components/filters";
 import { useCategories } from "@/features/categories";
-import { useAdminVendorsList } from "../../api/analytics/admin.queries";
 import { AdminProductsPriceSortRow } from "./AdminProductsPriceSortRow.component";
+import { AdminVendorFilterSelect } from "./AdminVendorFilterSelect.component";
 
 export interface AdminProductsFiltersProps {
   search: string;
@@ -50,8 +50,6 @@ export function AdminProductsFilters(props: AdminProductsFiltersProps) {
     props;
 
   const { data: categories } = useCategories();
-  const { data: vendorsData } = useAdminVendorsList();
-  const vendors = vendorsData?.items ?? [];
 
   const activeCount = [
     search.trim(),
@@ -145,24 +143,7 @@ export function AdminProductsFilters(props: AdminProductsFiltersProps) {
             </Select>
           </FormFieldFrame>
 
-          <FormFieldFrame label="Vendor" htmlFor="admin-products-vendor">
-            <Select
-              value={vendorId || ALL_OPTION}
-              onValueChange={handleSelect(onVendorChange)}
-            >
-              <SelectTrigger id="admin-products-vendor">
-                <SelectValue placeholder="All Vendors" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value={ALL_OPTION}>All Vendors</SelectItem>
-                {vendors.map((v) => (
-                  <SelectItem key={v.id} value={v.id}>
-                    {v.businessName}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </FormFieldFrame>
+          <AdminVendorFilterSelect value={vendorId} onChange={onVendorChange} />
         </div>
 
         <AdminProductsPriceSortRow {...props} />

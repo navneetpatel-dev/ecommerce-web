@@ -11,6 +11,13 @@ import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { LABELS } from "@/shared/constants/labels";
 import { FormFieldFrame } from "@/shared/components/forms";
 import { Input } from "@/shared/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/shared/components/ui/select";
 import { CollapsibleTableFilters } from "@/shared/components/filters";
 import { useDebouncedValue } from "@/shared/hooks/ui/use-debounce.hook";
 import type { AdminDataRow } from "../../hooks/shared/useAdminDataList.hook";
@@ -27,22 +34,44 @@ export function AdminInventoryPage() {
   const searchParams = useSearchParams();
   const paramSearch = searchParams.get("search") ?? searchParams.get("q") ?? "";
   const [userSearch, setUserSearch] = useState<string | null>(null);
+  const [stockLevel, setStockLevel] = useState("");
+  const [sort, setSort] = useState("");
   const search = userSearch ?? paramSearch;
   const debouncedSearch = useDebouncedValue(search.trim(), 350);
 
   const load = useCallback(async () => {
     const rows = await inventoryApi.lowStock();
-    if (!debouncedSearch) return rows;
     const q = debouncedSearch.toLowerCase();
-    return rows.filter(
-      (r) =>
-        r.productName?.toLowerCase().includes(q) ||
-        r.sku?.toLowerCase().includes(q),
-    );
-  }, [debouncedSearch]);
+    const filtered = rows.filter((r) => {
+      if (
+        q &&
+        !r.productName?.toLowerCase().includes(q) &&
+        !r.sku?.toLowerCase().includes(q)
+      ) {
+        return false;
+      }
+      if (stockLevel === "OUT_OF_STOCK" && Number(r.stock) > 0) return false;
+      if (stockLevel === "CRITICAL" && Number(r.stock) > 5) return false;
+      return true;
+    });
+    if (sort === "stock_asc") {
+      filtered.sort((a, b) => Number(a.stock) - Number(b.stock));
+    } else if (sort === "stock_desc") {
+      filtered.sort((a, b) => Number(b.stock) - Number(a.stock));
+    } else if (sort === "name_asc") {
+      filtered.sort((a, b) =>
+        String(a.productName ?? "").localeCompare(String(b.productName ?? "")),
+      );
+    }
+    return filtered;
+  }, [debouncedSearch, stockLevel, sort]);
 
-  const activeCount = search.trim() ? 1 : 0;
-  const handleClear = () => setUserSearch("");
+  const activeCount = [search.trim(), stockLevel, sort].filter(Boolean).length;
+  const handleClear = () => {
+    setUserSearch("");
+    setStockLevel("");
+    setSort("");
+  };
   const fetchDetail = useCallback(
     async (row: AdminDataRow) => ({ ...row }),
     [],
@@ -62,6 +91,39 @@ export function AdminInventoryPage() {
               onChange={(e) => setUserSearch(e.target.value)}
               placeholder="Search by product name or SKU..."
             />
+          </FormFieldFrame>
+
+          <FormFieldFrame label="Stock Level" htmlFor="inventory-filter-stock">
+            <Select
+              value={stockLevel || "__ALL__"}
+              onValueChange={(v) => setStockLevel(v === "__ALL__" ? "" : v)}
+            >
+              <SelectTrigger id="inventory-filter-stock">
+                <SelectValue placeholder="All Low Stock" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="__ALL__">All Low Stock</SelectItem>
+                <SelectItem value="OUT_OF_STOCK">Out of Stock (0)</SelectItem>
+                <SelectItem value="CRITICAL">Critical (≤ 5 units)</SelectItem>
+              </SelectContent>
+            </Select>
+          </FormFieldFrame>
+
+          <FormFieldFrame label="Sort By" htmlFor="inventory-filter-sort">
+            <Select
+              value={sort || "__ALL__"}
+              onValueChange={(v) => setSort(v === "__ALL__" ? "" : v)}
+            >
+              <SelectTrigger id="inventory-filter-sort">
+                <SelectValue placeholder="Default Order" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="__ALL__">Default Order</SelectItem>
+                <SelectItem value="stock_asc">Stock: Lowest First</SelectItem>
+                <SelectItem value="stock_desc">Stock: Highest First</SelectItem>
+                <SelectItem value="name_asc">Product Name (A–Z)</SelectItem>
+              </SelectContent>
+            </Select>
           </FormFieldFrame>
         </div>
       </CollapsibleTableFilters>

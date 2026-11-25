@@ -12,12 +12,15 @@ import {
 import { FormFieldFrame } from "@/shared/components/forms";
 import { LABELS } from "@/shared/constants/labels";
 import { CollapsibleTableFilters } from "@/shared/components/filters";
+import { AdminVendorFilterSelect } from "../vendors/AdminVendorFilterSelect.component";
 
 export interface CouponsFiltersProps {
   search: string;
   status: string;
+  vendorId?: string;
   onSearchChange: (value: string) => void;
   onStatusChange: (value: string) => void;
+  onVendorChange?: (value: string) => void;
   onClear: () => void;
 }
 
@@ -26,8 +29,10 @@ const ALL_STATUSES = "__ALL__";
 export function CouponsFilters({
   search,
   status,
+  vendorId = "",
   onSearchChange,
   onStatusChange,
+  onVendorChange,
   onClear,
 }: CouponsFiltersProps) {
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -38,11 +43,13 @@ export function CouponsFilters({
     onStatusChange(value === ALL_STATUSES ? "" : value);
   };
 
-  const activeCount = (search.trim() ? 1 : 0) + (status ? 1 : 0);
+  const activeCount = [search.trim(), status, vendorId].filter(Boolean).length;
 
   return (
     <CollapsibleTableFilters activeCount={activeCount} onClear={onClear}>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 items-end">
+      <div
+        className={`grid grid-cols-1 gap-4 sm:grid-cols-2 ${onVendorChange ? "lg:grid-cols-3" : ""} items-end`}
+      >
         <FormFieldFrame label={LABELS.search} htmlFor="coupons-filter-search">
           <Input
             id="coupons-filter-search"
@@ -68,6 +75,10 @@ export function CouponsFilters({
             </SelectContent>
           </Select>
         </FormFieldFrame>
+
+        {onVendorChange ? (
+          <AdminVendorFilterSelect value={vendorId} onChange={onVendorChange} />
+        ) : null}
       </div>
     </CollapsibleTableFilters>
   );

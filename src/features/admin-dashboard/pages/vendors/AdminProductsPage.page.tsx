@@ -41,6 +41,7 @@ export function AdminProductsPage() {
     page.filters.sort,
   );
   const defaultTab =
+    page.filters.status === "PENDING_APPROVAL" ||
     page.filters.status === "PENDING"
       ? "pending"
       : hasFilter

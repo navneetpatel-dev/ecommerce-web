@@ -91,6 +91,7 @@ export function AdminCategoryImageSeoFields({
           <Input
             id={`${idPrefix}-commission`}
             inputMode="decimal"
+            normalizeNumeric="decimal"
             placeholder={LABELS.categoryCommissionPlaceholder}
             error={commissionRateHasError}
             {...form.register("commissionRate")}

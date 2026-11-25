@@ -7,6 +7,7 @@ import { AdminDataCell } from "../../components/shared/AdminDataListView/AdminDa
 import { adminCellText } from "../../utils/shared/adminTableCells";
 
 const isRichCell = (key: string) =>
+  key === "product" ||
   key === "status" ||
   key.endsWith(".status") ||
   key.endsWith("Status") ||
@@ -35,7 +36,10 @@ export function useAdminDataListView(
         id: key,
         header: columnHeader(key),
         truncate:
-          key !== "status" && !key.endsWith(".status") && !isImageFieldKey(key),
+          key !== "product" &&
+          key !== "status" &&
+          !key.endsWith(".status") &&
+          !isImageFieldKey(key),
         // Badges and images render as components; everything else as text, so
         // the table can shorten it (desktop) or show it whole (phone cards).
         cell: (row) =>

@@ -1,14 +1,17 @@
 "use client";
 
-import { ExternalLink, Star, Tag } from "lucide-react";
+import { ExternalLink, Star } from "lucide-react";
 import { MediaImage } from "@/shared/components/media/MediaImage.component";
-import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import { PATHS } from "@/shared/constants/paths/paths";
+import { PRODUCT_STATUS } from "@/shared/constants/statuses";
 import { RecordDetailCopyButton } from "../RecordDetailCopyButton.component";
 import { ProductHeroPriceBadge } from "./ProductHeroPriceBadge.component";
+import { ProductHeroBadges } from "./ProductHeroBadges.component";
+import type { CategoryModalTarget } from "./CategoryDetailModal.component";
 
 interface ProductHeroCardProps {
   product: Record<string, unknown>;
+  onCategoryClick?: (target: CategoryModalTarget) => void;
 }
 
 function resolveHeroImage(product: Record<string, unknown>): string | null {
@@ -23,7 +26,10 @@ function resolveHeroImage(product: Record<string, unknown>): string | null {
   return null;
 }
 
-export function ProductHeroCard({ product }: ProductHeroCardProps) {
+export function ProductHeroCard({
+  product,
+  onCategoryClick,
+}: ProductHeroCardProps) {
   const imageUrl = resolveHeroImage(product);
   const name = String(product.name ?? product.productName ?? "Product Details");
   const brand = typeof product.brand === "string" ? product.brand : null;
@@ -52,9 +58,16 @@ export function ProductHeroCard({ product }: ProductHeroCardProps) {
     typeof product.reviewCount === "number" ? product.reviewCount : 0;
   const status = typeof product.status === "string" ? product.status : null;
   const slug = typeof product.slug === "string" ? product.slug : null;
-  const isActive = status === "ACTIVE";
-  const catalogUrl = `${PATHS.admin.products}?tab=all&search=${encodeURIComponent(name)}`;
+  const isPending =
+    status === PRODUCT_STATUS.PENDING_APPROVAL || status === "PENDING";
+  const isActive = status === PRODUCT_STATUS.LIVE || status === "ACTIVE";
+  const catalogUrl = isPending
+    ? `${PATHS.admin.products}?tab=pending&search=${encodeURIComponent(name)}`
+    : `${PATHS.admin.products}?tab=all&search=${encodeURIComponent(name)}`;
   const storeUrl = isActive && slug ? PATHS.product(slug) : catalogUrl;
+  const statusFilterUrl = isPending
+    ? `${PATHS.admin.products}?tab=pending`
+    : `${PATHS.admin.products}?tab=all&status=${status}`;
 
   return (
     <div className="rounded-2xl border border-line/80 bg-gradient-to-b from-surface-subtle/60 to-surface p-4 sm:p-5 shadow-xs space-y-4">
@@ -82,59 +95,22 @@ export function ProductHeroCard({ product }: ProductHeroCardProps) {
         </a>
 
         <div className="min-w-0 flex-1 space-y-2">
-          <div className="flex flex-wrap items-center gap-2">
-            {status && (
-              <a
-                href={`${PATHS.admin.products}?tab=all&status=${status}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                title={`Filter products with status "${status}" in Admin catalog in new tab`}
-                className="hover:opacity-80 transition-opacity"
-              >
-                <StatusBadge status={status} />
-              </a>
-            )}
-            {brand && (
-              <a
-                href={`${PATHS.admin.products}?tab=all&search=${encodeURIComponent(brand)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                title="Search brand in Admin catalog in new tab"
-                className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-brand-subtle text-brand text-[11px] font-semibold border border-brand/30 hover:bg-brand hover:text-paper hover:border-brand transition-all"
-              >
-                <span>{brand}</span>
-                <ExternalLink className="size-2.5 opacity-70" />
-              </a>
-            )}
-            {categoryName && (
-              <a
-                href={
-                  categoryId
-                    ? `${PATHS.admin.products}?tab=all&categoryId=${categoryId}&search=${encodeURIComponent(categoryName)}`
-                    : `${PATHS.admin.products}?tab=all&search=${encodeURIComponent(categoryName)}`
-                }
-                target="_blank"
-                rel="noopener noreferrer"
-                title="Filter by category in Admin catalog in new tab"
-                className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-surface text-ink-muted text-[11px] font-medium border border-line hover:bg-brand-subtle hover:text-ink hover:border-brand/40 transition-all"
-              >
-                <Tag className="size-3" />
-                <span>{categoryName}</span>
-                <ExternalLink className="size-2.5 opacity-70" />
-              </a>
-            )}
-          </div>
+          <ProductHeroBadges
+            status={status}
+            statusFilterUrl={statusFilterUrl}
+            isPending={isPending}
+            brand={brand}
+            categoryName={categoryName}
+            categoryId={categoryId}
+            category={category}
+            onCategoryClick={onCategoryClick}
+          />
 
           <h2 className="text-lg sm:text-xl font-bold text-ink tracking-tight line-clamp-2">
             <a
               href={storeUrl}
               target="_blank"
               rel="noopener noreferrer"
-              title={
-                isActive
-                  ? "Open product on storefront in new tab"
-                  : "View product in Admin catalog in new tab"
-              }
               className="hover:text-brand hover:underline inline-flex items-center gap-1.5 transition-colors"
             >
               <span>{name}</span>
@@ -148,7 +124,6 @@ export function ProductHeroCard({ product }: ProductHeroCardProps) {
                 href={`${PATHS.admin.reviews}?search=${encodeURIComponent(name)}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                title="View reviews in Admin Review Moderation in new tab"
                 className="flex items-center gap-1 font-semibold text-ink hover:text-brand transition-colors"
               >
                 <Star className="size-3.5 fill-amber-400 text-amber-500" />

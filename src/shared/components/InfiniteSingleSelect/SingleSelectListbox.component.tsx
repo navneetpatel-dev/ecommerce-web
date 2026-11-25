@@ -56,6 +56,7 @@ export function SingleSelectListbox(props: SingleSelectListboxProps) {
       optionId={option.id}
       selected={value === option.id}
       label={option.label}
+      sublabel={option.sublabel}
       disabled={disabled}
       onSelect={onSelect}
     />
