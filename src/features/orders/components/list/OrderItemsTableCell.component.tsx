@@ -11,17 +11,16 @@ interface OrderItemsTableCellProps {
 export const OrderItemsTableCell = memo(function OrderItemsTableCell({
   order,
 }: OrderItemsTableCellProps) {
-  const itemCount = countOrderItems(order);
-  const vendorCount = order.subOrders?.length ?? 0;
+  const itemCount = order.itemCount ?? countOrderItems(order);
+  const vendorCount = order.sellerCount ?? order.subOrders?.length ?? 0;
+  const summaryText = order.itemSummary ?? orderItemSummary(order);
   const sellerText =
     vendorCount === 1 ? LABELS.sellerSingular : LABELS.sellerPlural;
   const itemText = itemCount === 1 ? LABELS.itemSingular : LABELS.itemPlural;
 
   return (
     <div className={ORDERS_LIST_STYLES.itemsCell}>
-      <p className={ORDERS_LIST_STYLES.itemsSummary}>
-        {orderItemSummary(order)}
-      </p>
+      <p className={ORDERS_LIST_STYLES.itemsSummary}>{summaryText}</p>
       <p className={ORDERS_LIST_STYLES.itemsCountText}>
         {vendorCount} {sellerText}
         {" · "}

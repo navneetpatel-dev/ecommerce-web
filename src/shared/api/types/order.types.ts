@@ -105,6 +105,9 @@ export interface Order {
   id: string;
   orderReference?: string | null;
   customerName?: string | null;
+  sellerCount?: number;
+  itemCount?: number;
+  itemSummary?: string;
   userId: string;
   totalAmount: number;
   discountTotal: number;
