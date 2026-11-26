@@ -77,7 +77,7 @@ export function AccountSection({
 
       {isAdminRole(currentUser.role) ? (
         <Link
-          href={PATHS.admin.vendors}
+          href={PATHS.admin.root}
           className={cn(styles.dashboardLink, styles.dashboardLinkSolid)}
         >
           {LABELS.adminPanel}

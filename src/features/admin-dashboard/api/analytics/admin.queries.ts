@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { adminApi } from "./admin.api";
+import { vendorsApi } from "@/features/vendors";
 import { DEFAULT_PAGE_LIMIT } from "@/shared/constants/pagination/pagination";
 
 export const adminKeys = {
@@ -47,7 +48,7 @@ export function usePendingVendors() {
 export function useAdminVendorsList() {
   return useQuery({
     queryKey: [...adminKeys.vendors.all, "list"],
-    queryFn: () => adminApi.vendors({ page: 1, limit: 100 }),
+    queryFn: () => vendorsApi.directory({ limit: 100 }),
     staleTime: 5 * 60 * 1000,
   });
 }

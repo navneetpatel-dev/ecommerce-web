@@ -1,8 +1,12 @@
 "use client";
 
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LABELS } from "@/shared/constants/labels";
+import { LABELS, VENDOR_ROLES } from "@/shared/constants/labels";
+import { PATHS } from "@/shared/constants/paths/paths";
+import { useAuthStore } from "@/shared/stores/auth/auth.store";
 import { useApiFormErrors } from "@/shared/hooks/forms/useApiFormErrors.hook";
 import {
   VendorRegisterSchema,
@@ -13,8 +17,20 @@ import { useUnsavedChanges } from "@/shared/hooks/forms/useUnsavedChanges.hook";
 import { useRequireAuth } from "@/shared/hooks/auth/useRequireAuth.hook";
 
 export function useVendorRegisterPage() {
+  const router = useRouter();
+  const currentUser = useAuthStore((s) => s.currentUser);
   const { requireAuth } = useRequireAuth();
   const register = useVendorRegistration();
+
+  useEffect(() => {
+    const isVendor =
+      (currentUser?.role &&
+        (VENDOR_ROLES as readonly string[]).includes(currentUser.role)) ||
+      Boolean(currentUser?.vendorId);
+    if (isVendor) {
+      router.replace(PATHS.vendor.overview);
+    }
+  }, [currentUser?.role, currentUser?.vendorId, router]);
   const form = useForm<VendorRegisterInput>({
     mode: "onTouched",
     resolver: zodResolver(VendorRegisterSchema),

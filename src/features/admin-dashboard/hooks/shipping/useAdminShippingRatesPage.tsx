@@ -5,7 +5,7 @@ import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { LABELS } from "@/shared/constants/labels";
 import { shippingRatesLabels } from "@/shared/constants/labels/shippingRates";
 import { adminShippingApi } from "@/features/admin-dashboard/api/shipping/shipping.api";
-import { adminApi } from "../../api/analytics/admin.api";
+import { vendorsApi } from "@/features/vendors";
 import { useDebouncedValue } from "@/shared/hooks/ui/use-debounce.hook";
 import { AdminConfirmAction } from "../../components/shared/AdminConfirmAction.component";
 import { useShippingRateForm } from "./useShippingRateForm.hook";
@@ -66,8 +66,8 @@ export function useAdminShippingRatesPage(): AdminShippingRatesPageModel {
       )
       .catch(() => setZones([]));
 
-    adminApi
-      .vendors({ page: 1, limit: 100 })
+    vendorsApi
+      .directory({ limit: 100 })
       .then((res) =>
         setVendors(
           res.items.map((v) => ({ id: String(v.id), name: v.businessName })),

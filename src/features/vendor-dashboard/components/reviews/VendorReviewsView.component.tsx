@@ -5,6 +5,7 @@ import { useDebouncedValue } from "@/shared/hooks/ui/use-debounce.hook";
 import { LABELS } from "@/shared/constants/labels";
 import type { Review } from "@/shared/api/types";
 import { FormFieldFrame } from "@/shared/components/forms";
+import { Button } from "@/shared/components/ui/button";
 import { SearchInput } from "@/shared/components/ui/SearchInput.component";
 import {
   Select,
@@ -41,6 +42,8 @@ export function VendorReviewsView({
   const [search, setSearch] = useState("");
   const [rating, setRating] = useState("");
   const [responseStatus, setResponseStatus] = useState("");
+  const [page, setPage] = useState(1);
+  const REVIEWS_PAGE_SIZE = 20;
 
   const {
     targetId,
@@ -109,15 +112,55 @@ export function VendorReviewsView({
       <p className={styles.emptyText}>{LABELS.noReviewsFound}</p>
     ) : null;
 
+  const totalPages = Math.max(
+    1,
+    Math.ceil(filteredReviews.length / REVIEWS_PAGE_SIZE),
+  );
+  const currentPage = Math.min(page, totalPages);
+  const pagedReviews = useMemo(() => {
+    const start = (currentPage - 1) * REVIEWS_PAGE_SIZE;
+    return filteredReviews.slice(start, start + REVIEWS_PAGE_SIZE);
+  }, [filteredReviews, currentPage]);
+
   const listContent =
     !isLoading && !loadError && filteredReviews.length > 0 ? (
-      <VendorReviewsList
-        reviews={filteredReviews}
-        onOpenRespond={handleOpenRespond}
-        onOpenFlag={handleOpenFlag}
-        onRemoveReply={handleRemoveReply}
-        canFlag={Boolean(onFlag)}
-      />
+      <>
+        <VendorReviewsList
+          reviews={pagedReviews}
+          onOpenRespond={handleOpenRespond}
+          onOpenFlag={handleOpenFlag}
+          onRemoveReply={handleRemoveReply}
+          canFlag={Boolean(onFlag)}
+        />
+        {totalPages > 1 ? (
+          <div className="mt-4 flex items-center justify-between border-t border-line pt-4">
+            <span className="text-body-sm text-ink-muted">
+              Page {currentPage} of {totalPages} ({filteredReviews.length}{" "}
+              reviews)
+            </span>
+            <div className="flex items-center gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                disabled={currentPage <= 1}
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+              >
+                Previous
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                disabled={currentPage >= totalPages}
+                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+              >
+                Next
+              </Button>
+            </div>
+          </div>
+        ) : null}
+      </>
     ) : null;
 
   return (

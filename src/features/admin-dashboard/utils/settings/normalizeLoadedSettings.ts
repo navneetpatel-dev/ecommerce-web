@@ -1,17 +1,25 @@
 import type { AdminPlatformSettings } from "../../api/settings/settings.api";
 
+function roundRate(value: number | undefined, fallback: number): number {
+  const num = Number(value ?? fallback);
+  return Number.isFinite(num) ? Number(num.toFixed(4)) : fallback;
+}
+
 /** The settings as the form edits them: every optional field filled with its documented default. */
 export function normalizeLoadedSettings(
   settings: AdminPlatformSettings,
 ): AdminPlatformSettings {
   return {
     ...settings,
+    defaultCommissionRate: roundRate(settings.defaultCommissionRate, 10),
+    tcsRatePercent: roundRate(settings.tcsRatePercent, 0.5),
+    tdsRatePercent: roundRate(settings.tdsRatePercent, 0.1),
     payoutCycle: (settings.payoutCycle || "WEEKLY").toUpperCase(),
     autoApproveReviews: settings.autoApproveReviews !== false,
     autoApproveQuestions: settings.autoApproveQuestions !== false,
     returnShippingFee: settings.returnShippingFee ?? 0,
     tds194oExemptionThreshold: settings.tds194oExemptionThreshold ?? 500000,
-    commissionGstRatePercent: settings.commissionGstRatePercent ?? 18,
+    commissionGstRatePercent: roundRate(settings.commissionGstRatePercent, 18),
     platformGstin: settings.platformGstin ?? "",
     platformLegalName: settings.platformLegalName ?? "",
     platformState: settings.platformState ?? "",

@@ -7,14 +7,10 @@ import {
   type InfiniteMultiSelectPageResult,
 } from "@/shared/components/InfiniteMultiSelect";
 import { LABELS } from "@/shared/constants/labels";
-import {
-  CATEGORY_STATUS,
-  PRODUCT_STATUS,
-  VENDOR_STATUS,
-} from "@/shared/constants/statuses";
+import { CATEGORY_STATUS, PRODUCT_STATUS } from "@/shared/constants/statuses";
 import { categoriesApi } from "@/features/categories";
 import { productsApi } from "@/features/products";
-import { adminApi } from "../../api/analytics/admin.api";
+import { vendorsApi } from "@/features/vendors";
 
 type ScopeKind = "vendor" | "product" | "category";
 
@@ -89,10 +85,9 @@ export function CouponScopeMultiSelect({
         };
       }
 
-      const result = await adminApi.vendors({
+      const result = await vendorsApi.directory({
         page: query.page,
         limit: query.limit,
-        status: VENDOR_STATUS.APPROVED,
         search: query.search,
       });
       return {

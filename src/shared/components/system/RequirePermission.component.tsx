@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { EmptyState } from "@/shared/components/display/EmptyState.component";
 import { usePermissions } from "@/shared/hooks/auth/usePermissions.hook";
 import { LABELS } from "@/shared/constants/labels";
@@ -13,17 +14,21 @@ export function RequirePermission({
   permission: PermissionKey | PermissionKey[];
   children: React.ReactNode;
 }) {
+  const pathname = usePathname();
   const { hasAnyPermission } = usePermissions();
   const allowed = hasAnyPermission(
     ...(Array.isArray(permission) ? permission : [permission]),
   );
   if (!allowed) {
+    const isVendorRoute = pathname?.startsWith("/vendor");
     return (
       <EmptyState
         heading={LABELS.accessDeniedHeading}
         message={LABELS.accessDeniedMessage}
-        actionLabel={LABELS.goToAdminDashboard}
-        actionTo={PATHS.admin.root}
+        actionLabel={
+          isVendorRoute ? "Go to vendor overview" : LABELS.goToAdminDashboard
+        }
+        actionTo={isVendorRoute ? PATHS.vendor.overview : PATHS.admin.root}
       />
     );
   }

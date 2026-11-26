@@ -120,7 +120,7 @@ export const tables2Labels = {
   retry: "Try again",
   uploadProfilePhoto: "Upload profile photo",
   uploadProfilePhotoHint:
-    "Recommended 512×512 (1:1). PNG, JPEG, or WebP up to 1.5MB. Edit after selecting.",
+    "Recommended 512×512 (1:1). PNG, JPEG, or WebP up to 2MB. Edit after selecting.",
   uploadInvalidImageType: "Please choose a PNG, JPEG, or WebP image.",
   imageCropTitle: "Edit image",
   imageCropHint: "Drag to reposition. Adjust zoom and rotation, then apply.",
