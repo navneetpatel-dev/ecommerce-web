@@ -50,7 +50,7 @@ export function useVendorProductsPage() {
         close();
         return;
       }
-      queueMicrotask(() => form.resetFormState(form.categories[0]?.id));
+      queueMicrotask(() => form.resetFormState());
       return;
     }
 
@@ -107,7 +107,10 @@ export function useVendorProductsPage() {
     onCancel: close,
     formProps: {
       values: form.values,
-      categories: form.categories,
+      category: {
+        selected: form.selectedCategory,
+        onSelect: form.setSelectedCategory,
+      },
       imageUrls: form.imageUrls,
       draftUploadId: editId ?? form.draftUploadId,
       submitError: form.submitError,

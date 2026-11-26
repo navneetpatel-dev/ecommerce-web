@@ -22,14 +22,25 @@ export const productEditorFormStyles = {
     "min-w-0 truncate text-ink-muted",
     "min-w-0 truncate text-ink-muted",
   ],
+  categoryText: "flex min-w-0 flex-1 flex-col",
+  categoryPath: "truncate text-caption text-ink-muted",
+  categoryGst:
+    "ml-auto shrink-0 whitespace-nowrap rounded-full bg-brand-subtle px-2.5 py-0.5 text-caption font-medium tabular-nums text-brand",
   /** One column of the tree guide: a vertical line, with a short elbow into the row on the last one. */
   categoryGuide:
     "relative w-5 shrink-0 self-stretch border-l border-line-strong/40",
   categoryGuideElbow:
     "after:absolute after:left-0 after:top-1/2 after:h-px after:w-3.5 after:bg-line-strong/40",
   colSpan2: "sm:col-span-2",
+  detailsContent: "gap-x-6 gap-y-8",
+  pricingGroup:
+    "space-y-5 rounded-lg border border-line bg-paper/30 p-5 sm:col-span-2 sm:p-6",
+  pricingGroupHeader: "space-y-1",
+  pricingGroupTitle: "text-body font-semibold text-ink",
+  pricingGroupHint: "text-body-sm leading-relaxed text-ink-muted",
+  pricingGrid: "grid grid-cols-1 gap-6 sm:grid-cols-2 [&>*]:min-w-0",
   selectCategoryTriggerError: "border-danger",
-  descriptionTextarea: "min-h-[6.5rem]",
+  descriptionTextarea: "min-h-[11rem]",
 
   // Catalog
   listStack: "space-y-2",
@@ -40,18 +51,6 @@ export const productEditorFormStyles = {
 
   // Policies & SEO
   policyTextarea: "min-h-[5.5rem]",
-  seoDescriptionTextarea: "min-h-[8rem]",
-  seoSectionContent: "gap-6",
-  seoPreview:
-    "flex gap-3 rounded-lg border border-brand/30 bg-brand-subtle/40 p-4 sm:p-5",
-  seoPreviewIcon: "mt-0.5 size-5 shrink-0 text-brand",
-  seoPreviewBody: "min-w-0 flex-1 space-y-3",
-  seoPreviewCaption: "text-body-sm font-semibold text-ink",
-  seoPreviewResult: "space-y-1 rounded-md border border-line bg-surface p-4",
-  seoPreviewUrl: "truncate text-caption text-ink-muted",
-  seoPreviewTitle: "text-[1.0625rem] leading-snug text-brand",
-  seoPreviewDescription: "text-body-sm leading-relaxed text-ink",
-  seoPreviewNote: "text-caption text-ink-muted",
 } as const;
 
 export const productEditorDialogStyles = {

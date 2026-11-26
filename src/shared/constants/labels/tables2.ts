@@ -140,11 +140,11 @@ export const tables2Labels = {
   imageCropProcessing: "Processing…",
   categoryFormSectionBasics: "Basics",
   categoryFormSectionImage: "Image",
-  categoryFormSectionSeo: "SEO & commission",
+  categoryFormSectionCommission: "Commission",
+  categoryFormSectionCommissionHint:
+    "The platform's commission on sales in this category.",
   categoryFormSectionBasicsHint: "Name, parent, and visibility.",
   categoryFormSectionImageHint: "Upload and crop the category image.",
-  categoryFormSectionSeoHint:
-    "Optional search metadata and commission override.",
   productFormSectionDetails: "Product details",
   productFormSectionDetailsHint:
     "Name, selling price, MRP, brand, category, and description.",
@@ -160,9 +160,6 @@ export const tables2Labels = {
   productFormSectionMedia: "Video & size chart",
   productFormSectionMediaHint:
     "Optional. One video (MP4 or WebM) and one size chart image, shown on the product page.",
-  productFormSectionSeo: "Search listing",
-  productFormSectionSeoHint:
-    "Optional title and description for search engines. Leave blank to use the product name and description.",
   promoBannerFormSection: "Banner details",
   promoBannerFormSectionHint: "Title, image, link, status, and priority.",
   promoBannerEditSection: "Edit banner",

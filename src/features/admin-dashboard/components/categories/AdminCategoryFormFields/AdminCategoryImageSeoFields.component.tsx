@@ -10,7 +10,7 @@ import {
   UPLOAD_ENTITY,
   UPLOAD_PURPOSE,
 } from "@/shared/constants/uploads/uploads";
-import { adminCategoryStyles } from "../../../styles/categories/adminCategory.styles";
+import { SeoFieldsSection } from "@/shared/components/forms/seo/SeoFieldsSection.component";
 
 interface AdminCategoryImageSeoFieldsProps {
   form: UseFormReturn<CategoryFormInput>;
@@ -38,6 +38,24 @@ export function AdminCategoryImageSeoFields({
       shouldValidate: true,
     });
 
+  const setSeoField =
+    (name: "seoTitle" | "seoDescription") => (value: string) =>
+      setValue(name, value, {
+        shouldDirty: true,
+        shouldTouch: true,
+        shouldValidate: true,
+      });
+  const seoTitle = {
+    value: watch("seoTitle") ?? "",
+    error: showError("seoTitle"),
+    onChange: setSeoField("seoTitle"),
+  };
+  const seoDescription = {
+    value: watch("seoDescription") ?? "",
+    error: showError("seoDescription"),
+    onChange: setSeoField("seoDescription"),
+  };
+
   return (
     <>
       <FormSection
@@ -45,10 +63,7 @@ export function AdminCategoryImageSeoFields({
         hint={LABELS.categoryFormSectionImageHint}
         columns={1}
       >
-        <FormFieldFrame
-          label={LABELS.categoryImageUpload}
-          error={imageUrlError}
-        >
+        <FormFieldFrame error={imageUrlError}>
           <FileUpload
             entityType={UPLOAD_ENTITY.CATEGORIES}
             entityId={uploadEntityId}
@@ -56,37 +71,31 @@ export function AdminCategoryImageSeoFields({
             accept="image/png,image/jpeg,image/webp"
             valueUrl={imageUrlValue}
             onUploaded={onImageUploaded}
+            variant="card"
+            removable
+            label={LABELS.categoryImageUpload}
           />
         </FormFieldFrame>
       </FormSection>
 
+      <SeoFieldsSection
+        seoTitle={seoTitle}
+        seoDescription={seoDescription}
+        fallbackTitle={watch("name") ?? ""}
+        fallbackDescription=""
+        idPrefix={`${idPrefix}-seo`}
+      />
+
       <FormSection
-        title={LABELS.categoryFormSectionSeo}
-        hint={LABELS.categoryFormSectionSeoHint}
+        title={LABELS.categoryFormSectionCommission}
+        hint={LABELS.categoryFormSectionCommissionHint}
+        columns={1}
       >
-        <FormFieldFrame
-          label={LABELS.categorySeoTitle}
-          htmlFor={`${idPrefix}-seo-title`}
-        >
-          <Input id={`${idPrefix}-seo-title`} {...form.register("seoTitle")} />
-        </FormFieldFrame>
-
-        <FormFieldFrame
-          label={LABELS.categorySeoDescription}
-          htmlFor={`${idPrefix}-seo-desc`}
-        >
-          <Input
-            id={`${idPrefix}-seo-desc`}
-            {...form.register("seoDescription")}
-          />
-        </FormFieldFrame>
-
         <FormFieldFrame
           label={LABELS.categoryCommissionRate}
           htmlFor={`${idPrefix}-commission`}
           hint={LABELS.categoryCommissionRateHint}
           error={commissionRateError}
-          className={adminCategoryStyles.colSpan2MaxMd}
         >
           <Input
             id={`${idPrefix}-commission`}

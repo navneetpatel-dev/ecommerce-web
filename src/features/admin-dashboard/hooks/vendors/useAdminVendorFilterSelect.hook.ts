@@ -13,6 +13,7 @@ import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { usePermissions } from "@/shared/hooks/auth/usePermissions.hook";
 import type { VendorInfo } from "@/shared/api/types";
 import { vendorsApi } from "@/features/vendors";
+import { createPageCache } from "@/shared/utils/infinite-single-select/pageCache";
 import { adminApi } from "../../api/analytics/admin.api";
 import {
   directoryItemToOption,
@@ -21,31 +22,7 @@ import {
 } from "../../utils/vendors/vendorFilterOptions";
 
 const SELECTED_STALE_MS = 5 * 60 * 1000;
-/** Pages are reused for a minute (scrolling back, reopening) and then fetched again, so new vendors show up. */
-const PAGE_CACHE_TTL_MS = 60 * 1000;
-const PAGE_CACHE_MAX_ENTRIES = 100;
-const vendorPageCache = new Map<
-  string,
-  { at: number; result: InfiniteSingleSelectPageResult }
->();
-
-function cachedPage(key: string): InfiniteSingleSelectPageResult | null {
-  const hit = vendorPageCache.get(key);
-  if (!hit) return null;
-  if (Date.now() - hit.at > PAGE_CACHE_TTL_MS) {
-    vendorPageCache.delete(key);
-    return null;
-  }
-  return hit.result;
-}
-
-function rememberPage(key: string, result: InfiniteSingleSelectPageResult) {
-  if (vendorPageCache.size >= PAGE_CACHE_MAX_ENTRIES) {
-    const oldest = vendorPageCache.keys().next().value;
-    if (oldest !== undefined) vendorPageCache.delete(oldest);
-  }
-  vendorPageCache.set(key, { at: Date.now(), result });
-}
+const vendorPageCache = createPageCache<InfiniteSingleSelectPageResult>();
 
 interface UseAdminVendorFilterSelectArgs {
   value: string;
@@ -98,7 +75,7 @@ export function useAdminVendorFilterSelect({
       query: InfiniteSingleSelectPageQuery,
     ): Promise<InfiniteSingleSelectPageResult> => {
       const cacheKey = `${source}:${status ?? ""}:${query.search ?? ""}:${query.page}:${query.limit}`;
-      const cached = cachedPage(cacheKey);
+      const cached = vendorPageCache.get(cacheKey);
       if (cached) return cached;
 
       const pageResult = useAdminList
@@ -119,7 +96,7 @@ export function useAdminVendorFilterSelect({
             }),
             directoryItemToOption,
           );
-      rememberPage(cacheKey, pageResult);
+      vendorPageCache.set(cacheKey, pageResult);
       return pageResult;
     },
     [useAdminList, source, status],

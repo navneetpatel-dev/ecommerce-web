@@ -53,41 +53,55 @@ export function ProductImageRow(props: ProductImageRowProps) {
   };
 
   return (
-    <li className={productImageRowStyles.row}>
-      <div className={productImageRowStyles.thumbnailWrapper}>
+    <li className={productImageRowStyles.card}>
+      <div className={productImageRowStyles.media}>
         <MediaImage
           src={image.url}
           alt=""
-          sizes="80px"
-          imageClassName={productImageRowStyles.thumbnailImg}
+          sizes="(min-width: 640px) 360px, 100vw"
+          imageClassName={productImageRowStyles.mediaImg}
         />
-      </div>
-      <div className={productImageRowStyles.contentCol}>
         {image.isPrimary ? (
-          <p className={productImageRowStyles.primaryBadgeText}>
+          <span className={productImageRowStyles.mainBadge}>
+            <Star className={productImageRowStyles.starIcon} aria-hidden />
             {LABELS.primaryImage}
+          </span>
+        ) : null}
+      </div>
+      <div className={productImageRowStyles.body}>
+        <div className={productImageRowStyles.meta}>
+          <p className={productImageRowStyles.metaText}>
+            {variantSku
+              ? `${LABELS.sku}: ${variantSku}`
+              : LABELS.productImageAllVariants}
           </p>
-        ) : (
+        </div>
+        <div className={productImageRowStyles.actions}>
+          {image.isPrimary ? null : (
+            <Button
+              size="sm"
+              variant="outline"
+              type="button"
+              disabled={isBusy}
+              onClick={handleSetPrimary}
+            >
+              <Star className={productImageRowStyles.starIcon} aria-hidden />
+              {LABELS.setPrimaryImage}
+            </Button>
+          )}
           <Button
             size="sm"
-            variant="outline"
+            variant="ghost"
             type="button"
+            className={productImageRowStyles.actionsSpacer}
+            aria-label={LABELS.deleteImage}
             disabled={isBusy}
-            onClick={handleSetPrimary}
+            onClick={handleDelete}
           >
-            <Star className={productImageRowStyles.starIcon} aria-hidden />
-            {LABELS.setPrimaryImage}
+            <Trash2 aria-hidden />
+            {LABELS.delete}
           </Button>
-        )}
-        {variantSku ? (
-          <p className={productImageRowStyles.skuText}>
-            {LABELS.sku}: {variantSku}
-          </p>
-        ) : (
-          <p className={productImageRowStyles.skuText}>
-            {LABELS.productImageAllVariants}
-          </p>
-        )}
+        </div>
         <FileUpload
           entityType={UPLOAD_ENTITY.PRODUCTS}
           entityId={productId}
@@ -98,16 +112,6 @@ export function ProductImageRow(props: ProductImageRowProps) {
           onUploaded={handleReplace}
         />
       </div>
-      <Button
-        size="icon-sm"
-        variant="ghost"
-        type="button"
-        aria-label={LABELS.deleteImage}
-        disabled={isBusy}
-        onClick={handleDelete}
-      >
-        <Trash2 aria-hidden />
-      </Button>
     </li>
   );
 }

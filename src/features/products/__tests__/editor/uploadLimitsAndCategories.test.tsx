@@ -109,3 +109,31 @@ describe("the category in the picker", () => {
     ).toBeInTheDocument();
   });
 });
+
+describe("GST next to each category", () => {
+  it("shows the rate beside the name", () => {
+    render(
+      <ProductCategoryOption name="Cookware" depth={1} gst={{ percent: 12 }} />,
+    );
+    expect(screen.getByText("12% GST")).toBeInTheDocument();
+  });
+
+  it("a rate that changes with price shows the range and explains it on hover", () => {
+    render(
+      <ProductCategoryOption
+        name="Footwear"
+        gst={{ percent: 5, abovePercent: 12, threshold: 1000 }}
+      />,
+    );
+    const badge = screen.getByText("5–12% GST");
+    expect(badge).toHaveAttribute(
+      "title",
+      expect.stringContaining("12% above"),
+    );
+  });
+
+  it("without a rate (still loading) there is no badge", () => {
+    render(<ProductCategoryOption name="Toys" gst={null} />);
+    expect(screen.queryByText(/GST/)).toBeNull();
+  });
+});

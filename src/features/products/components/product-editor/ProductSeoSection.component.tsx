@@ -1,17 +1,10 @@
 "use client";
 
-import type { ChangeEvent } from "react";
-import { Input } from "@/shared/components/ui/input";
-import { Textarea } from "@/shared/components/ui/textarea";
-import { FormFieldFrame, FormSection } from "@/shared/components/forms";
-import { LABELS } from "@/shared/constants/labels";
-import { PRODUCT_FIELD_LIMITS } from "../../constants/listing-form/productFields";
-import {
-  type ProductListingFormField,
-  type ProductListingFormValues,
+import { SeoFieldsSection } from "@/shared/components/forms/seo/SeoFieldsSection.component";
+import type {
+  ProductListingFormField,
+  ProductListingFormValues,
 } from "../../schemas/listing-form/products.schema";
-import { SeoSearchPreview } from "./SeoSearchPreview.component";
-import { productEditorFormStyles } from "../../styles/product-editor/productEditorForm.styles";
 
 interface ProductSeoSectionProps {
   values: ProductListingFormValues;
@@ -26,57 +19,24 @@ export function ProductSeoSection({
   getError,
   patchValues,
 }: ProductSeoSectionProps) {
-  const handleSeoTitleChange = (event: ChangeEvent<HTMLInputElement>) =>
-    patchValues({ seoTitle: event.target.value });
-  const handleSeoDescriptionChange = (
-    event: ChangeEvent<HTMLTextAreaElement>,
-  ) => patchValues({ seoDescription: event.target.value });
-
+  const seoTitle = {
+    value: values.seoTitle,
+    error: getError("seoTitle"),
+    onChange: (value: string) => patchValues({ seoTitle: value }),
+  };
+  const seoDescription = {
+    value: values.seoDescription,
+    error: getError("seoDescription"),
+    onChange: (value: string) => patchValues({ seoDescription: value }),
+  };
   return (
-    <FormSection
-      title={LABELS.productFormSectionSeo}
-      hint={LABELS.productFormSectionSeoHint}
-      columns={1}
-      contentClassName={productEditorFormStyles.seoSectionContent}
-    >
-      <FormFieldFrame
-        counter={{
-          value: values.seoTitle,
-          max: PRODUCT_FIELD_LIMITS.SEO_TITLE_MAX,
-        }}
-        label={LABELS.productSeoTitle}
-        hint={LABELS.productSeoTitleHint}
-        error={getError("seoTitle")}
-      >
-        <Input
-          value={values.seoTitle}
-          placeholder={values.name}
-          maxLength={PRODUCT_FIELD_LIMITS.SEO_TITLE_MAX}
-          error={Boolean(getError("seoTitle"))}
-          disabled={disabled}
-          onChange={handleSeoTitleChange}
-        />
-      </FormFieldFrame>
-      <FormFieldFrame
-        counter={{
-          value: values.seoDescription,
-          max: PRODUCT_FIELD_LIMITS.SEO_DESCRIPTION_MAX,
-        }}
-        label={LABELS.productSeoDescription}
-        hint={LABELS.productSeoDescriptionHint}
-        error={getError("seoDescription")}
-      >
-        <Textarea
-          value={values.seoDescription}
-          placeholder={LABELS.productSeoDescriptionPlaceholder}
-          maxLength={PRODUCT_FIELD_LIMITS.SEO_DESCRIPTION_MAX}
-          error={Boolean(getError("seoDescription"))}
-          disabled={disabled}
-          onChange={handleSeoDescriptionChange}
-          className={productEditorFormStyles.seoDescriptionTextarea}
-        />
-      </FormFieldFrame>
-      <SeoSearchPreview values={values} />
-    </FormSection>
+    <SeoFieldsSection
+      seoTitle={seoTitle}
+      seoDescription={seoDescription}
+      fallbackTitle={values.name}
+      fallbackDescription={values.description}
+      disabled={disabled}
+      idPrefix="product-seo"
+    />
   );
 }

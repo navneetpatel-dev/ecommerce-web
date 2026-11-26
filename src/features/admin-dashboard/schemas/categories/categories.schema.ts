@@ -5,6 +5,8 @@ import {
   WARRANTY_TYPE_VALUES,
 } from "@/shared/constants/statuses";
 import { LABELS } from "@/shared/constants/labels";
+import { SEO_LIMITS } from "@/shared/constants/seo/seoLimits";
+import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 
 /** Keep in sync with backend CreateCategorySchema. */
 export const CategoryFormSchema = z.object({
@@ -18,8 +20,24 @@ export const CategoryFormSchema = z.object({
       message: LABELS.categoryImageUrlInvalid,
     }),
   status: z.enum(CATEGORY_STATUS_VALUES),
-  seoTitle: z.string().trim().optional(),
-  seoDescription: z.string().trim().optional(),
+  seoTitle: z
+    .string()
+    .trim()
+    .max(
+      SEO_LIMITS.TITLE_MAX,
+      formatLabel(LABELS.seoTitleTooLong, { max: SEO_LIMITS.TITLE_MAX }),
+    )
+    .optional(),
+  seoDescription: z
+    .string()
+    .trim()
+    .max(
+      SEO_LIMITS.DESCRIPTION_MAX,
+      formatLabel(LABELS.seoDescriptionTooLong, {
+        max: SEO_LIMITS.DESCRIPTION_MAX,
+      }),
+    )
+    .optional(),
   commissionRate: z
     .string()
     .optional()

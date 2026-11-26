@@ -1,10 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
-import {
-  categoriesApi,
-  flattenCategoriesWithDepth,
-} from "@/features/categories";
+import { useCallback, useState } from "react";
 import { LABELS } from "@/shared/constants/labels";
 import { useManualFormFieldErrors } from "@/shared/hooks/forms/useManualFormFieldErrors.hook";
 import {
@@ -65,7 +61,9 @@ export function useProductEditorState(options: ProductEditorStateOptions) {
   );
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [draftUploadId, setDraftUploadId] = useState(() => crypto.randomUUID());
-  const [categories, setCategories] = useState<CategoryOptionData[]>([]);
+  // The picker loads its own pages when opened; the form only keeps what was chosen.
+  const [selectedCategory, setSelectedCategory] =
+    useState<CategoryOptionData | null>(null);
   const [vendorId, setVendorId] = useState("");
   const [variantRows, setVariantRows] = useState<VariantDraft[]>([]);
   const [variantErrors, setVariantErrors] = useState<
@@ -85,24 +83,6 @@ export function useProductEditorState(options: ProductEditorStateOptions) {
 
   const pricing = useProductPricingLock(mode === "edit" ? product : null);
 
-  useEffect(() => {
-    void categoriesApi.list().then((rows) => {
-      const tree = Array.isArray(rows) ? rows : [];
-      const flat = flattenCategoriesWithDepth(tree).map((row) => ({
-        id: row.id,
-        name: row.name,
-        depth: row.depth,
-        imageUrl: row.imageUrl ?? null,
-      }));
-      setCategories(flat);
-      setValues((current) =>
-        current.categoryId || !flat[0]?.id
-          ? current
-          : { ...current, categoryId: String(flat[0].id) },
-      );
-    });
-  }, []);
-
   const clearMessages = useCallback(() => {
     setSubmitError(null);
     clearApiFieldErrors();
@@ -112,24 +92,23 @@ export function useProductEditorState(options: ProductEditorStateOptions) {
 
   const resetFormState = useCallback(
     (categoryId?: string) => {
-      setValues(
-        emptyProductListingValues(categoryId ?? categories[0]?.id ?? ""),
-      );
+      setValues(emptyProductListingValues(categoryId ?? ""));
       setImageUrls([]);
       setDraftUploadId(crypto.randomUUID());
       setVendorId("");
       setVariantRows([]);
       setChangeReason("");
       setProduct(null);
+      setSelectedCategory(null);
       clearMessages();
       setLoading(false);
     },
-    [categories, clearMessages],
+    [clearMessages],
   );
 
   const loadEditProduct = useCallback(
     async (productId: string) => {
-      setValues(emptyProductListingValues(categories[0]?.id ?? ""));
+      setValues(emptyProductListingValues(""));
       setImageUrls([]);
       setChangeReason("");
       setProduct(null);
@@ -138,6 +117,15 @@ export function useProductEditorState(options: ProductEditorStateOptions) {
       try {
         const loaded = await productsApi.detail(productId);
         setProduct(loaded);
+        setSelectedCategory(
+          loaded.category
+            ? {
+                id: loaded.category.id,
+                name: loaded.category.name,
+                imageUrl: loaded.category.imageUrl ?? null,
+              }
+            : null,
+        );
         setValues(listingValuesFromProduct(loaded));
       } catch (err: unknown) {
         setSubmitError(getApiErrorMessage(err, LABELS.couldNotLoadProduct));
@@ -145,7 +133,7 @@ export function useProductEditorState(options: ProductEditorStateOptions) {
         setLoading(false);
       }
     },
-    [categories, clearMessages],
+    [clearMessages],
   );
 
   /** Non-blank variant rows as request bodies, or null (with errors shown) when a row is incomplete. */
@@ -197,7 +185,7 @@ export function useProductEditorState(options: ProductEditorStateOptions) {
         });
       }
       close();
-      resetFormState(categories[0]?.id);
+      resetFormState();
       onSaved();
     } catch (err: unknown) {
       const mapped = applyApiErrorsToManualForm<ProductListingFormField>(
@@ -223,7 +211,8 @@ export function useProductEditorState(options: ProductEditorStateOptions) {
     imageUrls,
     setImageUrls,
     draftUploadId,
-    categories,
+    selectedCategory,
+    setSelectedCategory,
     vendorId,
     setVendorId,
     variantRows,

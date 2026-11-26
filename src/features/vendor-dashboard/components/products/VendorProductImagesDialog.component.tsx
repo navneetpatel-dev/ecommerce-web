@@ -101,9 +101,15 @@ export function VendorProductImagesDialog({
               </p>
             ) : null}
 
-            <ul className={vendorProductImagesDialogStyles.imageList}>
-              {images.map(renderImageRow)}
-            </ul>
+            {images.length === 0 ? (
+              <p className={vendorProductImagesDialogStyles.emptyState}>
+                {LABELS.noProductImagesYet}
+              </p>
+            ) : (
+              <ul className={vendorProductImagesDialogStyles.imageList}>
+                {images.map(renderImageRow)}
+              </ul>
+            )}
 
             <FormSection
               title={LABELS.productFormSectionImages}
@@ -148,6 +154,7 @@ export function VendorProductImagesDialog({
                 accept="image/png,image/jpeg,image/webp"
                 disabled={busyId === "new" || imagesFull}
                 label={LABELS.addProductImage}
+                variant="card"
                 onUploaded={onAddImage}
               />
             </FormSection>

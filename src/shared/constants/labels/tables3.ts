@@ -33,20 +33,6 @@ export const tables3Labels = {
   productOwnerOnlyHint: "Only the store owner can change this.",
   productHsnCodeHint:
     "Optional display override. Tax still follows category tax rules.",
-  productSeoTitleHint:
-    "Recommended up to 60 characters; search engines cut longer titles.",
-  productSeoDescriptionHint:
-    "Recommended 120 to 160 characters. Say what makes this product worth clicking.",
-  productSeoDescriptionPlaceholder:
-    "Leave blank to use the product description.",
-  seoPreviewCaption: "How this could look in search results",
-  seoPreviewUrl: "yourstore.com › products › your-product",
-  seoPreviewTitleEmpty: "Your product title appears here",
-  seoPreviewDescriptionEmpty:
-    "Your product description appears here. Add one above to see it.",
-  seoPreviewFallbackNote: "Empty fields use the product name and description.",
-  productSeoTitle: "SEO title",
-  productSeoDescription: "SEO description",
   productVideoUrl: "Product video",
   productSizeChart: "Size chart",
   productCodEnabled: "Cash on delivery",
@@ -87,6 +73,12 @@ export const tables3Labels = {
   productPriceExclGst: "Selling price (excl. GST)",
   productMrpInclGst: "MRP (incl. GST)",
   productCustomerPricePreview: "Customers pay ₹{amount} (incl. {percent}% GST)",
+  productPriceBreakdown: "₹{price} + {percent}% GST = customers pay ₹{amount}",
+  productMrpMinimumHint:
+    "Optional. Enter the MRP including GST; it must be at least ₹{amount} (what customers pay), and cover every variant. Leave empty for no discount.",
+  productMrpBelowCustomerPrice:
+    "MRP must be at least ₹{amount}, what customers pay including GST.",
+  productUseCustomerPriceAsMrp: "Use ₹{amount}",
   productPriceGstHint: "GST is added at your category's rate.",
   productFieldTooLong: "Must be {max} characters or fewer.",
   productListTooLong: "You can add at most {max} items.",
@@ -108,8 +100,6 @@ export const tables3Labels = {
   categoryStatus: "Status",
   categoryStatusActive: "Active",
   categoryStatusArchived: "Archived",
-  categorySeoTitle: "SEO title",
-  categorySeoDescription: "SEO description",
   categoryCommissionRate: "Category commission %",
   categoryCommissionRateHint:
     "Optional override; leaves inherit from parents, then vendor default.",

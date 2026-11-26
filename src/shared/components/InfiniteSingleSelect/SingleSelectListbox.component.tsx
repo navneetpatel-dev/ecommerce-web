@@ -1,6 +1,11 @@
 "use client";
 
-import { forwardRef, type ButtonHTMLAttributes, type ChangeEvent } from "react";
+import {
+  forwardRef,
+  type ButtonHTMLAttributes,
+  type ChangeEvent,
+  type ReactNode,
+} from "react";
 import { ChevronDown } from "lucide-react";
 import { Input } from "@/shared/components/ui/input";
 import { LABELS } from "@/shared/constants/labels";
@@ -24,6 +29,7 @@ interface SingleSelectListboxProps {
   listRef: React.RefObject<HTMLDivElement | null>;
   sentinelRef: React.RefObject<HTMLDivElement | null>;
   onSelect: (next: string) => void;
+  renderOption?: (option: InfiniteSingleSelectOption) => ReactNode;
   /** Extra classes merged onto the scrollable list container. */
   listClassName?: string;
 }
@@ -45,18 +51,20 @@ export function SingleSelectListbox(props: SingleSelectListboxProps) {
     listRef,
     sentinelRef,
     onSelect,
+    renderOption: renderContent,
     listClassName,
   } = props;
 
   const emptyCopy = loadError ? LABELS.couldNotLoadOptions : emptyMessage;
 
-  const renderOption = (option: InfiniteSingleSelectOption) => (
+  const renderRow = (option: InfiniteSingleSelectOption) => (
     <OptionRow
       key={option.id}
       optionId={option.id}
       selected={value === option.id}
       label={option.label}
       sublabel={option.sublabel}
+      content={renderContent?.(option)}
       disabled={disabled}
       onSelect={onSelect}
     />
@@ -89,7 +97,7 @@ export function SingleSelectListbox(props: SingleSelectListboxProps) {
               onSelect={onSelect}
             />
           ) : null}
-          {options.map(renderOption)}
+          {options.map(renderRow)}
           {options.length === 0 ? <ListHint>{emptyCopy}</ListHint> : null}
           <div
             ref={sentinelRef}

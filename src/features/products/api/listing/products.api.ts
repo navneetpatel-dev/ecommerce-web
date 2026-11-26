@@ -48,6 +48,19 @@ export interface GstPricePreview {
   displayPrice: number;
 }
 
+/** One category of the product form's picker, with its GST (own or inherited). */
+export interface CategoryPickerItem {
+  id: string;
+  name: string;
+  depth: number;
+  imageUrl: string | null;
+  /** Where a search result sits in the tree ("Home & Kitchen › Cookware"). */
+  path: string | null;
+  gstPercentage: number;
+  priceBandThreshold: number | null;
+  gstPercentageAbove: number | null;
+}
+
 export interface VariantWriteBody {
   sku: string;
   attributes: Record<string, string>;
@@ -94,6 +107,18 @@ export const productsApi = {
         buildSearchParams({ categoryId, price }).toString(),
       ),
     ),
+  /** Vendor/admin: one page of the category picker (the tree, or a search), or one category by id. */
+  categoryPicker: async (params: {
+    page: number;
+    limit: number;
+    search?: string;
+    id?: string;
+  }): Promise<PaginatedList<CategoryPickerItem>> => {
+    const res = await apiClient.getWithResponse<CategoryPickerItem[]>(
+      API.categories.picker(buildSearchParams(params).toString()),
+    );
+    return unwrapPaginatedList(res);
+  },
   detailBySlug: (slug: string) =>
     apiClient.get<ProductDetail>(API.products.bySlug(slug)),
   /** Authenticated-only. Upserts a view so a repeat view refreshes recency instead of duplicating. */

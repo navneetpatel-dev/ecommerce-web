@@ -76,4 +76,14 @@ export const assistedListingLabels = {
   publishPlatformProductBody:
     "This is a platform product, so it goes live immediately without a separate approval. The action is recorded in the audit trail.",
   platformProductPublished: "Product published.",
+  productPricingGroupTitle: "Pricing",
+  productPricingGroupHint:
+    "The selling price is before GST; GST is added at the category's rate. The MRP includes GST.",
+  noProductImagesYet:
+    "No images yet. Add up to 10 photos; the first one becomes the main image.",
+  searchCategories: "Search categories",
+  noCategoriesFound: "No categories found.",
+  gstBadge: "{percent}% GST",
+  gstBadgeBand: "{from}–{to}% GST",
+  gstBadgeBandTitle: "{from}% GST up to ₹{threshold}, {to}% above",
 } as const;

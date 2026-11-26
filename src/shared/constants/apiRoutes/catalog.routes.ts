@@ -23,6 +23,7 @@ export const productsRoutes = {
 } as const;
 
 export const categoriesRoutes = {
+  picker: (query = "") => `/api/categories/picker${query ? `?${query}` : ""}`,
   list: "/api/categories",
   detail: (id: string) => `/api/categories/${id}`,
   resolve: (path: string) =>

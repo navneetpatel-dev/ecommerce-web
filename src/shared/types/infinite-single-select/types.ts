@@ -1,7 +1,11 @@
+import type { ReactNode } from "react";
+
 export type InfiniteSingleSelectOption = {
   id: string;
   label: string;
   sublabel?: string;
+  /** Whatever the caller needs to draw the row or act on the choice (see `renderOption`, `onSelectOption`). */
+  data?: unknown;
 };
 
 export type InfiniteSingleSelectPageQuery = {
@@ -20,6 +24,12 @@ export type InfiniteSingleSelectPageResult = {
 export interface InfiniteSingleSelectProps {
   value: string;
   onChange: (id: string) => void;
+  /** Called with the chosen option itself (not for "none"), for callers that need more than the id. */
+  onSelectOption?: (option: InfiniteSingleSelectOption) => void;
+  /** Draws a row's content instead of the default label and sublabel. */
+  renderOption?: (option: InfiniteSingleSelectOption) => ReactNode;
+  /** When false the selected option only labels the closed field; it is not added to the top of the list. Default true. */
+  pinnedInList?: boolean;
   /** Fetch one page. Must return server pagination meta so infinite scroll can continue. */
   fetchPage: (
     query: InfiniteSingleSelectPageQuery,

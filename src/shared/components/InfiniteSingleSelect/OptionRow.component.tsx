@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, type ReactNode } from "react";
 import { Check } from "lucide-react";
 import { cn } from "@/shared/utils/dom/cn";
 import { infiniteSingleSelectStyles } from "../../styles/infinite-single-select/infiniteSingleSelect.styles";
@@ -10,6 +10,7 @@ export function OptionRow({
   selected,
   label,
   sublabel,
+  content,
   disabled,
   onSelect,
 }: {
@@ -17,6 +18,8 @@ export function OptionRow({
   selected: boolean;
   label: string;
   sublabel?: string;
+  /** Replaces the label and sublabel with custom content. */
+  content?: ReactNode;
   disabled?: boolean;
   onSelect: (optionId: string) => void;
 }) {
@@ -36,16 +39,18 @@ export function OptionRow({
         selected && infiniteSingleSelectStyles.optionRow.selected,
       )}
     >
-      <span className={infiniteSingleSelectStyles.optionRow.labelWrapper}>
-        <span className={infiniteSingleSelectStyles.optionRow.label}>
-          {label}
-        </span>
-        {sublabel ? (
-          <span className={infiniteSingleSelectStyles.optionRow.sublabel}>
-            {sublabel}
+      {content ?? (
+        <span className={infiniteSingleSelectStyles.optionRow.labelWrapper}>
+          <span className={infiniteSingleSelectStyles.optionRow.label}>
+            {label}
           </span>
-        ) : null}
-      </span>
+          {sublabel ? (
+            <span className={infiniteSingleSelectStyles.optionRow.sublabel}>
+              {sublabel}
+            </span>
+          ) : null}
+        </span>
+      )}
       {selected ? (
         <span className={infiniteSingleSelectStyles.optionRow.checkWrapper}>
           <Check

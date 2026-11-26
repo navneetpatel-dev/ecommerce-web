@@ -28,6 +28,9 @@ function InfiniteSingleSelectBody(props: InfiniteSingleSelectProps) {
   const {
     value,
     onChange,
+    onSelectOption,
+    renderOption,
+    pinnedInList = true,
     fetchPage,
     pinnedOption = null,
     allowNone = false,
@@ -62,7 +65,7 @@ function InfiniteSingleSelectBody(props: InfiniteSingleSelectProps) {
     open,
     disabled,
     fetchPage,
-    pinnedOption,
+    pinnedOption: pinnedInList ? pinnedOption : null,
     pageSize,
     searchable,
   });
@@ -120,8 +123,12 @@ function InfiniteSingleSelectBody(props: InfiniteSingleSelectProps) {
     const id = next === noneValue ? "" : next;
     if (id) {
       const match = options.find((option) => option.id === id);
-      if (match) setSelectedLabel(match.label);
-      else if (pinnedOption?.id === id) setSelectedLabel(pinnedOption.label);
+      if (match) {
+        setSelectedLabel(match.label);
+        onSelectOption?.(match);
+      } else if (pinnedOption?.id === id) {
+        setSelectedLabel(pinnedOption.label);
+      }
     } else {
       setSelectedLabel(null);
     }
@@ -171,6 +178,7 @@ function InfiniteSingleSelectBody(props: InfiniteSingleSelectProps) {
             listRef={listRef}
             sentinelRef={sentinelRef}
             onSelect={handleSelect}
+            renderOption={renderOption}
             listClassName={listClassName}
           />
         </PopoverContent>

@@ -62,7 +62,7 @@ export function useAdminProductEditor(onChanged: () => void) {
 
     if (mode === "create") {
       if (!canCreate) return close();
-      queueMicrotask(() => form.resetFormState(form.categories[0]?.id));
+      queueMicrotask(() => form.resetFormState());
       return;
     }
     if (!canManage) return close();
@@ -108,7 +108,10 @@ export function useAdminProductEditor(onChanged: () => void) {
         : null,
     formProps: {
       values: form.values,
-      categories: form.categories,
+      category: {
+        selected: form.selectedCategory,
+        onSelect: form.setSelectedCategory,
+      },
       imageUrls: form.imageUrls,
       draftUploadId: editId ?? form.draftUploadId,
       submitError: form.submitError,

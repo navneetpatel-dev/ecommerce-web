@@ -2,6 +2,7 @@
 
 import { MediaImage } from "@/shared/components/media/MediaImage.component";
 import { cn } from "@/shared/utils/dom/cn";
+import { gstBadge } from "../../utils/product-editor/categoryGst";
 import type { CategoryOptionData } from "../../types/product-editor/types";
 import { productEditorFormStyles as styles } from "../../styles/product-editor/productEditorForm.styles";
 
@@ -34,8 +35,11 @@ export function ProductCategoryOption({
   name,
   depth = 0,
   imageUrl,
+  gst,
+  path,
 }: Omit<CategoryOptionData, "id">) {
   const level = levelOf(depth);
+  const badge = gst ? gstBadge(gst) : null;
   return (
     <span className={styles.categoryOption}>
       <CategoryGuides depth={level} />
@@ -44,7 +48,15 @@ export function ProductCategoryOption({
       >
         <MediaImage src={imageUrl} alt="" sizes="36px" />
       </span>
-      <span className={styles.categoryName[level]}>{name}</span>
+      <span className={styles.categoryText}>
+        <span className={styles.categoryName[level]}>{name}</span>
+        {path ? <span className={styles.categoryPath}>{path}</span> : null}
+      </span>
+      {badge ? (
+        <span className={styles.categoryGst} title={badge.title}>
+          {badge.text}
+        </span>
+      ) : null}
     </span>
   );
 }

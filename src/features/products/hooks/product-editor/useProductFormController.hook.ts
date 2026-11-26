@@ -9,6 +9,7 @@ import {
   allRequiredFieldsMet,
   firstMissingRequiredHint,
 } from "@/shared/utils/validation/firstMissingRequiredHint";
+import type { PriceGuide } from "../../types/product-editor/types";
 import {
   parseProductListingForm,
   productFormFieldErrors,
@@ -97,13 +98,25 @@ export function useProductFormController({
     values.categoryId,
     Number(values.price),
   );
-  const priceHint =
-    gstPreview && values.categoryId && values.price !== ""
-      ? formatLabel(LABELS.productCustomerPricePreview, {
-          amount: formatInrAmount(gstPreview.displayPrice),
-          percent: gstPreview.gstPercentage,
+  const previewReady = Boolean(
+    gstPreview && values.categoryId && values.price !== "",
+  );
+  const customerPrice = previewReady ? gstPreview!.displayPrice : null;
+  const priceGuide: PriceGuide = {
+    priceHint: previewReady
+      ? formatLabel(LABELS.productPriceBreakdown, {
+          price: values.price,
+          percent: gstPreview!.gstPercentage,
+          amount: formatInrAmount(gstPreview!.displayPrice),
         })
-      : LABELS.productPriceGstHint;
+      : LABELS.productPriceGstHint,
+    mrpHint: previewReady
+      ? formatLabel(LABELS.productMrpMinimumHint, {
+          amount: formatInrAmount(gstPreview!.displayPrice),
+        })
+      : LABELS.productMrpHint,
+    customerPrice,
+  };
 
   return {
     getError,
@@ -111,6 +124,6 @@ export function useProductFormController({
     disableHint,
     patchValues,
     handleSubmit,
-    priceHint,
+    priceGuide,
   };
 }

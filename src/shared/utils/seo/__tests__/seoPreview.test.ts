@@ -3,7 +3,7 @@ import {
   SEO_DESCRIPTION_RECOMMENDED,
   SEO_TITLE_RECOMMENDED,
   seoPreviewText,
-} from "../../utils/product-editor/seoPreview";
+} from "../seoPreview";
 
 const base = {
   seoTitle: "",

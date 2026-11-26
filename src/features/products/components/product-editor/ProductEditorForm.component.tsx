@@ -20,7 +20,7 @@ import type { ProductEditorFormProps } from "../../types/product-editor/types";
 export function ProductEditorForm({
   mode,
   values,
-  categories,
+  category,
   imageUrls,
   draftUploadId,
   submitError,
@@ -45,7 +45,7 @@ export function ProductEditorForm({
     disableHint,
     patchValues,
     handleSubmit,
-    priceHint,
+    priceGuide,
   } = useProductFormController({
     values,
     loading,
@@ -64,11 +64,11 @@ export function ProductEditorForm({
         {vendorField}
         <ProductDetailsSection
           values={values}
-          categories={categories}
+          category={category}
           disabled={disabled}
           getError={getError}
           patchValues={patchValues}
-          priceHint={priceHint}
+          priceGuide={priceGuide}
           pricingLock={pricingLock}
         />
 
