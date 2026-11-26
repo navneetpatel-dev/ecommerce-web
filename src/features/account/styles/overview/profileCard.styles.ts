@@ -17,5 +17,5 @@ export const profileCardStyles = {
   emailRow: "mt-2 flex flex-wrap items-center gap-2",
   emailText: "text-body text-ink-muted",
   memberSinceNotice: "mt-2 text-body-sm text-ink-faint",
-  uploadHint: "mt-3 text-body-sm text-ink-muted",
+  uploadHint: "mt-3 text-body-sm text-info",
 } as const;

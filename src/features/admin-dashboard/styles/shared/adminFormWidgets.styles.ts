@@ -10,7 +10,7 @@ export const adminFormWidgetsStyles = {
   broadcastCard:
     "space-y-4 rounded-md border border-line-strong bg-surface-raised p-4",
   broadcastTitle: "text-body font-medium text-ink",
-  broadcastHint: "mt-1 text-body-sm text-ink-muted",
+  broadcastHint: "mt-1 text-body-sm text-info",
   errorSm: "text-body-sm text-danger",
   successSm: "text-body-sm text-success",
 

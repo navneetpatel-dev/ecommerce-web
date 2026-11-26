@@ -24,7 +24,7 @@ export const formFieldFrameStyles = {
   labelRow: "flex items-center justify-between",
   footerRow: "flex flex-wrap items-center justify-between gap-x-2 gap-y-1",
   error: "text-body-sm text-danger",
-  hint: "text-body-sm text-ink-muted",
+  hint: "text-body-sm text-info",
   footerActionWrapper: "ml-auto",
   /** Hint or error on the left, character count on the right: one row under the control. */
   counterRow: "flex items-start justify-between gap-x-4 gap-y-1",

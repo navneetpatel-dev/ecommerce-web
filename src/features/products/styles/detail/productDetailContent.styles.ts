@@ -49,7 +49,7 @@ export const PRODUCT_DETAIL_CONTENT_STYLES = {
   // PurchasePanel
   purchasePanelRoot:
     "space-y-3 rounded-xl border border-line bg-paper/50 p-3 sm:p-4",
-  helperText: "text-body-sm text-ink-muted",
+  helperText: "text-body-sm text-info",
   outOfStockStack: "space-y-2",
   actionRow:
     "flex flex-wrap items-center gap-2 border-t border-line pt-3 sm:gap-2.5",

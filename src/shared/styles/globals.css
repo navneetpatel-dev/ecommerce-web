@@ -29,6 +29,9 @@
   --success-subtle: #e7ecf1;
   --warning: #9c5a12;
   --warning-subtle: #fbeedd;
+  /* Information: helper text, notes and tips (teal, distinct from brand, success and warning). */
+  --info: #1d6a75;
+  --info-subtle: #e2f0f2;
   --overlay: rgba(27, 25, 23, 0.55);
 
   /* Typography Scale */
@@ -109,6 +112,8 @@
   --success-subtle: #1c2a36;
   --warning: #e0902e;
   --warning-subtle: #362613;
+  --info: #6fc2cd;
+  --info-subtle: #15292d;
   --overlay: rgba(0, 0, 0, 0.7);
 
   /* Dark elevation: rely on surface lightness + border, not shadow */
@@ -158,6 +163,8 @@
   --color-success-subtle: var(--success-subtle);
   --color-warning: var(--warning);
   --color-warning-subtle: var(--warning-subtle);
+  --color-info: var(--info);
+  --color-info-subtle: var(--info-subtle);
   --color-overlay: var(--overlay);
 
   --font-display: var(--font-display), Fraunces, serif;
@@ -629,6 +636,78 @@ html::-webkit-scrollbar-track {
 @keyframes checkmark-check {
   to {
     stroke-dashoffset: 0;
+  }
+}
+
+/* Attention pulse for a secondary action that should still be noticed (e.g. Preview): a soft brand
+   ring, a light sweep across the button and a blinking eye. Pauses on hover/focus; off for reduced motion. */
+@keyframes attention-ring {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--brand) 45%, transparent);
+  }
+  50% {
+    box-shadow: 0 0 0 6px transparent;
+  }
+}
+
+@keyframes attention-sheen {
+  0%,
+  55% {
+    transform: translateX(-130%);
+  }
+  100% {
+    transform: translateX(130%);
+  }
+}
+
+@keyframes attention-eye {
+  0%,
+  86%,
+  100% {
+    transform: scaleY(1);
+  }
+  92% {
+    transform: scaleY(0.1);
+  }
+}
+
+.attention-pulse {
+  position: relative;
+  border-color: var(--brand);
+  animation: attention-ring 2.6s ease-in-out infinite;
+}
+
+.attention-pulse::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    100deg,
+    transparent 35%,
+    color-mix(in srgb, var(--brand) 30%, transparent) 50%,
+    transparent 65%
+  );
+  transform: translateX(-130%);
+  animation: attention-sheen 3.2s ease-in-out infinite;
+}
+
+.attention-pulse > svg {
+  animation: attention-eye 3.2s ease-in-out infinite;
+}
+
+.attention-pulse:is(:hover, :focus-visible, :disabled),
+.attention-pulse:is(:hover, :focus-visible, :disabled)::after,
+.attention-pulse:is(:hover, :focus-visible, :disabled) > svg {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .attention-pulse,
+  .attention-pulse::after,
+  .attention-pulse > svg {
+    animation: none;
   }
 }
 

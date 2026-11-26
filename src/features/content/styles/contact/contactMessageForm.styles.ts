@@ -2,7 +2,7 @@ export const contactMessageFormStyles = {
   container: "space-y-6",
   header: "border-b border-line pb-4",
   title: "font-display text-[1.35rem] leading-tight text-ink",
-  hint: "mt-1 text-body-sm text-ink-muted",
+  hint: "mt-1 text-body-sm text-info",
   grid: "grid grid-cols-1 gap-4 sm:grid-cols-2",
   fullWidth: "sm:col-span-2",
   messageFooter: "mt-1.5 flex items-center justify-between gap-2",

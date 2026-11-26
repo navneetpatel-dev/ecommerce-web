@@ -1,4 +1,6 @@
 export const productEditorFormStyles = {
+  /** Draws the eye: a soft pulse, a light sweep and a blinking eye (see `.attention-pulse` in globals.css). */
+  previewButton: "attention-pulse",
   form: "",
   submitError: "text-sm text-danger",
 
@@ -45,10 +47,10 @@ export const productEditorFormStyles = {
   pricePreviewMeta:
     "flex flex-wrap items-center gap-x-4 gap-y-1 text-caption text-ink-muted",
   pricePreviewSavings: "font-medium text-success",
-  pricePreviewNote: "text-caption text-ink-muted",
+  pricePreviewNote: "text-caption text-info",
   pricingGroupHeader: "space-y-1",
   pricingGroupTitle: "text-body font-semibold text-ink",
-  pricingGroupHint: "text-body-sm leading-relaxed text-ink-muted",
+  pricingGroupHint: "text-body-sm leading-relaxed text-info",
   pricingGrid: "grid grid-cols-1 gap-6 sm:grid-cols-2 [&>*]:min-w-0",
   selectCategoryTriggerError: "border-danger",
   descriptionTextarea: "min-h-[11rem]",

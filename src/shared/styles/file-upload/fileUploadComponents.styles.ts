@@ -1,7 +1,7 @@
 export const fileUploadStyles = {
   root: "space-y-2",
   label: "text-body-sm font-medium text-ink",
-  hint: "text-body-sm leading-snug text-ink-muted",
+  hint: "text-body-sm leading-snug text-info",
   buttonRow: "flex flex-wrap items-center gap-2",
   hiddenInput: "sr-only",
   previewList: "flex flex-wrap gap-2",
@@ -36,7 +36,7 @@ export const filePickerDropzoneStyles = {
   primaryText: "text-body-sm text-ink",
   actionText:
     "font-semibold text-brand underline underline-offset-4 decoration-brand/40 hover:decoration-brand",
-  hintText: "text-caption text-ink-muted",
+  hintText: "text-caption text-info",
 } as const;
 
 export const filePickerSelectedFileStyles = {
@@ -56,7 +56,7 @@ export const fileUploadCardStyles = {
   header: "flex flex-wrap items-start justify-between gap-3",
   headerText: "min-w-0 space-y-1",
   label: "text-body font-semibold text-ink",
-  hint: "text-body-sm leading-relaxed text-ink-muted",
+  hint: "text-body-sm leading-relaxed text-info",
   counter: "text-body-sm font-medium tabular-nums text-ink-muted",
   counterFull: "text-body-sm font-medium tabular-nums text-warning",
   buttonRow: "flex flex-wrap items-center gap-3",

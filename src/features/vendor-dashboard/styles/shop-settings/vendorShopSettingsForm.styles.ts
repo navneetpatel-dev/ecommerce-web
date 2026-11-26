@@ -42,7 +42,7 @@ export const vendorShopSettingsFormStyles = {
   checklistStack: "sm:col-span-2 space-y-2.5",
   checklistSubtitle: "text-body-sm font-medium text-ink-muted",
   checklistGrid: "grid gap-2.5 sm:grid-cols-1",
-  overrideNote: "sm:col-span-2 text-body-sm text-ink-muted",
+  overrideNote: "sm:col-span-2 text-body-sm text-info",
 
   headerButton:
     "flex flex-col gap-2.5 p-3.5 sm:p-4 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-inset",
@@ -85,7 +85,7 @@ export const vendorShopSettingsFormStyles = {
     "col-span-full rounded-md border border-line bg-surface-raised p-4",
   bankDetailsMaskedTitle: "text-body-sm font-medium text-ink",
   bankDetailsMaskedNumber: "mt-1 font-mono text-body-sm text-ink-muted",
-  bankDetailsMaskedHint: "mt-2 text-body-xs text-ink-faint",
+  bankDetailsMaskedHint: "mt-2 text-body-xs text-info",
   bankDetailsMismatchText: "mt-1 text-body-xs text-danger",
   ifscInput: "uppercase",
   fulfillmentNotice: "col-span-full text-body-xs text-ink-muted",

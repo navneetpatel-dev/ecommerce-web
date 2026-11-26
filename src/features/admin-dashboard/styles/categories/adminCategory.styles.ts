@@ -7,6 +7,6 @@ export const adminCategoryStyles = {
   taxFigureGroup: "flex flex-col gap-0.5",
   taxFigure: "text-[1.75rem] font-semibold leading-none text-brand",
   taxSource: "text-body-sm text-ink-muted",
-  taxHint: "text-body-sm text-ink-muted sm:col-span-2",
+  taxHint: "text-body-sm text-info sm:col-span-2",
   colSpan2MaxMd: "sm:col-span-2 sm:max-w-md",
 } as const;

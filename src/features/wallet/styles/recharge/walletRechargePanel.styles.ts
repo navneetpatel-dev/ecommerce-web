@@ -3,7 +3,7 @@ export const walletRechargePanelStyles = {
     "border border-line bg-surface-raised p-5 shadow-elevation-1 md:p-6",
   heading: "text-body font-semibold text-ink",
   subheading: "mt-1 text-[0.875rem] text-ink-muted",
-  maxBalanceNote: "mt-2 text-[0.75rem] leading-relaxed text-ink-faint",
+  maxBalanceNote: "mt-2 text-[0.75rem] leading-relaxed text-info",
   presetsGrid: "mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4",
   presetButton: "h-auto min-h-9 justify-start px-3 py-2",
   presetContent: "flex flex-col items-start leading-tight",

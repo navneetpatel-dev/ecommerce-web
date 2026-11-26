@@ -8,7 +8,7 @@ export const ticketAttachmentUploaderStyles = {
 
   root: "space-y-2",
   label: "text-body-sm font-medium text-ink",
-  hint: "text-body-sm leading-snug text-ink-muted",
+  hint: "text-body-sm leading-snug text-info",
   btnRow: "flex flex-wrap items-center gap-2",
   fileInput: "sr-only",
   counterText: "text-[0.75rem] tabular-nums text-ink-muted",

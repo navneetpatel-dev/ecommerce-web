@@ -2,7 +2,7 @@ export const adminTaxStyles = {
   dialogContent: "max-w-2xl",
   form: "flex flex-col gap-6",
   sectionContent: "gap-5 sm:gap-6",
-  rateNote: "text-body-sm text-ink-muted sm:col-span-2",
+  rateNote: "text-body-sm text-info sm:col-span-2",
   focus:
     "flex flex-wrap items-center justify-between gap-4 rounded-lg border border-brand/40 bg-brand-subtle p-4 sm:p-5",
   focusBody: "min-w-0 space-y-1",

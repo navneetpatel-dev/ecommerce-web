@@ -41,7 +41,12 @@ export function ProductEditorForm({
   const disabled = submitting || loading;
   const showImages = mode === "create";
   const previewButton = onPreview ? (
-    <Button type="button" variant="outline" onClick={onPreview}>
+    <Button
+      type="button"
+      variant="outline"
+      className={productEditorFormStyles.previewButton}
+      onClick={onPreview}
+    >
       <Eye aria-hidden />
       {LABELS.previewAsCustomer}
     </Button>
