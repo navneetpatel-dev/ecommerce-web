@@ -13,6 +13,7 @@ interface ProductHeadingBlockProps {
   avgRating: number;
   reviewCount: number;
   onReviewsClick: () => void;
+  hideRating?: boolean;
 }
 
 export function ProductHeadingBlock({
@@ -21,6 +22,7 @@ export function ProductHeadingBlock({
   avgRating,
   reviewCount,
   onReviewsClick,
+  hideRating = false,
 }: ProductHeadingBlockProps) {
   const visibleTags = (product.tags ?? []).filter((tag) => {
     if (reviewCount > 0) return true;
@@ -52,20 +54,22 @@ export function ProductHeadingBlock({
           {product.name}
         </h1>
 
-        <div className={PRODUCT_DETAIL_CONTENT_STYLES.ratingRow}>
-          <RatingStars value={avgRating} count={reviewCount} size="md" />
-          {reviewCount > 0 ? (
-            <a
-              href="#reviews"
-              className={PRODUCT_DETAIL_CONTENT_STYLES.reviewsLink}
-              onClick={onReviewsClick}
-            >
-              {formatLabel(LABELS.reviewsWithCount, {
-                count: reviewCount,
-              })}
-            </a>
-          ) : null}
-        </div>
+        {hideRating ? null : (
+          <div className={PRODUCT_DETAIL_CONTENT_STYLES.ratingRow}>
+            <RatingStars value={avgRating} count={reviewCount} size="md" />
+            {reviewCount > 0 ? (
+              <a
+                href="#reviews"
+                className={PRODUCT_DETAIL_CONTENT_STYLES.reviewsLink}
+                onClick={onReviewsClick}
+              >
+                {formatLabel(LABELS.reviewsWithCount, {
+                  count: reviewCount,
+                })}
+              </a>
+            ) : null}
+          </div>
+        )}
 
         {visibleTags.length ? (
           <div className={PRODUCT_DETAIL_CONTENT_STYLES.tagsRow}>

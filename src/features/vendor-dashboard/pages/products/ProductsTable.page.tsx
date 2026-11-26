@@ -5,6 +5,7 @@ import { RequirePermission } from "@/shared/components/system/RequirePermission.
 import { StatusDialog } from "@/shared/components/dialogs/StatusDialog.component";
 import { ProductsTableView } from "../../components/products/ProductsTableView.component";
 import {
+  ProductCustomerPreviewDialog,
   ProductEditorDialog,
   ProductVariantsDialog,
 } from "@/features/products";
@@ -32,6 +33,9 @@ export function ProductsTable() {
         <StatusDialog {...page.deleteDialogProps} />
         {page.imagesDialogProps ? (
           <ImagesDialog {...page.imagesDialogProps} />
+        ) : null}
+        {page.previewDialogProps ? (
+          <ProductCustomerPreviewDialog {...page.previewDialogProps} />
         ) : null}
         {page.variantsDialogProps ? (
           <ProductVariantsDialog {...page.variantsDialogProps} />

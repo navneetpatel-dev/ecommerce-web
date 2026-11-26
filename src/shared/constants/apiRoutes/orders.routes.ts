@@ -58,5 +58,7 @@ export const shippingRoutes = {
 
 export const taxRoutes = {
   rules: "/api/tax/rules",
-  rule: (id: string) => `/api/tax/rules/${id}`,
+  rule: (id: string, query = "") => `/api/tax/rules/${id}${query}`,
+  effective: (categoryId: string) =>
+    `/api/tax/rules/effective?categoryId=${categoryId}`,
 } as const;

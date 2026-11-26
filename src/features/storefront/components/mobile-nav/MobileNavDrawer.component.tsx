@@ -1,6 +1,6 @@
 import { useRef } from "react";
+import { IconCloseButton } from "@/shared/components/ui/icon-close-button";
 import Link from "next/link";
-import { X } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { PATHS } from "@/shared/constants/paths/paths";
@@ -60,16 +60,11 @@ export function MobileNavDrawer({
       >
         <div className={styles.header}>
           <span className={styles.title}>{LABELS.menu}</span>
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon-sm"
+          <IconCloseButton
+            variant="dialog"
+            label={LABELS.closeMenu}
             onClick={onClose}
-            className={styles.closeButton}
-            aria-label={LABELS.closeMenu}
-          >
-            <X size={20} />
-          </Button>
+          />
         </div>
 
         <nav aria-label={LABELS.menu} className={styles.nav}>

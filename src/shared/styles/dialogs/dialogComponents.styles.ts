@@ -1,7 +1,7 @@
 import { OVERLAY_BACKDROP } from "../common.styles";
 
 export const loginRequiredDialogStyles = {
-  content: "max-w-[400px]",
+  content: "max-w-md",
   header: "items-center space-y-2 text-center sm:text-center",
   iconWrap:
     "mb-1 flex h-12 w-12 items-center justify-center rounded-full border border-brand/25 bg-brand-subtle text-brand",
@@ -13,7 +13,7 @@ export const loginRequiredDialogStyles = {
 } as const;
 
 export const statusDialogStyles = {
-  content: "max-w-[420px] gap-5 sm:text-left",
+  content: "max-w-md sm:text-left",
   header: "space-y-4 sm:text-left",
   iconWrap:
     "mx-auto flex h-12 w-12 items-center justify-center rounded-full border sm:mx-0",
@@ -55,7 +55,7 @@ export const bottomSheetViewStyles = {
   handle: "h-1 w-10 rounded-full bg-line",
   header: "flex items-center justify-between border-b border-line px-4 py-3",
   title: "text-[1.125rem] font-semibold text-ink",
-  closeButton: "ml-auto rounded-full text-ink-muted hover:text-ink",
+  closeButton: "ml-auto",
   content: "flex-1 overflow-y-auto px-4 py-4",
 } as const;
 

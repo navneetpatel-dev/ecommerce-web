@@ -59,7 +59,7 @@ export function VendorPackingSlipDialog({
       </div>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-h-[90vh] max-w-xl overflow-y-auto">
+        <DialogContent className="max-w-2xl">
           <DialogHeader>
             <div className="flex flex-wrap items-center justify-between gap-2 pr-6">
               <DialogTitle className="text-heading-sm font-semibold text-ink flex items-center gap-2">

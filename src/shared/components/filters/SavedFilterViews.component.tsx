@@ -1,7 +1,8 @@
 "use client";
 
+import { IconCloseButton } from "@/shared/components/ui/icon-close-button";
 import { useEffect, useState } from "react";
-import { Bookmark, Check, Plus, Share2, Trash2, X } from "lucide-react";
+import { Bookmark, Check, Plus, Share2, Trash2 } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import {
@@ -215,14 +216,10 @@ export function SavedFilterViews({
               <p className="text-body-sm font-semibold text-ink">
                 Save Filter View
               </p>
-              <button
-                type="button"
+              <IconCloseButton
+                variant="inline"
                 onClick={() => setIsSaving(false)}
-                className="text-ink-muted hover:text-ink"
-                aria-label="Close"
-              >
-                <X className="size-3.5" aria-hidden />
-              </button>
+              />
             </div>
             <form onSubmit={handleSaveCurrentView} className="space-y-2">
               <Input

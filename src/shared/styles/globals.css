@@ -373,6 +373,62 @@ html::-webkit-scrollbar-track {
   box-shadow: 0 1px 0 rgba(15, 23, 42, 0.04);
 }
 
+/* Dialog action rows stay pinned to the bottom edge while the dialog body scrolls: every dialog whose
+   body holds a DialogFooter or FormActions row gets this, so the buttons are always in reach. A dialog
+   without such a row keeps its bottom padding instead. (`--dialog-pad` is the body's side padding.) */
+.dialog-body :is(.dialog-footer, [data-form-actions]) {
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  margin-inline: calc(var(--dialog-pad) * -1);
+  /* The last field never touches the action row's top edge when scrolled to the end. */
+  margin-top: 1rem;
+  padding: 0.875rem var(--dialog-pad);
+  border-top: 1px solid var(--color-line);
+  background: var(--color-surface-raised);
+}
+
+/* Modals scroll without a visible scrollbar (wheel, touch and keyboard still work). */
+.dialog-body {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.dialog-body::-webkit-scrollbar {
+  display: none;
+}
+
+/* Scrolling an error into view must stop above the pinned action row, not under it. */
+.dialog-body [role="alert"] {
+  scroll-margin-bottom: 6rem;
+}
+
+.dialog-body:not(:has(:is(.dialog-footer, [data-form-actions]))) {
+  padding-bottom: var(--dialog-pad);
+}
+
+/* A bordered form section inside a dialog: header and fields share one inset (the section sits in a
+   padded dialog already, so the wide page padding would double up). */
+.dialog-body [data-form-section] > header,
+.dialog-body [data-form-section] > div {
+  padding-inline: 1.25rem;
+}
+
+.dialog-body [data-form-section] > div {
+  padding-block: 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .dialog-body [data-form-section] > header,
+  .dialog-body [data-form-section] > div {
+    padding-inline: 1.5rem;
+  }
+
+  .dialog-body [data-form-section] > div {
+    padding-block: 1.5rem;
+  }
+}
+
 /* Dialog action row — equal-size buttons on every breakpoint */
 .dialog-footer {
   display: flex;

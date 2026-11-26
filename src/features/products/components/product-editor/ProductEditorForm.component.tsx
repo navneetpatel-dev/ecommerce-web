@@ -1,5 +1,6 @@
 "use client";
 
+import { Eye } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { DisabledActionHint } from "@/shared/components/forms/DisabledActionHint.component";
 import { FormActions, FormStack } from "@/shared/components/forms";
@@ -35,9 +36,16 @@ export function ProductEditorForm({
   vendorField,
   reason,
   variants,
+  onPreview,
 }: ProductEditorFormProps) {
   const disabled = submitting || loading;
   const showImages = mode === "create";
+  const previewButton = onPreview ? (
+    <Button type="button" variant="outline" onClick={onPreview}>
+      <Eye aria-hidden />
+      {LABELS.previewAsCustomer}
+    </Button>
+  ) : undefined;
 
   const {
     getError,
@@ -128,7 +136,7 @@ export function ProductEditorForm({
           </p>
         ) : null}
 
-        <FormActions>
+        <FormActions leading={previewButton}>
           <Button
             variant="outline"
             type="button"

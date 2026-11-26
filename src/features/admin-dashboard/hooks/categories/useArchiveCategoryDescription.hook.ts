@@ -1,25 +1,24 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { categoriesApi } from "@/features/categories";
+import { categoriesApi, type CategoryImpact } from "@/features/categories";
 
+/** What archiving or deleting this category touches (loaded when the confirmation opens). */
 export function useArchiveCategoryDescription(categoryId: string) {
-  const [count, setCount] = useState<number | null>(null);
+  const [impact, setImpact] = useState<CategoryImpact | null>(null);
 
   useEffect(() => {
     let active = true;
     void categoriesApi
-      .productCount(categoryId)
+      .impact(categoryId)
       .then((result) => {
-        if (active) setCount(result.productCount);
+        if (active) setImpact(result);
       })
-      .catch(() => {
-        if (active) setCount(0);
-      });
+      .catch(() => undefined);
     return () => {
       active = false;
     };
   }, [categoryId]);
 
-  return { count };
+  return { impact };
 }

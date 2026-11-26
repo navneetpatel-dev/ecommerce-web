@@ -1,5 +1,6 @@
 import type { ChangeEvent } from "react";
-import { CheckSquare, Search, Square, X } from "lucide-react";
+import { IconCloseButton } from "@/shared/components/ui/icon-close-button";
+import { CheckSquare, Search, Square } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { LABELS } from "@/shared/constants/labels";
@@ -40,14 +41,12 @@ export function PermissionsToolbar({
           className={rolePermissionsDialogStyles.searchInput}
         />
         {search ? (
-          <button
-            type="button"
-            onClick={handleClearSearch}
+          <IconCloseButton
+            variant="inline"
+            label={LABELS.clearPermissionSearch}
             className={rolePermissionsDialogStyles.clearIconBtn}
-            aria-label={LABELS.clearPermissionSearch}
-          >
-            <X className={rolePermissionsDialogStyles.iconXs} />
-          </button>
+            onClick={handleClearSearch}
+          />
         ) : null}
       </div>
 

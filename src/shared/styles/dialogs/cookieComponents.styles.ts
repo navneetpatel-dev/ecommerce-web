@@ -6,8 +6,7 @@ export const cookieBannerStyles = {
   text: "text-body-sm text-ink-muted flex-1 pr-6 sm:pr-0",
   actions: "flex items-center gap-2 shrink-0",
   prefLink: "text-body-sm",
-  dismissButton:
-    "absolute top-2 right-2 h-8 w-8 min-h-8 max-h-8 sm:hidden text-ink-muted",
+  dismissButton: "absolute top-2 right-2 sm:hidden",
 } as const;
 
 export const cookiePreferencesDialogStyles = {

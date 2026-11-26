@@ -4,7 +4,7 @@ export const adminCashbackOffersStyles = {
   headerInfo: "min-w-0 space-y-1",
   heading: "font-display text-xl font-semibold text-ink",
   description: "max-w-2xl text-body-sm text-ink-muted",
-  dialogContent: "max-h-[90dvh] max-w-2xl overflow-y-auto",
+  dialogContent: "max-w-2xl",
   form: "space-y-5",
   grid: "grid gap-4 sm:grid-cols-3",
   gridTwo: "grid gap-4 sm:grid-cols-2",

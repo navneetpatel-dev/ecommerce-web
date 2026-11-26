@@ -1,6 +1,7 @@
 import type { RefObject } from "react";
+import { IconCloseButton } from "@/shared/components/ui/icon-close-button";
 import Link from "next/link";
-import { BookOpen, HelpCircle, Mail, Ticket, X } from "lucide-react";
+import { BookOpen, HelpCircle, Mail, Ticket } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths/paths";
@@ -36,16 +37,7 @@ export function ChatWidget({
     >
       <div className={chatWidgetStyles.header}>
         <h2 className={chatWidgetStyles.title}>{LABELS.chatNeedHelpTitle}</h2>
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon"
-          aria-label={LABELS.close}
-          className={chatWidgetStyles.closeBtn}
-          onClick={onClose}
-        >
-          <X className={chatWidgetStyles.closeIcon} aria-hidden />
-        </Button>
+        <IconCloseButton variant="dialog" onClick={onClose} />
       </div>
       <p className={chatWidgetStyles.message}>{LABELS.chatSupportMessage}</p>
       <div className={chatWidgetStyles.actions}>

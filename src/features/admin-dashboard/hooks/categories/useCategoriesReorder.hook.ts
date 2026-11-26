@@ -44,11 +44,20 @@ export function useCategoriesReorder(
     const oldIndex = rows.findIndex((row) => row.id === active.id);
     const newIndex = rows.findIndex((row) => row.id === over.id);
     if (oldIndex < 0 || newIndex < 0) return;
-    const next = arrayMove(rows, oldIndex, newIndex);
-    setRows(next);
+    const moved = rows[oldIndex]!;
+    const target = rows[newIndex]!;
+    // Order only means something among siblings; changing the parent is done in the edit dialog.
+    if ((moved.parentId ?? null) !== (target.parentId ?? null)) {
+      setReorderError(LABELS.categoryReorderSameParent);
+      return;
+    }
+    setRows(arrayMove(rows, oldIndex, newIndex));
     setReorderError(null);
     try {
-      await categoriesApi.reorder(next.map((row) => row.id));
+      await categoriesApi.move(
+        moved.id,
+        newIndex > oldIndex ? { afterId: target.id } : { beforeId: target.id },
+      );
       onRefresh?.();
     } catch (err) {
       setRows(categories);

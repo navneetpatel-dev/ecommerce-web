@@ -26,12 +26,16 @@ export const formFieldFrameStyles = {
   error: "text-body-sm text-danger",
   hint: "text-body-sm text-ink-muted",
   footerActionWrapper: "ml-auto",
+  /** Hint or error on the left, character count on the right: one row under the control. */
+  counterRow: "flex items-start justify-between gap-x-4 gap-y-1",
+  counterNote: "min-w-0 flex-1 space-y-1",
 } as const;
 
 export const formSectionStyles = {
   section:
     "overflow-hidden rounded-md border border-line bg-surface shadow-card-hairline",
-  header: "border-b border-line/80 bg-paper/50 px-4 py-4 sm:px-6 sm:py-5",
+  header:
+    "border-b border-line/80 bg-paper/50 px-4 py-4 sm:px-6 sm:py-5 lg:px-8",
   title: "text-body font-semibold tracking-tight text-ink",
   hint: "mt-1 max-w-3xl text-body-sm text-ink-muted",
   content: "grid gap-5 p-4 sm:gap-x-6 sm:gap-y-6 sm:p-6 lg:gap-x-8 lg:p-8",

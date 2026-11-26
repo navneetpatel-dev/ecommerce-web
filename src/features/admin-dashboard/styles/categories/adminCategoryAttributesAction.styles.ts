@@ -1,5 +1,5 @@
 export const adminCategoryAttributesActionStyles = {
-  dialogContent: "max-h-[min(92vh,48rem)] max-w-lg overflow-y-auto",
+  dialogContent: "max-w-2xl",
   dialogDescription: "text-[0.875rem] text-ink-muted",
   listHint: "text-[0.875rem] text-ink-muted",
   listContainer:

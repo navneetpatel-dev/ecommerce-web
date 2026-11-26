@@ -1,7 +1,8 @@
 "use client";
 
+import { IconCloseButton } from "@/shared/components/ui/icon-close-button";
 import * as React from "react";
-import { Search, X } from "lucide-react";
+import { Search } from "lucide-react";
 import { cn } from "@/shared/utils/dom/cn";
 import {
   joinAriaIds,
@@ -126,14 +127,12 @@ export const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
           )}
         />
         {hasValue ? (
-          <button
-            type="button"
+          <IconCloseButton
+            variant="inline"
+            label="Clear search"
+            className="absolute right-2 top-1/2 -translate-y-1/2"
             onClick={handleClearClick}
-            aria-label="Clear search"
-            className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded-full p-1 text-ink-muted hover:text-ink hover:bg-surface-raised transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
-          >
-            <X className="size-3.5" strokeWidth={2.25} aria-hidden />
-          </button>
+          />
         ) : showShortcutHint && !isFocused ? (
           <kbd
             aria-hidden

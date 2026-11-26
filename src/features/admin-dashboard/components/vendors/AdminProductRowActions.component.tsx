@@ -1,6 +1,6 @@
 "use client";
 
-import { Boxes, Pencil, Send } from "lucide-react";
+import { Boxes, Eye, Pencil, Send } from "lucide-react";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { AdminConfirmAction } from "../shared/AdminConfirmAction.component";
 import { Button } from "@/shared/components/ui/button";
@@ -19,6 +19,7 @@ interface AdminProductRowActionsProps {
   product: ProductTarget;
   status: string;
   listedByPlatform: boolean;
+  onPreview: (product: ProductTarget) => void;
   onEdit: (id: string) => void;
   onManageVariants: (product: ProductTarget) => void;
   onSubmitOnBehalf: (product: ProductTarget) => void;
@@ -32,12 +33,14 @@ export function AdminProductRowActions({
   product,
   status,
   listedByPlatform,
+  onPreview,
   onEdit,
   onManageVariants,
   onSubmitOnBehalf,
   canPublish = false,
   onPublish,
 }: AdminProductRowActionsProps) {
+  const handlePreview = () => onPreview(product);
   const handleEdit = () => onEdit(product.id);
   const handleVariants = () => onManageVariants(product);
   const handleSubmit = () => onSubmitOnBehalf(product);
@@ -46,6 +49,18 @@ export function AdminProductRowActions({
 
   return (
     <>
+      <TableRowAction>
+        <Button
+          size="sm"
+          variant="outline"
+          type="button"
+          className={tableMenuButtonClass("neutral")}
+          onClick={handlePreview}
+        >
+          <Eye strokeWidth={2.25} aria-hidden />
+          <span>{LABELS.previewAsCustomer}</span>
+        </Button>
+      </TableRowAction>
       <TableRowAction>
         <Button
           size="sm"

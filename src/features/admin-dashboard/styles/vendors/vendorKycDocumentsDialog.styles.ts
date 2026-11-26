@@ -1,5 +1,5 @@
 export const vendorKycDocumentsDialogStyles = {
-  dialogContent: "max-w-lg",
+  dialogContent: "max-w-2xl",
   loadingText: "py-6 text-center text-body text-ink-muted",
   errorText: "py-6 text-center text-body text-danger",
   actionErrorText: "text-center text-body-sm text-danger",

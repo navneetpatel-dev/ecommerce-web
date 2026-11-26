@@ -94,27 +94,57 @@ export function useProductFormController({
   };
 
   // What customers will pay for the entered (pre-GST) price, from the server.
+  const mrpNumber =
+    values.compareAtPrice !== "" && Number(values.compareAtPrice) > 0
+      ? Number(values.compareAtPrice)
+      : undefined;
   const { data: gstPreview } = useGstPricePreview(
     values.categoryId,
     Number(values.price),
+    mrpNumber,
   );
   const previewReady = Boolean(
     gstPreview && values.categoryId && values.price !== "",
   );
   const customerPrice = previewReady ? gstPreview!.displayPrice : null;
+  const missing: PriceGuide["missing"] = !values.categoryId
+    ? "category"
+    : values.price === ""
+      ? "price"
+      : null;
   const priceGuide: PriceGuide = {
+    missing,
     priceHint: previewReady
       ? formatLabel(LABELS.productPriceBreakdown, {
           price: values.price,
           percent: gstPreview!.gstPercentage,
           amount: formatInrAmount(gstPreview!.displayPrice),
         })
-      : LABELS.productPriceGstHint,
-    mrpHint: previewReady
-      ? formatLabel(LABELS.productMrpMinimumHint, {
-          amount: formatInrAmount(gstPreview!.displayPrice),
-        })
-      : LABELS.productMrpHint,
+      : !values.categoryId
+        ? LABELS.productPriceNeedsCategory
+        : LABELS.productPriceGstHint,
+    mrpHint: !previewReady
+      ? !values.categoryId
+        ? LABELS.productMrpNeedsCategory
+        : LABELS.productMrpHint
+      : gstPreview!.showMrp && gstPreview!.discountPercent != null
+        ? formatLabel(LABELS.productMrpShownHint, {
+            mrp: formatInrAmount(gstPreview!.compareAtPrice),
+            percent: gstPreview!.discountPercent,
+          })
+        : formatLabel(LABELS.productMrpMinimumHint, {
+            amount: formatInrAmount(gstPreview!.displayPrice),
+          }),
+    preview: previewReady
+      ? {
+          displayPrice: gstPreview!.displayPrice,
+          gstPercentage: gstPreview!.gstPercentage,
+          compareAtPrice: gstPreview!.compareAtPrice ?? null,
+          showMrp: Boolean(gstPreview!.showMrp),
+          discountPercent: gstPreview!.discountPercent ?? null,
+          savings: gstPreview!.savings ?? null,
+        }
+      : null,
     customerPrice,
   };
 

@@ -1,7 +1,8 @@
 "use client";
 
+import { IconCloseButton } from "@/shared/components/ui/icon-close-button";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Loader2, Search, X } from "lucide-react";
+import { Loader2, Search } from "lucide-react";
 import { Input } from "@/shared/components/ui/input";
 
 export interface InfiniteSearchSelectProps<T> {
@@ -149,16 +150,13 @@ export function InfiniteSearchSelect<T>({
               className="inline-flex items-center gap-1.5 rounded-full border border-line bg-paper px-2.5 py-1 text-body-xs text-ink"
             >
               <span>{getLabel(item)}</span>
-              <button
-                type="button"
+              <IconCloseButton
+                variant="inline"
+                label={`Remove ${getLabel(item)}`}
                 onClick={() =>
                   onChange(selected.filter((x) => getId(x) !== getId(item)))
                 }
-                aria-label={`Remove ${getLabel(item)}`}
-                className="text-ink-muted hover:text-ink cursor-pointer"
-              >
-                <X className="size-3" />
-              </button>
+              />
             </span>
           ))}
         </div>

@@ -1,5 +1,5 @@
-import { X, type LucideIcon } from "lucide-react";
-import { Button } from "@/shared/components/ui/button";
+import type { LucideIcon } from "lucide-react";
+import { IconCloseButton } from "@/shared/components/ui/icon-close-button";
 import { LABELS } from "@/shared/constants/labels";
 import { filePickerSelectedFileStyles } from "../../styles/file-upload/fileUploadComponents.styles";
 
@@ -35,16 +35,12 @@ export function FilePickerSelectedFile({
           </p>
         </div>
       </div>
-      <Button
-        type="button"
-        variant="ghost"
-        size="icon-sm"
+      <IconCloseButton
+        variant="inline"
+        label={LABELS.remove}
         disabled={disabled}
         onClick={onRemove}
-        aria-label={LABELS.remove}
-      >
-        <X size={16} aria-hidden="true" />
-      </Button>
+      />
     </div>
   );
 }

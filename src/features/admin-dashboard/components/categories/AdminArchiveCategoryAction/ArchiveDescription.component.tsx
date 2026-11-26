@@ -7,20 +7,41 @@ import { useArchiveCategoryDescription } from "../../../hooks/categories/useArch
 interface ArchiveDescriptionProps {
   categoryId: string;
   name: string;
+  /** "archive" hides it from the shop; "delete" removes it for good. */
+  mode?: "archive" | "delete";
 }
 
+/** The confirmation text with what the action really touches: products, subcategories, its tax rule. */
 export function ArchiveDescription({
   categoryId,
   name,
+  mode = "archive",
 }: ArchiveDescriptionProps) {
-  const { count } = useArchiveCategoryDescription(categoryId);
+  const { impact } = useArchiveCategoryDescription(categoryId);
+  if (!impact) return <>{LABELS.categoryImpactLoading}</>;
 
-  return (
-    <>
-      {formatLabel(LABELS.confirmArchiveCategoryBody, {
-        name,
-        count: String(count ?? "…"),
-      })}
-    </>
+  const base = formatLabel(
+    mode === "archive"
+      ? LABELS.categoryImpactArchive
+      : LABELS.categoryImpactDelete,
+    {
+      name,
+      products: String(impact.productCount),
+      children: String(impact.childCount),
+    },
   );
+  const cascade =
+    mode === "archive" && impact.activeChildCount > 0
+      ? formatLabel(LABELS.categoryImpactArchiveCascade, {
+          count: String(impact.activeChildCount),
+        })
+      : null;
+  const rule =
+    mode === "delete" && impact.ownTaxRule
+      ? formatLabel(LABELS.categoryImpactTaxRule, {
+          percent: String(impact.ownTaxRule.gstPercentage),
+        })
+      : null;
+
+  return <>{[base, cascade, rule].filter(Boolean).join(" ")}</>;
 }

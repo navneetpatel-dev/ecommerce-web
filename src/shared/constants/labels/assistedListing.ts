@@ -83,6 +83,24 @@ export const assistedListingLabels = {
     "No images yet. Add up to 10 photos; the first one becomes the main image.",
   searchCategories: "Search categories",
   noCategoriesFound: "No categories found.",
+  previewAsCustomer: "Preview",
+  customerPreviewTitle: "Customer preview",
+  customerPreviewBody:
+    "How shoppers will see this product page. Buying is turned off.",
+  customerPreviewNotLive:
+    "Not visible to customers yet: this product is {status}.",
+  customerPriceTitle: "How customers will see it",
+  customerPriceSavings: "Customers save ₹{amount}",
+  customerPriceNoMrp:
+    "No MRP, so no discount is shown. Add an MRP above to show a struck-through price and a % off.",
+  customerPriceHighDiscount:
+    "That is a very large discount ({percent}% off). Customers may doubt it; check the MRP.",
+  customerPriceSmallDiscount:
+    "A discount this small ({percent}% off) is rarely noticed. A slightly higher MRP stands out more.",
+  customerPriceNeedsCategory:
+    "Choose a category to see the GST and what customers will pay.",
+  customerPriceNeedsPrice: "Enter a selling price to see this.",
+  previewNamePlaceholder: "Your product name",
   gstBadge: "{percent}% GST",
   gstBadgeBand: "{from}–{to}% GST",
   gstBadgeBandTitle: "{from}% GST up to ₹{threshold}, {to}% above",

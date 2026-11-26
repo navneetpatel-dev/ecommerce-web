@@ -15,6 +15,7 @@ interface ProductActionCallbacks {
   onEdit?: (product: ProductTableRow) => void;
   onDelete?: (product: ProductTableRow) => void;
   onSubmitForApproval?: (product: ProductTableRow) => void;
+  onPreview?: (product: ProductTableRow) => void;
   onManageImages?: (product: ProductTableRow) => void;
   onManageVariants?: (product: ProductTableRow) => void;
   isDeleting?: boolean;

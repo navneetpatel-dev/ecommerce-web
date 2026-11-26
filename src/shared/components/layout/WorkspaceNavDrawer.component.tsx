@@ -1,8 +1,8 @@
 "use client";
 
+import { IconCloseButton } from "@/shared/components/ui/icon-close-button";
 import { useMemo, useRef } from "react";
 import Link from "next/link";
-import { X } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { cn } from "@/shared/utils/dom/cn";
 import { LABELS } from "@/shared/constants/labels";
@@ -70,16 +70,11 @@ export function WorkspaceNavDrawer({
       >
         <div className={workspaceNavDrawerStyles.header}>
           <span className={workspaceNavDrawerStyles.title}>{title}</span>
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon-sm"
+          <IconCloseButton
+            variant="dialog"
+            label={LABELS.closeMenu}
             onClick={onClose}
-            className={workspaceNavDrawerStyles.closeButton}
-            aria-label={LABELS.closeMenu}
-          >
-            <X size={20} />
-          </Button>
+          />
         </div>
 
         <nav

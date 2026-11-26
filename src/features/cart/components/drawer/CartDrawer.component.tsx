@@ -1,10 +1,10 @@
 "use client";
 
+import { IconCloseButton } from "@/shared/components/ui/icon-close-button";
 import { useRef } from "react";
-import { X, ShoppingBag } from "lucide-react";
+import { ShoppingBag } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
 import { motion, AnimatePresence } from "motion/react";
-import { Button } from "@/shared/components/ui/button";
 import { EmptyState } from "@/shared/components/display/EmptyState.component";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { useModalOverlay } from "@/shared/hooks/ui/useModalOverlay.hook";
@@ -167,16 +167,12 @@ export function CartDrawer({
             <h2 className={styles.title}>{LABELS.yourCart}</h2>
             <div className={styles.headerActions}>
               {clearCartActionElement}
-              <Button
+              <IconCloseButton
                 ref={closeButtonRef}
-                type="button"
-                variant="ghost"
-                size="icon-sm"
+                variant="dialog"
+                label={LABELS.closeCart}
                 onClick={onClose}
-                aria-label={LABELS.closeCart}
-              >
-                <X size={20} />
-              </Button>
+              />
             </div>
           </div>
 

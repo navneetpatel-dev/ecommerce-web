@@ -1,15 +1,9 @@
 "use client";
 
+import { IconCloseButton } from "@/shared/components/ui/icon-close-button";
 import { useState } from "react";
 import Link from "next/link";
-import {
-  ArrowUpRight,
-  Mail,
-  Megaphone,
-  RotateCcw,
-  Send,
-  X,
-} from "lucide-react";
+import { ArrowUpRight, Mail, Megaphone, RotateCcw, Send } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { AdminDataPage } from "../shared/AdminDataPage.page";
@@ -153,16 +147,13 @@ export function AdminNotificationsPage() {
                 <span className="font-mono">
                   Broadcast: {filters.referenceId.slice(0, 8)}…
                 </span>
-                <button
-                  type="button"
+                <IconCloseButton
+                  variant="inline"
+                  label="Clear broadcast filter"
                   onClick={() =>
                     setFilters((prev) => ({ ...prev, referenceId: undefined }))
                   }
-                  aria-label="Clear broadcast filter"
-                  className="hover:opacity-75 cursor-pointer"
-                >
-                  <X className="size-3.5" />
-                </button>
+                />
               </div>
             )}
             <NotificationLogFiltersBar

@@ -1,8 +1,7 @@
 "use client";
 
-import { X } from "lucide-react";
+import { IconCloseButton } from "@/shared/components/ui/icon-close-button";
 import { MediaImage } from "@/shared/components/media/MediaImage.component";
-import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
 import {
   fileUploadCardStyles,
@@ -74,16 +73,11 @@ function PreviewTile({ entry, card, isMain, onRemove }: PreviewTileProps) {
         </span>
       ) : null}
       {onRemove ? (
-        <Button
-          type="button"
-          size="icon"
-          variant="outline"
-          className={fileUploadCardStyles.removeButton}
-          aria-label={LABELS.removeFile}
+        <IconCloseButton
+          variant="overlay"
+          label={LABELS.removeFile}
           onClick={handleRemove}
-        >
-          <X aria-hidden />
-        </Button>
+        />
       ) : null}
     </li>
   );

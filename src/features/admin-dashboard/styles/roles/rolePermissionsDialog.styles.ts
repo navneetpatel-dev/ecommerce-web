@@ -1,6 +1,6 @@
 export const rolePermissionsDialogStyles = {
   dialogContent:
-    "w-full sm:max-w-3xl max-h-[min(90vh,46rem)] h-[min(90vh,46rem)] p-0 sm:p-0 flex flex-col overflow-hidden gap-0",
+    "w-full sm:max-w-4xl max-h-[min(90vh,46rem)] h-[min(90vh,46rem)] p-0 sm:p-0 flex flex-col overflow-hidden gap-0",
   header: "border-b border-line px-6 py-4 bg-paper/50",
   headerRow: "flex items-center justify-between gap-3",
   titleWrapper: "flex items-center gap-2",
@@ -42,8 +42,7 @@ export const rolePermissionsDialogStyles = {
   searchIcon:
     "absolute left-3 top-1/2 -translate-y-1/2 size-4 text-ink-faint pointer-events-none",
   searchInput: "pl-9 pr-8 h-9 text-body-sm bg-surface border-line",
-  clearIconBtn:
-    "absolute right-2.5 top-1/2 -translate-y-1/2 text-ink-muted hover:text-ink",
+  clearIconBtn: "absolute right-2 top-1/2 -translate-y-1/2",
   iconXs: "size-3.5",
   iconXsBrand: "size-3.5 text-brand",
   iconXsMuted: "size-3.5 text-ink-muted",

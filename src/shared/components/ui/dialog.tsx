@@ -2,9 +2,9 @@
 
 import * as React from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
-import { X } from "lucide-react";
+import { useScrollAlertsIntoView } from "@/shared/hooks/ui/useScrollAlertsIntoView.hook";
+import { IconCloseButton } from "./icon-close-button";
 import { cn } from "@/shared/utils/dom/cn";
-import { LABELS } from "@/shared/constants/labels";
 import { dialogStyles } from "../../styles/ui/dialog.styles";
 
 const Dialog = DialogPrimitive.Root;
@@ -24,6 +24,19 @@ const DialogOverlay = React.forwardRef<
   />
 ));
 DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
+
+/**
+ * The dialog scrolls its own body (`dialogStyles.bodyBase`). A caller passing `overflow-y-auto` to the
+ * dialog box as well produced two scrollbars and a scroll area with empty space below the content, so
+ * those classes are dropped here, once, for every dialog in the app.
+ */
+const OWN_SCROLL_CLASS = /^(?:[a-z]+:)*overflow(?:-y)?-(?:auto|scroll)$/;
+export function withoutOwnScroll(className?: string): string | undefined {
+  return className
+    ?.split(/\s+/)
+    .filter((token) => token && !OWN_SCROLL_CLASS.test(token))
+    .join(" ");
+}
 
 const DialogContent = React.forwardRef<
   React.ComponentRef<typeof DialogPrimitive.Content>,
@@ -48,6 +61,8 @@ const DialogContent = React.forwardRef<
     ref,
   ) => {
     const closedByPointerRef = React.useRef(false);
+    // An error appearing below the fold (after Save) scrolls into view.
+    const bodyRef = useScrollAlertsIntoView<HTMLDivElement>();
     const isFullscreen = presentation === "fullscreen";
 
     const closeButtonElement = !hideCloseButton && (
@@ -59,21 +74,16 @@ const DialogContent = React.forwardRef<
             : dialogStyles.closeButtonWrapDefault,
         )}
       >
-        <DialogPrimitive.Close
-          type="button"
-          className={cn(
-            dialogStyles.closeButtonBase,
-            isFullscreen && dialogStyles.closeButtonFullscreen,
-            closeButtonClassName,
-          )}
-          onPointerDown={(event) => {
-            // Keep focus in the dialog until close so field blur doesn't flash validation.
-            event.preventDefault();
-            closedByPointerRef.current = true;
-          }}
-        >
-          <X size={18} />
-          <span className={dialogStyles.srOnly}>{LABELS.close}</span>
+        <DialogPrimitive.Close asChild>
+          <IconCloseButton
+            variant={isFullscreen ? "floating" : "dialog"}
+            className={closeButtonClassName}
+            onPointerDown={(event) => {
+              // Keep focus in the dialog until close so field blur doesn't flash validation.
+              event.preventDefault();
+              closedByPointerRef.current = true;
+            }}
+          />
         </DialogPrimitive.Close>
       </div>
     );
@@ -98,7 +108,7 @@ const DialogContent = React.forwardRef<
               isFullscreen
                 ? dialogStyles.contentFullscreen
                 : dialogStyles.contentDefault,
-              className,
+              withoutOwnScroll(className),
             )}
             style={{ animationDuration: "var(--motion-moderate)" }}
             onPointerDownOutside={(event) => {
@@ -121,6 +131,7 @@ const DialogContent = React.forwardRef<
           >
             {closeButtonElement}
             <div
+              ref={bodyRef}
               className={cn(
                 dialogStyles.bodyBase,
                 !className?.includes("p-0") && dialogStyles.bodyPadding,

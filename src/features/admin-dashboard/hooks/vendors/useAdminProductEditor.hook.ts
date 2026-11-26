@@ -48,6 +48,9 @@ export function useAdminProductEditor(onChanged: () => void) {
     null,
   );
   const [submitTarget, setSubmitTarget] = useState<ProductTarget | null>(null);
+  const [previewTarget, setPreviewTarget] = useState<ProductTarget | null>(
+    null,
+  );
   const lastKeyRef = useRef<string | null>(null);
 
   useEffect(() => {
@@ -94,6 +97,7 @@ export function useAdminProductEditor(onChanged: () => void) {
     open: showDialog,
     mode: (mode === "edit" ? "edit" : "create") as "create" | "edit",
     isDirty: formDirty,
+    savedProduct: form.product,
     onOpenChange: setOpen,
     onCancel: close,
     vendorId: form.vendorId,
@@ -148,6 +152,16 @@ export function useAdminProductEditor(onChanged: () => void) {
       }
     : null;
 
+  const previewDialogProps = previewTarget
+    ? {
+        productId: previewTarget.id,
+        open: true,
+        onOpenChange: (next: boolean) => {
+          if (!next) setPreviewTarget(null);
+        },
+      }
+    : null;
+
   const submitDialogProps = submitTarget
     ? {
         productId: submitTarget.id,
@@ -171,6 +185,8 @@ export function useAdminProductEditor(onChanged: () => void) {
     openEdit,
     openVariants: setVariantsTarget,
     openSubmit: setSubmitTarget,
+    openPreview: setPreviewTarget,
+    previewDialogProps,
     editorDialogProps,
     variantsDialogProps,
     submitDialogProps,

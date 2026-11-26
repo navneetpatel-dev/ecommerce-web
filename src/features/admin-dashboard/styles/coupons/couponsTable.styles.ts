@@ -1,5 +1,5 @@
 export const couponsTableStyles = {
-  dialogContent: "max-w-md",
+  dialogContent: "max-w-xl",
   dialogTextMuted: "text-[0.875rem] text-ink-muted",
   analyticsList: "space-y-3 text-[0.875rem]",
   analyticsRow: "flex justify-between gap-4",

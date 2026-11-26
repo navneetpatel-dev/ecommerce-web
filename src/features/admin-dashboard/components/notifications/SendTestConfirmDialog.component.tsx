@@ -70,7 +70,7 @@ export function SendTestConfirmDialog({
         onOpenChange(next);
       }}
     >
-      <DialogContent className="max-w-lg">
+      <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle>
             {broadcast ? "Send test of broadcast" : "Send test email"}

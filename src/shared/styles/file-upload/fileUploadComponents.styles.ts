@@ -69,5 +69,4 @@ export const fileUploadCardStyles = {
     "flex aspect-square items-center justify-center rounded-md border border-line bg-surface text-body-sm text-ink-muted",
   mainBadge:
     "absolute left-2 top-2 rounded-sm bg-brand px-2 py-0.5 text-[0.6875rem] font-semibold uppercase tracking-wide text-paper",
-  removeButton: "absolute right-2 top-2",
 } as const;

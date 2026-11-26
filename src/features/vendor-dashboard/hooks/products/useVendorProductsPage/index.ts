@@ -103,6 +103,7 @@ export function useVendorProductsPage() {
     open: showProductDialog,
     mode: (mode === "edit" ? "edit" : "create") as "create" | "edit",
     isDirty: formDirty,
+    savedProduct: form.product,
     onOpenChange: setOpen,
     onCancel: close,
     formProps: {
@@ -146,6 +147,7 @@ export function useVendorProductsPage() {
     deleteDialogProps: view.deleteDialogProps,
     imagesDialogProps: view.imagesDialogProps,
     variantsDialogProps: view.variantsDialogProps,
+    previewDialogProps: view.previewDialogProps,
     ImagesDialog: VendorProductImagesDialog,
   };
 }

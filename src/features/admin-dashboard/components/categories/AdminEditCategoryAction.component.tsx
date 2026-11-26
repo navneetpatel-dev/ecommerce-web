@@ -13,6 +13,8 @@ import { DisabledActionHint } from "@/shared/components/forms/DisabledActionHint
 import { FormActions } from "@/shared/components/forms";
 import { LABELS } from "@/shared/constants/labels";
 import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
+import type { CategoryGstInfo } from "@/shared/api/types";
+import { CategoryTaxSection } from "./CategoryTaxSection.component";
 import { AdminCategoryFormFields } from "./AdminCategoryFormFields.component";
 import { useAdminEditCategoryAction } from "../../hooks/categories/useAdminEditCategoryAction.hook";
 import { adminEditCategoryActionStyles as styles } from "../../styles/categories/adminEditCategoryAction.styles";
@@ -31,6 +33,7 @@ interface AdminEditCategoryActionProps {
     codEnabled?: boolean;
     defaultWarrantyMonths?: number | null;
     defaultWarrantyType?: string | null;
+    gst?: CategoryGstInfo;
   };
   onSaved: () => void;
 }
@@ -78,6 +81,7 @@ export function AdminEditCategoryAction({
               excludeCategoryId={category.id}
               idPrefix={`category-edit-${category.id}`}
             />
+            <CategoryTaxSection categoryId={category.id} gst={category.gst} />
             {error ? (
               <p role="alert" className={styles.errorMessage}>
                 {error}

@@ -25,6 +25,8 @@ interface UseProductDetailContentParams {
   variantUnavailable?: boolean;
   isAddingToCart?: boolean;
   showStickyBar?: boolean;
+  /** A preview inside a dialog: the page must not touch the URL (the dialog is kept open by it). */
+  preview?: boolean;
 }
 
 export function useProductDetailContent({
@@ -36,10 +38,15 @@ export function useProductDetailContent({
   variantUnavailable = false,
   isAddingToCart = false,
   showStickyBar = false,
+  preview = false,
 }: UseProductDetailContentParams) {
   const [deliveryBlocked, setDeliveryBlocked] = useState(false);
   // In the URL (`?tab=reviews`): Back from "View all reviews" lands on the same tab.
-  const [detailTab, setDetailTab] = useUrlTabState(DETAIL_TABS, "description");
+  const urlTab = useUrlTabState(DETAIL_TABS, "description");
+  const localTab = useState<string>("description");
+  // A preview opened from the product dialog keeps its tab in memory: changing the URL there would
+  // drop the `create`/`edit` parameters that keep that dialog open.
+  const [detailTab, setDetailTab] = preview ? localTab : urlTab;
 
   const {
     resolvedVariant,

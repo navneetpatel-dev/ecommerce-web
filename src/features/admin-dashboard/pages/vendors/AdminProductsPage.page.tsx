@@ -9,7 +9,10 @@ import { useAdminProductsPage } from "../../hooks/vendors/useAdminProductsPage";
 import { adminPagesStyles } from "../shared/adminPages.styles";
 import { LABELS } from "@/shared/constants/labels";
 import { Button } from "@/shared/components/ui/button";
-import { ProductVariantsDialog } from "@/features/products";
+import {
+  ProductCustomerPreviewDialog,
+  ProductVariantsDialog,
+} from "@/features/products";
 import { AdminProductEditorDialog } from "../../components/vendors/AdminProductEditorDialog.component";
 import { SubmitOnBehalfDialog } from "../../components/vendors/SubmitOnBehalfDialog.component";
 import { adminProductEditorStyles } from "../../components/vendors/adminProductEditor.styles";
@@ -39,6 +42,9 @@ export function AdminProductsPage() {
         cellOverrides={page.cellOverrides}
       />
       <AdminProductEditorDialog {...editor.editorDialogProps} />
+      {editor.previewDialogProps ? (
+        <ProductCustomerPreviewDialog {...editor.previewDialogProps} />
+      ) : null}
       {editor.variantsDialogProps ? (
         <ProductVariantsDialog {...editor.variantsDialogProps} />
       ) : null}

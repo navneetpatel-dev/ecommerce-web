@@ -41,6 +41,8 @@ interface PurchasePanelProps {
   imageUrl?: string;
   price?: number;
   description?: string;
+  /** Nothing here talks to the server for a product that is not on sale: no delivery check, notify-me, wishlist or share. */
+  preview?: boolean;
 }
 
 export function PurchasePanel({
@@ -74,6 +76,7 @@ export function PurchasePanel({
   imageUrl,
   price,
   description,
+  preview = false,
 }: PurchasePanelProps) {
   const actionsQuantityMax = Math.max(quantityMax, 1);
   const handleAddToCartClick = () => {
@@ -96,20 +99,22 @@ export function PurchasePanel({
           <p className={PRODUCT_DETAIL_CONTENT_STYLES.helperText}>
             {LABELS.outOfStockHint}
           </p>
-          <NotifyMeButton variantId={variantId ?? null} />
+          {preview ? null : <NotifyMeButton variantId={variantId ?? null} />}
         </div>
       ) : null}
 
-      <ProductDeliveryCheck
-        productId={productId}
-        variantId={variantId}
-        vendorId={vendorId}
-        codAvailable={codAvailable}
-        codEligibleAtUnitPrice={codEligibleAtUnitPrice}
-        codMinOrderValue={codMinOrderValue}
-        codMaxOrderValue={codMaxOrderValue}
-        onBlockedChange={onDeliveryBlockedChange}
-      />
+      {preview ? null : (
+        <ProductDeliveryCheck
+          productId={productId}
+          variantId={variantId}
+          vendorId={vendorId}
+          codAvailable={codAvailable}
+          codEligibleAtUnitPrice={codEligibleAtUnitPrice}
+          codMinOrderValue={codMinOrderValue}
+          codMaxOrderValue={codMaxOrderValue}
+          onBlockedChange={onDeliveryBlockedChange}
+        />
+      )}
 
       <div className={PRODUCT_DETAIL_CONTENT_STYLES.actionRow}>
         {isSoldOut ? null : (
@@ -126,32 +131,36 @@ export function PurchasePanel({
             onAddToCart={handleAddToCartClick}
           />
         )}
-        <Button
-          variant="outline"
-          size="icon"
-          className={PRODUCT_DETAIL_CONTENT_STYLES.wishlistButton}
-          onClick={onToggleWishlist}
-          aria-label={
-            isWishlisted ? LABELS.removeFromWishlist : LABELS.addToWishlist
-          }
-        >
-          <Heart
-            size={16}
-            className={
-              isWishlisted
-                ? PRODUCT_DETAIL_CONTENT_STYLES.heartWishlisted
-                : PRODUCT_DETAIL_CONTENT_STYLES.heartUnwishlisted
-            }
-          />
-        </Button>
-        <ShareButtonContainer
-          productId={productId}
-          title={productName}
-          url={productUrl}
-          imageUrl={imageUrl}
-          price={price}
-          description={description}
-        />
+        {preview ? null : (
+          <>
+            <Button
+              variant="outline"
+              size="icon"
+              className={PRODUCT_DETAIL_CONTENT_STYLES.wishlistButton}
+              onClick={onToggleWishlist}
+              aria-label={
+                isWishlisted ? LABELS.removeFromWishlist : LABELS.addToWishlist
+              }
+            >
+              <Heart
+                size={16}
+                className={
+                  isWishlisted
+                    ? PRODUCT_DETAIL_CONTENT_STYLES.heartWishlisted
+                    : PRODUCT_DETAIL_CONTENT_STYLES.heartUnwishlisted
+                }
+              />
+            </Button>
+            <ShareButtonContainer
+              productId={productId}
+              title={productName}
+              url={productUrl}
+              imageUrl={imageUrl}
+              price={price}
+              description={description}
+            />
+          </>
+        )}
       </div>
     </div>
   );

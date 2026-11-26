@@ -6,7 +6,7 @@ import {
   TableRowActions,
   TableRowAction,
 } from "@/shared/components/DataTable/TableRowActions.component";
-import { Pencil, Trash2, Send, Images, Boxes } from "lucide-react";
+import { Pencil, Trash2, Send, Images, Boxes, Eye } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
 import { PRODUCT_STATUS } from "@/shared/constants/statuses";
 import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
@@ -19,6 +19,7 @@ export function ProductActions(props: ProductRowActionsProps) {
     onEdit,
     onDelete,
     onSubmitForApproval,
+    onPreview,
     onManageImages,
     onManageVariants,
     isDeleting,
@@ -27,6 +28,7 @@ export function ProductActions(props: ProductRowActionsProps) {
   const canSubmit =
     Boolean(onSubmitForApproval) && product.status === PRODUCT_STATUS.DRAFT;
   const handleSubmit = () => onSubmitForApproval?.(product);
+  const handlePreview = () => onPreview?.(product);
   const handleManageImages = () => onManageImages?.(product);
   const handleManageVariants = () => onManageVariants?.(product);
   const handleEdit = () => onEdit?.(product);
@@ -34,6 +36,20 @@ export function ProductActions(props: ProductRowActionsProps) {
 
   return (
     <TableRowActions>
+      {onPreview ? (
+        <TableRowAction>
+          <Button
+            size="sm"
+            variant="outline"
+            type="button"
+            className={tableMenuButtonClass("neutral")}
+            onClick={handlePreview}
+          >
+            <Eye strokeWidth={2.25} aria-hidden />
+            <span>{LABELS.previewAsCustomer}</span>
+          </Button>
+        </TableRowAction>
+      ) : null}
       {canSubmit ? (
         <TableRowAction>
           <DisabledActionHint

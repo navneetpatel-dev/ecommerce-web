@@ -11,6 +11,6 @@ export const variantsEditorStyles = {
   empty: "text-sm text-ink-muted",
   actions: "flex flex-wrap gap-2",
   reasonBox: "mb-3",
-  dialogContent: "max-h-[min(92vh,48rem)] max-w-4xl overflow-y-auto",
+  dialogContent: "max-w-5xl",
   rowReadOnlySku: "text-sm font-medium text-ink",
 } as const;

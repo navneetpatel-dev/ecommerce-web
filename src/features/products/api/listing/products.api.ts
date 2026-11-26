@@ -46,6 +46,13 @@ export type ProductListResponse = PaginatedList<ProductListItem>;
 export interface GstPricePreview {
   gstPercentage: number;
   displayPrice: number;
+  /** Present when an MRP was sent: what the customer page shows for it, computed by the API. */
+  compareAtPrice?: number | null;
+  showMrp?: boolean;
+  discountPercent?: number | null;
+  savings?: number | null;
+  /** What the customer pays for each variant price that was sent, in order. */
+  variantDisplayPrices?: number[];
 }
 
 /** One category of the product form's picker, with its GST (own or inherited). */
@@ -101,10 +108,22 @@ export const productsApi = {
   detail: (slugOrId: string) =>
     apiClient.get<ProductDetail>(API.products.detail(slugOrId)),
   /** Vendor/admin. The GST-inclusive price customers see for a pre-GST price. */
-  gstPreview: (categoryId: string, price: number) =>
+  gstPreview: (
+    categoryId: string,
+    price: number,
+    compareAtPrice?: number,
+    variantPrices?: number[],
+  ) =>
     apiClient.get<GstPricePreview>(
       API.products.gstPreview(
-        buildSearchParams({ categoryId, price }).toString(),
+        buildSearchParams({
+          categoryId,
+          price,
+          compareAtPrice,
+          variantPrices: variantPrices?.length
+            ? variantPrices.join(",")
+            : undefined,
+        }).toString(),
       ),
     ),
   /** Vendor/admin: one page of the category picker (the tree, or a search), or one category by id. */

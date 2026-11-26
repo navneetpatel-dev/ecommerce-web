@@ -6,6 +6,10 @@ import { LABELS } from "@/shared/constants/labels";
 import { CATEGORY_STATUS } from "@/shared/constants/statuses";
 import type { Category } from "@/shared/api/types";
 import { categoriesTableStyles } from "../../styles/categories/categoriesTable.styles";
+import {
+  CategoryNameCell,
+  CategoryGstCell,
+} from "../../components/categories/CategoriesTable/CategoryCells.component";
 import { CategorySortableHandle } from "../../components/categories/CategoriesTable/CategorySortableHandle.component";
 
 export function useCategoriesTableColumns() {
@@ -30,7 +34,7 @@ export function useCategoriesTableColumns() {
         id: "name",
         header: LABELS.name,
         className: categoriesTableStyles.nameColumn,
-        accessor: "name",
+        cell: (row) => <CategoryNameCell category={row} />,
       },
       {
         id: "slug",
@@ -57,6 +61,22 @@ export function useCategoriesTableColumns() {
         id: "parent",
         header: LABELS.parentName,
         cell: (row) => row.parent?.name || LABELS.parentCategoryNone,
+      },
+      {
+        id: "productCount",
+        header: LABELS.categoryProducts,
+        accessor: "productCount",
+      },
+      {
+        id: "childCount",
+        header: LABELS.categorySubcategories,
+        accessor: "childCount",
+      },
+      {
+        id: "gst",
+        header: LABELS.categoryGst,
+        truncate: false,
+        cell: (row) => <CategoryGstCell category={row} />,
       },
     ],
     [],

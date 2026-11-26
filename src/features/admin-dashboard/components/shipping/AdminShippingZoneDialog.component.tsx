@@ -50,7 +50,7 @@ export function AdminShippingZoneDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg">
+      <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle>{LABELS.addShippingZone}</DialogTitle>
           <DialogDescription>

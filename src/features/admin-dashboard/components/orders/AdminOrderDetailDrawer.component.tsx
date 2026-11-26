@@ -50,7 +50,7 @@ export function AdminOrderDetailDrawer({
 
   return (
     <Dialog open={Boolean(order)} onOpenChange={handleOpenChange}>
-      <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto">
+      <DialogContent className="max-w-3xl">
         <DialogHeader>
           <div className="flex flex-wrap items-center justify-between gap-2 pr-6">
             <DialogTitle className="text-heading-sm font-semibold text-ink">

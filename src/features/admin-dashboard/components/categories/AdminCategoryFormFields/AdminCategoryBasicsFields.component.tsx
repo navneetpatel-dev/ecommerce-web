@@ -15,8 +15,15 @@ import {
 import { LABELS } from "@/shared/constants/labels";
 import { CATEGORY_STATUS } from "@/shared/constants/statuses";
 import type { Category } from "@/shared/api/types";
+import { CATEGORY_NAME_MAX } from "../../../schemas/categories/categories.schema";
 import { NONE_PARENT } from "../../../hooks/categories/useCategoryParentOptions.hook";
 import { adminCategoryStyles } from "../../../styles/categories/adminCategory.styles";
+
+const INDENT = "\u00A0\u00A0\u00A0";
+
+/** The parent list shows the tree: subcategories are indented under their parent. */
+const categoryOptionLabel = (category: Category) =>
+  `${INDENT.repeat(category.depth ?? 0)}${category.name}`;
 
 interface AdminCategoryBasicsFieldsProps {
   form: UseFormReturn<CategoryFormInput>;
@@ -36,7 +43,7 @@ export function AdminCategoryBasicsFields({
   const nameHasError = Boolean(nameError);
   const parentOptionItems = parentOptions.map((category) => (
     <SelectItem key={category.id} value={category.id}>
-      {category.name}
+      {categoryOptionLabel(category)}
     </SelectItem>
   ));
 
@@ -50,10 +57,12 @@ export function AdminCategoryBasicsFields({
         htmlFor={`${idPrefix}-name`}
         required
         error={nameError}
+        counter={{ value: form.watch("name") ?? "", max: CATEGORY_NAME_MAX }}
         className={adminCategoryStyles.colSpan2}
       >
         <Input
           id={`${idPrefix}-name`}
+          maxLength={CATEGORY_NAME_MAX}
           error={nameHasError}
           placeholder={LABELS.categoryName}
           {...register("name")}

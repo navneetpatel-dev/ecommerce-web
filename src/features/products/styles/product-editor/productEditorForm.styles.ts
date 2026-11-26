@@ -1,5 +1,5 @@
 export const productEditorFormStyles = {
-  form: "mb-5",
+  form: "",
   submitError: "text-sm text-danger",
 
   // Media
@@ -35,6 +35,17 @@ export const productEditorFormStyles = {
   detailsContent: "gap-x-6 gap-y-8",
   pricingGroup:
     "space-y-5 rounded-lg border border-line bg-paper/30 p-5 sm:col-span-2 sm:p-6",
+  pricePreview:
+    "space-y-2 rounded-lg border border-line bg-surface px-4 py-3.5",
+  pricePreviewTitle:
+    "text-caption font-semibold uppercase tracking-wide text-ink-muted",
+  pricePreviewLine: "flex flex-wrap items-center gap-x-3 gap-y-1.5",
+  pricePreviewPrice: "text-[1.5rem] font-semibold leading-none text-brand",
+  pricePreviewMrp: "text-body-sm text-ink-muted",
+  pricePreviewMeta:
+    "flex flex-wrap items-center gap-x-4 gap-y-1 text-caption text-ink-muted",
+  pricePreviewSavings: "font-medium text-success",
+  pricePreviewNote: "text-caption text-ink-muted",
   pricingGroupHeader: "space-y-1",
   pricingGroupTitle: "text-body font-semibold text-ink",
   pricingGroupHint: "text-body-sm leading-relaxed text-ink-muted",
@@ -54,6 +65,6 @@ export const productEditorFormStyles = {
 } as const;
 
 export const productEditorDialogStyles = {
-  dialogContent: "max-h-[min(92vh,48rem)] max-w-3xl overflow-y-auto",
+  dialogContent: "max-w-4xl",
   description: "text-[0.875rem] text-ink-muted",
 } as const;

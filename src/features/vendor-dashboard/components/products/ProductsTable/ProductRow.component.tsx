@@ -21,6 +21,7 @@ export function ProductRow(props: ProductRowActionsProps) {
     onSubmitForApproval,
     onManageImages,
     onManageVariants,
+    onPreview,
     isDeleting,
     isSubmitting,
   } = props;
@@ -55,6 +56,7 @@ export function ProductRow(props: ProductRowActionsProps) {
           onSubmitForApproval={onSubmitForApproval}
           onManageImages={onManageImages}
           onManageVariants={onManageVariants}
+          onPreview={onPreview}
           isDeleting={isDeleting}
           isSubmitting={isSubmitting}
         />

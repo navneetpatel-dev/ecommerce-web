@@ -31,6 +31,10 @@ export const categoriesRoutes = {
   facets: (idOrSlug: string, query = "") =>
     `/api/categories/${idOrSlug}/facets${query ? `?${query}` : ""}`,
   productCount: (id: string) => `/api/categories/${id}/product-count`,
+  admin: (query = "") => `/api/categories/admin${query ? `?${query}` : ""}`,
+  adminDetail: (id: string) => `/api/categories/admin/${id}`,
+  impact: (id: string) => `/api/categories/admin/${id}/impact`,
+  move: (id: string) => `/api/categories/${id}/move`,
   reorder: "/api/categories/reorder",
   reassignProducts: "/api/categories/reassign-products",
   attributes: (categoryId: string) =>

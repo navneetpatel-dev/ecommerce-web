@@ -15,6 +15,7 @@ const product = { id: "p1", name: "Lamp" };
 
 function renderActions(status: string, listedByPlatform: boolean) {
   const handlers = {
+    onPreview: vi.fn(),
     onEdit: vi.fn(),
     onManageVariants: vi.fn(),
     onSubmitOnBehalf: vi.fn(),
@@ -54,6 +55,7 @@ describe("admin product row actions", () => {
           product={product}
           status={status}
           listedByPlatform={listed}
+          onPreview={vi.fn()}
           onEdit={vi.fn()}
           onManageVariants={vi.fn()}
           onSubmitOnBehalf={vi.fn()}

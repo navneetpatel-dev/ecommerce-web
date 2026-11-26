@@ -22,6 +22,6 @@ export const productDetailsMiscStyles = {
 
   // ProductSizeChartButton
   sizeChartButton: "rounded-full",
-  sizeChartDialogContent: "max-w-2xl",
+  sizeChartDialogContent: "max-w-3xl",
   sizeChartImage: "h-auto w-full",
 } as const;

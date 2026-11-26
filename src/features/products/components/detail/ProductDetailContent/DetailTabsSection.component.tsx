@@ -24,6 +24,8 @@ interface DetailTabsSectionProps {
   categoryName: string | null;
   displayStock: number;
   reviewCount: number;
+  /** Reviews and questions; hidden for a product that has none yet (previews). */
+  showCommunity?: boolean;
 }
 
 export function DetailTabsSection({
@@ -34,6 +36,7 @@ export function DetailTabsSection({
   categoryName,
   displayStock,
   reviewCount,
+  showCommunity = true,
 }: DetailTabsSectionProps) {
   return (
     <div className={PRODUCT_DETAIL_CONTENT_STYLES.tabsContainer}>
@@ -54,18 +57,22 @@ export function DetailTabsSection({
           >
             {LABELS.specifications}
           </TabsTrigger>
-          <TabsTrigger
-            value="reviews"
-            className={PRODUCT_DETAIL_CONTENT_STYLES.tabTrigger}
-          >
-            {formatLabel(LABELS.reviewsWithCount, { count: reviewCount })}
-          </TabsTrigger>
-          <TabsTrigger
-            value="qna"
-            className={PRODUCT_DETAIL_CONTENT_STYLES.tabTrigger}
-          >
-            {LABELS.questionsAndAnswers}
-          </TabsTrigger>
+          {showCommunity ? (
+            <>
+              <TabsTrigger
+                value="reviews"
+                className={PRODUCT_DETAIL_CONTENT_STYLES.tabTrigger}
+              >
+                {formatLabel(LABELS.reviewsWithCount, { count: reviewCount })}
+              </TabsTrigger>
+              <TabsTrigger
+                value="qna"
+                className={PRODUCT_DETAIL_CONTENT_STYLES.tabTrigger}
+              >
+                {LABELS.questionsAndAnswers}
+              </TabsTrigger>
+            </>
+          ) : null}
         </TabsList>
         <TabsContent
           value="description"
@@ -115,29 +122,33 @@ export function DetailTabsSection({
             codAvailable={product.codAvailable}
           />
         </TabsContent>
-        <TabsContent
-          value="reviews"
-          className={PRODUCT_DETAIL_CONTENT_STYLES.tabContent}
-          id="reviews"
-        >
-          <ProductReviewsContainer
-            productId={product.id}
-            productSlug={product.slug}
-            productName={product.name}
-            enabled={detailTab === "reviews"}
-          />
-        </TabsContent>
-        <TabsContent
-          value="qna"
-          className={PRODUCT_DETAIL_CONTENT_STYLES.tabContent}
-          id="qna"
-        >
-          <ProductQnaContainer
-            productId={product.id}
-            productSlug={product.slug}
-            enabled={detailTab === "qna"}
-          />
-        </TabsContent>
+        {showCommunity ? (
+          <>
+            <TabsContent
+              value="reviews"
+              className={PRODUCT_DETAIL_CONTENT_STYLES.tabContent}
+              id="reviews"
+            >
+              <ProductReviewsContainer
+                productId={product.id}
+                productSlug={product.slug}
+                productName={product.name}
+                enabled={detailTab === "reviews"}
+              />
+            </TabsContent>
+            <TabsContent
+              value="qna"
+              className={PRODUCT_DETAIL_CONTENT_STYLES.tabContent}
+              id="qna"
+            >
+              <ProductQnaContainer
+                productId={product.id}
+                productSlug={product.slug}
+                enabled={detailTab === "qna"}
+              />
+            </TabsContent>
+          </>
+        ) : null}
       </Tabs>
     </div>
   );

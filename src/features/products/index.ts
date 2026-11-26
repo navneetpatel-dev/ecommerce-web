@@ -35,8 +35,12 @@ export { createProductWithImages } from "./utils/product-editor/createProductWit
 export { useProductEditorState } from "./hooks/product-editor/useProductEditorState.hook";
 export { ProductVariantsEditor } from "./components/product-editor/variants/ProductVariantsEditor.component";
 export type { VariantDraft } from "./utils/product-editor/variantDrafts";
+export { ProductCategorySelect as CategoryPickerSelect } from "./components/product-editor/ProductCategorySelect.component";
+export type { CategoryOptionData } from "./types/product-editor/types";
+export { ProductCategoryOption } from "./components/product-editor/ProductCategoryOption.component";
 export { ProductVariantsDialog } from "./components/product-editor/variants/ProductVariantsDialog.component";
 export { PlatformListedBadge } from "./components/product-editor/PlatformListedBadge.component";
+export { ProductCustomerPreviewDialog } from "./components/preview/ProductCustomerPreviewDialog.component";
 export { useIsVendorStaff } from "./hooks/product-editor/useIsVendorStaff.hook";
 export { SORT_OPTIONS } from "./hooks/listing/useProductListing.hook";
 export type {

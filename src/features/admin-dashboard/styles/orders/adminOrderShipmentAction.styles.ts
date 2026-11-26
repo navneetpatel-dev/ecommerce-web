@@ -1,5 +1,5 @@
 export const adminOrderShipmentActionStyles = {
-  dialogContent: "max-w-lg",
+  dialogContent: "max-w-2xl",
   list: "space-y-3",
   itemCard: "space-y-2 rounded-md border border-line bg-surface p-3.5",
   itemHeader: "flex items-center justify-between gap-3",

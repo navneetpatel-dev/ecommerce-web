@@ -1,3 +1,4 @@
+import { scrollIntoViewIfHidden } from "@/shared/utils/dom/scrollIntoViewIfHidden";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 import { getFormLevelApiError } from "@/shared/utils/api-errors/applyApiFormErrors";
 
@@ -21,7 +22,11 @@ export function FormError({ error, fallback }: FormErrorProps) {
   if (!message) return null;
 
   return (
-    <p role="alert" className={formErrorStyles.message}>
+    <p
+      ref={scrollIntoViewIfHidden}
+      role="alert"
+      className={formErrorStyles.message}
+    >
       {message}
     </p>
   );

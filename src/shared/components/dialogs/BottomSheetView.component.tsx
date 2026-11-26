@@ -1,9 +1,8 @@
 "use client";
 
+import { IconCloseButton } from "@/shared/components/ui/icon-close-button";
 import { useRef } from "react";
-import { X } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
-import { LABELS } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/dom/cn";
 import { useModalOverlay } from "@/shared/hooks/ui/useModalOverlay.hook";
 import { bottomSheetViewStyles } from "../../styles/dialogs/dialogComponents.styles";
@@ -61,16 +60,11 @@ export function BottomSheetView({
         </div>
         <div className={bottomSheetViewStyles.header}>
           {title && <h2 className={bottomSheetViewStyles.title}>{title}</h2>}
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon-sm"
-            onClick={onClose}
+          <IconCloseButton
+            variant="dialog"
             className={bottomSheetViewStyles.closeButton}
-            aria-label={LABELS.close}
-          >
-            <X size={20} />
-          </Button>
+            onClick={onClose}
+          />
         </div>
         <div className={bottomSheetViewStyles.content}>{children}</div>
       </div>

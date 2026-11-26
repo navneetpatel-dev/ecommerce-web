@@ -1,7 +1,8 @@
 "use client";
 
+import { IconCloseButton } from "@/shared/components/ui/icon-close-button";
 import { useQuery } from "@tanstack/react-query";
-import { Package, X } from "lucide-react";
+import { Package } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -86,16 +87,7 @@ export function ProductModerationPreviewModal({
               </p>
             </div>
           </div>
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            onClick={onClose}
-            aria-label={LABELS.close}
-            className="rounded-full size-8 p-0"
-          >
-            <X className="size-4" />
-          </Button>
+          <IconCloseButton variant="dialog" onClick={onClose} />
         </div>
 
         <div className="overflow-y-auto px-5 py-5 space-y-4 max-h-[calc(92vh-140px)]">

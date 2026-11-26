@@ -8,9 +8,16 @@ import { LABELS } from "@/shared/constants/labels";
 import { SEO_LIMITS } from "@/shared/constants/seo/seoLimits";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 
+/** Keep in sync with backend `CATEGORY_NAME_MAX`. */
+export const CATEGORY_NAME_MAX = 100;
+
 /** Keep in sync with backend CreateCategorySchema. */
 export const CategoryFormSchema = z.object({
-  name: z.string().trim().min(1, LABELS.categoryNameRequired),
+  name: z
+    .string()
+    .trim()
+    .min(1, LABELS.categoryNameRequired)
+    .max(CATEGORY_NAME_MAX, LABELS.categoryNameTooLong),
   parentId: z.union([z.string().uuid(), z.literal("")]).optional(),
   imageUrl: z
     .string()

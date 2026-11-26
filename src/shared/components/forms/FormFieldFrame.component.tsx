@@ -91,13 +91,19 @@ export function FormFieldFrame({
         {children}
       </FieldControlProvider>
       {counter ? (
-        <CharacterCount
-          id={`${controlId}-count`}
-          value={counter.value}
-          limits={{ min: 0, max: counter.max }}
-        />
+        <div className={formFieldFrameStyles.counterRow}>
+          <div className={formFieldFrameStyles.counterNote}>
+            {errorNode}
+            {hintNode}
+          </div>
+          <CharacterCount
+            id={`${controlId}-count`}
+            value={counter.value}
+            limits={{ min: 0, max: counter.max }}
+          />
+        </div>
       ) : null}
-      {footerAction ? (
+      {counter ? null : footerAction ? (
         <div className={formFieldFrameStyles.footerRow}>
           {errorNode ?? (hint ? hintNode : <span />)}
           <div className={formFieldFrameStyles.footerActionWrapper}>

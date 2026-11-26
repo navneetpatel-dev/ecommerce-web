@@ -10,11 +10,11 @@ export const couponsHeaderSectionStyles = {
   titleGroup: "min-w-0 space-y-1",
   heading: "text-[1.25rem] font-semibold text-ink sm:text-[1.375rem]",
   summary: "text-[0.875rem] text-ink-muted",
-  dialogContent: "max-h-[min(92vh,48rem)] max-w-2xl overflow-y-auto",
+  dialogContent: "max-w-2xl",
 } as const;
 
 export const couponAnalyticsDialogStyles = {
-  dialogContent: "max-w-md",
+  dialogContent: "max-w-xl",
   loadingText: "text-[0.875rem] text-ink-muted",
   statsList: "space-y-3 text-[0.875rem]",
   statRow: "flex justify-between gap-4",

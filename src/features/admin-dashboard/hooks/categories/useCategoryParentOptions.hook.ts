@@ -6,39 +6,50 @@ import { CATEGORY_STATUS } from "@/shared/constants/statuses";
 import { MAX_PAGE_LIMIT } from "@/shared/constants/pagination/pagination";
 import type { Category } from "@/shared/api/types";
 
+/** The deepest a category may sit; its children would be one level deeper, so depth 0 and 1 can be parents. */
+const MAX_PARENT_DEPTH = 1;
+
+/**
+ * Categories that can be a parent: active, not too deep, in tree order (the server leaves out the
+ * edited category and everything below it, so a cycle cannot be picked). Every page is loaded, so
+ * the list is not cut at the first 100.
+ */
 export function useCategoryParentOptions(excludeCategoryId?: string) {
   const [parents, setParents] = useState<Category[]>([]);
 
   useEffect(() => {
-    void categoriesApi
-      .listPaginated({ page: 1, limit: MAX_PAGE_LIMIT })
-      .then((result) => setParents(result.items));
-  }, []);
-
-  const parentOptions = useMemo(() => {
-    const byId = new Map(parents.map((category) => [category.id, category]));
-    const depthOf = (category: Category): number => {
-      let depth = 0;
-      let cursor: Category | undefined = category;
-      const seen = new Set<string>();
-      while (cursor?.parentId) {
-        if (seen.has(cursor.id)) break;
-        seen.add(cursor.id);
-        depth += 1;
-        cursor = byId.get(cursor.parentId);
-      }
-      return depth;
+    let active = true;
+    async function loadAll() {
+      const all: Category[] = [];
+      let page = 1;
+      let totalPages = 1;
+      do {
+        const result = await categoriesApi.listPaginated({
+          page,
+          limit: MAX_PAGE_LIMIT,
+          excludeId: excludeCategoryId,
+        });
+        all.push(...result.items);
+        totalPages = result.totalPages;
+        page += 1;
+      } while (page <= totalPages);
+      if (active) setParents(all);
+    }
+    void loadAll().catch(() => undefined);
+    return () => {
+      active = false;
     };
-    // Max taxonomy depth is 3 — only depth 0–1 nodes may be parents.
-    return parents.filter(
-      (category) =>
-        category.status !== CATEGORY_STATUS.ARCHIVED &&
-        category.id !== excludeCategoryId &&
-        depthOf(category) < 2,
-    );
-  }, [parents, excludeCategoryId]);
+  }, [excludeCategoryId]);
 
-  return parentOptions;
+  return useMemo(
+    () =>
+      parents.filter(
+        (category) =>
+          category.status !== CATEGORY_STATUS.ARCHIVED &&
+          (category.depth ?? 0) <= MAX_PARENT_DEPTH,
+      ),
+    [parents],
+  );
 }
 
 export const NONE_PARENT = "__none__";

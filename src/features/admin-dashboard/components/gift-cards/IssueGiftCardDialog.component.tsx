@@ -70,7 +70,7 @@ export function IssueGiftCardDialog({ onSuccess }: IssueGiftCardDialogProps) {
           <span>{LABELS.issueGiftCard}</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-xl">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">

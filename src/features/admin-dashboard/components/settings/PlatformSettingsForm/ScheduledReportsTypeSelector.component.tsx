@@ -1,10 +1,11 @@
 "use client";
 
+import { IconCloseButton } from "@/shared/components/ui/icon-close-button";
 import { useId, type ChangeEvent } from "react";
 import { Input } from "@/shared/components/ui/input";
 import { Button } from "@/shared/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/shared/components/ui/tabs";
-import { Search, X, CheckSquare, Square } from "lucide-react";
+import { Search, CheckSquare, Square } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
 import type { ScheduledReportTypeOption } from "../../../hooks/settings/useScheduledReportsCatalog.hook";
 import {
@@ -123,14 +124,12 @@ export function ScheduledReportsTypeSelector({
             className={styles.searchInput}
           />
           {search ? (
-            <button
-              type="button"
-              onClick={handleClearSearch}
+            <IconCloseButton
+              variant="inline"
+              label="Clear search"
               className={styles.searchClearButton}
-              aria-label="Clear search"
-            >
-              <X className={styles.searchClearIcon} />
-            </button>
+              onClick={handleClearSearch}
+            />
           ) : null}
         </div>
       </div>

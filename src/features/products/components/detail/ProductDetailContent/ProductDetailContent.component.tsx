@@ -12,6 +12,7 @@ import type { ProductDetailContentProps } from "../../../types/detail/types";
 
 export function ProductDetailContent({
   product,
+  preview = false,
   isWishlisted,
   onToggleWishlist,
   onAddToCart,
@@ -68,6 +69,7 @@ export function ProductDetailContent({
     variantUnavailable,
     isAddingToCart,
     showStickyBar,
+    preview,
   });
 
   return (
@@ -123,6 +125,8 @@ export function ProductDetailContent({
           returnWindowDays={returnWindowDays}
           returnsAllowed={returnsAllowed}
           warrantyTypeLabel={warrantyTypeLabel}
+          hideRating={preview}
+          preview={preview}
         />
       </div>
 
@@ -134,16 +138,19 @@ export function ProductDetailContent({
         categoryName={categoryName}
         displayStock={displayStock}
         reviewCount={reviewCount}
+        showCommunity={!preview}
       />
 
-      <ProductRelatedRails
-        productId={product.id}
-        categoryId={product.categoryId}
-        vendorId={product.vendor?.id}
-      />
+      {preview ? null : (
+        <ProductRelatedRails
+          productId={product.id}
+          categoryId={product.categoryId}
+          vendorId={product.vendor?.id}
+        />
+      )}
 
       <StickyAddToCartBar
-        visible={isStickyBarVisible}
+        visible={isStickyBarVisible && !preview}
         productName={product.name}
         displayPrice={displayPrice}
         addDisabled={addDisabled}

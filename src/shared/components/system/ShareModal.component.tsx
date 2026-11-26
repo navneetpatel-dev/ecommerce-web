@@ -64,7 +64,7 @@ export function ShareModal({
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       {trigger ? <DialogTrigger asChild>{trigger}</DialogTrigger> : null}
-      <DialogContent className="max-w-md p-6">
+      <DialogContent className="max-w-xl">
         <DialogHeader className="text-left">
           <DialogTitle className="text-body-lg font-semibold text-ink">
             {label}

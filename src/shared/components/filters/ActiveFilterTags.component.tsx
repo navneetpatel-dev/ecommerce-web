@@ -1,6 +1,7 @@
 "use client";
 
-import { RotateCcw, X } from "lucide-react";
+import { IconCloseButton } from "@/shared/components/ui/icon-close-button";
+import { RotateCcw } from "lucide-react";
 import { cn } from "@/shared/utils/dom/cn";
 
 export interface ActiveFilterTag {
@@ -43,14 +44,12 @@ export function ActiveFilterTags({
         >
           <span className="text-ink-muted/80 font-normal">{tag.label}:</span>
           <span className="font-semibold text-ink">{tag.valueLabel}</span>
-          <button
-            type="button"
+          <IconCloseButton
+            variant="inline"
+            label={`Remove filter ${tag.label} ${tag.valueLabel}`}
+            className="size-5 hover:bg-danger/15 hover:text-danger"
             onClick={tag.onRemove}
-            className="flex size-4 items-center justify-center rounded-full text-ink-muted/70 transition-colors hover:bg-danger/15 hover:text-danger focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-danger"
-            aria-label={`Remove filter ${tag.label} ${tag.valueLabel}`}
-          >
-            <X className="size-3" aria-hidden />
-          </button>
+          />
         </span>
       ))}
 

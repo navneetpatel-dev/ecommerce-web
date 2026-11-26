@@ -30,6 +30,6 @@ export const reviewMediaGalleryStyles = {
   strip: "flex gap-2 overflow-x-auto pb-1",
   stripThumb: `${thumbBase} size-14 shrink-0 border-line opacity-70 hover:opacity-100`,
   stripThumbSelected: `${thumbBase} size-14 shrink-0 border-brand ring-2 ring-brand`,
-  moderationContent: "max-h-[90dvh] max-w-3xl overflow-y-auto",
+  moderationContent: "max-h-[90dvh] max-w-3xl",
   moderationList: "space-y-3",
 } as const;

@@ -35,7 +35,13 @@ export function useAdminArchiveCategoryAction({
     : CATEGORY_STATUS.ARCHIVED;
 
   const handleConfirm = async () => {
-    await categoriesApi.update(category.id, { status: nextStatus });
+    // Archiving also archives active subcategories; the dialog said so.
+    await categoriesApi.update(
+      category.id,
+      isArchived
+        ? { status: nextStatus }
+        : { status: nextStatus, cascade: true },
+    );
     onDone();
   };
 

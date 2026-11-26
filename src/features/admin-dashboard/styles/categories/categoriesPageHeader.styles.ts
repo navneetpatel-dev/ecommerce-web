@@ -5,6 +5,6 @@ export const categoriesPageHeaderStyles = {
     "font-display text-xl font-semibold tracking-tight text-ink sm:text-2xl",
   hint: "max-w-xl text-[0.875rem] text-ink-muted",
   buttonGroup: "sm:shrink-0",
-  dialogContent: "max-h-[min(92vh,48rem)] max-w-2xl overflow-y-auto",
+  dialogContent: "max-w-2xl",
   form: "space-y-1",
 } as const;

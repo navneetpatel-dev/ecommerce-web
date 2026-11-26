@@ -12,6 +12,7 @@ function renderActions(canPublish: boolean) {
       product={product}
       status="DRAFT"
       listedByPlatform={false}
+      onPreview={vi.fn()}
       onEdit={vi.fn()}
       onManageVariants={vi.fn()}
       onSubmitOnBehalf={vi.fn()}

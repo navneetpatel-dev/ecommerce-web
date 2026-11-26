@@ -130,6 +130,7 @@ export function useAdminProductsPage(): AdminProductsPageModel {
           product={{ id: String(row.id), name }}
           status={String(row.status ?? "")}
           listedByPlatform={Boolean(row.listedByPlatform)}
+          onPreview={editor.openPreview}
           onEdit={editor.openEdit}
           onManageVariants={editor.openVariants}
           onSubmitOnBehalf={editor.openSubmit}
@@ -172,6 +173,7 @@ export function useAdminProductsPage(): AdminProductsPageModel {
       );
     },
     [
+      editor.openPreview,
       editor.openEdit,
       editor.openVariants,
       editor.openSubmit,

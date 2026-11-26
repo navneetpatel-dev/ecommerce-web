@@ -2,7 +2,7 @@ import { cn } from "@/shared/utils/dom/cn";
 
 export const changeUserRoleDialogStyles = {
   triggerWrapper: "inline-block cursor-pointer",
-  dialogContent: "sm:max-w-[425px]",
+  dialogContent: "sm:max-w-xl",
   title: "flex items-center gap-2",
   titleIcon: "h-5 w-5 text-ink-primary",
   errorAlert: cn(

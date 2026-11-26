@@ -1,17 +1,12 @@
 "use client";
 
 import { useCallback } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/shared/components/ui/dialog";
+import { Dialog, DialogContent } from "@/shared/components/ui/dialog";
 import { DiscardChangesDialog } from "@/shared/components/dialogs/DiscardChangesDialog.component";
-import { LABELS } from "@/shared/constants/labels";
+import type { ProductDetail } from "@/shared/api/types";
 import { useDiscardChangesGuard } from "@/shared/hooks/dialogs/useDiscardChangesGuard.hook";
-import { ProductEditorForm } from "./ProductEditorForm.component";
+import { ProductEditorDialogBody } from "./ProductEditorDialogBody.component";
+import type { ProductEditorForm } from "./ProductEditorForm.component";
 import { productEditorDialogStyles } from "../../styles/product-editor/productEditorForm.styles";
 import type { ComponentProps } from "react";
 
@@ -25,6 +20,8 @@ interface ProductEditorDialogProps {
   onOpenChange: (open: boolean) => void;
   formProps: Omit<ProductEditorFormProps, "mode" | "onCancel">;
   onCancel: () => void;
+  /** The saved product when editing, for the customer preview. */
+  savedProduct?: ProductDetail | null;
 }
 
 /** Route-synced create/edit product dialog — matches admin workspace dialog patterns. */
@@ -35,6 +32,7 @@ export function ProductEditorDialog({
   onOpenChange,
   formProps,
   onCancel,
+  savedProduct,
 }: ProductEditorDialogProps) {
   const discard = useDiscardChangesGuard(isDirty);
 
@@ -58,20 +56,11 @@ export function ProductEditorDialog({
     <>
       <Dialog open={open} onOpenChange={handleOpenChange}>
         <DialogContent className={productEditorDialogStyles.dialogContent}>
-          <DialogHeader>
-            <DialogTitle>
-              {mode === "edit" ? LABELS.editProductTitle : LABELS.createProduct}
-            </DialogTitle>
-          </DialogHeader>
-          <DialogDescription className={productEditorDialogStyles.description}>
-            {mode === "edit"
-              ? LABELS.editProductBody
-              : LABELS.createProductBody}
-          </DialogDescription>
-          <ProductEditorForm
+          <ProductEditorDialogBody
             mode={mode}
-            {...formProps}
+            formProps={formProps}
             onCancel={handleCancel}
+            savedProduct={savedProduct}
           />
         </DialogContent>
       </Dialog>

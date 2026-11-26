@@ -1,8 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, type ReactNode } from "react";
-import { useUrlFilterParams } from "@/shared/hooks/navigation/useUrlFilterParams.hook";
-import { useDebouncedValue } from "@/shared/hooks/ui/use-debounce.hook";
+import { useCallback, type ReactNode } from "react";
 import { DndContext, closestCenter } from "@dnd-kit/core";
 import {
   SortableContext,
@@ -20,6 +18,14 @@ import { categoriesTableStyles } from "../../../styles/categories/categoriesTabl
 import { useCategoriesTableColumns } from "../../../hooks/categories/useCategoriesTableColumns.hook";
 import { CategoriesFilters } from "../CategoriesFilters.component";
 
+export interface CategoriesFilterState {
+  search: string;
+  status: string;
+  onSearchChange: (value: string) => void;
+  onStatusChange: (value: string) => void;
+  onClear: () => void;
+}
+
 export interface CategoriesTableProps {
   categories: Category[];
   loading?: boolean;
@@ -27,6 +33,7 @@ export interface CategoriesTableProps {
   onRefresh?: () => void;
   pagination?: DataTablePaginationProps;
   actions?: (row: Category) => ReactNode;
+  filters: CategoriesFilterState;
 }
 
 export function CategoriesTable({
@@ -36,30 +43,12 @@ export function CategoriesTable({
   onRefresh,
   pagination,
   actions,
+  filters,
 }: CategoriesTableProps) {
-  const urlFilters = useUrlFilterParams<"search" | "status">({ search: ["q"] });
-  const search = urlFilters.get("search");
-  const status = urlFilters.get("status");
-  const debouncedSearch = useDebouncedValue(search.trim(), 350);
-
-  const filteredCategories = useMemo(() => {
-    return categories.filter((cat) => {
-      if (debouncedSearch) {
-        const q = debouncedSearch.toLowerCase();
-        const match =
-          cat.name?.toLowerCase().includes(q) ||
-          cat.slug?.toLowerCase().includes(q) ||
-          cat.seoDescription?.toLowerCase().includes(q);
-        if (!match) return false;
-      }
-      if (status === "active" && cat.status !== "ACTIVE") return false;
-      if (status === "inactive" && cat.status === "ACTIVE") return false;
-      return true;
-    });
-  }, [categories, debouncedSearch, status]);
+  const hasFilters = Boolean(filters.search.trim() || filters.status);
 
   const { rows, ids, sensors, reorderError, onDragEnd } = useCategoriesReorder(
-    filteredCategories,
+    categories,
     onRefresh,
   );
 
@@ -69,23 +58,21 @@ export function CategoriesTable({
 
   const fetchRowDetail = useCallback(
     async (row: Category) =>
-      (await categoriesApi.detail(row.id)) as unknown as Record<
+      (await categoriesApi.adminDetail(row.id)) as unknown as Record<
         string,
         unknown
       >,
     [],
   );
 
-  const hasFilters = Boolean(search || status);
-
   return (
     <div>
       <CategoriesFilters
-        search={search}
-        status={status}
-        onSearchChange={urlFilters.set("search")}
-        onStatusChange={urlFilters.set("status")}
-        onClear={() => urlFilters.clearAll(["search", "status"])}
+        search={filters.search}
+        status={filters.status}
+        onSearchChange={filters.onSearchChange}
+        onStatusChange={filters.onStatusChange}
+        onClear={filters.onClear}
       />
       <DndContext
         sensors={sensors}
@@ -94,9 +81,7 @@ export function CategoriesTable({
       >
         <SortableContext items={ids} strategy={verticalListSortingStrategy}>
           <p className={categoriesTableStyles.hint}>
-            {hasFilters
-              ? "Filtering categories by search/status. Clear filters to reorder."
-              : LABELS.categoryReorderHint}
+            {hasFilters ? LABELS.categoryOrderHint : LABELS.categoryReorderHint}
           </p>
           {reorderError ? (
             <p role="alert" className={categoriesTableStyles.error}>

@@ -50,6 +50,7 @@ interface ProductsTableViewProps {
   onSubmitForApproval?: (product: ProductRow) => void;
   onManageImages?: (product: ProductRow) => void;
   onManageVariants?: (product: ProductRow) => void;
+  onPreview?: (product: ProductRow) => void;
 }
 
 export function ProductsTableView(props: ProductsTableViewProps) {
@@ -84,6 +85,7 @@ export function ProductsTableView(props: ProductsTableViewProps) {
     onSubmitForApproval,
     onManageImages,
     onManageVariants,
+    onPreview,
   } = props;
   const hasTotal = typeof total === "number" && total > 0;
   const resultFrom = (page - 1) * DEFAULT_PAGE_LIMIT + 1;
@@ -112,6 +114,7 @@ export function ProductsTableView(props: ProductsTableViewProps) {
       onSubmitForApproval={onSubmitForApproval}
       onManageImages={onManageImages}
       onManageVariants={onManageVariants}
+      onPreview={onPreview}
       isDeleting={isDeleting}
       isSubmitting={isSubmitting}
     />

@@ -74,6 +74,14 @@ export const tables3Labels = {
   productMrpInclGst: "MRP (incl. GST)",
   productCustomerPricePreview: "Customers pay ₹{amount} (incl. {percent}% GST)",
   productPriceBreakdown: "₹{price} + {percent}% GST = customers pay ₹{amount}",
+  productPriceNeedsCategory:
+    "Choose a category above: GST depends on it, and the customer price is shown here.",
+  productMrpNeedsCategory:
+    "Optional. The MRP includes GST, so it must be at least the customer price; choose a category to see that amount.",
+  productMrpBelowPrice:
+    "The MRP cannot be lower than the selling price (₹{price}). It includes GST, so it should be higher.",
+  productMrpShownHint:
+    "Customers will see ₹{mrp} struck through, with {percent}% off.",
   productMrpMinimumHint:
     "Optional. Enter the MRP including GST; it must be at least ₹{amount} (what customers pay), and cover every variant. Leave empty for no discount.",
   productMrpBelowCustomerPrice:

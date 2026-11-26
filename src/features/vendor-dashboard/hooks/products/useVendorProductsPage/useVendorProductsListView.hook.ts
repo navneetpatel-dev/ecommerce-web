@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Trash2 } from "lucide-react";
 import type { ProductListItem } from "@/shared/api/types";
 import { QUERY_PARAMS } from "@/shared/constants/navigation/queryParams";
@@ -74,6 +74,18 @@ export function useVendorProductsListView(options: {
     return product ? { id: product.id, name: product.name } : null;
   }, [variantsProductId, products]);
 
+  // "View as customer" is local to the page: no URL state needed.
+  const [previewId, setPreviewId] = useState<string | null>(null);
+  const previewDialogProps = previewId
+    ? {
+        productId: previewId,
+        open: true,
+        onOpenChange: (open: boolean) => {
+          if (!open) setPreviewId(null);
+        },
+      }
+    : null;
+
   const tableViewProps = {
     search: table.search,
     status: table.status,
@@ -116,6 +128,7 @@ export function useVendorProductsListView(options: {
             [QUERY_PARAMS.edit]: null,
           })
       : undefined,
+    onPreview: (p: { id: string }) => setPreviewId(p.id),
     onManageVariants: canEdit
       ? (p: { id: string }) =>
           setQuery({
@@ -185,5 +198,6 @@ export function useVendorProductsListView(options: {
     deleteDialogProps,
     imagesDialogProps,
     variantsDialogProps,
+    previewDialogProps,
   };
 }

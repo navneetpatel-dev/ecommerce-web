@@ -24,7 +24,10 @@ export function FormSection({
   contentClassName,
 }: FormSectionProps) {
   return (
-    <section className={cn(formSectionStyles.section, className)}>
+    <section
+      data-form-section
+      className={cn(formSectionStyles.section, className)}
+    >
       <header className={formSectionStyles.header}>
         <h3 className={formSectionStyles.title}>{title}</h3>
         {hint ? <p className={formSectionStyles.hint}>{hint}</p> : null}

@@ -5,7 +5,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { LABELS } from "@/shared/constants/labels";
-import { formatLabel } from "@/shared/utils/formatting/formatLabel";
+import { useUrlFilterParams } from "@/shared/hooks/navigation/useUrlFilterParams.hook";
+import { useDebouncedValue } from "@/shared/hooks/ui/use-debounce.hook";
 import { useUnsavedChanges } from "@/shared/hooks/forms/useUnsavedChanges.hook";
 import { useDiscardChangesGuard } from "@/shared/hooks/dialogs/useDiscardChangesGuard.hook";
 import {
@@ -17,6 +18,7 @@ import { AdminConfirmAction } from "../../components/shared/AdminConfirmAction.c
 import { AdminEditCategoryAction } from "../../components/categories/AdminEditCategoryAction.component";
 import { AdminCategoryAttributesAction } from "../../components/categories/AdminCategoryAttributesAction.component";
 import { AdminArchiveCategoryAction } from "../../components/categories/AdminArchiveCategoryAction.component";
+import { ArchiveDescription } from "../../components/categories/AdminArchiveCategoryAction/ArchiveDescription.component";
 import { AdminReassignProductsAction } from "../../components/categories/AdminReassignProductsAction.component";
 import { useAdminDataList } from "../shared/useAdminDataList.hook";
 import {
@@ -28,6 +30,10 @@ import {
 import type { Category } from "@/shared/api/types";
 
 export function useAdminCategoriesPage() {
+  const urlFilters = useUrlFilterParams<"search" | "status">({ search: ["q"] });
+  const search = urlFilters.get("search");
+  const status = urlFilters.get("status");
+  const debouncedSearch = useDebouncedValue(search.trim(), 350);
   const [listVersion, setListVersion] = useState(0);
   const [open, setOpen] = useState(false);
   const [isPending, setIsPending] = useState(false);
@@ -45,9 +51,14 @@ export function useAdminCategoriesPage() {
   const load = useCallback(
     async ({ page, limit }: { page: number; limit: number }) => {
       void listVersion;
-      return categoriesApi.listPaginated({ page, limit });
+      return categoriesApi.listPaginated({
+        page,
+        limit,
+        search: debouncedSearch || undefined,
+        status: status || undefined,
+      });
     },
-    [listVersion],
+    [listVersion, debouncedSearch, status],
   );
 
   const list = useAdminDataList(load);
@@ -109,9 +120,13 @@ export function useAdminCategoriesPage() {
           label={LABELS.delete}
           dialogVariant="danger"
           title={LABELS.confirmDeleteCategoryTitle}
-          description={formatLabel(LABELS.confirmDeleteCategoryBody, {
-            name: row.name,
-          })}
+          description={
+            <ArchiveDescription
+              categoryId={row.id}
+              name={row.name}
+              mode="delete"
+            />
+          }
           onConfirm={deleteCategoryFor(row.id)}
         />
       </>
@@ -145,6 +160,13 @@ export function useAdminCategoriesPage() {
       onPageChange: list.onPageChange,
     },
     renderActions,
+    filters: {
+      search,
+      status,
+      onSearchChange: urlFilters.set("search"),
+      onStatusChange: urlFilters.set("status"),
+      onClear: () => urlFilters.clearAll(["search", "status"]),
+    },
     reassignToolbar: <AdminReassignProductsAction onDone={list.reload} />,
   };
 }

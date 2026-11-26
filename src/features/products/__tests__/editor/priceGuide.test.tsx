@@ -16,6 +16,8 @@ const guide = {
   priceHint: "₹1000 + 18% GST = customers pay ₹1,180",
   mrpHint: "Optional. Enter the MRP including GST; it must be at least ₹1,180.",
   customerPrice: 1180,
+  preview: null,
+  missing: null,
 };
 
 function renderSection(
@@ -77,6 +79,8 @@ describe("price, GST and MRP guidance", () => {
           priceHint: LABELS.productPriceGstHint,
           mrpHint: LABELS.productMrpHint,
           customerPrice: null,
+          preview: null,
+          missing: null,
         }}
         pricingLock={{ locked: false }}
       />,
@@ -98,5 +102,55 @@ describe("category comes before price", () => {
       category.compareDocumentPosition(price) &
         Node.DOCUMENT_POSITION_FOLLOWING,
     ).toBeTruthy();
+  });
+});
+
+describe("an MRP that cannot be right, with or without a category", () => {
+  const noCategoryGuide = {
+    priceHint: LABELS.productPriceNeedsCategory,
+    mrpHint: LABELS.productMrpNeedsCategory,
+    customerPrice: null,
+    preview: null,
+    missing: "category" as const,
+  };
+  function renderNoCategory(over: Record<string, unknown>) {
+    render(
+      <ProductDetailsSection
+        values={{ ...(values as object), categoryId: "", ...over } as never}
+        category={{ selected: null, onSelect: vi.fn() }}
+        disabled={false}
+        getError={() => undefined}
+        patchValues={vi.fn()}
+        priceGuide={noCategoryGuide}
+        pricingLock={{ locked: false }}
+      />,
+    );
+  }
+
+  it("an MRP below the selling price is flagged at once, before any category is chosen", () => {
+    renderNoCategory({ price: "500", compareAtPrice: "300" });
+    expect(
+      screen.getByText(/MRP cannot be lower than the selling price \(₹500\)/),
+    ).toBeInTheDocument();
+  });
+
+  it("an MRP at or above the selling price is not flagged", () => {
+    renderNoCategory({ price: "500", compareAtPrice: "700" });
+    expect(screen.queryByText(/MRP cannot be lower/)).toBeNull();
+    renderNoCategory({ price: "500", compareAtPrice: "500" });
+    expect(screen.queryByText(/MRP cannot be lower/)).toBeNull();
+  });
+
+  it("without a category the form says why there is no GST yet, under the price and under the MRP", () => {
+    renderNoCategory({ price: "500", compareAtPrice: "" });
+    expect(
+      screen.getByText(LABELS.productPriceNeedsCategory),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(LABELS.productMrpNeedsCategory),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(LABELS.customerPriceNeedsCategory),
+    ).toBeInTheDocument();
   });
 });

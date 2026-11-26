@@ -35,6 +35,7 @@ export function AdminCategoriesPage() {
           onRefresh={page.reload}
           pagination={page.pagination}
           actions={page.renderActions}
+          filters={page.filters}
         />
       </RequirePermission>
     </div>

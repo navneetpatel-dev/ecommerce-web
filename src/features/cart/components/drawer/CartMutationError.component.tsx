@@ -1,7 +1,7 @@
 "use client";
 
-import { AlertCircle, X } from "lucide-react";
-import { Button } from "@/shared/components/ui/button";
+import { IconCloseButton } from "@/shared/components/ui/icon-close-button";
+import { AlertCircle } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
 import { cartMutationErrorStyles as styles } from "../../styles/drawer/cartMutationError.styles";
 
@@ -22,16 +22,11 @@ export function CartMutationError({
     <div role="alert" className={styles.root(className)}>
       <AlertCircle className={styles.icon} aria-hidden />
       <p className={styles.message}>{message}</p>
-      <Button
-        type="button"
-        variant="ghost"
-        size="icon-sm"
-        className={styles.dismissButton}
-        aria-label={LABELS.dismiss}
+      <IconCloseButton
+        variant="inline"
+        label={LABELS.dismiss}
         onClick={onDismiss}
-      >
-        <X className={styles.dismissIcon} aria-hidden />
-      </Button>
+      />
     </div>
   );
 }

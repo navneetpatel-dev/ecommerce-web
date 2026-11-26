@@ -1,5 +1,5 @@
 export const addressFormDialogStyles = {
-  dialogContent: "max-h-[min(92vh,48rem)] max-w-2xl overflow-y-auto",
+  dialogContent: "max-w-2xl",
   colSpan2: "sm:col-span-2",
   locationNotice:
     "sm:col-span-2 flex items-center justify-between gap-3 rounded-md border border-line bg-warning/10 px-3 py-2 text-body-sm text-ink",

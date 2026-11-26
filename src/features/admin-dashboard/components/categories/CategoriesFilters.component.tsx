@@ -73,7 +73,7 @@ export function CategoriesFilters({
             <SelectContent>
               <SelectItem value={ALL_STATUSES}>All Statuses</SelectItem>
               <SelectItem value="ACTIVE">Active</SelectItem>
-              <SelectItem value="INACTIVE">Inactive</SelectItem>
+              <SelectItem value="ARCHIVED">Archived</SelectItem>
             </SelectContent>
           </Select>
         </FormFieldFrame>

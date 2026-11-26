@@ -28,6 +28,7 @@ export function ProductsTableContent(props: ProductsTableContentProps) {
     onSubmitForApproval,
     onManageImages,
     onManageVariants,
+    onPreview,
     isDeleting,
     isSubmitting,
   } = props;
@@ -45,6 +46,7 @@ export function ProductsTableContent(props: ProductsTableContentProps) {
     onSubmitForApproval,
     onManageImages,
     onManageVariants,
+    onPreview,
     isDeleting,
     isSubmitting,
   });

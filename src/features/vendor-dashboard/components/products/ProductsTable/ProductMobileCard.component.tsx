@@ -17,6 +17,7 @@ export function ProductMobileCard(props: ProductRowActionsProps) {
     onSubmitForApproval,
     onManageImages,
     onManageVariants,
+    onPreview,
     isDeleting,
     isSubmitting,
   } = props;
@@ -53,6 +54,7 @@ export function ProductMobileCard(props: ProductRowActionsProps) {
           onSubmitForApproval={onSubmitForApproval}
           onManageImages={onManageImages}
           onManageVariants={onManageVariants}
+          onPreview={onPreview}
           isDeleting={isDeleting}
           isSubmitting={isSubmitting}
         />

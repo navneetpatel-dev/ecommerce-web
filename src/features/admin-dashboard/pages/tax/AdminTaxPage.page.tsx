@@ -1,87 +1,71 @@
 "use client";
 
-import { AdminDataPage } from "../shared/AdminDataPage.page";
-import { AdminTaxRuleForm } from "../../components/tax/AdminTaxRuleForm.component";
+import { Plus } from "lucide-react";
+import type { ChangeEvent } from "react";
+import { Button } from "@/shared/components/ui/button";
 import { FormFieldFrame } from "@/shared/components/forms";
 import { Input } from "@/shared/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/shared/components/ui/select";
 import { CollapsibleTableFilters } from "@/shared/components/filters";
 import { LABELS } from "@/shared/constants/labels";
+import { AdminDataPage } from "../shared/AdminDataPage.page";
+import { TaxCategoryFocus } from "../../components/tax/TaxCategoryFocus.component";
+import { TaxEffectiveLookup } from "../../components/tax/TaxEffectiveLookup.component";
+import { TaxFilterSelects } from "../../components/tax/TaxFilterSelects.component";
+import { TaxRuleDialog } from "../../components/tax/TaxRuleDialog.component";
 import { useAdminTaxPage } from "../../hooks/tax/useAdminTaxPage";
 import { adminPagesStyles } from "../shared/adminPages.styles";
-
-const ALL = "__ALL__";
+import { adminTaxStyles as styles } from "../../styles/tax/adminTax.styles";
 
 export function AdminTaxPage() {
   const page = useAdminTaxPage();
+  const { filters } = page;
   const activeCount = [
-    page.filters.search.trim(),
-    page.filters.gstTier,
-    page.filters.hasPriceBand,
+    filters.search.trim(),
+    filters.gstTier,
+    filters.hasPriceBand,
+    filters.scope,
   ].filter(Boolean).length;
+  const handleSearch = (event: ChangeEvent<HTMLInputElement>) =>
+    filters.onSearchChange(event.target.value);
 
   return (
     <div className={adminPagesStyles.stack5}>
-      <AdminTaxRuleForm {...page.form} />
+      <div className={styles.headerActions}>
+        <Button
+          type="button"
+          size="sm"
+          fullWidth="mobile"
+          onClick={page.openCreate}
+        >
+          <Plus aria-hidden />
+          {LABELS.addTaxRule}
+        </Button>
+      </div>
+      <TaxCategoryFocus {...page.focus} />
+      <TaxRuleDialog {...page.dialog} />
+      <TaxEffectiveLookup />
 
       <CollapsibleTableFilters
         activeCount={activeCount}
-        onClear={page.filters.onClear}
+        onClear={filters.onClear}
       >
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 items-end">
+        <div className={styles.filterGrid}>
           <FormFieldFrame label={LABELS.search} htmlFor="tax-filter-search">
             <Input
               id="tax-filter-search"
-              value={page.filters.search}
-              onChange={(e) => page.filters.onSearchChange(e.target.value)}
+              value={filters.search}
+              onChange={handleSearch}
               placeholder="Search by HSN code, category, GST %..."
             />
           </FormFieldFrame>
-
-          <FormFieldFrame label="GST Slab" htmlFor="tax-filter-gst">
-            <Select
-              value={page.filters.gstTier || ALL}
-              onValueChange={(v) =>
-                page.filters.onGstTierChange(v === ALL ? "" : v)
-              }
-            >
-              <SelectTrigger id="tax-filter-gst">
-                <SelectValue placeholder="All Slabs" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value={ALL}>All Slabs</SelectItem>
-                {["0", "5", "12", "18", "28"].map((g) => (
-                  <SelectItem key={g} value={g}>
-                    {g}% GST
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </FormFieldFrame>
-
-          <FormFieldFrame label="Price Band" htmlFor="tax-filter-band">
-            <Select
-              value={page.filters.hasPriceBand || ALL}
-              onValueChange={(v) =>
-                page.filters.onHasPriceBandChange(v === ALL ? "" : v)
-              }
-            >
-              <SelectTrigger id="tax-filter-band">
-                <SelectValue placeholder="All Rules" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value={ALL}>All Rules</SelectItem>
-                <SelectItem value="YES">Has Price Band</SelectItem>
-                <SelectItem value="NO">Flat Rate Only</SelectItem>
-              </SelectContent>
-            </Select>
-          </FormFieldFrame>
+          <TaxFilterSelects
+            gstTier={filters.gstTier}
+            hasPriceBand={filters.hasPriceBand}
+            scope={filters.scope}
+            onGstTierChange={filters.onGstTierChange}
+            onHasPriceBandChange={filters.onHasPriceBandChange}
+            onScopeChange={filters.onScopeChange}
+          />
         </div>
       </CollapsibleTableFilters>
 
@@ -91,6 +75,7 @@ export function AdminTaxPage() {
         load={page.load}
         actions={page.actions}
         columnKeys={page.columnKeys}
+        cellOverrides={page.cellOverrides}
         fetchRowDetail={page.fetchDetail}
       />
     </div>

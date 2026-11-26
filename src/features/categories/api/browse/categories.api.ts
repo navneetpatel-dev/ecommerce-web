@@ -11,8 +11,21 @@ import type {
   CategoryFacet,
 } from "@/shared/api/types";
 
+export type CategoryImpact = {
+  categoryId: string;
+  childCount: number;
+  activeChildCount: number;
+  productCount: number;
+  ownTaxRule: { id: string; gstPercentage: number } | null;
+  gstAfterRuleRemoved: number | null;
+};
+
 export type CategoryWriteBody = {
   name?: string;
+  /** Also change the URL slug on rename (off by default so links keep working). */
+  regenerateSlug?: boolean;
+  /** Archive active subcategories too. */
+  cascade?: boolean;
   parentId?: string | null;
   imageUrl?: string | null;
   status?: string;
@@ -26,20 +39,60 @@ export const categoriesApi = {
   /** Storefront / pickers — full ACTIVE category tree (no pagination). */
   list: () => apiClient.get<Category[]>(API.categories.list),
 
-  /** Admin / pickers — paginated flat categories. */
+  /**
+   * Admin screens: the whole tree in order, a page at a time, every status, with depth, products,
+   * subcategories and GST. (The public list is active categories only.)
+   */
   listPaginated: async (
-    params: PaginationQuery & { search?: string; status?: string } = {},
+    params: PaginationQuery & {
+      search?: string;
+      status?: string;
+      excludeId?: string;
+    } = {},
   ): Promise<PaginatedList<Category>> => {
     const q = new URLSearchParams();
     q.set("page", String(params.page ?? 1));
     if (params.limit) q.set("limit", String(params.limit));
     if (params.search) q.set("search", params.search);
     if (params.status) q.set("status", params.status);
+    if (params.excludeId) q.set("excludeId", params.excludeId);
+    const res = await apiClient.getWithResponse<Category[]>(
+      API.categories.admin(q.toString()),
+    );
+    return unwrapPaginatedList(res);
+  },
+
+  /** Pickers outside the category screens: active categories only, open to any signed-in admin. */
+  listPublicPaginated: async (
+    params: PaginationQuery & { search?: string } = {},
+  ): Promise<PaginatedList<Category>> => {
+    const q = new URLSearchParams();
+    q.set("page", String(params.page ?? 1));
+    if (params.limit) q.set("limit", String(params.limit));
+    if (params.search) q.set("search", params.search);
     const res = await apiClient.getWithResponse<Category[]>(
       `${API.categories.list}?${q.toString()}`,
     );
     return unwrapPaginatedList(res);
   },
+
+  /** Admin: one category with every status and field. */
+  adminDetail: (id: string) =>
+    apiClient.get<Category>(API.categories.adminDetail(id)),
+
+  /** Admin: what archiving or deleting a category would touch. */
+  impact: (id: string) =>
+    apiClient.get<CategoryImpact>(API.categories.impact(id)),
+
+  /** Admin: move among siblings and/or under another parent. */
+  move: (
+    id: string,
+    body: { parentId?: string | null; beforeId?: string; afterId?: string },
+  ) =>
+    apiClient.patch<{ id: string; orderedIds: string[] }>(
+      API.categories.move(id),
+      body,
+    ),
 
   detail: (id: string) => apiClient.get<Category>(API.categories.detail(id)),
 

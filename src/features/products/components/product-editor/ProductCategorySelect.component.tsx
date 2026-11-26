@@ -15,6 +15,9 @@ interface ProductCategorySelectProps {
   value: string;
   selected: CategoryOptionData | null;
   onSelect: (category: CategoryOptionData) => void;
+  /** Offers an empty choice (for example "platform default") and calls this when it is chosen. */
+  onClear?: () => void;
+  noneLabel?: string;
   error?: boolean;
   disabled?: boolean;
 }
@@ -28,6 +31,8 @@ export function ProductCategorySelect({
   value,
   selected,
   onSelect,
+  onClear,
+  noneLabel,
   error = false,
   disabled = false,
 }: ProductCategorySelectProps) {
@@ -56,8 +61,13 @@ export function ProductCategorySelect({
     const category = option.data as CategoryOptionData;
     return <ProductCategoryOption {...category} />;
   }, []);
-  // Choosing a category is required, so there is no "none"; the form validates an empty value.
-  const handleChange = useCallback(() => undefined, []);
+  // The chosen category arrives through `onSelect`; an empty choice (when offered) through `onClear`.
+  const handleChange = useCallback(
+    (id: string) => {
+      if (!id) onClear?.();
+    },
+    [onClear],
+  );
 
   return (
     <InfiniteSingleSelect
@@ -68,7 +78,9 @@ export function ProductCategorySelect({
       fetchPage={fetchPage}
       pinnedOption={pinnedOption}
       pinnedInList={false}
-      placeholder={LABELS.selectCategory}
+      allowNone={Boolean(onClear)}
+      noneLabel={noneLabel}
+      placeholder={noneLabel ?? LABELS.selectCategory}
       searchPlaceholder={LABELS.searchCategories}
       emptyMessage={LABELS.noCategoriesFound}
       pageSize={PAGE_SIZE}

@@ -96,7 +96,7 @@ export const productQnaStyles = {
   // The viewer's own answer: a soft card in the same column as the others.
   mineAnswer:
     "scroll-mt-28 rounded-xl border border-brand/20 bg-brand-subtle/30 p-3 motion-safe:animate-fade-in sm:p-4",
-  editDialog: "max-w-[520px]",
+  editDialog: "max-w-2xl",
   editHeader: "text-left sm:text-left",
   editForm: "space-y-2",
   editActions: "flex flex-col-reverse gap-2 pt-2 xs:flex-row xs:justify-end",

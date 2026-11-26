@@ -1,3 +1,12 @@
+/** Where a category's GST comes from, for the admin screens. */
+export interface CategoryGstInfo {
+  percent: number;
+  source: "own" | "inherited" | "default" | "fallback";
+  fromCategoryName: string | null;
+  priceBandThreshold: number | null;
+  percentAbove: number | null;
+}
+
 export interface Category {
   id: string;
   name: string;
@@ -17,6 +26,11 @@ export interface Category {
   children?: Category[];
   attributes?: CategoryAttribute[];
   path?: string;
+  /** Admin list only: nesting level, children, products and GST. */
+  depth?: number;
+  childCount?: number;
+  productCount?: number;
+  gst?: CategoryGstInfo;
   breadcrumb?: Array<{ id: string; name: string; slug: string }>;
 }
 

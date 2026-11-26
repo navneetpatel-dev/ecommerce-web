@@ -17,7 +17,10 @@ export function FormActions({
   className,
 }: FormActionsProps) {
   return (
-    <div className={cn(formActionsStyles.container, className)}>
+    <div
+      data-form-actions
+      className={cn(formActionsStyles.container, className)}
+    >
       {leading != null ? (
         <div className={formActionsStyles.leading} aria-live="polite">
           {leading}

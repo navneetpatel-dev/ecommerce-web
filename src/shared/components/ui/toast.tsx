@@ -1,8 +1,8 @@
 "use client";
 
+import { IconCloseButton } from "@/shared/components/ui/icon-close-button";
 import * as React from "react";
 import * as ToastPrimitive from "@radix-ui/react-toast";
-import { X } from "lucide-react";
 import { cn } from "@/shared/utils/dom/cn";
 
 const ToastProvider = ToastPrimitive.Provider;
@@ -58,14 +58,12 @@ const ToastClose = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <ToastPrimitive.Close
     ref={ref}
-    className={cn(
-      "absolute right-2 top-2 rounded-sm p-1 text-ink-muted hover:text-ink",
-      className,
-    )}
+    className={cn("absolute right-2 top-2", className)}
     toast-close=""
+    asChild
     {...props}
   >
-    <X size={14} />
+    <IconCloseButton variant="inline" />
   </ToastPrimitive.Close>
 ));
 ToastClose.displayName = "ToastClose";

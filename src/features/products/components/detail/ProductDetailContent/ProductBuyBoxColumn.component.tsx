@@ -23,6 +23,9 @@ interface ProductBuyBoxColumnProps {
   avgRating: number;
   reviewCount: number;
   onReviewsClick: () => void;
+  hideRating?: boolean;
+  /** A preview of a product that is not on sale: no offers, delivery check, notify-me, wishlist or share. */
+  preview?: boolean;
   displayPrice: number;
   compareAtPrice: number | null;
   showMrp: boolean;
@@ -63,6 +66,8 @@ export function ProductBuyBoxColumn({
   avgRating,
   reviewCount,
   onReviewsClick,
+  hideRating = false,
+  preview = false,
   displayPrice,
   compareAtPrice,
   showMrp,
@@ -106,6 +111,7 @@ export function ProductBuyBoxColumn({
           avgRating={avgRating}
           reviewCount={reviewCount}
           onReviewsClick={onReviewsClick}
+          hideRating={hideRating}
         />
 
         <PriceAvailabilityBlock
@@ -136,8 +142,15 @@ export function ProductBuyBoxColumn({
           />
         ) : null}
 
-        <CashbackOfferBadge categoryId={product.categoryId} variant="detail" />
-        <ProductEligibleOffers productId={product.id} />
+        {preview ? null : (
+          <>
+            <CashbackOfferBadge
+              categoryId={product.categoryId}
+              variant="detail"
+            />
+            <ProductEligibleOffers productId={product.id} />
+          </>
+        )}
 
         {product.variants && product.variants.length > 0 ? (
           <VariantSelector
@@ -182,6 +195,7 @@ export function ProductBuyBoxColumn({
           imageUrl={product.imageUrl}
           price={displayPrice}
           description={product.description}
+          preview={preview}
         />
 
         <SellerPerksBlock

@@ -1,5 +1,6 @@
 // Categories feature — public API
 export { categoriesApi } from "./api/browse/categories.api";
+export type { CategoryImpact } from "./api/browse/categories.api";
 export { useCategories } from "./api/browse/categories.queries";
 export {
   resolveCategoryBySlugServer,

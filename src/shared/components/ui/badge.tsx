@@ -1,8 +1,7 @@
 import * as React from "react";
-import { X } from "lucide-react";
+import { IconCloseButton } from "@/shared/components/ui/icon-close-button";
 import { cn } from "@/shared/utils/dom/cn";
 import { cva, type VariantProps } from "class-variance-authority";
-import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
 import { badgeStyles } from "../../styles/ui/badge.styles";
 
@@ -48,19 +47,15 @@ function Badge({
     return (
       <span className={cn(badgeVariants({ variant }), className)} {...props}>
         {children}
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon-sm"
+        <IconCloseButton
+          variant="inline"
+          label={LABELS.remove}
+          className={badgeStyles.removeButton}
           onClick={(e) => {
             e.stopPropagation();
             onRemove();
           }}
-          className={badgeStyles.removeButton}
-          aria-label={LABELS.remove}
-        >
-          <X size={12} />
-        </Button>
+        />
       </span>
     );
   }

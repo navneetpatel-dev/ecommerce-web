@@ -7,7 +7,7 @@ import {
   type InfiniteMultiSelectPageResult,
 } from "@/shared/components/InfiniteMultiSelect";
 import { LABELS } from "@/shared/constants/labels";
-import { CATEGORY_STATUS, PRODUCT_STATUS } from "@/shared/constants/statuses";
+import { PRODUCT_STATUS } from "@/shared/constants/statuses";
 import { categoriesApi } from "@/features/categories";
 import { productsApi } from "@/features/products";
 import { vendorsApi } from "@/features/vendors";
@@ -47,11 +47,10 @@ export function CouponScopeMultiSelect({
       query: InfiniteMultiSelectPageQuery,
     ): Promise<InfiniteMultiSelectPageResult> => {
       if (scopeType === "category") {
-        const result = await categoriesApi.listPaginated({
+        const result = await categoriesApi.listPublicPaginated({
           page: query.page,
           limit: query.limit,
           search: query.search,
-          status: CATEGORY_STATUS.ACTIVE,
         });
         return {
           items: result.items.map((category) => ({

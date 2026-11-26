@@ -5,7 +5,13 @@ import { LABELS } from "@/shared/constants/labels";
 import { productEditorFormStyles as styles } from "../../styles/product-editor/productEditorForm.styles";
 
 /** Selling price and MRP together, with a short explanation of how GST fits in. */
-export function ProductPricingGroup({ children }: { children: ReactNode }) {
+export function ProductPricingGroup({
+  children,
+  preview,
+}: {
+  children: ReactNode;
+  preview: ReactNode;
+}) {
   return (
     <div className={styles.pricingGroup}>
       <div className={styles.pricingGroupHeader}>
@@ -17,6 +23,7 @@ export function ProductPricingGroup({ children }: { children: ReactNode }) {
         </p>
       </div>
       <div className={styles.pricingGrid}>{children}</div>
+      {preview}
     </div>
   );
 }

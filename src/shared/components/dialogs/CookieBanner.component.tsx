@@ -1,4 +1,4 @@
-import { X } from "lucide-react";
+import { IconCloseButton } from "@/shared/components/ui/icon-close-button";
 import { Button } from "@/shared/components/ui/button";
 import { CookiePreferencesDialog } from "./CookiePreferencesDialog.component";
 import { LABELS } from "@/shared/constants/labels";
@@ -63,16 +63,12 @@ export function CookieBanner({
             {LABELS.acceptCookies}
           </Button>
         </div>
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon-sm"
-          onClick={onDismiss}
+        <IconCloseButton
+          variant="inline"
+          label={LABELS.dismiss}
           className={cookieBannerStyles.dismissButton}
-          aria-label={LABELS.dismiss}
-        >
-          <X size={16} />
-        </Button>
+          onClick={onDismiss}
+        />
       </div>
     </div>
   );

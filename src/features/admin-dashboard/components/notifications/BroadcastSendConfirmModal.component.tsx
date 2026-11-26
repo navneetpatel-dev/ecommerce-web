@@ -36,7 +36,7 @@ export function BroadcastSendConfirmModal({
       open={mode != null}
       onOpenChange={(v) => !v && !pending && onClose()}
     >
-      <DialogContent className="max-w-lg">
+      <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle>
             {isTest

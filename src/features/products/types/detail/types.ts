@@ -23,6 +23,11 @@ export interface VariantSelectionProps {
 
 export interface ProductDetailContentProps {
   product: ProductDetail;
+  /**
+   * Showing the page as a preview (while creating or reviewing a product): no ratings, reviews,
+   * questions, related products or sticky buy bar, since none of that exists for the product yet.
+   */
+  preview?: boolean;
   isWishlisted: boolean;
   onToggleWishlist: () => void;
   onAddToCart?: (quantity: number) => void;

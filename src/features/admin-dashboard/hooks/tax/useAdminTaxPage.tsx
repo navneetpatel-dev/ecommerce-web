@@ -1,90 +1,120 @@
 "use client";
 
-import { useState, useCallback, type FormEvent, type ReactNode } from "react";
+import { useState, useCallback, type ReactNode } from "react";
+import type { CategoryOptionData } from "@/features/products";
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { LABELS } from "@/shared/constants/labels";
-import { formatLabel } from "@/shared/utils/formatting/formatLabel";
-import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 import { useUrlFilterParams } from "@/shared/hooks/navigation/useUrlFilterParams.hook";
 import { useDebouncedValue } from "@/shared/hooks/ui/use-debounce.hook";
-import { taxApi } from "@/features/admin-dashboard/api/tax/tax.api";
-import { AdminConfirmAction } from "../../components/shared/AdminConfirmAction.component";
-import { adminRowLabel } from "../../utils/shared/adminRowLabel";
-import { filterTaxRules } from "../../utils/tax/taxFilters.utils";
+import {
+  taxApi,
+  type TaxRuleFilters,
+  type TaxRuleRow,
+} from "../../api/tax/tax.api";
+import { useTaxCategoryFocus } from "./useTaxCategoryFocus.hook";
+import { TaxRuleRowActions } from "../../components/tax/TaxRuleRowActions.component";
+import {
+  TaxRuleAppliesToCell,
+  TaxRuleScopeCell,
+} from "../../components/tax/TaxRuleCells.component";
 import type { AdminDataRow } from "../shared/useAdminDataList.hook";
 
+const asRule = (row: AdminDataRow) => row as unknown as TaxRuleRow;
+
 export function useAdminTaxPage() {
-  const urlFilters = useUrlFilterParams<"search" | "gstTier" | "hasPriceBand">({
-    search: ["q"],
-  });
+  const urlFilters = useUrlFilterParams<
+    "search" | "gstTier" | "hasPriceBand" | "scope" | "categoryId"
+  >({ search: ["q"] });
   const search = urlFilters.get("search");
   const gstTier = urlFilters.get("gstTier");
   const hasPriceBand = urlFilters.get("hasPriceBand");
+  const scope = urlFilters.get("scope");
+  const categoryId = urlFilters.get("categoryId");
   const debouncedSearch = useDebouncedValue(search.trim(), 350);
-  const [gstPercentage, setGstPercentage] = useState("18");
-  const [hsnCode, setHsnCode] = useState("");
-  // Optional per-piece price band: above this value, the higher GST % applies.
-  const [priceBandThreshold, setPriceBandThreshold] = useState("");
-  const [gstPercentageAbove, setGstPercentageAbove] = useState("");
-  const [createError, setCreateError] = useState<string | null>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [editing, setEditing] = useState<TaxRuleRow | null>(null);
+  const [initialCategory, setInitialCategory] =
+    useState<CategoryOptionData | null>(null);
   const [listVersion, setListVersion] = useState(0);
 
-  const handleCreate = useCallback(
-    async (e: FormEvent) => {
-      e.preventDefault();
-      setCreateError(null);
-      try {
-        const hasBand = priceBandThreshold !== "" && gstPercentageAbove !== "";
-        await taxApi.createRule({
-          gstPercentage: Number(gstPercentage),
-          hsnCode: hsnCode || undefined,
-          priceBandThreshold: hasBand ? Number(priceBandThreshold) : null,
-          gstPercentageAbove: hasBand ? Number(gstPercentageAbove) : null,
-        });
-        setHsnCode("");
-        setGstPercentage("18");
-        setPriceBandThreshold("");
-        setGstPercentageAbove("");
-        setListVersion((version) => version + 1);
-      } catch (err) {
-        setCreateError(getApiErrorMessage(err, LABELS.couldNotCreateTaxRule));
-      }
-    },
-    [gstPercentage, hsnCode, priceBandThreshold, gstPercentageAbove],
-  );
-
+  // Filtering, counting and paging all happen on the server, so totals and later pages are right.
   const load = useCallback(
     async ({ page, limit }: { page: number; limit: number }) => {
       void listVersion;
-      const result = await taxApi.getRules({ page, limit });
-      const filtered = filterTaxRules(
-        result.items,
-        debouncedSearch,
-        gstTier,
-        hasPriceBand,
-      );
-      return { ...result, items: filtered, total: filtered.length };
+      const filters: TaxRuleFilters = { page, limit };
+      if (debouncedSearch) filters.search = debouncedSearch;
+      if (gstTier) filters.gstPercentage = Number(gstTier);
+      if (hasPriceBand === "YES" || hasPriceBand === "NO") {
+        filters.hasBand = hasPriceBand;
+      }
+      if (scope === "default" || scope === "category") filters.scope = scope;
+      if (categoryId) filters.categoryId = categoryId;
+      return taxApi.getRules(filters);
     },
-    [listVersion, debouncedSearch, gstTier, hasPriceBand],
+    [listVersion, debouncedSearch, gstTier, hasPriceBand, scope, categoryId],
+  );
+
+  const refresh = useCallback(
+    () => setListVersion((version) => version + 1),
+    [],
+  );
+  const openCreate = useCallback(() => {
+    setEditing(null);
+    setInitialCategory(null);
+    setDialogOpen(true);
+  }, []);
+  const openEdit = useCallback((rule: TaxRuleRow) => {
+    setInitialCategory(null);
+    setEditing(rule);
+    setDialogOpen(true);
+  }, []);
+  const handleSaved = useCallback(() => {
+    setDialogOpen(false);
+    refresh();
+  }, [refresh]);
+  const handleDelete = useCallback(
+    (rule: TaxRuleRow) =>
+      taxApi.deleteRule(rule.id, { force: rule.isDefault }).then(refresh),
+    [refresh],
+  );
+
+  const focus = useTaxCategoryFocus(categoryId, listVersion);
+  const editFocusedRule = useCallback(() => {
+    if (focus.ownRule) openEdit(focus.ownRule);
+  }, [focus.ownRule, openEdit]);
+  const setFocusedCategoryRate = useCallback(() => {
+    if (!focus.effective) return;
+    setEditing(null);
+    setInitialCategory({
+      id: focus.effective.categoryId,
+      name: focus.effective.categoryName,
+    });
+    setDialogOpen(true);
+  }, [focus.effective]);
+  const clearFocus = useCallback(
+    () => urlFilters.clearAll(["categoryId"]),
+    [urlFilters],
   );
 
   const actions = useCallback(
-    (row: AdminDataRow, reload: () => void): ReactNode => {
-      const deleteRule = () => taxApi.deleteRule(String(row.id)).then(reload);
-
-      const name = adminRowLabel(row);
-      return (
-        <AdminConfirmAction
-          label={LABELS.delete}
-          dialogVariant="danger"
-          title={LABELS.confirmDeleteTaxTitle}
-          description={formatLabel(LABELS.confirmDeleteTaxBody, { name })}
-          onConfirm={deleteRule}
-        />
-      );
-    },
-    [],
+    (row: AdminDataRow): ReactNode => (
+      <TaxRuleRowActions
+        rule={asRule(row)}
+        onEdit={openEdit}
+        onDelete={handleDelete}
+      />
+    ),
+    [openEdit, handleDelete],
   );
+
+  const cellOverrides = {
+    categoryName: (row: AdminDataRow) => (
+      <TaxRuleScopeCell rule={asRule(row)} />
+    ),
+    appliesToCount: (row: AdminDataRow) => (
+      <TaxRuleAppliesToCell rule={asRule(row)} />
+    ),
+  };
 
   const fetchDetail = useCallback(
     async (row: AdminDataRow) => ({ ...row }),
@@ -97,29 +127,45 @@ export function useAdminTaxPage() {
       search,
       gstTier,
       hasPriceBand,
+      scope,
       onSearchChange: urlFilters.set("search"),
       onGstTierChange: urlFilters.set("gstTier"),
       onHasPriceBandChange: urlFilters.set("hasPriceBand"),
-      onClear: () => urlFilters.clearAll(["search", "gstTier", "hasPriceBand"]),
+      onScopeChange: urlFilters.set("scope"),
+      onClear: () =>
+        urlFilters.clearAll([
+          "search",
+          "gstTier",
+          "hasPriceBand",
+          "scope",
+          "categoryId",
+        ]),
     },
-    form: {
-      gstPercentage,
-      hsnCode,
-      priceBandThreshold,
-      gstPercentageAbove,
-      createError,
-      onGstChange: setGstPercentage,
-      onHsnChange: setHsnCode,
-      onPriceBandThresholdChange: setPriceBandThreshold,
-      onGstPercentageAboveChange: setGstPercentageAbove,
-      onSubmit: handleCreate,
+    dialog: {
+      open: dialogOpen,
+      rule: editing,
+      initialCategory,
+      onOpenChange: setDialogOpen,
+      onSaved: handleSaved,
+    },
+    openCreate,
+    focus: {
+      status: focus.status,
+      effective: focus.effective,
+      ownRule: focus.ownRule,
+      sourceText: focus.sourceText,
+      onEditRule: editFocusedRule,
+      onSetOwnRate: setFocusedCategoryRate,
+      onClear: clearFocus,
     },
     title: LABELS.tax,
     permission: PERMISSIONS.TAX_MANAGE,
     load,
     actions,
+    cellOverrides,
     columnKeys: [
       "categoryName",
+      "appliesToCount",
       "hsnCode",
       "gstPercentage",
       "priceBandThreshold",

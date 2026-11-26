@@ -1,6 +1,6 @@
 export const vendorProductImagesDialogStyles = {
   counter: "text-body-sm font-medium tabular-nums text-ink-muted",
-  dialogContent: "max-w-3xl",
+  dialogContent: "max-w-4xl",
   loadingText: "text-ink-muted",
   errorText: "text-danger text-body-sm",
   imageList: "grid grid-cols-1 gap-5 sm:grid-cols-2",

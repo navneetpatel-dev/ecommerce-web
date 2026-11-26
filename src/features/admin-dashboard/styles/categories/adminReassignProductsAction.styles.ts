@@ -1,5 +1,5 @@
 export const adminReassignProductsActionStyles = {
-  dialogContent: "max-w-md",
+  dialogContent: "max-w-xl",
   dialogDescription: "text-[0.875rem] text-ink-muted",
   formSection: "mt-2",
   errorMessage: "text-body-sm text-danger",

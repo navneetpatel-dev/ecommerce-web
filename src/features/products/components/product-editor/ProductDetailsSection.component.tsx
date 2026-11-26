@@ -21,6 +21,7 @@ import type {
   PricingLock,
   ProductEditorFormProps,
 } from "../../types/product-editor/types";
+import { CustomerPricePreview } from "./CustomerPricePreview.component";
 import { ProductPricingGroup } from "./ProductPricingGroup.component";
 import { ProductCategorySelect } from "./ProductCategorySelect.component";
 import { productEditorFormStyles } from "../../styles/product-editor/productEditorForm.styles";
@@ -62,6 +63,12 @@ export function ProductDetailsSection({
   const customerPrice = priceGuide.customerPrice;
   const mrp =
     values.compareAtPrice === "" ? null : Number(values.compareAtPrice);
+  // Comparable without a category: an MRP below the selling price itself can never be right.
+  const sellingPrice = values.price === "" ? null : Number(values.price);
+  const mrpBelowPrice =
+    mrp !== null && sellingPrice !== null && mrp < sellingPrice
+      ? formatLabel(LABELS.productMrpBelowPrice, { price: values.price })
+      : undefined;
   const mrpTooLow =
     customerPrice !== null && mrp !== null && mrp < customerPrice;
   const mrpBelowMinimum =
@@ -157,7 +164,14 @@ export function ProductDetailsSection({
           onChange={handleBrandChange}
         />
       </FormFieldFrame>
-      <ProductPricingGroup>
+      <ProductPricingGroup
+        preview={
+          <CustomerPricePreview
+            preview={priceGuide.preview}
+            missing={priceGuide.missing}
+          />
+        }
+      >
         <FormFieldFrame
           label={LABELS.productPriceExclGst}
           hint={
@@ -188,7 +202,7 @@ export function ProductDetailsSection({
                 "MRP is configured exclusively by the store owner.")
               : priceGuide.mrpHint
           }
-          error={getError("compareAtPrice") ?? mrpBelowMinimum}
+          error={getError("compareAtPrice") ?? mrpBelowPrice ?? mrpBelowMinimum}
           footerAction={useCustomerPriceButton}
         >
           <NumberInput
