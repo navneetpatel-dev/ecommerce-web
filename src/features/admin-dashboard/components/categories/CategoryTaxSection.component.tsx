@@ -5,6 +5,7 @@ import { ArrowUpRight } from "lucide-react";
 import type { CategoryGstInfo } from "@/shared/api/types";
 import { FormSection } from "@/shared/components/forms";
 import { Button } from "@/shared/components/ui/button";
+import { attentionStyles } from "@/shared/styles/attention.styles";
 import { LABELS } from "@/shared/constants/labels";
 import { useCategoryTaxSection } from "../../hooks/categories/useCategoryTaxSection.hook";
 import { adminCategoryStyles as styles } from "../../styles/categories/adminCategory.styles";
@@ -37,7 +38,12 @@ export function CategoryTaxSection({
           <span className={styles.taxSource}>{sourceText}</span>
         </div>
         {canManageTax ? (
-          <Button asChild variant="outline" size="sm">
+          <Button
+            asChild
+            variant="outline"
+            size="sm"
+            className={attentionStyles.manageTax}
+          >
             <Link href={taxPath}>
               {LABELS.categoryManageTax}
               <ArrowUpRight aria-hidden />

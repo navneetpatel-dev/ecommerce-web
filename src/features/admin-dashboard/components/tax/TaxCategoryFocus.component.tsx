@@ -3,6 +3,7 @@
 import { Pencil, Plus } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { IconCloseButton } from "@/shared/components/ui/icon-close-button";
+import { attentionStyles } from "@/shared/styles/attention.styles";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import type { EffectiveTaxRule, TaxRuleRow } from "../../api/tax/tax.api";
@@ -64,7 +65,12 @@ export function TaxCategoryFocus({
             {LABELS.taxFocusEditRule}
           </Button>
         ) : (
-          <Button type="button" size="sm" onClick={onSetOwnRate}>
+          <Button
+            type="button"
+            size="sm"
+            className={attentionStyles.setOwnRate}
+            onClick={onSetOwnRate}
+          >
             <Plus aria-hidden />
             {LABELS.taxFocusSetOwn}
           </Button>

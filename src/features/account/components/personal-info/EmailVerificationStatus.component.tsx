@@ -1,9 +1,10 @@
 "use client";
 
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, Mail } from "lucide-react";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import { FormError } from "@/shared/components/forms/FormError.component";
+import { attentionStyles } from "@/shared/styles/attention.styles";
 import { LABELS } from "@/shared/constants/labels";
 import { useEmailVerificationStatus } from "../../hooks/personal-info/useEmailVerificationStatus.hook";
 import { emailVerificationStatusStyles as styles } from "../../styles/personal-info/emailVerificationStatus.styles";
@@ -41,8 +42,10 @@ export function EmailVerificationStatus({
           size="sm"
           fullWidth="mobile"
           loading={isPending}
+          className={attentionStyles.verifyEmail}
           onClick={handleResend}
         >
+          <Mail aria-hidden />
           {LABELS.resendVerificationEmail}
         </Button>
       )}

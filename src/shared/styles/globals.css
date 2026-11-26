@@ -639,12 +639,19 @@ html::-webkit-scrollbar-track {
   }
 }
 
-/* Attention pulse for a secondary action that should still be noticed (e.g. Preview): a soft brand
-   ring, a light sweep across the button and a blinking eye. Pauses on hover/focus; off for reduced motion. */
+/* Attention effects for actions that should be noticed without being the main button (Preview, Manage
+   tax, Submit...). `.attention-pulse` is the base (ring + light sweep); modifiers change the little
+   things per button so they never look like the same effect repeated:
+   tone      -> ring colour (default brand; .attention-tone-info | -success | -warning)
+   icon move -> .attention-blink | -nudge | -pop | -fly | -bob | -wiggle | -shake
+   weight    -> .attention-quiet (icon only, for table rows) | .attention-no-sheen
+   rhythm    -> .attention-cycle-fast | -slow
+   Paused on hover/focus/disabled; off for reduced motion. */
 @keyframes attention-ring {
   0%,
   100% {
-    box-shadow: 0 0 0 0 color-mix(in srgb, var(--brand) 45%, transparent);
+    box-shadow: 0 0 0 0
+      color-mix(in srgb, var(--attention-color) 45%, transparent);
   }
   50% {
     box-shadow: 0 0 0 6px transparent;
@@ -661,7 +668,7 @@ html::-webkit-scrollbar-track {
   }
 }
 
-@keyframes attention-eye {
+@keyframes attention-blink {
   0%,
   86%,
   100% {
@@ -672,10 +679,99 @@ html::-webkit-scrollbar-track {
   }
 }
 
+@keyframes attention-nudge {
+  0%,
+  70%,
+  100% {
+    transform: translate(0, 0);
+  }
+  82% {
+    transform: translate(3px, -3px);
+  }
+}
+
+@keyframes attention-pop {
+  0%,
+  70%,
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+  84% {
+    transform: scale(1.35) rotate(90deg);
+  }
+}
+
+@keyframes attention-fly {
+  0%,
+  70%,
+  100% {
+    transform: translate(0, 0);
+    opacity: 1;
+  }
+  84% {
+    transform: translate(5px, -5px);
+    opacity: 0.35;
+  }
+  85% {
+    transform: translate(-5px, 5px);
+    opacity: 0.35;
+  }
+}
+
+@keyframes attention-bob {
+  0%,
+  70%,
+  100% {
+    transform: translateY(0);
+  }
+  80% {
+    transform: translateY(-3px);
+  }
+  90% {
+    transform: translateY(1px);
+  }
+}
+
+@keyframes attention-wiggle {
+  0%,
+  70%,
+  100% {
+    transform: rotate(0deg);
+  }
+  78% {
+    transform: rotate(-14deg);
+  }
+  86% {
+    transform: rotate(12deg);
+  }
+  93% {
+    transform: rotate(-6deg);
+  }
+}
+
+@keyframes attention-shake {
+  0%,
+  72%,
+  100% {
+    transform: translateX(0);
+  }
+  78%,
+  90% {
+    transform: translateX(-2px);
+  }
+  84%,
+  96% {
+    transform: translateX(2px);
+  }
+}
+
 .attention-pulse {
+  --attention-color: var(--brand);
+  --attention-cycle: 3.2s;
   position: relative;
-  border-color: var(--brand);
-  animation: attention-ring 2.6s ease-in-out infinite;
+  border-color: var(--attention-color);
+  animation: attention-ring calc(var(--attention-cycle) * 0.8) ease-in-out
+    infinite;
 }
 
 .attention-pulse::after {
@@ -686,15 +782,68 @@ html::-webkit-scrollbar-track {
   background: linear-gradient(
     100deg,
     transparent 35%,
-    color-mix(in srgb, var(--brand) 30%, transparent) 50%,
+    color-mix(in srgb, var(--attention-color) 30%, transparent) 50%,
     transparent 65%
   );
   transform: translateX(-130%);
-  animation: attention-sheen 3.2s ease-in-out infinite;
+  animation: attention-sheen var(--attention-cycle) ease-in-out infinite;
 }
 
 .attention-pulse > svg {
-  animation: attention-eye 3.2s ease-in-out infinite;
+  animation-duration: var(--attention-cycle);
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+.attention-tone-info {
+  --attention-color: var(--info);
+}
+.attention-tone-success {
+  --attention-color: var(--success);
+}
+.attention-tone-warning {
+  --attention-color: var(--warning);
+}
+.attention-cycle-fast {
+  --attention-cycle: 2.6s;
+}
+.attention-cycle-slow {
+  --attention-cycle: 4s;
+}
+
+.attention-blink > svg {
+  animation-name: attention-blink;
+}
+.attention-nudge > svg {
+  animation-name: attention-nudge;
+}
+.attention-pop > svg {
+  animation-name: attention-pop;
+}
+.attention-fly > svg {
+  animation-name: attention-fly;
+}
+.attention-bob > svg {
+  animation-name: attention-bob;
+}
+.attention-wiggle > svg {
+  animation-name: attention-wiggle;
+}
+.attention-shake > svg {
+  animation-name: attention-shake;
+}
+
+.attention-no-sheen::after {
+  display: none;
+}
+
+/* Quiet: only the icon moves (used where the button repeats, e.g. every table row). */
+.attention-quiet {
+  animation: none;
+  border-color: revert-layer;
+}
+.attention-quiet::after {
+  display: none;
 }
 
 .attention-pulse:is(:hover, :focus-visible, :disabled),

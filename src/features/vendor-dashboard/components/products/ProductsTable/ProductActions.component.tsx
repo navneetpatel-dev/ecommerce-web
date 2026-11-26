@@ -1,5 +1,7 @@
 "use client";
 
+import { cn } from "@/shared/utils/dom/cn";
+import { attentionStyles } from "@/shared/styles/attention.styles";
 import { Button } from "@/shared/components/ui/button";
 import { DisabledActionHint } from "@/shared/components/forms/DisabledActionHint.component";
 import {
@@ -42,7 +44,10 @@ export function ProductActions(props: ProductRowActionsProps) {
             size="sm"
             variant="outline"
             type="button"
-            className={tableMenuButtonClass("neutral")}
+            className={cn(
+              tableMenuButtonClass("neutral"),
+              attentionStyles.previewRow,
+            )}
             onClick={handlePreview}
           >
             <Eye strokeWidth={2.25} aria-hidden />
@@ -61,7 +66,10 @@ export function ProductActions(props: ProductRowActionsProps) {
               size="sm"
               variant="outline"
               type="button"
-              className={tableMenuButtonClass("success")}
+              className={cn(
+                tableMenuButtonClass("success"),
+                attentionStyles.submitRow,
+              )}
               disabled={isSubmitting}
               onClick={handleSubmit}
             >
@@ -77,7 +85,10 @@ export function ProductActions(props: ProductRowActionsProps) {
             size="sm"
             variant="outline"
             type="button"
-            className={tableMenuButtonClass("neutral")}
+            className={cn(
+              tableMenuButtonClass("neutral"),
+              attentionStyles.imagesRow,
+            )}
             onClick={handleManageImages}
           >
             <Images strokeWidth={2.25} aria-hidden />
@@ -91,7 +102,10 @@ export function ProductActions(props: ProductRowActionsProps) {
             size="sm"
             variant="outline"
             type="button"
-            className={tableMenuButtonClass("neutral")}
+            className={cn(
+              tableMenuButtonClass("neutral"),
+              attentionStyles.variantsRow,
+            )}
             onClick={handleManageVariants}
           >
             <Boxes strokeWidth={2.25} aria-hidden />

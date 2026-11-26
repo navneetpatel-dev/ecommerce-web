@@ -1,6 +1,7 @@
+import { attentionStyles } from "@/shared/styles/attention.styles";
 export const productEditorFormStyles = {
   /** Draws the eye: a soft pulse, a light sweep and a blinking eye (see `.attention-pulse` in globals.css). */
-  previewButton: "attention-pulse",
+  previewButton: attentionStyles.preview,
   form: "",
   submitError: "text-sm text-danger",
 

@@ -1,5 +1,7 @@
 "use client";
 
+import { cn } from "@/shared/utils/dom/cn";
+import { attentionStyles } from "@/shared/styles/attention.styles";
 import { Boxes, Eye, Pencil, Send } from "lucide-react";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { AdminConfirmAction } from "../shared/AdminConfirmAction.component";
@@ -54,7 +56,10 @@ export function AdminProductRowActions({
           size="sm"
           variant="outline"
           type="button"
-          className={tableMenuButtonClass("neutral")}
+          className={cn(
+            tableMenuButtonClass("neutral"),
+            attentionStyles.previewRow,
+          )}
           onClick={handlePreview}
         >
           <Eye strokeWidth={2.25} aria-hidden />
@@ -78,7 +83,10 @@ export function AdminProductRowActions({
           size="sm"
           variant="outline"
           type="button"
-          className={tableMenuButtonClass("neutral")}
+          className={cn(
+            tableMenuButtonClass("neutral"),
+            attentionStyles.variantsRow,
+          )}
           onClick={handleVariants}
         >
           <Boxes strokeWidth={2.25} aria-hidden />
@@ -105,7 +113,10 @@ export function AdminProductRowActions({
             size="sm"
             variant="outline"
             type="button"
-            className={tableMenuButtonClass("success")}
+            className={cn(
+              tableMenuButtonClass("success"),
+              attentionStyles.submitRow,
+            )}
             onClick={handleSubmit}
           >
             <Send strokeWidth={2.25} aria-hidden />
