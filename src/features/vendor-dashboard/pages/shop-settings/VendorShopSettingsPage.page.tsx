@@ -23,14 +23,7 @@ export function VendorShopSettingsPage() {
   }
 
   return (
-    <RequirePermission
-      permission={[
-        PERMISSIONS.PRODUCT_UPDATE,
-        PERMISSIONS.PRODUCT_CREATE,
-        PERMISSIONS.SUBORDER_MANAGE,
-        PERMISSIONS.PAYOUT_VIEW,
-      ]}
-    >
+    <RequirePermission permission={PERMISSIONS.PAYOUT_VIEW}>
       <VendorShopSettingsForm
         vendorId={settings.vendorId}
         businessName={settings.businessName}

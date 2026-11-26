@@ -56,3 +56,48 @@ export async function fetchShortLink(
 
   return null;
 }
+
+const PLACEHOLDER_ORIGIN = "https://placeholder.invalid";
+const UNSAFE_PATH_CHARS = /[\u0000-\u001f\u007f\\]/;
+
+/**
+ * The only thing the short-link page may navigate to: a same-site path. Anything that could leave
+ * the site (`//evil.com`, `/\evil.com`, `javascript:…`, another host) becomes `/`, and the rest is
+ * re-serialised as a browser reads it (so `<`, `>` and quotes are percent-encoded). The API already
+ * does this; the page does not rely on it.
+ */
+export function safeRedirectPath(raw: string | null | undefined): string {
+  const value = (raw ?? "").trim();
+  const candidate = value.startsWith("/") ? value : `/${value}`;
+  if (
+    !value ||
+    candidate.startsWith("//") ||
+    UNSAFE_PATH_CHARS.test(candidate) ||
+    candidate.length > 2048
+  ) {
+    return "/";
+  }
+  try {
+    const url = new URL(candidate, PLACEHOLDER_ORIGIN);
+    if (url.origin !== PLACEHOLDER_ORIGIN) return "/";
+    const path = `${url.pathname}${url.search}`;
+    return path.startsWith("/") && !path.startsWith("//") ? path : "/";
+  } catch {
+    return "/";
+  }
+}
+
+const LINE_SEPARATOR = String.fromCharCode(0x2028);
+const PARAGRAPH_SEPARATOR = String.fromCharCode(0x2029);
+
+/** A JS string literal that is safe inside an inline `<script>`: `</script>` and line separators cannot end it early. */
+export function toInlineScriptString(value: string): string {
+  return JSON.stringify(value)
+    .replace(/</g, "\\u003c")
+    .replace(/>/g, "\\u003e")
+    .replace(/&/g, "\\u0026")
+    .split(LINE_SEPARATOR)
+    .join("\\u2028")
+    .split(PARAGRAPH_SEPARATOR)
+    .join("\\u2029");
+}

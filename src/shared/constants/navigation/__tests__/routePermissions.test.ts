@@ -28,10 +28,9 @@ describe("Route Permissions Mapping", () => {
         PERMISSIONS.PRODUCT_MANAGE,
         PERMISSIONS.PRODUCT_APPROVE,
       ]);
-      expect(adminPermissionsForPath("/admin/inventory")).toEqual([
+      expect(adminPermissionsForPath("/admin/inventory")).toEqual(
         PERMISSIONS.PRODUCT_MANAGE,
-        PERMISSIONS.PRODUCT_UPDATE,
-      ]);
+      );
       expect(adminPermissionsForPath("/admin/categories")).toEqual(
         PERMISSIONS.CATEGORY_MANAGE,
       );
@@ -63,6 +62,22 @@ describe("Route Permissions Mapping", () => {
       );
     });
 
+    it("gives Web Vitals and Cashback Offers their own Super Admin permissions", () => {
+      expect(adminPermissionsForPath("/admin/web-vitals")).toEqual(
+        PERMISSIONS.WEBVITALS_VIEW,
+      );
+      expect(adminPermissionsForPath("/admin/cashback-offers")).toEqual(
+        PERMISSIONS.CASHBACK_MANAGE,
+      );
+      // Coupons and Analytics keep their own, broader permissions.
+      expect(adminPermissionsForPath("/admin/coupons")).toEqual(
+        PERMISSIONS.COUPON_MANAGE,
+      );
+      expect(adminPermissionsForPath("/admin/analytics")).toEqual(
+        PERMISSIONS.ANALYTICS_VIEW,
+      );
+    });
+
     it("maps nested paths with prefixes correctly", () => {
       expect(adminPermissionsForPath("/admin/orders/12345")).toEqual(
         PERMISSIONS.ORDER_MANAGE,
@@ -78,15 +93,18 @@ describe("Route Permissions Mapping", () => {
   });
 
   describe("Vendor Routes", () => {
-    it("maps financial and team routes requiring PAYOUT_VIEW", () => {
+    it("maps financial routes requiring PAYOUT_VIEW", () => {
       expect(vendorPermissionsForPath("/vendor/dashboard/payouts")).toEqual(
         PERMISSIONS.PAYOUT_VIEW,
       );
       expect(vendorPermissionsForPath("/vendor/dashboard/analytics")).toEqual(
         PERMISSIONS.PAYOUT_VIEW,
       );
+    });
+
+    it("gates the team page on its own TEAM_MANAGE permission", () => {
       expect(vendorPermissionsForPath("/vendor/dashboard/team")).toEqual(
-        PERMISSIONS.PAYOUT_VIEW,
+        PERMISSIONS.TEAM_MANAGE,
       );
     });
 
@@ -111,6 +129,15 @@ describe("Route Permissions Mapping", () => {
       expect(vendorPermissionsForPath("/vendor/dashboard/qna")).toEqual(
         PERMISSIONS.REVIEW_RESPOND,
       );
+    });
+
+    it("keeps coupons and shop settings owner-only", () => {
+      expect(vendorPermissionsForPath("/vendor/dashboard/coupons")).toEqual(
+        PERMISSIONS.PRODUCT_CREATE,
+      );
+      expect(
+        vendorPermissionsForPath("/vendor/dashboard/shop-settings"),
+      ).toEqual(PERMISSIONS.PAYOUT_VIEW);
     });
 
     it("falls back safely for unknown vendor paths", () => {

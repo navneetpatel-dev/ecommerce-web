@@ -32,7 +32,7 @@ export function fullAnalyticsDate(value: string): string {
   });
 }
 
-type TrendPoint = { date: string; count: number; revenue?: number };
+type TrendPoint = { date: string; count: number; revenue?: number | null };
 
 /** Fill missing calendar days so the trend chart stays evenly spaced. */
 export function fillAnalyticsTrendDays(
@@ -83,4 +83,21 @@ export function pickTrendTickIndexes(length: number, maxTicks = 7): number[] {
     indexes.add(Math.round((i * last) / (maxTicks - 1)));
   }
   return [...indexes].sort((a, b) => a - b);
+}
+
+/** Nothing to draw: no orders, and (when revenue is shown) no revenue either. */
+export function isTrendEmpty(
+  points: Array<{ count: number; revenue?: number }>,
+  showRevenue: boolean,
+): boolean {
+  return points.every(
+    (point) => point.count === 0 && (!showRevenue || point.revenue === 0),
+  );
+}
+
+/** Compact rupee tick for the revenue axis: 1500 → 2k, 250000 → 3L. */
+export function formatRevenueTick(value: number): string {
+  if (value >= 100000) return `${Math.round(value / 100000)}L`;
+  if (value >= 1000) return `${Math.round(value / 1000)}k`;
+  return String(value);
 }

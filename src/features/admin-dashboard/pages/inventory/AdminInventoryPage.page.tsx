@@ -130,7 +130,7 @@ export function AdminInventoryPage() {
 
       <AdminDataPage
         title={LABELS.inventory}
-        permission={[PERMISSIONS.PRODUCT_MANAGE, PERMISSIONS.PRODUCT_UPDATE]}
+        permission={PERMISSIONS.PRODUCT_MANAGE}
         load={load}
         columnKeys={["productName", "sku", "stock", "lowStockAt"]}
         actions={renderStockEditorAction}

@@ -24,7 +24,7 @@ const getRowId = (row: CashbackOffer) => row.id;
 
 export function AdminCashbackOffersPage() {
   return (
-    <RequirePermission permission={PERMISSIONS.COUPON_MANAGE}>
+    <RequirePermission permission={PERMISSIONS.CASHBACK_MANAGE}>
       <AdminCashbackOffersContent />
     </RequirePermission>
   );

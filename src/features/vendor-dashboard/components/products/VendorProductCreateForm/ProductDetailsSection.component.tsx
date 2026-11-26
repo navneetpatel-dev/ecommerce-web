@@ -12,9 +12,9 @@ import {
   SelectValue,
 } from "@/shared/components/ui/select";
 import { FormFieldFrame, FormSection } from "@/shared/components/forms";
-import { LABELS, ROLES } from "@/shared/constants/labels";
+import { LABELS } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/dom/cn";
-import { useAuthStore } from "@/shared/stores/auth/auth.store";
+import { useIsVendorStaff } from "../../../hooks/products/useIsVendorStaff.hook";
 import { PRODUCT_FIELD_LIMITS } from "@/features/products";
 import type {
   ProductListingFormField,
@@ -41,9 +41,7 @@ export function ProductDetailsSection({
   patchValues,
   priceHint,
 }: ProductDetailsSectionProps) {
-  const isStaff = useAuthStore(
-    (state) => state.currentUser?.role === ROLES.VENDOR_STAFF,
-  );
+  const isStaff = useIsVendorStaff();
   const isPriceDisabled = disabled || isStaff;
 
   const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {

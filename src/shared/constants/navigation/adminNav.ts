@@ -18,7 +18,7 @@ export const ADMIN_NAV = [
     href: PATHS.admin.webVitals,
     label: LABELS.webVitals,
     category: LABELS.adminNavCategoryOverview,
-    permissions: [PERMISSIONS.ANALYTICS_VIEW] as PermissionKey[],
+    permissions: [PERMISSIONS.WEBVITALS_VIEW] as PermissionKey[],
   },
   {
     href: PATHS.admin.reports,
@@ -81,10 +81,8 @@ export const ADMIN_NAV = [
     href: PATHS.admin.inventory,
     label: LABELS.inventory,
     category: LABELS.adminNavCategoryCatalog,
-    permissions: [
-      PERMISSIONS.PRODUCT_MANAGE,
-      PERMISSIONS.PRODUCT_UPDATE,
-    ] as PermissionKey[],
+    // PRODUCT_UPDATE is a vendor permission (own-store stock lives in the vendor workspace).
+    permissions: [PERMISSIONS.PRODUCT_MANAGE] as PermissionKey[],
   },
   {
     href: PATHS.admin.categories,
@@ -110,7 +108,7 @@ export const ADMIN_NAV = [
     href: PATHS.admin.cashbackOffers,
     label: LABELS.adminCashbackOffers,
     category: LABELS.adminNavCategoryMarketing,
-    permissions: [PERMISSIONS.COUPON_MANAGE] as PermissionKey[],
+    permissions: [PERMISSIONS.CASHBACK_MANAGE] as PermissionKey[],
   },
   {
     href: PATHS.admin.banners,

@@ -23,6 +23,8 @@ import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import {
   fillAnalyticsTrendDays,
+  formatRevenueTick,
+  isTrendEmpty,
   pickTrendTickIndexes,
 } from "../../utils/analytics/analyticsFormat";
 import { useChartThemeColors } from "@/shared/hooks/theme/useChartThemeColors.hook";
@@ -32,14 +34,19 @@ import { analyticsStyles } from "../../styles/analytics/analyticsComponents.styl
 interface Point {
   date: string;
   count: number;
-  revenue?: number;
+  revenue?: number | null;
 }
 
 interface AnalyticsTrendChartProps {
   data: Point[];
+  /** False for admins without `analytics.revenue`: orders only, no revenue axis or line. */
+  showRevenue?: boolean;
 }
 
-export function AnalyticsTrendChart({ data }: AnalyticsTrendChartProps) {
+export function AnalyticsTrendChart({
+  data,
+  showRevenue = true,
+}: AnalyticsTrendChartProps) {
   const colors = useChartThemeColors();
 
   const chartData = useMemo(
@@ -57,6 +64,10 @@ export function AnalyticsTrendChart({ data }: AnalyticsTrendChartProps) {
     [chartData],
   );
 
+  const isEmpty = useMemo(
+    () => isTrendEmpty(chartData, showRevenue),
+    [chartData, showRevenue],
+  );
   const maxOrders = Math.max(...chartData.map((point) => point.count), 0);
   const ordersDomainMax = Math.max(4, Math.ceil(maxOrders * 1.25));
 
@@ -69,9 +80,7 @@ export function AnalyticsTrendChart({ data }: AnalyticsTrendChartProps) {
         <CardDescription>{LABELS.analyticsOrderTrendHint}</CardDescription>
       </CardHeader>
       <CardContent className={analyticsStyles.trendCardContent}>
-        {chartData.every(
-          (point) => point.count === 0 && point.revenue === 0,
-        ) ? (
+        {isEmpty ? (
           <p className={analyticsStyles.trendEmpty}>
             {LABELS.analyticsEmptyChart}
           </p>
@@ -113,21 +122,17 @@ export function AnalyticsTrendChart({ data }: AnalyticsTrendChartProps) {
                   width={32}
                   allowDecimals={false}
                 />
-                <YAxis
-                  yAxisId="revenue"
-                  orientation="right"
-                  tick={{ fill: colors.inkFaint, fontSize: 11 }}
-                  tickLine={false}
-                  axisLine={false}
-                  width={48}
-                  tickFormatter={(value: number) =>
-                    value >= 100000
-                      ? `${Math.round(value / 100000)}L`
-                      : value >= 1000
-                        ? `${Math.round(value / 1000)}k`
-                        : String(value)
-                  }
-                />
+                {showRevenue ? (
+                  <YAxis
+                    yAxisId="revenue"
+                    orientation="right"
+                    tick={{ fill: colors.inkFaint, fontSize: 11 }}
+                    tickLine={false}
+                    axisLine={false}
+                    width={48}
+                    tickFormatter={formatRevenueTick}
+                  />
+                ) : null}
                 <Tooltip
                   cursor={{ fill: colors.brandSubtle, opacity: 0.35 }}
                   content={<AnalyticsTrendTooltip dateByLabel={dateByLabel} />}
@@ -150,16 +155,18 @@ export function AnalyticsTrendChart({ data }: AnalyticsTrendChartProps) {
                   radius={[4, 4, 0, 0]}
                   maxBarSize={22}
                 />
-                <Line
-                  yAxisId="revenue"
-                  type="monotone"
-                  dataKey="revenue"
-                  name={LABELS.analyticsRevenueSeries}
-                  stroke={colors.success}
-                  strokeWidth={2.25}
-                  dot={false}
-                  activeDot={{ r: 4, fill: colors.success, strokeWidth: 0 }}
-                />
+                {showRevenue ? (
+                  <Line
+                    yAxisId="revenue"
+                    type="monotone"
+                    dataKey="revenue"
+                    name={LABELS.analyticsRevenueSeries}
+                    stroke={colors.success}
+                    strokeWidth={2.25}
+                    dot={false}
+                    activeDot={{ r: 4, fill: colors.success, strokeWidth: 0 }}
+                  />
+                ) : null}
               </ComposedChart>
             </ResponsiveContainer>
           </div>

@@ -21,7 +21,8 @@ export const adminApi = {
   dashboard: () =>
     apiClient.get<{
       totalOrders: number;
-      totalRevenue: number;
+      /** Null without `analytics.revenue`. */
+      totalRevenue: number | null;
       totalVendors: number;
       totalCustomers: number;
       pendingApprovals: number;

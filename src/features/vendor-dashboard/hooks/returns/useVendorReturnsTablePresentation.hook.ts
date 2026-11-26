@@ -3,6 +3,8 @@ import { LABELS } from "@/shared/constants/labels";
 import { RETURN_STATUS } from "@/shared/constants/statuses";
 import { RETURN_STATUS_LABEL, formatReturnReason } from "@/features/returns";
 import type { ProductImage, ReturnRequest } from "@/shared/api/types";
+import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
+import { usePermissions } from "@/shared/hooks/auth/usePermissions.hook";
 
 export interface VendorReturnRowViewModel {
   id: string;
@@ -43,6 +45,9 @@ function imagesFor(row: ReturnRequest): ProductImage[] {
 }
 
 export function useVendorReturnsTablePresentation(returns: ReturnRequest[]) {
+  // Disputing a return puts the customer's refund in question: owners only (vendor staff still restock).
+  const { hasPermission } = usePermissions();
+  const mayDispute = hasPermission(PERMISSIONS.PAYOUT_VIEW);
   const rows: VendorReturnRowViewModel[] = useMemo(
     () =>
       returns.map((row) => {
@@ -67,6 +72,7 @@ export function useVendorReturnsTablePresentation(returns: ReturnRequest[]) {
             Boolean(row.receivedAt) && !row.restockedAt && !row.disputedAt,
           restocked: Boolean(row.restockedAt),
           canDispute:
+            mayDispute &&
             (Boolean(row.receivedAt) ||
               row.status === RETURN_STATUS.PICKUP_SCHEDULED) &&
             !row.disputedAt &&
@@ -75,7 +81,7 @@ export function useVendorReturnsTablePresentation(returns: ReturnRequest[]) {
           disputeStatus: row.disputeStatus ?? null,
         };
       }),
-    [returns],
+    [returns, mayDispute],
   );
 
   return {

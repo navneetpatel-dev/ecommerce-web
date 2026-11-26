@@ -34,9 +34,25 @@ export function useAdminAnalyticsLayout(data: AdminAnalytics) {
     [data.topCategories],
   );
 
+  // Admins without `analytics.revenue` get null revenue figures from the API.
+  const revenue = useMemo(
+    () =>
+      data.gmv === null || data.paidGmv === null || data.aov === null
+        ? null
+        : {
+            gmv: data.gmv,
+            paidGmv: data.paidGmv,
+            aov: data.aov,
+            growthPct: data.revenueGrowthPct,
+          },
+    [data.gmv, data.paidGmv, data.aov, data.revenueGrowthPct],
+  );
+
   return {
     exportRange,
     topVendorItems,
     topCategoryItems,
+    revenue,
+    showRevenue: revenue !== null,
   };
 }

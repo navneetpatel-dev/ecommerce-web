@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { SidebarNav } from "@/shared/components/layout/SidebarNav.component";
+import { EmptyState } from "@/shared/components/display/EmptyState.component";
 import { WorkspaceNavDrawer } from "@/shared/components/layout/WorkspaceNavDrawer.component";
 import { useVendorLayout } from "@/shared/hooks/navigation/useVendorLayout.hook";
 import { RequirePermission } from "@/shared/components/system/RequirePermission.component";
@@ -19,7 +20,7 @@ export function VendorLayoutContainer({
   /** Renders the top header; receives the callback that opens the workspace nav drawer. */
   renderHeader: (openWorkspaceNav: () => void) => React.ReactNode;
 }) {
-  const { pathname, navItems } = useVendorLayout();
+  const { pathname, navItems, hasVendorAccess } = useVendorLayout();
   const [navOpen, setNavOpen] = useState(false);
 
   const closeNav = () => setNavOpen(false);
@@ -47,10 +48,17 @@ export function VendorLayoutContainer({
           {pathname === PATHS.vendor.root ||
           pathname === PATHS.vendor.profile ? (
             children
-          ) : (
+          ) : hasVendorAccess ? (
             <RequirePermission permission={vendorPermissionsForPath(pathname)}>
               {children}
             </RequirePermission>
+          ) : (
+            <EmptyState
+              heading={LABELS.accessDeniedHeading}
+              message={LABELS.accessDeniedMessage}
+              actionLabel={LABELS.goToHomepage}
+              actionTo={PATHS.home}
+            />
           )}
         </main>
       </div>

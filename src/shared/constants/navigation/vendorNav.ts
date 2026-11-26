@@ -61,10 +61,8 @@ export const VENDOR_NAV = [
   {
     href: PATHS.vendor.coupons,
     label: LABELS.coupons,
-    permissions: [
-      PERMISSIONS.PRODUCT_CREATE,
-      PERMISSIONS.PRODUCT_UPDATE,
-    ] as PermissionKey[],
+    // Owner-only (BE `requireVendorOwner`): staff hold PRODUCT_UPDATE but not PRODUCT_CREATE.
+    permissions: [PERMISSIONS.PRODUCT_CREATE] as PermissionKey[],
   },
   {
     href: PATHS.vendor.reviews,
@@ -97,17 +95,13 @@ export const VENDOR_NAV = [
   {
     href: PATHS.vendor.shopSettings,
     label: LABELS.vendorShopSettings,
-    permissions: [
-      PERMISSIONS.PRODUCT_UPDATE,
-      PERMISSIONS.PRODUCT_CREATE,
-      PERMISSIONS.SUBORDER_MANAGE,
-      PERMISSIONS.PAYOUT_VIEW,
-    ] as PermissionKey[],
+    // Owner-only (BE `PATCH /vendors/me`): PAYOUT_VIEW is held by VENDOR_OWNER, not VENDOR_STAFF.
+    permissions: [PERMISSIONS.PAYOUT_VIEW] as PermissionKey[],
   },
   {
     href: PATHS.vendor.team,
     label: LABELS.team,
-    permissions: [PERMISSIONS.PAYOUT_VIEW] as PermissionKey[],
+    permissions: [PERMISSIONS.TEAM_MANAGE] as PermissionKey[],
   },
 ] as const;
 

@@ -18,6 +18,7 @@ import {
   Users,
 } from "lucide-react";
 import { usePermissions } from "@/shared/hooks/auth/usePermissions.hook";
+import { useAuthStore } from "@/shared/stores/auth/auth.store";
 import { VENDOR_NAV } from "@/shared/constants/navigation/vendorNav";
 import { PATHS } from "@/shared/constants/paths/paths";
 
@@ -41,8 +42,15 @@ const VENDOR_NAV_ICONS = {
 export function useVendorLayout() {
   const pathname = usePathname();
   const { hasAnyPermission } = usePermissions();
-  const navItems = VENDOR_NAV.filter((item) =>
-    hasAnyPermission(...item.permissions),
+  // Vendor data is scoped by `vendorId`; admins can hold vendor-style permissions
+  // (e.g. suborder.manage) without belonging to a store, so permissions alone are not enough.
+  const hasVendorAccess = useAuthStore((state) =>
+    Boolean(state.currentUser?.vendorId),
+  );
+  const navItems = (
+    hasVendorAccess
+      ? VENDOR_NAV.filter((item) => hasAnyPermission(...item.permissions))
+      : []
   ).map((item) => ({
     href: item.href,
     label: item.label,
@@ -50,5 +58,5 @@ export function useVendorLayout() {
       Package) as typeof Package,
     permissions: item.permissions,
   }));
-  return { pathname, navItems };
+  return { pathname, navItems, hasVendorAccess };
 }

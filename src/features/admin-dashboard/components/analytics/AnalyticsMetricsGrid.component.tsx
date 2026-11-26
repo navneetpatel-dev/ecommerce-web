@@ -1,21 +1,13 @@
-import {
-  Banknote,
-  Package,
-  Percent,
-  RotateCcw,
-  ShoppingBag,
-  Store,
-  Users,
-  Wallet,
-} from "lucide-react";
+import { Percent, RotateCcw, ShoppingBag, Store, Users } from "lucide-react";
 import { motion } from "motion/react";
 import type { AdminAnalytics } from "@/shared/api/types";
 import { LABELS } from "@/shared/constants/labels";
 import { AnalyticsMetricCard } from "./AnalyticsMetricCard.component";
 import {
-  formatAnalyticsInr,
-  formatAnalyticsPercent,
-} from "../../utils/analytics/analyticsFormat";
+  AnalyticsRevenueCards,
+  type AnalyticsRevenueMetrics,
+} from "./AnalyticsRevenueCards.component";
+import { formatAnalyticsPercent } from "../../utils/analytics/analyticsFormat";
 import { analyticsStyles } from "../../styles/analytics/analyticsComponents.styles";
 
 const fadeUp = {
@@ -25,10 +17,15 @@ const fadeUp = {
 
 interface AnalyticsMetricsGridProps {
   data: AdminAnalytics;
+  /** Null for admins without `analytics.revenue`: the revenue cards are left out. */
+  revenue: AnalyticsRevenueMetrics | null;
 }
 
 /** The two top-of-page KPI card rows (GMV/AOV/orders, then customers/vendors/rates). */
-export function AnalyticsMetricsGrid({ data }: AnalyticsMetricsGridProps) {
+export function AnalyticsMetricsGrid({
+  data,
+  revenue,
+}: AnalyticsMetricsGridProps) {
   return (
     <>
       <motion.div
@@ -36,23 +33,7 @@ export function AnalyticsMetricsGrid({ data }: AnalyticsMetricsGridProps) {
         {...fadeUp}
         transition={{ duration: 0.35, delay: 0.05 }}
       >
-        <AnalyticsMetricCard
-          title={LABELS.analyticsGmv}
-          value={formatAnalyticsInr(data.gmv)}
-          icon={Banknote}
-          tone="brand"
-          trend={data.revenueGrowthPct}
-        />
-        <AnalyticsMetricCard
-          title={LABELS.analyticsPaidGmv}
-          value={formatAnalyticsInr(data.paidGmv)}
-          icon={Wallet}
-        />
-        <AnalyticsMetricCard
-          title={LABELS.analyticsAov}
-          value={formatAnalyticsInr(data.aov)}
-          icon={Package}
-        />
+        {revenue ? <AnalyticsRevenueCards revenue={revenue} /> : null}
         <AnalyticsMetricCard
           title={LABELS.analyticsTotalOrders}
           value={String(data.totalOrders)}

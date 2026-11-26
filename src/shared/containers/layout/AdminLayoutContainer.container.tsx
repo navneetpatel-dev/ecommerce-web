@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { SidebarNav } from "@/shared/components/layout/SidebarNav.component";
+import { EmptyState } from "@/shared/components/display/EmptyState.component";
 import { WorkspaceNavDrawer } from "@/shared/components/layout/WorkspaceNavDrawer.component";
 import { ShieldCheck } from "lucide-react";
 import { useAdminLayout } from "@/shared/hooks/navigation/useAdminLayout.hook";
@@ -20,7 +21,7 @@ export function AdminLayoutContainer({
   /** Renders the top header; receives the callback that opens the workspace nav drawer. */
   renderHeader: (openWorkspaceNav: () => void) => React.ReactNode;
 }) {
-  const { pathname, navItems } = useAdminLayout();
+  const { pathname, navItems, isSignedIn, hasAdminAccess } = useAdminLayout();
   const [navOpen, setNavOpen] = useState(false);
 
   const closeNav = () => setNavOpen(false);
@@ -56,7 +57,15 @@ export function AdminLayoutContainer({
           title={LABELS.adminPanel}
         />
         <main id={MAIN_CONTENT_ID} tabIndex={-1} className={styles.main}>
-          {pathname === PATHS.admin.root || pathname === PATHS.admin.profile ? (
+          {isSignedIn && !hasAdminAccess ? (
+            <EmptyState
+              heading={LABELS.accessDeniedHeading}
+              message={LABELS.accessDeniedMessage}
+              actionLabel={LABELS.goToHomepage}
+              actionTo={PATHS.home}
+            />
+          ) : pathname === PATHS.admin.root ||
+            pathname === PATHS.admin.profile ? (
             children
           ) : (
             <RequirePermission permission={adminPermissionsForPath(pathname)}>

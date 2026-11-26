@@ -4,7 +4,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { SITE } from "@/shared/seo/constants";
 import { formatInr } from "@/shared/utils/formatting/orderFormat";
-import { fetchShortLink } from "@/shared/utils/sharing/shortLink";
+import {
+  fetchShortLink,
+  safeRedirectPath,
+  toInlineScriptString,
+} from "@/shared/utils/sharing/shortLink";
 
 interface Props {
   params: Promise<{ code: string }>;
@@ -70,9 +74,7 @@ export default async function ShortLinkRedirectPage({ params }: Props) {
   const link = await fetchShortLink(code);
   if (!link) notFound();
 
-  const targetUrl = link.targetUrl.startsWith("/")
-    ? link.targetUrl
-    : `/${link.targetUrl}`;
+  const targetUrl = safeRedirectPath(link.targetUrl);
   const name = link.metadata?.name || "Product";
   const imageUrl = link.metadata?.imageUrl;
   const price = link.metadata?.price;
@@ -84,7 +86,7 @@ export default async function ShortLinkRedirectPage({ params }: Props) {
       </noscript>
       <script
         dangerouslySetInnerHTML={{
-          __html: `window.location.replace(${JSON.stringify(targetUrl)});`,
+          __html: `window.location.replace(${toInlineScriptString(targetUrl)});`,
         }}
       />
 

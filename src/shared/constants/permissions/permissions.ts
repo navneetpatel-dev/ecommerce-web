@@ -33,6 +33,11 @@ export const PERMISSIONS = {
   GIFT_CARD_MANAGE: "gift_card.manage",
   ROLE_MANAGE: "role.manage",
   USER_IMPERSONATE: "user.impersonate",
+  TEAM_MANAGE: "team.manage",
+  CASHBACK_MANAGE: "cashback.manage",
+  ANALYTICS_REVENUE: "analytics.revenue",
+  COUPON_UNLIMITED: "coupon.unlimited",
+  WEBVITALS_VIEW: "webvitals.view",
 } as const;
 
 export type PermissionKey = (typeof PERMISSIONS)[keyof typeof PERMISSIONS];

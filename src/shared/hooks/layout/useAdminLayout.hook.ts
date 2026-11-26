@@ -28,6 +28,7 @@ import {
   BadgePercent,
 } from "lucide-react";
 import { usePermissions } from "@/shared/hooks/auth/usePermissions.hook";
+import { useAuthStore } from "@/shared/stores/auth/auth.store";
 import { ADMIN_NAV } from "@/shared/constants/navigation/adminNav";
 import { PATHS } from "@/shared/constants/paths/paths";
 
@@ -62,6 +63,7 @@ const ADMIN_NAV_ICONS = {
 export function useAdminLayout() {
   const pathname = usePathname();
   const { hasAnyPermission } = usePermissions();
+  const isSignedIn = useAuthStore((state) => state.currentUser !== null);
   const navItems = ADMIN_NAV.filter((item) =>
     hasAnyPermission(...item.permissions),
   ).map((item) => ({
@@ -72,5 +74,7 @@ export function useAdminLayout() {
       Shield) as typeof Shield,
     permissions: item.permissions,
   }));
-  return { pathname, navItems };
+  // Shoppers and vendors hold no admin permission, so they get no sidebar item at all.
+  const hasAdminAccess = navItems.length > 0;
+  return { pathname, navItems, isSignedIn, hasAdminAccess };
 }

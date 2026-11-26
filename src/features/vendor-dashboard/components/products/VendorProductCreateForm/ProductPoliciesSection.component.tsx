@@ -20,6 +20,7 @@ import {
   type ProductListingFormField,
   type ProductListingFormValues,
 } from "@/features/products";
+import { useIsVendorStaff } from "../../../hooks/products/useIsVendorStaff.hook";
 import { vendorProductCreateFormStyles } from "../../../styles/products/vendorProductCreateForm.styles";
 
 interface ProductPoliciesSectionProps {
@@ -35,6 +36,9 @@ export function ProductPoliciesSection({
   getError,
   patchValues,
 }: ProductPoliciesSectionProps) {
+  const isStaff = useIsVendorStaff();
+  const isTaxAndPaymentDisabled = disabled || isStaff;
+
   const handleDeliveryNoteChange = (
     event: ChangeEvent<HTMLTextAreaElement>,
   ) => {
@@ -136,23 +140,24 @@ export function ProductPoliciesSection({
       </FormFieldFrame>
       <FormFieldFrame
         label={LABELS.productHsnCode}
-        hint={LABELS.productHsnCodeHint}
+        hint={isStaff ? LABELS.productOwnerOnlyHint : LABELS.productHsnCodeHint}
         error={getError("hsnCode")}
       >
         <Input
           value={values.hsnCode}
           maxLength={PRODUCT_FIELD_LIMITS.HSN_MAX}
           error={Boolean(getError("hsnCode"))}
-          disabled={disabled}
+          disabled={isTaxAndPaymentDisabled}
           onChange={handleHsnCodeChange}
         />
       </FormFieldFrame>
       <FormFieldFrame
         label={LABELS.productCodEnabled}
+        hint={isStaff ? LABELS.productOwnerOnlyHint : undefined}
         error={getError("codMode")}
       >
         <Select value={values.codMode} onValueChange={handleCodModeChange}>
-          <SelectTrigger disabled={disabled}>
+          <SelectTrigger disabled={isTaxAndPaymentDisabled}>
             <SelectValue />
           </SelectTrigger>
           <SelectContent>

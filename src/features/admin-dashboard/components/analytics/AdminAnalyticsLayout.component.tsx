@@ -45,8 +45,13 @@ const fadeUp = {
 };
 
 export function AdminAnalyticsLayout({ data }: AdminAnalyticsLayoutProps) {
-  const { exportRange, topVendorItems, topCategoryItems } =
-    useAdminAnalyticsLayout(data);
+  const {
+    exportRange,
+    topVendorItems,
+    topCategoryItems,
+    revenue,
+    showRevenue,
+  } = useAdminAnalyticsLayout(data);
 
   return (
     <div className={styles.container}>
@@ -61,11 +66,11 @@ export function AdminAnalyticsLayout({ data }: AdminAnalyticsLayoutProps) {
             <h1 className={styles.title}>{LABELS.analytics}</h1>
             <p className={styles.subtitle}>{LABELS.analyticsHint}</p>
           </div>
-          <AdminAnalyticsExportBar range={exportRange} />
+          {showRevenue ? <AdminAnalyticsExportBar range={exportRange} /> : null}
         </div>
       </motion.header>
 
-      <AnalyticsMetricsGrid data={data} />
+      <AnalyticsMetricsGrid data={data} revenue={revenue} />
 
       <motion.div {...fadeUp} transition={{ duration: 0.35, delay: 0.1 }}>
         <AnalyticsOpsQueues
@@ -81,7 +86,10 @@ export function AdminAnalyticsLayout({ data }: AdminAnalyticsLayoutProps) {
         transition={{ duration: 0.35, delay: 0.12 }}
       >
         <div className={styles.colVolume}>
-          <AnalyticsTrendChart data={data.orderVolume} />
+          <AnalyticsTrendChart
+            data={data.orderVolume}
+            showRevenue={showRevenue}
+          />
         </div>
         <div className={styles.colStatus}>
           <AnalyticsStatusChart
@@ -105,20 +113,22 @@ export function AdminAnalyticsLayout({ data }: AdminAnalyticsLayoutProps) {
         <AnalyticsRatingChart data={data.ratingDistribution} />
       </motion.div>
 
-      <motion.div
-        className={styles.gridTwoCol}
-        {...fadeUp}
-        transition={{ duration: 0.35, delay: 0.16 }}
-      >
-        <AnalyticsRankedList
-          title={LABELS.analyticsTopVendors}
-          items={topVendorItems}
-        />
-        <AnalyticsRankedList
-          title={LABELS.analyticsTopCategories}
-          items={topCategoryItems}
-        />
-      </motion.div>
+      {showRevenue ? (
+        <motion.div
+          className={styles.gridTwoCol}
+          {...fadeUp}
+          transition={{ duration: 0.35, delay: 0.16 }}
+        >
+          <AnalyticsRankedList
+            title={LABELS.analyticsTopVendors}
+            items={topVendorItems}
+          />
+          <AnalyticsRankedList
+            title={LABELS.analyticsTopCategories}
+            items={topCategoryItems}
+          />
+        </motion.div>
+      ) : null}
 
       <p className={styles.footerText}>
         <Package className={styles.footerIcon} aria-hidden />
