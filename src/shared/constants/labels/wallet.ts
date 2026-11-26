@@ -88,7 +88,6 @@ export const walletLabels = {
   // Admin wallet-adjust panel
   walletAdjustSubtitle:
     "Manually credit or debit customer wallet points with audit logging and reason tracking",
-  walletAdjustUserPlaceholder: "e.g. usr_123456789",
   walletAdjustReasonPlaceholder:
     "Provide a detailed audit reason for this points adjustment...",
 

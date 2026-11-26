@@ -5,7 +5,7 @@ import { Button } from "@/shared/components/ui/button";
 import { FormFieldFrame } from "@/shared/components/forms";
 import { NumberInput } from "@/shared/components/forms/NumberInput.component";
 import { Textarea } from "@/shared/components/ui/textarea";
-import { Input } from "@/shared/components/ui/input";
+import { InfiniteSingleSelect } from "@/shared/components/InfiniteSingleSelect";
 import {
   Select,
   SelectContent,
@@ -47,15 +47,17 @@ export function AdminWalletAdjustPanel() {
           <div className={adminFormWidgetsStyles.gridSm2}>
             <FormFieldFrame
               label={LABELS.walletAdjustUserId}
-              htmlFor="wallet-adjust-user"
               error={form.fieldError("userId")}
             >
-              <Input
-                id="wallet-adjust-user"
+              <InfiniteSingleSelect
                 value={form.userId}
+                onChange={form.handleUserChange}
+                fetchPage={form.fetchUsers}
                 placeholder={LABELS.walletAdjustUserPlaceholder}
-                onChange={form.handleUserIdChange}
+                searchPlaceholder={LABELS.walletAdjustUserSearchPlaceholder}
+                emptyMessage={LABELS.walletAdjustUserEmpty}
                 error={Boolean(form.fieldError("userId"))}
+                pageSize={10}
               />
             </FormFieldFrame>
 

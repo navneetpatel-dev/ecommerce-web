@@ -13,6 +13,8 @@ export const walletRoutes = {
 
 export const walletAdminRoutes = {
   adjust: (userId: string) => `/api/admin/wallet/${userId}/adjust`,
+  /** Find the account to adjust (needs wallet.adjust, unlike the Users admin). */
+  users: (query: string) => `/api/admin/wallet/users?${query}`,
 } as const;
 
 export const commissionsRoutes = {

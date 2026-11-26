@@ -1,6 +1,9 @@
 // Vendors feature — public API
 export { vendorsApi } from "./api/directory/vendors.api";
-export type { KycChecklistItem } from "./api/directory/vendors.api";
+export type {
+  KycChecklistItem,
+  VendorDirectoryItem,
+} from "./api/directory/vendors.api";
 export {
   useVendorById,
   useUpdateVendor,

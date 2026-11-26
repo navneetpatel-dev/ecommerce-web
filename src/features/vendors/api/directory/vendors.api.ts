@@ -72,8 +72,9 @@ export type StorefrontVendor = {
 };
 
 export const vendorsApi = {
+  /** Approved vendors (id and name): open to every signed-in user. `id` resolves one vendor. */
   directory: async (
-    params: PaginationQuery & { search?: string } = {},
+    params: PaginationQuery & { search?: string; id?: string } = {},
   ): Promise<PaginatedList<VendorDirectoryItem>> => {
     const res = await apiClient.getWithResponse<VendorDirectoryItem[]>(
       API.vendors.directory(
@@ -81,6 +82,7 @@ export const vendorsApi = {
           page: params.page,
           limit: params.limit,
           search: params.search,
+          id: params.id,
         }).toString(),
       ),
     );

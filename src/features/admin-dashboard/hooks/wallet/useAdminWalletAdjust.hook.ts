@@ -1,6 +1,10 @@
 "use client";
 
-import { useState, type ChangeEvent } from "react";
+import { useCallback, useState, type ChangeEvent } from "react";
+import type {
+  InfiniteSingleSelectPageQuery,
+  InfiniteSingleSelectPageResult,
+} from "@/shared/components/InfiniteSingleSelect";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { formatPoints } from "@/shared/utils/formatting/formatPoints";
@@ -10,6 +14,11 @@ import {
   getFormLevelApiError,
 } from "@/shared/utils/api-errors/applyApiFormErrors";
 import { walletAdminApi } from "../../api/wallet/walletAdmin.api";
+import {
+  EMPTY_WALLET_USER_PAGE,
+  WALLET_USER_SEARCH_MIN,
+  walletUsersToPage,
+} from "../../utils/wallet/walletUserOptions";
 
 type WalletAdjustField = "userId" | "amount" | "reason";
 
@@ -63,9 +72,21 @@ export function useAdminWalletAdjust() {
     }
   };
 
-  const handleUserIdChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setUserId(event.target.value);
+  const handleUserChange = (id: string) => {
+    setUserId(id);
   };
+
+  // No request until there is enough to search for: the API refuses shorter terms.
+  const fetchUsers = useCallback(
+    async (
+      query: InfiniteSingleSelectPageQuery,
+    ): Promise<InfiniteSingleSelectPageResult> => {
+      const term = query.search?.trim() ?? "";
+      if (term.length < WALLET_USER_SEARCH_MIN) return EMPTY_WALLET_USER_PAGE;
+      return walletUsersToPage(await walletAdminApi.searchUsers(term));
+    },
+    [],
+  );
 
   const handleDirectionChange = (value: string) => {
     setDirection(value as "CREDIT" | "DEBIT");
@@ -86,7 +107,8 @@ export function useAdminWalletAdjust() {
   return {
     userId,
     setUserId,
-    handleUserIdChange,
+    handleUserChange,
+    fetchUsers,
     direction,
     setDirection,
     handleDirectionChange,

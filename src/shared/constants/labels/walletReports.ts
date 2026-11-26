@@ -32,7 +32,12 @@ export const walletReportsLabels = {
   reportLiabilityFifoNote:
     "Purchased vs promotional split follows FIFO (promotional first) from the ledger.",
   walletAdjustTitle: "Manual wallet adjustment",
-  walletAdjustUserId: "Customer user ID",
+  walletAdjustUserId: "Account",
+  walletAdjustUserSearchPlaceholder:
+    "Search by name, email or user ID (3+ characters)",
+  walletAdjustUserPlaceholder: "Select an account",
+  walletAdjustUserEmpty:
+    "No matching account. Type at least 3 characters of a name, email or user ID.",
   walletAdjustDirection: "Direction",
   walletAdjustAmount: "Points amount",
   walletAdjustReason: "Reason",
