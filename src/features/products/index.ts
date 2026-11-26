@@ -13,7 +13,11 @@ export { ProductListingPage } from "./pages/listing/ProductListingPage.page";
 export { ProductDetailPage } from "./pages/detail/ProductDetailPage.page";
 export { productsApi } from "./api/listing/products.api";
 export { useGstPricePreview } from "./api/listing/products.queries";
-export { PRODUCT_FIELD_LIMITS } from "./constants/listing-form/productFields";
+export {
+  PRODUCT_FIELD_LIMITS,
+  ADMIN_NOTE_LIMITS,
+  VARIANT_LIMITS,
+} from "./constants/listing-form/productFields";
 export {
   emptySpecRow,
   emptyProductListingValues,
@@ -26,6 +30,14 @@ export {
   type ProductListingFormValues,
   type ProductWriteBody,
 } from "./schemas/listing-form/products.schema";
+export { ProductEditorDialog } from "./components/product-editor/ProductEditorDialog.component";
+export { createProductWithImages } from "./utils/product-editor/createProductWithImages";
+export { useProductEditorState } from "./hooks/product-editor/useProductEditorState.hook";
+export { ProductVariantsEditor } from "./components/product-editor/variants/ProductVariantsEditor.component";
+export type { VariantDraft } from "./utils/product-editor/variantDrafts";
+export { ProductVariantsDialog } from "./components/product-editor/variants/ProductVariantsDialog.component";
+export { PlatformListedBadge } from "./components/product-editor/PlatformListedBadge.component";
+export { useIsVendorStaff } from "./hooks/product-editor/useIsVendorStaff.hook";
 export { SORT_OPTIONS } from "./hooks/listing/useProductListing.hook";
 export type {
   ProductFilters,

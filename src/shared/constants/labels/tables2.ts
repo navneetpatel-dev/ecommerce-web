@@ -79,6 +79,13 @@ export const tables2Labels = {
   categoryImageUrlInvalid: "Enter a valid image URL",
   categoryImageUpload: "Category image",
   uploadFile: "Upload file",
+  replaceFile: "Replace file",
+  removeFile: "Remove",
+  mainImage: "Main",
+  imagesCount: "{count} / {max} images",
+  uploadLimitReached: "You can add up to {max} images ({remaining} more).",
+  uploadLimitFull:
+    "The limit of {max} images is reached. Remove one to add another.",
   uploadFiles: "Upload files",
   uploading: "Uploading…",
   uploadFailed: "Could not upload file.",
@@ -148,9 +155,11 @@ export const tables2Labels = {
   productFormSectionPoliciesHint:
     "Optional extra notes shown under the platform delivery and return policy.",
   productFormSectionImages: "Images",
-  productFormSectionImagesHint: "Add one or more product photos.",
+  productFormSectionImagesHint:
+    "Add up to 10 product photos. The first one is the main image shown in listings.",
   productFormSectionMedia: "Video & size chart",
-  productFormSectionMediaHint: "Optional media shown on the product page.",
+  productFormSectionMediaHint:
+    "Optional. One video (MP4 or WebM) and one size chart image, shown on the product page.",
   productFormSectionSeo: "Search listing",
   productFormSectionSeoHint:
     "Optional title and description for search engines. Leave blank to use the product name and description.",

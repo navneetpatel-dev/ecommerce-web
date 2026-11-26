@@ -5,6 +5,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { ProductActions } from "./ProductActions.component";
 import { productMobileCardStyles as styles } from "../../../styles/products/productsTable.styles";
 import type { ProductRowActionsProps } from "../../../types/products/ProductsTable-types";
+import { PlatformListedBadge } from "@/features/products";
 import { formatInr } from "@/shared/utils/formatting/orderFormat";
 
 /** Below-lg card treatment for a vendor product (mirrors the desktop row). */
@@ -15,6 +16,7 @@ export function ProductMobileCard(props: ProductRowActionsProps) {
     onDelete,
     onSubmitForApproval,
     onManageImages,
+    onManageVariants,
     isDeleting,
     isSubmitting,
   } = props;
@@ -26,6 +28,7 @@ export function ProductMobileCard(props: ProductRowActionsProps) {
       <div className={styles.topRow}>
         <div className={styles.titleGroup}>
           <p className={styles.name}>{product.name}</p>
+          {product.listedByPlatform ? <PlatformListedBadge /> : null}
           <p className={styles.sku}>{product.sku}</p>
         </div>
         <StatusBadge status={product.status} />
@@ -49,6 +52,7 @@ export function ProductMobileCard(props: ProductRowActionsProps) {
           onDelete={onDelete}
           onSubmitForApproval={onSubmitForApproval}
           onManageImages={onManageImages}
+          onManageVariants={onManageVariants}
           isDeleting={isDeleting}
           isSubmitting={isSubmitting}
         />

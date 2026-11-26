@@ -13,7 +13,9 @@ import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 import type {
   FileUploadProps,
+  MultiProps,
   PreviewEntry,
+  SingleProps,
 } from "../../types/file-upload/types";
 import { isPdfFile, isVideoFile, mbLabel } from "../../utils/file-upload/utils";
 import { useFileUploads } from "./useFileUploads.hook";
@@ -26,6 +28,15 @@ export function useFileUploadController(props: FileUploadProps) {
   const [previews, setPreviews] = useState<PreviewEntry[]>([]);
 
   const isMultiple = props.mode === "multiple";
+  const attachedUrls = isMultiple
+    ? ((props as MultiProps).valueUrls ?? [])
+    : [];
+  const maxFiles = isMultiple ? (props as MultiProps).maxFiles : undefined;
+  const remainingSlots =
+    maxFiles === undefined
+      ? Number.POSITIVE_INFINITY
+      : Math.max(0, maxFiles - attachedUrls.length);
+  const limitReached = remainingSlots === 0;
   const spec = getImageUploadSpec(props.entityType, props.purpose);
   const maxBytes =
     props.maxBytes ?? maxBytesForUpload(props.entityType, props.purpose);
@@ -72,6 +83,19 @@ export function useFileUploadController(props: FileUploadProps) {
 
   const processFiles = async (files: File[]) => {
     setError(null);
+
+    if (maxFiles !== undefined && files.length > remainingSlots) {
+      setError(
+        limitReached
+          ? formatLabel(LABELS.uploadLimitFull, { max: maxFiles })
+          : formatLabel(LABELS.uploadLimitReached, {
+              max: maxFiles,
+              remaining: remainingSlots,
+            }),
+      );
+      if (fileRef.current) fileRef.current.value = "";
+      return;
+    }
 
     for (const file of files) {
       const validationError = validateFile(file);
@@ -120,6 +144,18 @@ export function useFileUploadController(props: FileUploadProps) {
 
   const previewEntries = buildPreviewEntries({ props, isMultiple, previews });
 
+  const removeUrl = (url: string) => {
+    setError(null);
+    setPreviews((current) =>
+      current.filter((entry) => entry.storedUrl !== url),
+    );
+    if (isMultiple) {
+      (props as MultiProps).onUploaded(attachedUrls.filter((u) => u !== url));
+    } else {
+      (props as SingleProps).onUploaded("");
+    }
+  };
+
   return {
     accept,
     cropSession: crop.cropSession,
@@ -127,6 +163,10 @@ export function useFileUploadController(props: FileUploadProps) {
     fileRef,
     hintText,
     isMultiple,
+    attachedCount: attachedUrls.length,
+    maxFiles,
+    limitReached,
+    removeUrl,
     onCropCancelled: crop.onCropCancelled,
     onCropConfirmed: crop.onCropConfirmed,
     onPick,

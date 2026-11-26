@@ -48,6 +48,15 @@ export interface GstPricePreview {
   displayPrice: number;
 }
 
+export interface VariantWriteBody {
+  sku: string;
+  attributes: Record<string, string>;
+  price: number;
+  stock: number;
+  /** Required when a platform admin changes the price of a live product. */
+  changeReason?: string;
+}
+
 export const productsApi = {
   list: async (filters: ProductFilters): Promise<ProductListResponse> => {
     const params = buildSearchParams({
@@ -100,31 +109,28 @@ export const productsApi = {
     ),
   create: (body: ProductWriteBody) =>
     apiClient.post<ProductDetail>(API.products.list(), body),
+  /** Admin: list a draft product for an approved vendor. */
+  createOnBehalf: (vendorId: string | undefined, product: ProductWriteBody) =>
+    apiClient.post<ProductDetail>(API.products.onBehalf, { vendorId, product }),
+  /** Admin: submit a platform-listed product, recording how the vendor agreed. */
+  submitOnBehalf: (id: string, consentNote: string) =>
+    apiClient.post<ProductDetail>(API.products.submitOnBehalf(id), {
+      consentNote,
+    }),
   /** Vendor-scoped CSV bulk import — one row per product, text/numeric fields only. */
   bulkImport: (file: File) =>
     postFile<BulkImportRowResult[]>(API.products.bulkImport, file),
-  update: (id: string, body: Partial<ProductWriteBody>) =>
-    apiClient.patch<ProductDetail>(API.products.detail(id), body),
+  update: (
+    id: string,
+    body: Partial<ProductWriteBody> & { changeReason?: string },
+  ) => apiClient.patch<ProductDetail>(API.products.detail(id), body),
   delete: (id: string) => apiClient.delete(API.products.detail(id)),
   submitForApproval: (id: string) =>
     apiClient.post<{ message: string }>(API.products.submit(id), {}),
-  addVariant: (
-    productId: string,
-    body: {
-      sku: string;
-      attributes: Record<string, string>;
-      price: number;
-      stock: number;
-    },
-  ) => apiClient.post<ProductVariant>(API.products.variants(productId), body),
-  updateVariant: (
-    variantId: string,
-    body: Partial<{
-      attributes: Record<string, string>;
-      price: number;
-      stock: number;
-    }>,
-  ) => apiClient.patch<ProductVariant>(API.products.variant(variantId), body),
+  addVariant: (productId: string, body: VariantWriteBody) =>
+    apiClient.post<ProductVariant>(API.products.variants(productId), body),
+  updateVariant: (variantId: string, body: Partial<VariantWriteBody>) =>
+    apiClient.patch<ProductVariant>(API.products.variant(variantId), body),
   deleteVariant: (variantId: string) =>
     apiClient.delete(API.products.variant(variantId)),
   addImage: (

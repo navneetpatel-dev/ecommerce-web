@@ -1,7 +1,8 @@
 import { useId, type ReactNode } from "react";
 import { Label } from "@/shared/components/ui/label";
 import { cn } from "@/shared/utils/dom/cn";
-import { FieldControlProvider, joinAriaIds } from "./fieldControl.context";
+import { CharacterCount } from "./CharacterCount.component";
+import { FieldControlProvider } from "./fieldControl.context";
 import { formFieldFrameStyles } from "../../styles/forms/forms.styles";
 
 interface FormFieldFrameProps {
@@ -14,6 +15,8 @@ interface FormFieldFrameProps {
   className?: string;
   labelAction?: ReactNode;
   footerAction?: ReactNode;
+  /** Shows "12 / 200" under the control; pass the field's current value and its limit. */
+  counter?: { value: string; max: number };
 }
 
 function RequiredMark() {
@@ -39,6 +42,7 @@ export function FormFieldFrame({
   className,
   labelAction,
   footerAction,
+  counter,
 }: FormFieldFrameProps) {
   // React's useId contains ":" / "«»" — legal in ids, awkward in selectors and
   // e2e locators — strip them so the id stays copy-pasteable and CSS-safe.
@@ -46,7 +50,9 @@ export function FormFieldFrame({
   const controlId = htmlFor ?? generatedId;
   const errorId = error ? `${controlId}-error` : undefined;
   const hintId = hint ? `${controlId}-hint` : undefined;
-  const describedById = joinAriaIds(errorId, hintId);
+  const counterId = counter ? `${controlId}-count` : undefined;
+  const describedById =
+    [errorId, hintId, counterId].filter(Boolean).join(" ") || undefined;
 
   const labelNode = label ? (
     <Label htmlFor={controlId}>
@@ -84,6 +90,13 @@ export function FormFieldFrame({
       >
         {children}
       </FieldControlProvider>
+      {counter ? (
+        <CharacterCount
+          id={`${controlId}-count`}
+          value={counter.value}
+          limits={{ min: 0, max: counter.max }}
+        />
+      ) : null}
       {footerAction ? (
         <div className={formFieldFrameStyles.footerRow}>
           {errorNode ?? (hint ? hintNode : <span />)}

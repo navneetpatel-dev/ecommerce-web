@@ -8,12 +8,25 @@ import { AdminProductsFilters } from "../../components/vendors/AdminProductsFilt
 import { useAdminProductsPage } from "../../hooks/vendors/useAdminProductsPage";
 import { adminPagesStyles } from "../shared/adminPages.styles";
 import { LABELS } from "@/shared/constants/labels";
+import { Button } from "@/shared/components/ui/button";
+import { ProductVariantsDialog } from "@/features/products";
+import { AdminProductEditorDialog } from "../../components/vendors/AdminProductEditorDialog.component";
+import { SubmitOnBehalfDialog } from "../../components/vendors/SubmitOnBehalfDialog.component";
+import { adminProductEditorStyles } from "../../components/vendors/adminProductEditor.styles";
 
 export function AdminProductsPage() {
   const page = useAdminProductsPage();
 
+  const editor = page.editor;
   const catalog = (
     <div className={adminPagesStyles.stack6}>
+      {editor.canCreate ? (
+        <div className={adminProductEditorStyles.headerActions}>
+          <Button type="button" onClick={editor.openCreate}>
+            {LABELS.addProductForVendor}
+          </Button>
+        </div>
+      ) : null}
       <AdminProductsFilters {...page.filters} />
       <AdminDataPage
         title={page.title}
@@ -23,7 +36,15 @@ export function AdminProductsPage() {
         columnKeys={page.columnKeys}
         hideTitle={page.showApprovalQueue}
         fetchRowDetail={page.fetchDetail}
+        cellOverrides={page.cellOverrides}
       />
+      <AdminProductEditorDialog {...editor.editorDialogProps} />
+      {editor.variantsDialogProps ? (
+        <ProductVariantsDialog {...editor.variantsDialogProps} />
+      ) : null}
+      {editor.submitDialogProps ? (
+        <SubmitOnBehalfDialog {...editor.submitDialogProps} />
+      ) : null}
     </div>
   );
 

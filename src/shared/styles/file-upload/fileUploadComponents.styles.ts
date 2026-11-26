@@ -49,3 +49,25 @@ export const filePickerSelectedFileStyles = {
   filename: "truncate text-body-sm font-semibold text-ink",
   filesize: "text-caption text-ink-muted",
 } as const;
+
+/** The roomy `variant="card"` uploader (product images, video, size chart). */
+export const fileUploadCardStyles = {
+  root: "space-y-4 rounded-lg border border-dashed border-line-strong/70 bg-paper/30 p-5",
+  header: "flex flex-wrap items-start justify-between gap-3",
+  headerText: "min-w-0 space-y-1",
+  label: "text-body font-semibold text-ink",
+  hint: "text-body-sm leading-relaxed text-ink-muted",
+  counter: "text-body-sm font-medium tabular-nums text-ink-muted",
+  counterFull: "text-body-sm font-medium tabular-nums text-warning",
+  buttonRow: "flex flex-wrap items-center gap-3",
+  grid: "grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4",
+  tile: "group relative aspect-square overflow-hidden rounded-md border border-line bg-surface",
+  tileImage: "object-cover",
+  tileVideo:
+    "relative aspect-video overflow-hidden rounded-md border border-line bg-surface sm:col-span-2",
+  tilePdf:
+    "flex aspect-square items-center justify-center rounded-md border border-line bg-surface text-body-sm text-ink-muted",
+  mainBadge:
+    "absolute left-2 top-2 rounded-sm bg-brand px-2 py-0.5 text-[0.6875rem] font-semibold uppercase tracking-wide text-paper",
+  removeButton: "absolute right-2 top-2",
+} as const;

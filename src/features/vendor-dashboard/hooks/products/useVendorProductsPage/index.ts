@@ -6,7 +6,10 @@ import { usePermissions } from "@/shared/hooks/auth/usePermissions.hook";
 import { useRouteQueryDialog } from "@/shared/hooks/navigation/useRouteQueryDialog.hook";
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { QUERY_PARAMS } from "@/shared/constants/navigation/queryParams";
-import type { ProductListingFormValues } from "@/features/products";
+import type {
+  ProductListingFormValues,
+  VariantDraft,
+} from "@/features/products";
 import { VendorProductImagesDialog } from "../../../components/products/VendorProductImagesDialog.component";
 import { useVendorProductsTable } from "../useVendorProductsTable.hook";
 import { useVendorProductFormState } from "./useVendorProductFormState.hook";
@@ -63,6 +66,7 @@ export function useVendorProductsPage() {
   }, [canCreate, canEdit, close, editId, form, mode, open]);
 
   const imagesProductId = searchParams.get(QUERY_PARAMS.images);
+  const variantsProductId = searchParams.get(QUERY_PARAMS.variants);
 
   const view = useVendorProductsListView({
     table,
@@ -73,6 +77,7 @@ export function useVendorProductsPage() {
     openEdit,
     setQuery,
     imagesProductId,
+    variantsProductId,
     refresh: () => router.refresh(),
   });
 
@@ -87,6 +92,11 @@ export function useVendorProductsPage() {
   const handleImageUrlsChange = (urls: string[]) => {
     setFormDirty(true);
     form.setImageUrls(urls);
+  };
+
+  const handleVariantRowsChange = (rows: VariantDraft[]) => {
+    setFormDirty(true);
+    form.setVariantRows(rows);
   };
 
   const formDialogProps = {
@@ -107,6 +117,18 @@ export function useVendorProductsPage() {
       onChange: handleFormChange,
       onImageUrlsChange: handleImageUrlsChange,
       onValidSubmit: form.handleValidSubmit,
+      pricingLock: form.pricing.lock,
+      reason: {
+        required: form.pricing.reasonRequired,
+        value: form.changeReason,
+        error: form.reasonError,
+        onChange: form.handleReasonChange,
+      },
+      variants: {
+        rows: form.variantRows,
+        errors: form.variantErrors,
+        onChange: handleVariantRowsChange,
+      },
     },
   };
 
@@ -120,6 +142,7 @@ export function useVendorProductsPage() {
     tableViewProps: view.tableViewProps,
     deleteDialogProps: view.deleteDialogProps,
     imagesDialogProps: view.imagesDialogProps,
+    variantsDialogProps: view.variantsDialogProps,
     ImagesDialog: VendorProductImagesDialog,
   };
 }

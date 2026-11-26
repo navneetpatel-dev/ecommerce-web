@@ -1,5 +1,6 @@
 "use client";
 
+import { PlatformListedBadge } from "@/features/products";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { LABELS } from "@/shared/constants/labels";
 import { formatInr } from "@/shared/utils/formatting/orderFormat";
@@ -94,6 +95,17 @@ export function ProductModerationMetadataGrid({
           </span>
         </div>
       )}
+      {product.listedByPlatform ? (
+        <div className="col-span-2 sm:col-span-3">
+          <PlatformListedBadge />{" "}
+          <span className="font-medium text-ink-muted">
+            {LABELS.vendorConsentNoteLabel}:
+          </span>{" "}
+          <span className="font-semibold text-ink">
+            {product.vendorConsentNote || "—"}
+          </span>
+        </div>
+      ) : null}
     </div>
   );
 }

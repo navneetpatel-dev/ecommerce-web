@@ -86,8 +86,12 @@ export const adminApi = {
     return unwrapPaginatedList(res);
   },
 
-  approveProduct: (id: string) =>
-    apiClient.post<{ message: string }>(API.products.approve(id), {}),
+  /** `ownWorkReason`: a Super Admin approving a listing they prepared themselves. */
+  approveProduct: (id: string, ownWorkReason?: string) =>
+    apiClient.post<{ message: string }>(
+      API.products.approve(id),
+      ownWorkReason ? { ownWorkReason } : {},
+    ),
   rejectProduct: (id: string, rejectionNote: string) =>
     apiClient.post<{ message: string }>(API.products.reject(id), {
       rejectionNote,

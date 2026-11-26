@@ -3,6 +3,7 @@ export const QUERY_PARAMS = {
   create: "create",
   edit: "edit",
   images: "images",
+  variants: "variants",
   analytics: "analytics",
 } as const;
 

@@ -81,7 +81,7 @@ describe("useAdminVendorFilterSelect: which list a role's dropdown uses", () => 
     async (_label, role, permissions) => {
       signIn(role, [...permissions]);
       const { result } = renderHook(
-        () => useAdminVendorFilterSelect({ value: "", status: "APPROVED" }),
+        () => useAdminVendorFilterSelect({ value: "" }),
         { wrapper },
       );
       const page = await result.current.fetchPage({
@@ -93,7 +93,7 @@ describe("useAdminVendorFilterSelect: which list a role's dropdown uses", () => 
         page: 1,
         limit: 25,
         search: `acm ${_label}`,
-        status: "APPROVED",
+        status: undefined,
       });
       expect(directory).not.toHaveBeenCalled();
       expect(page.items[0]).toEqual({
@@ -215,5 +215,45 @@ describe("useAdminVendorFilterSelect: the name of an already-selected vendor", (
     );
     result.current.handleChange("v2");
     expect(onChange).toHaveBeenCalledWith("v2");
+  });
+
+  it("a picker for approved vendors uses the light directory for everyone, even Super Admin", async () => {
+    signIn("SUPER_ADMIN", []);
+    const { result } = renderHook(
+      () => useAdminVendorFilterSelect({ value: "", status: "APPROVED" }),
+      { wrapper },
+    );
+    await result.current.fetchPage({
+      page: 1,
+      limit: 25,
+      search: "picker term",
+    });
+    expect(directory).toHaveBeenCalledWith({
+      page: 1,
+      limit: 25,
+      search: "picker term",
+    });
+    expect(adminVendors).not.toHaveBeenCalled();
+    expect(result.current.resetKey).toBe("directory");
+  });
+
+  it("a fetched page is reused for a minute, then fetched again so new vendors appear", async () => {
+    vi.useFakeTimers();
+    try {
+      signIn("ADMIN_CATALOG_MANAGER", ["product.manage"]);
+      const { result } = renderHook(
+        () => useAdminVendorFilterSelect({ value: "" }),
+        { wrapper },
+      );
+      const query = { page: 1, limit: 25, search: "ttl term" };
+      await result.current.fetchPage(query);
+      await result.current.fetchPage(query);
+      expect(directory).toHaveBeenCalledTimes(1);
+      vi.advanceTimersByTime(61 * 1000);
+      await result.current.fetchPage(query);
+      expect(directory).toHaveBeenCalledTimes(2);
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });

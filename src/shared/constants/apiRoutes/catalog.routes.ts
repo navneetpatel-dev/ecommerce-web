@@ -13,6 +13,8 @@ export const productsRoutes = {
   archive: (id: string) => `/api/products/${id}/archive`,
   unarchive: (id: string) => `/api/products/${id}/unarchive`,
   submit: (id: string) => `/api/products/${id}/submit`,
+  onBehalf: "/api/products/on-behalf",
+  submitOnBehalf: (id: string) => `/api/products/${id}/submit-on-behalf`,
   variants: (productId: string) => `/api/products/${productId}/variants`,
   variant: (variantId: string) => `/api/products/variants/${variantId}`,
   images: (productId: string) => `/api/products/${productId}/images`,

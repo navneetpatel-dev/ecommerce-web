@@ -1,0 +1,212 @@
+"use client";
+
+import type { ChangeEvent } from "react";
+import { Input } from "@/shared/components/ui/input";
+import { Textarea } from "@/shared/components/ui/textarea";
+import { NumberInput } from "@/shared/components/forms/NumberInput.component";
+import {
+  Select,
+  SelectContent,
+  SelectTrigger,
+  SelectValue,
+} from "@/shared/components/ui/select";
+import { FormFieldFrame, FormSection } from "@/shared/components/forms";
+import { LABELS } from "@/shared/constants/labels";
+import { cn } from "@/shared/utils/dom/cn";
+import { useIsVendorStaff } from "../../hooks/product-editor/useIsVendorStaff.hook";
+import { PRODUCT_FIELD_LIMITS } from "../../constants/listing-form/productFields";
+import type {
+  ProductListingFormField,
+  ProductListingFormValues,
+} from "../../schemas/listing-form/products.schema";
+import type {
+  CategoryOptionData,
+  PricingLock,
+} from "../../types/product-editor/types";
+import { ProductCategoryOptions } from "./ProductCategoryOptions.component";
+import { productEditorFormStyles } from "../../styles/product-editor/productEditorForm.styles";
+import { CURRENCY_SYMBOL } from "@/shared/utils/formatting/orderFormat";
+
+interface ProductDetailsSectionProps {
+  values: ProductListingFormValues;
+  categories: CategoryOptionData[];
+  disabled: boolean;
+  getError: (field: ProductListingFormField) => string | undefined;
+  patchValues: (patch: Partial<ProductListingFormValues>) => void;
+  /** What customers will pay, GST included (server-computed). */
+  priceHint: string;
+  /** Set by the editor for platform admins; without it, vendor staff are locked out. */
+  pricingLock?: PricingLock;
+}
+
+export function ProductDetailsSection({
+  values,
+  categories,
+  disabled,
+  getError,
+  patchValues,
+  priceHint,
+  pricingLock,
+}: ProductDetailsSectionProps) {
+  const isStaff = useIsVendorStaff();
+  // The closed select shows just the name; the picture belongs to the open list.
+  const selectedCategoryName = categories.find(
+    (category) => category.id === values.categoryId,
+  )?.name;
+  const locked = pricingLock?.locked ?? isStaff;
+  const isPriceDisabled = disabled || locked;
+
+  const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
+    patchValues({ name: event.target.value });
+  };
+
+  const handlePriceChange = (value: number | undefined) => {
+    patchValues({ price: value == null ? "" : String(value) });
+  };
+
+  const handleCompareAtPriceChange = (value: number | undefined) => {
+    patchValues({ compareAtPrice: value == null ? "" : String(value) });
+  };
+
+  const handleBrandChange = (event: ChangeEvent<HTMLInputElement>) => {
+    patchValues({ brand: event.target.value });
+  };
+
+  const handleCategoryChange = (value: string) => {
+    patchValues({ categoryId: value });
+  };
+
+  const handleDescriptionChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    patchValues({ description: event.target.value });
+  };
+
+  return (
+    <FormSection
+      title={LABELS.productFormSectionDetails}
+      hint={LABELS.productFormSectionDetailsHint}
+    >
+      <FormFieldFrame
+        counter={{ value: values.name, max: PRODUCT_FIELD_LIMITS.NAME_MAX }}
+        label={LABELS.productName}
+        required
+        error={getError("name")}
+      >
+        <Input
+          placeholder={LABELS.productNamePlaceholder}
+          value={values.name}
+          maxLength={PRODUCT_FIELD_LIMITS.NAME_MAX}
+          error={Boolean(getError("name"))}
+          disabled={disabled}
+          onChange={handleNameChange}
+        />
+      </FormFieldFrame>
+      <FormFieldFrame
+        label={LABELS.productPriceExclGst}
+        hint={
+          locked
+            ? (pricingLock?.hint ??
+              "Base product pricing is configured exclusively by the store owner.")
+            : priceHint
+        }
+        required
+        error={getError("price")}
+      >
+        <NumberInput
+          prefix={CURRENCY_SYMBOL}
+          min={1}
+          step={1}
+          placeholder={LABELS.productPriceExclGst}
+          value={values.price === "" ? undefined : Number(values.price)}
+          error={Boolean(getError("price"))}
+          disabled={isPriceDisabled}
+          onChange={handlePriceChange}
+        />
+      </FormFieldFrame>
+      <FormFieldFrame
+        label={LABELS.productMrpInclGst}
+        hint={
+          locked
+            ? (pricingLock?.hint ??
+              "MRP is configured exclusively by the store owner.")
+            : LABELS.productMrpHint
+        }
+        error={getError("compareAtPrice")}
+      >
+        <NumberInput
+          prefix={CURRENCY_SYMBOL}
+          min={1}
+          step={1}
+          placeholder={LABELS.productMrpInclGst}
+          value={
+            values.compareAtPrice === ""
+              ? undefined
+              : Number(values.compareAtPrice)
+          }
+          error={Boolean(getError("compareAtPrice"))}
+          disabled={isPriceDisabled}
+          onChange={handleCompareAtPriceChange}
+        />
+      </FormFieldFrame>
+      <FormFieldFrame
+        counter={{ value: values.brand, max: PRODUCT_FIELD_LIMITS.BRAND_MAX }}
+        label={LABELS.productBrand}
+        error={getError("brand")}
+      >
+        <Input
+          placeholder={LABELS.productBrandPlaceholder}
+          value={values.brand}
+          maxLength={PRODUCT_FIELD_LIMITS.BRAND_MAX}
+          error={Boolean(getError("brand"))}
+          disabled={disabled}
+          onChange={handleBrandChange}
+        />
+      </FormFieldFrame>
+      <FormFieldFrame
+        label={LABELS.selectCategory}
+        required
+        error={getError("categoryId")}
+        className={productEditorFormStyles.colSpan2}
+      >
+        <Select
+          value={values.categoryId || undefined}
+          onValueChange={handleCategoryChange}
+          disabled={disabled}
+        >
+          <SelectTrigger
+            className={cn(
+              getError("categoryId") &&
+                productEditorFormStyles.selectCategoryTriggerError,
+            )}
+          >
+            <SelectValue placeholder={LABELS.selectCategory}>
+              {selectedCategoryName}
+            </SelectValue>
+          </SelectTrigger>
+          <SelectContent>
+            <ProductCategoryOptions categories={categories} />
+          </SelectContent>
+        </Select>
+      </FormFieldFrame>
+      <FormFieldFrame
+        counter={{
+          value: values.description,
+          max: PRODUCT_FIELD_LIMITS.DESCRIPTION_MAX,
+        }}
+        label={LABELS.shortDescription}
+        required
+        error={getError("description")}
+        className={productEditorFormStyles.colSpan2}
+      >
+        <Textarea
+          placeholder={LABELS.shortDescription}
+          value={values.description}
+          maxLength={PRODUCT_FIELD_LIMITS.DESCRIPTION_MAX}
+          error={Boolean(getError("description"))}
+          disabled={disabled}
+          onChange={handleDescriptionChange}
+          className={productEditorFormStyles.descriptionTextarea}
+        />
+      </FormFieldFrame>
+    </FormSection>
+  );
+}

@@ -30,13 +30,21 @@ export const ProductListingFormSchema = z
       .string()
       .trim()
       .min(1, LABELS.enterProductPrice)
-      .refine((value) => Number(value) >= 1, LABELS.enterProductPrice),
+      .refine((value) => Number(value) >= 1, LABELS.enterProductPrice)
+      .refine(
+        (value) => Number(value) <= PRODUCT_FIELD_LIMITS.PRICE_MAX,
+        LABELS.priceTooHigh,
+      ),
     compareAtPrice: z
       .string()
       .trim()
       .refine(
         (value) => !value || Number(value) >= 1,
         LABELS.enterProductCompareAtPrice,
+      )
+      .refine(
+        (value) => !value || Number(value) <= PRODUCT_FIELD_LIMITS.PRICE_MAX,
+        LABELS.priceTooHigh,
       ),
     description: z
       .string()

@@ -10,6 +10,8 @@ import {
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { FileUpload } from "@/shared/components/FileUpload";
 import { FormSection } from "@/shared/components/forms";
+import { formatLabel } from "@/shared/utils/formatting/formatLabel";
+import { PRODUCT_FIELD_LIMITS } from "@/features/products";
 import { LABELS } from "@/shared/constants/labels";
 import {
   UPLOAD_ENTITY,
@@ -59,6 +61,8 @@ export function VendorProductImagesDialog({
     onSetPrimary,
     handleVariantFilter,
   } = useVendorProductImages({ productId, open, onChanged });
+  const IMAGES_MAX = PRODUCT_FIELD_LIMITS.IMAGES_MAX;
+  const imagesFull = images.length >= IMAGES_MAX;
 
   const renderImageRow = (image: ProductImage) => (
     <ProductImageRow
@@ -126,12 +130,23 @@ export function VendorProductImagesDialog({
                   </SelectContent>
                 </Select>
               ) : null}
+              <p
+                className={vendorProductImagesDialogStyles.counter}
+                aria-live="polite"
+              >
+                {imagesFull
+                  ? formatLabel(LABELS.uploadLimitFull, { max: IMAGES_MAX })
+                  : formatLabel(LABELS.imagesCount, {
+                      count: images.length,
+                      max: IMAGES_MAX,
+                    })}
+              </p>
               <FileUpload
                 entityType={UPLOAD_ENTITY.PRODUCTS}
                 entityId={productId}
                 purpose={UPLOAD_PURPOSE.IMAGES}
                 accept="image/png,image/jpeg,image/webp"
-                disabled={busyId === "new"}
+                disabled={busyId === "new" || imagesFull}
                 label={LABELS.addProductImage}
                 onUploaded={onAddImage}
               />

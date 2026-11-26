@@ -6,7 +6,15 @@ import type {
 
 export type PreviewEntry = { storedUrl: string; displayUrl: string };
 
-type SingleProps = {
+/** Opt-in look and behaviour shared by both modes. Without them the uploader is the compact one. */
+type CardOptions = {
+  /** `card`: a roomy bordered panel with large previews. */
+  variant?: "inline" | "card";
+  /** Each preview gets a Remove button (single mode clears the value to ""). */
+  removable?: boolean;
+};
+
+type SingleProps = CardOptions & {
   mode?: "single";
   entityType: UploadEntityType;
   entityId: string;
@@ -19,7 +27,7 @@ type SingleProps = {
   label?: string;
 };
 
-type MultiProps = {
+type MultiProps = CardOptions & {
   mode: "multiple";
   entityType: UploadEntityType;
   entityId: string;
@@ -29,6 +37,10 @@ type MultiProps = {
   disabled?: boolean;
   valueUrls?: string[];
   onUploaded: (urls: string[]) => void;
+  /** At most this many files in total (already attached + new). */
+  maxFiles?: number;
+  /** Marks the first file as the main one. */
+  markFirstAsMain?: boolean;
   label?: string;
 };
 

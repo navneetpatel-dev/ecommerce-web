@@ -70,6 +70,13 @@ export interface ProductDetail extends ProductListItem {
   images: ProductImage[];
   categoryId: string;
   status: string;
+  /** Created by the platform on the vendor's behalf (team views only). */
+  listedByPlatform?: boolean;
+  /** How the vendor agreed to a platform submission (team and owning vendor only). */
+  vendorConsentNote?: string | null;
+  vendorId?: string | null;
+  createdBy?: string | null;
+  updatedBy?: string | null;
   secondaryCategories?: Array<{
     id: string;
     name: string;

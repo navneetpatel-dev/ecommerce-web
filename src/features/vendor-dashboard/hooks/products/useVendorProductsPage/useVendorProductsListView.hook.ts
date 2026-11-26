@@ -12,6 +12,7 @@ import type { useVendorProductsTable } from "../useVendorProductsTable.hook";
 type RichProductItem = ProductListItem & {
   sku?: string;
   status?: string;
+  listedByPlatform?: boolean;
   variants?: Array<{
     id: string;
     sku?: string;
@@ -29,6 +30,7 @@ export function useVendorProductsListView(options: {
   openEdit: (id: string) => void;
   setQuery: (updates: Record<string, string | null | undefined>) => void;
   imagesProductId: string | null;
+  variantsProductId: string | null;
   refresh: () => void;
 }) {
   const {
@@ -40,6 +42,7 @@ export function useVendorProductsListView(options: {
     openEdit,
     setQuery,
     imagesProductId,
+    variantsProductId,
     refresh,
   } = options;
 
@@ -54,6 +57,7 @@ export function useVendorProductsListView(options: {
         lowStockAt: product.variants?.[0]?.lowStockAt ?? 5,
         basePrice: product.basePrice,
         status: product.status ?? PRODUCT_STATUS.LIVE,
+        listedByPlatform: product.listedByPlatform,
       })),
     [table.data?.items],
   );
@@ -63,6 +67,12 @@ export function useVendorProductsListView(options: {
     const product = products.find((row) => row.id === imagesProductId);
     return product ? { id: product.id, name: product.name } : null;
   }, [imagesProductId, products]);
+
+  const variantsTarget = useMemo(() => {
+    if (!variantsProductId) return null;
+    const product = products.find((row) => row.id === variantsProductId);
+    return product ? { id: product.id, name: product.name } : null;
+  }, [variantsProductId, products]);
 
   const tableViewProps = {
     search: table.search,
@@ -102,6 +112,15 @@ export function useVendorProductsListView(options: {
       ? (p: { id: string; name: string }) =>
           setQuery({
             [QUERY_PARAMS.images]: p.id,
+            [QUERY_PARAMS.create]: null,
+            [QUERY_PARAMS.edit]: null,
+          })
+      : undefined,
+    onManageVariants: canEdit
+      ? (p: { id: string }) =>
+          setQuery({
+            [QUERY_PARAMS.variants]: p.id,
+            [QUERY_PARAMS.images]: null,
             [QUERY_PARAMS.create]: null,
             [QUERY_PARAMS.edit]: null,
           })
@@ -149,5 +168,22 @@ export function useVendorProductsListView(options: {
       }
     : null;
 
-  return { tableViewProps, deleteDialogProps, imagesDialogProps };
+  const variantsDialogProps = variantsTarget
+    ? {
+        productId: variantsTarget.id,
+        productName: variantsTarget.name,
+        open: true,
+        onOpenChange: (open: boolean) => {
+          if (!open) setQuery({ [QUERY_PARAMS.variants]: null });
+        },
+        onChanged: () => refresh(),
+      }
+    : null;
+
+  return {
+    tableViewProps,
+    deleteDialogProps,
+    imagesDialogProps,
+    variantsDialogProps,
+  };
 }

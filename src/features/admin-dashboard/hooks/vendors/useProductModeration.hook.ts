@@ -6,7 +6,13 @@ export function useProductModeration() {
   const queryClient = useQueryClient();
 
   const approve = useMutation({
-    mutationFn: (id: string) => adminApi.approveProduct(id),
+    mutationFn: ({
+      id,
+      ownWorkReason,
+    }: {
+      id: string;
+      ownWorkReason?: string;
+    }) => adminApi.approveProduct(id, ownWorkReason),
     onSuccess: () =>
       queryClient.invalidateQueries({ queryKey: adminKeys.products.all }),
   });

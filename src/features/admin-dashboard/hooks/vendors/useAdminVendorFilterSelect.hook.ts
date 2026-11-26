@@ -21,7 +21,31 @@ import {
 } from "../../utils/vendors/vendorFilterOptions";
 
 const SELECTED_STALE_MS = 5 * 60 * 1000;
-const vendorPageCache = new Map<string, InfiniteSingleSelectPageResult>();
+/** Pages are reused for a minute (scrolling back, reopening) and then fetched again, so new vendors show up. */
+const PAGE_CACHE_TTL_MS = 60 * 1000;
+const PAGE_CACHE_MAX_ENTRIES = 100;
+const vendorPageCache = new Map<
+  string,
+  { at: number; result: InfiniteSingleSelectPageResult }
+>();
+
+function cachedPage(key: string): InfiniteSingleSelectPageResult | null {
+  const hit = vendorPageCache.get(key);
+  if (!hit) return null;
+  if (Date.now() - hit.at > PAGE_CACHE_TTL_MS) {
+    vendorPageCache.delete(key);
+    return null;
+  }
+  return hit.result;
+}
+
+function rememberPage(key: string, result: InfiniteSingleSelectPageResult) {
+  if (vendorPageCache.size >= PAGE_CACHE_MAX_ENTRIES) {
+    const oldest = vendorPageCache.keys().next().value;
+    if (oldest !== undefined) vendorPageCache.delete(oldest);
+  }
+  vendorPageCache.set(key, { at: Date.now(), result });
+}
 
 interface UseAdminVendorFilterSelectArgs {
   value: string;
@@ -45,12 +69,15 @@ export function useAdminVendorFilterSelect({
     PERMISSIONS.VENDOR_MANAGE,
     PERMISSIONS.VENDOR_APPROVE,
   );
-  const source = canManageVendors ? "admin" : "directory";
+  // Picking an approved vendor needs only an id and a name: the light directory serves that for everyone.
+  // The full admin list is for browsing vendors of any status.
+  const useAdminList = canManageVendors && status !== "APPROVED";
+  const source = useAdminList ? "admin" : "directory";
 
   const { data: selectedOption } = useQuery<InfiniteSingleSelectOption | null>({
     queryKey: ["admin", "vendors", "selected", source, value],
     queryFn: async () => {
-      if (canManageVendors) {
+      if (useAdminList) {
         const vendor = await apiClient.get<VendorInfo>(
           API.vendors.detail(value),
         );
@@ -71,10 +98,10 @@ export function useAdminVendorFilterSelect({
       query: InfiniteSingleSelectPageQuery,
     ): Promise<InfiniteSingleSelectPageResult> => {
       const cacheKey = `${source}:${status ?? ""}:${query.search ?? ""}:${query.page}:${query.limit}`;
-      const cached = vendorPageCache.get(cacheKey);
+      const cached = cachedPage(cacheKey);
       if (cached) return cached;
 
-      const pageResult = canManageVendors
+      const pageResult = useAdminList
         ? toPageResult(
             await adminApi.vendors({
               page: query.page,
@@ -92,10 +119,10 @@ export function useAdminVendorFilterSelect({
             }),
             directoryItemToOption,
           );
-      vendorPageCache.set(cacheKey, pageResult);
+      rememberPage(cacheKey, pageResult);
       return pageResult;
     },
-    [canManageVendors, source, status],
+    [useAdminList, source, status],
   );
 
   const handleChange = useCallback(

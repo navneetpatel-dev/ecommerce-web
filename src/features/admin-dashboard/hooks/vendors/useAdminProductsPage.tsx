@@ -6,13 +6,16 @@ import {
   PERMISSIONS,
   type PermissionKey,
 } from "@/shared/constants/permissions/permissions";
+import { notifySuccess } from "@/shared/stores/notifications/toast.store";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
-import { productsApi } from "@/features/products";
+import { PlatformListedBadge, productsApi } from "@/features/products";
 import { useDebouncedValue } from "@/shared/hooks/ui/use-debounce.hook";
 import { adminApi } from "../../api/analytics/admin.api";
 import { usePendingProducts } from "../../api/analytics/admin.queries";
 import { usePermissions } from "@/shared/hooks/auth/usePermissions.hook";
+import { AdminProductRowActions } from "../../components/vendors/AdminProductRowActions.component";
+import { useAdminProductEditor } from "./useAdminProductEditor.hook";
 import { AdminConfirmAction } from "../../components/shared/AdminConfirmAction.component";
 import { adminRowLabel } from "../../utils/shared/adminRowLabel";
 import type { AdminProductsFiltersProps } from "../../components/vendors/AdminProductsFilters.component";
@@ -24,11 +27,24 @@ export type AdminProductsPageModel = AdminListPageModel & {
   showApprovalQueue: boolean;
   pendingCount: number;
   filters: AdminProductsFiltersProps;
+  cellOverrides: Record<string, (row: AdminDataRow) => ReactNode>;
+  editor: ReturnType<typeof useAdminProductEditor>;
 };
+
+/** A Super Admin publishing one of the platform's own products: it goes live at once. */
+async function publishProduct(id: string, reload: () => void) {
+  await productsApi.submitForApproval(id);
+  notifySuccess(LABELS.platformProductPublished);
+  reload();
+}
 
 export function useAdminProductsPage(): AdminProductsPageModel {
   const { hasPermission } = usePermissions();
   const { data: pendingProducts } = usePendingProducts();
+  // Bumped after a save so the list reloads.
+  const [version, setVersion] = useState(0);
+  const bumpVersion = useCallback(() => setVersion((value) => value + 1), []);
+  const editor = useAdminProductEditor(bumpVersion);
   const searchParams = useSearchParams();
 
   const [userFilters, setUserFilters] = useState<
@@ -67,6 +83,8 @@ export function useAdminProductsPage(): AdminProductsPageModel {
         maxPrice: debouncedMaxPrice ? Number(debouncedMaxPrice) : undefined,
         sort: sort || undefined,
       }),
+    // `version` is bumped after a save: a new `load` makes the list fetch again.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       debouncedSearch,
       status,
@@ -76,6 +94,7 @@ export function useAdminProductsPage(): AdminProductsPageModel {
       debouncedMinPrice,
       debouncedMaxPrice,
       sort,
+      version,
     ],
   );
 
@@ -104,6 +123,23 @@ export function useAdminProductsPage(): AdminProductsPageModel {
       const archiveProduct = () =>
         adminApi.archiveProduct(String(row.id)).then(reload);
 
+      const publish = () => publishProduct(String(row.id), reload);
+
+      const rowActions = isArchived ? null : (
+        <AdminProductRowActions
+          product={{ id: String(row.id), name }}
+          status={String(row.status ?? "")}
+          listedByPlatform={Boolean(row.listedByPlatform)}
+          onEdit={editor.openEdit}
+          onManageVariants={editor.openVariants}
+          onSubmitOnBehalf={editor.openSubmit}
+          canPublish={
+            editor.isSuperAdmin && !row.vendorId && row.status === "DRAFT"
+          }
+          onPublish={publish}
+        />
+      );
+
       if (isArchived) {
         return (
           <AdminConfirmAction
@@ -120,18 +156,33 @@ export function useAdminProductsPage(): AdminProductsPageModel {
       }
 
       return (
-        <AdminConfirmAction
-          label={LABELS.archive}
-          dialogVariant="warning"
-          tone="archive"
-          title={LABELS.confirmArchiveProductTitle}
-          description={formatLabel(LABELS.confirmArchiveProductBody, { name })}
-          onConfirm={archiveProduct}
-        />
+        <>
+          {rowActions}
+          <AdminConfirmAction
+            label={LABELS.archive}
+            dialogVariant="warning"
+            tone="archive"
+            title={LABELS.confirmArchiveProductTitle}
+            description={formatLabel(LABELS.confirmArchiveProductBody, {
+              name,
+            })}
+            onConfirm={archiveProduct}
+          />
+        </>
       );
     },
-    [],
+    [
+      editor.openEdit,
+      editor.openVariants,
+      editor.openSubmit,
+      editor.isSuperAdmin,
+    ],
   );
+
+  const cellOverrides = {
+    listedByPlatform: (row: AdminDataRow) =>
+      row.listedByPlatform ? <PlatformListedBadge /> : "—",
+  };
 
   const fetchDetail = useCallback(
     async (row: AdminDataRow) =>
@@ -155,7 +206,10 @@ export function useAdminProductsPage(): AdminProductsPageModel {
       "categoryName",
       "status",
       "basePrice",
+      "listedByPlatform",
     ],
+    cellOverrides,
+    editor,
     showApprovalQueue: hasPermission(PERMISSIONS.PRODUCT_APPROVE),
     pendingCount: pendingProducts?.total ?? 0,
     filters: {

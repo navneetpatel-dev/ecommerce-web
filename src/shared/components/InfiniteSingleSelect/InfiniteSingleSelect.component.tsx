@@ -131,7 +131,8 @@ function InfiniteSingleSelectBody(props: InfiniteSingleSelectProps) {
 
   return (
     <div className={cn(infiniteSingleSelectStyles.root, className)}>
-      <Popover open={open} onOpenChange={handlePopoverChange}>
+      {/* modal: inside a Dialog the page scroll lock would otherwise swallow wheel/touch scrolling of this list. */}
+      <Popover modal open={open} onOpenChange={handlePopoverChange}>
         <PopoverTrigger asChild>
           <TriggerButton
             open={open}

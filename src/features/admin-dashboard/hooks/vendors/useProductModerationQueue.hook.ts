@@ -7,6 +7,10 @@ import { useProductModeration } from "./useProductModeration.hook";
 import { adminApi } from "../../api/analytics/admin.api";
 import { useDebouncedValue } from "@/shared/hooks/ui/use-debounce.hook";
 import { PRODUCT_STATUS } from "@/shared/constants/statuses";
+import { ROLES } from "@/shared/constants/labels";
+import { ERROR_CODES } from "@/shared/constants/http/errors";
+import { isApiErrorCode } from "@/shared/types/apiError.types";
+import { useAuthStore } from "@/shared/stores/auth/auth.store";
 import type { ProductDetail } from "@/shared/api/types";
 import type { AdminProductsFiltersProps } from "../../components/vendors/AdminProductsFilters.component";
 
@@ -77,13 +81,41 @@ export function useProductModerationQueue() {
     });
   }, []);
 
+  const isSuperAdmin = useAuthStore(
+    (state) => state.currentUser?.role === ROLES.SUPER_ADMIN,
+  );
+  // A Super Admin who prepared a listing is refused as approver; they may approve it with a reason.
+  const [ownWorkId, setOwnWorkId] = useState<string | null>(null);
+
   const onApprove = useCallback(
     async (id: string) => {
-      await approve.mutateAsync(id);
+      try {
+        await approve.mutateAsync({ id });
+      } catch (err: unknown) {
+        if (
+          isSuperAdmin &&
+          isApiErrorCode(err, ERROR_CODES.PRODUCT_APPROVER_NOT_INDEPENDENT)
+        ) {
+          setOwnWorkId(id);
+          return;
+        }
+        throw err;
+      }
       list.reload();
     },
-    [approve, list],
+    [approve, list, isSuperAdmin],
   );
+
+  const onApproveOwnWork = useCallback(
+    async (ownWorkReason: string) => {
+      if (!ownWorkId) return;
+      await approve.mutateAsync({ id: ownWorkId, ownWorkReason });
+      setOwnWorkId(null);
+      list.reload();
+    },
+    [approve, list, ownWorkId],
+  );
+  const closeOwnWork = useCallback(() => setOwnWorkId(null), []);
 
   const onReject = useCallback(
     async (id: string, note: string) => {
@@ -139,6 +171,9 @@ export function useProductModerationQueue() {
       onPageChange: list.onPageChange,
     },
     onApprove,
+    ownWorkOpen: ownWorkId !== null,
+    onApproveOwnWork,
+    closeOwnWork,
     onReject,
     isApproving: approve.isPending,
     isRejecting: reject.isPending,

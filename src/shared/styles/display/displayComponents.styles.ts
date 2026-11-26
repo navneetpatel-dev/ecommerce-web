@@ -151,7 +151,7 @@ export const expandableTextStyles = {
 export const characterCountStyles = {
   root: "mt-1.5 flex items-center justify-between gap-3 text-[0.75rem] leading-tight",
   hint: "text-ink-muted",
-  count: "ml-auto tabular-nums text-ink-muted",
+  count: "ml-auto whitespace-nowrap tabular-nums text-ink-muted",
   countNear: "text-warning",
   countFull: "font-medium text-danger",
 } as const;

@@ -7,7 +7,11 @@ export const tables3Labels = {
   editProductBody:
     "Update listing details, policies, and search settings for this product.",
   productBrandPlaceholder: "Brand name",
-  productTagsHint: "Separate tags with commas.",
+  productTagsHint:
+    "Separate tags with commas (up to 20 tags, 40 characters each).",
+  productHighlightsHint: "Up to 12 highlights, 160 characters each.",
+  productSpecsHint:
+    "Up to 30 specifications (label up to 60, value up to 200 characters).",
   productTagsPlaceholder: "cookware, steel, induction",
   addProductHighlight: "Add highlight",
   addProductSpecification: "Add specification",
@@ -29,6 +33,18 @@ export const tables3Labels = {
   productOwnerOnlyHint: "Only the store owner can change this.",
   productHsnCodeHint:
     "Optional display override. Tax still follows category tax rules.",
+  productSeoTitleHint:
+    "Recommended up to 60 characters; search engines cut longer titles.",
+  productSeoDescriptionHint:
+    "Recommended 120 to 160 characters. Say what makes this product worth clicking.",
+  productSeoDescriptionPlaceholder:
+    "Leave blank to use the product description.",
+  seoPreviewCaption: "How this could look in search results",
+  seoPreviewUrl: "yourstore.com › products › your-product",
+  seoPreviewTitleEmpty: "Your product title appears here",
+  seoPreviewDescriptionEmpty:
+    "Your product description appears here. Add one above to see it.",
+  seoPreviewFallbackNote: "Empty fields use the product name and description.",
   productSeoTitle: "SEO title",
   productSeoDescription: "SEO description",
   productVideoUrl: "Product video",

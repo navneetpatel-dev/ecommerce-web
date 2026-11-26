@@ -49,6 +49,7 @@ interface ProductsTableViewProps {
   onDeleteProduct?: (product: ProductRow) => void;
   onSubmitForApproval?: (product: ProductRow) => void;
   onManageImages?: (product: ProductRow) => void;
+  onManageVariants?: (product: ProductRow) => void;
 }
 
 export function ProductsTableView(props: ProductsTableViewProps) {
@@ -82,6 +83,7 @@ export function ProductsTableView(props: ProductsTableViewProps) {
     onDeleteProduct,
     onSubmitForApproval,
     onManageImages,
+    onManageVariants,
   } = props;
   const hasTotal = typeof total === "number" && total > 0;
   const resultFrom = (page - 1) * DEFAULT_PAGE_LIMIT + 1;
@@ -109,6 +111,7 @@ export function ProductsTableView(props: ProductsTableViewProps) {
       onDelete={onDeleteProduct}
       onSubmitForApproval={onSubmitForApproval}
       onManageImages={onManageImages}
+      onManageVariants={onManageVariants}
       isDeleting={isDeleting}
       isSubmitting={isSubmitting}
     />

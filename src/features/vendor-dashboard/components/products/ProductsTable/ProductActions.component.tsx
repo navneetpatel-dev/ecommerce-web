@@ -6,7 +6,7 @@ import {
   TableRowActions,
   TableRowAction,
 } from "@/shared/components/DataTable/TableRowActions.component";
-import { Pencil, Trash2, Send, Images } from "lucide-react";
+import { Pencil, Trash2, Send, Images, Boxes } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
 import { PRODUCT_STATUS } from "@/shared/constants/statuses";
 import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
@@ -20,6 +20,7 @@ export function ProductActions(props: ProductRowActionsProps) {
     onDelete,
     onSubmitForApproval,
     onManageImages,
+    onManageVariants,
     isDeleting,
     isSubmitting,
   } = props;
@@ -27,6 +28,7 @@ export function ProductActions(props: ProductRowActionsProps) {
     Boolean(onSubmitForApproval) && product.status === PRODUCT_STATUS.DRAFT;
   const handleSubmit = () => onSubmitForApproval?.(product);
   const handleManageImages = () => onManageImages?.(product);
+  const handleManageVariants = () => onManageVariants?.(product);
   const handleEdit = () => onEdit?.(product);
   const handleDelete = () => onDelete?.(product);
 
@@ -64,6 +66,20 @@ export function ProductActions(props: ProductRowActionsProps) {
           >
             <Images strokeWidth={2.25} aria-hidden />
             <span>{LABELS.manageProductImages}</span>
+          </Button>
+        </TableRowAction>
+      ) : null}
+      {onManageVariants ? (
+        <TableRowAction>
+          <Button
+            size="sm"
+            variant="outline"
+            type="button"
+            className={tableMenuButtonClass("neutral")}
+            onClick={handleManageVariants}
+          >
+            <Boxes strokeWidth={2.25} aria-hidden />
+            <span>{LABELS.manageVariants}</span>
           </Button>
         </TableRowAction>
       ) : null}

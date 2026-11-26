@@ -1,5 +1,6 @@
 "use client";
 
+import { ApproveOwnWorkDialog } from "../../components/vendors/ApproveOwnWorkDialog.component";
 import { PackageSearch } from "lucide-react";
 import { EmptyState } from "@/shared/components/display/EmptyState.component";
 import { useProductModerationQueue } from "../../hooks/vendors/useProductModerationQueue.hook";
@@ -33,6 +34,11 @@ export function ProductModerationQueue() {
         onReject={queue.onReject}
         isApproving={queue.isApproving}
         isRejecting={queue.isRejecting}
+      />
+      <ApproveOwnWorkDialog
+        open={queue.ownWorkOpen}
+        onConfirm={queue.onApproveOwnWork}
+        onClose={queue.closeOwnWork}
       />
     </div>
   );

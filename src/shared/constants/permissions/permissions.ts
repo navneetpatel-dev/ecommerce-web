@@ -24,6 +24,7 @@ export const PERMISSIONS = {
   PRODUCT_CREATE: "product.create",
   PRODUCT_UPDATE: "product.update",
   PRODUCT_DELETE: "product.delete",
+  PRODUCT_PRICING: "product.pricing",
   SUBORDER_MANAGE: "suborder.manage",
   PAYOUT_VIEW: "payout.view",
   REVIEW_RESPOND: "review.respond",

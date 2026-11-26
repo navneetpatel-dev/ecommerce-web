@@ -9,6 +9,7 @@ import {
 import { cn } from "@/shared/utils/dom/cn";
 import { ProductActions } from "./ProductActions.component";
 import type { ProductRowActionsProps } from "../../../types/products/ProductsTable-types";
+import { PlatformListedBadge } from "@/features/products";
 import { formatInr } from "@/shared/utils/formatting/orderFormat";
 
 /** Desktop table row for a vendor product. */
@@ -19,6 +20,7 @@ export function ProductRow(props: ProductRowActionsProps) {
     onDelete,
     onSubmitForApproval,
     onManageImages,
+    onManageVariants,
     isDeleting,
     isSubmitting,
   } = props;
@@ -29,6 +31,7 @@ export function ProductRow(props: ProductRowActionsProps) {
     <TableRow>
       <TableCell className={cn(TABLE_DATA_CELL_CLASS, "font-medium")}>
         {product.name}
+        {product.listedByPlatform ? <PlatformListedBadge /> : null}
       </TableCell>
       <TableCell
         className={cn(TABLE_DATA_CELL_CLASS, "font-mono text-body-sm")}
@@ -51,6 +54,7 @@ export function ProductRow(props: ProductRowActionsProps) {
           onDelete={onDelete}
           onSubmitForApproval={onSubmitForApproval}
           onManageImages={onManageImages}
+          onManageVariants={onManageVariants}
           isDeleting={isDeleting}
           isSubmitting={isSubmitting}
         />

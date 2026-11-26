@@ -8,6 +8,7 @@ export interface ProductTableRow {
   lowStockAt: number;
   basePrice: number;
   status: string;
+  listedByPlatform?: boolean;
 }
 
 interface ProductActionCallbacks {
@@ -15,6 +16,7 @@ interface ProductActionCallbacks {
   onDelete?: (product: ProductTableRow) => void;
   onSubmitForApproval?: (product: ProductTableRow) => void;
   onManageImages?: (product: ProductTableRow) => void;
+  onManageVariants?: (product: ProductTableRow) => void;
   isDeleting?: boolean;
   isSubmitting?: boolean;
 }
