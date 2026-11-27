@@ -3,6 +3,7 @@
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { Package, Save } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
+import { RowActionButton } from "@/shared/components/DataTable/RowActions/RowActionButton.component";
 import { Input } from "@/shared/components/ui/input";
 import {
   Dialog,
@@ -15,7 +16,6 @@ import {
 } from "@/shared/components/ui/dialog";
 import { FormFieldFrame } from "@/shared/components/forms";
 import { LABELS } from "@/shared/constants/labels";
-import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
 import { useInventoryStockEditor } from "../../hooks/inventory/useInventoryStockEditor.hook";
 import type { LowStockInventoryRow } from "../../api/inventory/inventory.api";
 
@@ -50,15 +50,7 @@ export function InventoryStockEditor({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button
-          type="button"
-          size="sm"
-          variant="outline"
-          className={tableMenuButtonClass("neutral")}
-        >
-          <Package className="size-3.5" aria-hidden />
-          <span>{LABELS.editStock}</span>
-        </Button>
+        <RowActionButton kind="edit" icon={Package} label={LABELS.editStock} />
       </DialogTrigger>
       <DialogContent className="max-w-xl">
         <form onSubmit={handleSave}>

@@ -3,8 +3,14 @@
 import * as React from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { useScrollAlertsIntoView } from "@/shared/hooks/ui/useScrollAlertsIntoView.hook";
-import { IconCloseButton } from "./icon-close-button";
+import {
+  DialogCloseButton,
+  type DialogCloseButtonPlacement,
+} from "./dialog-close-button";
 import { cn } from "@/shared/utils/dom/cn";
+import { withoutOwnScroll } from "@/shared/utils/dom/withoutOwnScroll";
+import { RowActionsBoundary } from "../DataTable/RowActions/rowActionsContext";
+import { DialogReturnFocusContent } from "./dialog-return-focus-content";
 import { dialogStyles } from "../../styles/ui/dialog.styles";
 
 const Dialog = DialogPrimitive.Root;
@@ -25,25 +31,14 @@ const DialogOverlay = React.forwardRef<
 ));
 DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 
-/**
- * The dialog scrolls its own body (`dialogStyles.bodyBase`). A caller passing `overflow-y-auto` to the
- * dialog box as well produced two scrollbars and a scroll area with empty space below the content, so
- * those classes are dropped here, once, for every dialog in the app.
- */
-const OWN_SCROLL_CLASS = /^(?:[a-z]+:)*overflow(?:-y)?-(?:auto|scroll)$/;
-export function withoutOwnScroll(className?: string): string | undefined {
-  return className
-    ?.split(/\s+/)
-    .filter((token) => token && !OWN_SCROLL_CLASS.test(token))
-    .join(" ");
-}
-
 const DialogContent = React.forwardRef<
   React.ComponentRef<typeof DialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & {
     presentation?: "default" | "fullscreen";
     hideCloseButton?: boolean;
     closeButtonClassName?: string;
+    closeButtonPlacement?: Exclude<DialogCloseButtonPlacement, "fullscreen">;
+    bodyClassName?: string;
   }
 >(
   (
@@ -53,6 +48,8 @@ const DialogContent = React.forwardRef<
       presentation = "default",
       hideCloseButton = false,
       closeButtonClassName,
+      closeButtonPlacement = "row",
+      bodyClassName,
       onCloseAutoFocus,
       onPointerDownOutside,
       onEscapeKeyDown,
@@ -66,26 +63,13 @@ const DialogContent = React.forwardRef<
     const isFullscreen = presentation === "fullscreen";
 
     const closeButtonElement = !hideCloseButton && (
-      <div
-        className={cn(
-          dialogStyles.closeButtonWrap,
-          isFullscreen
-            ? dialogStyles.closeButtonWrapFullscreen
-            : dialogStyles.closeButtonWrapDefault,
-        )}
-      >
-        <DialogPrimitive.Close asChild>
-          <IconCloseButton
-            variant={isFullscreen ? "floating" : "dialog"}
-            className={closeButtonClassName}
-            onPointerDown={(event) => {
-              // Keep focus in the dialog until close so field blur doesn't flash validation.
-              event.preventDefault();
-              closedByPointerRef.current = true;
-            }}
-          />
-        </DialogPrimitive.Close>
-      </div>
+      <DialogCloseButton
+        placement={isFullscreen ? "fullscreen" : closeButtonPlacement}
+        className={closeButtonClassName}
+        onPointerClose={() => {
+          closedByPointerRef.current = true;
+        }}
+      />
     );
 
     return (
@@ -101,7 +85,7 @@ const DialogContent = React.forwardRef<
               : dialogStyles.portalWrapDefault,
           )}
         >
-          <DialogPrimitive.Content
+          <DialogReturnFocusContent
             ref={ref}
             className={cn(
               dialogStyles.contentBase,
@@ -135,11 +119,12 @@ const DialogContent = React.forwardRef<
               className={cn(
                 dialogStyles.bodyBase,
                 !className?.includes("p-0") && dialogStyles.bodyPadding,
+                bodyClassName,
               )}
             >
-              {children}
+              <RowActionsBoundary>{children}</RowActionsBoundary>
             </div>
-          </DialogPrimitive.Content>
+          </DialogReturnFocusContent>
         </div>
       </DialogPortal>
     );
@@ -190,6 +175,7 @@ const DialogDescription = React.forwardRef<
 DialogDescription.displayName = DialogPrimitive.Description.displayName;
 
 export {
+  withoutOwnScroll,
   Dialog,
   DialogPortal,
   DialogOverlay,

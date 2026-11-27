@@ -2,6 +2,7 @@
 
 import { Pencil } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
+import { RowActionButton } from "@/shared/components/DataTable/RowActions/RowActionButton.component";
 import {
   Dialog,
   DialogContent,
@@ -12,7 +13,6 @@ import {
 import { DisabledActionHint } from "@/shared/components/forms/DisabledActionHint.component";
 import { FormActions } from "@/shared/components/forms";
 import { LABELS } from "@/shared/constants/labels";
-import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
 import type { CategoryGstInfo } from "@/shared/api/types";
 import { CategoryTaxSection } from "./CategoryTaxSection.component";
 import { AdminCategoryFormFields } from "./AdminCategoryFormFields.component";
@@ -56,16 +56,13 @@ export function AdminEditCategoryAction({
 
   return (
     <>
-      <Button
-        size="sm"
-        variant="outline"
-        className={tableMenuButtonClass("edit")}
+      <RowActionButton
+        kind="edit"
+        icon={Pencil}
+        label={LABELS.edit}
         disabled={isPending}
         onClick={openEditor}
-      >
-        <Pencil strokeWidth={2.25} aria-hidden />
-        <span>{LABELS.edit}</span>
-      </Button>
+      />
 
       <Dialog open={open} onOpenChange={handleOpenChange}>
         <DialogContent className={styles.dialogContent}>

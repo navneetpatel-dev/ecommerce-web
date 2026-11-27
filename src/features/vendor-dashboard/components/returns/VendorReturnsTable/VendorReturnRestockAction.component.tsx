@@ -1,8 +1,10 @@
 "use client";
 
+import { Flag, PackagePlus } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
-import { Button } from "@/shared/components/ui/button";
+import { TableRowActions } from "@/shared/components/DataTable/TableRowActions.component";
+import { RowActionButton } from "@/shared/components/DataTable/RowActions/RowActionButton.component";
 import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import { AdminConfirmAction } from "@/features/admin-dashboard";
 import { VendorReturnDisputeDialog } from "../VendorReturnDisputeDialog.component";
@@ -55,40 +57,38 @@ export function VendorReturnRestockAction({
   }
 
   return (
-    <div className={styles.restockContainer}>
-      {row.canRestock ? (
-        <AdminConfirmAction
-          label={LABELS.returnRestock}
-          tone="neutral"
-          title={LABELS.confirmRestockReturnTitle}
-          description={formatLabel(LABELS.confirmRestockReturnBody, {
-            name: row.productLabel,
-          })}
-          onConfirm={handleRestock}
-        />
-      ) : null}
+    <>
+      <TableRowActions>
+        {row.canRestock ? (
+          <AdminConfirmAction
+            label={LABELS.returnRestock}
+            icon={PackagePlus}
+            tone="neutral"
+            title={LABELS.confirmRestockReturnTitle}
+            description={formatLabel(LABELS.confirmRestockReturnBody, {
+              name: row.productLabel,
+            })}
+            onConfirm={handleRestock}
+          />
+        ) : null}
+        {row.canDispute ? (
+          <RowActionButton
+            icon={Flag}
+            label={LABELS.returnDispute}
+            onClick={handleOpenDispute}
+          />
+        ) : null}
+      </TableRowActions>
 
       {row.canDispute ? (
-        <>
-          <Button
-            size="sm"
-            variant="ghost"
-            type="button"
-            className={styles.disputeBtn}
-            onClick={handleOpenDispute}
-          >
-            Dispute
-          </Button>
-
-          <VendorReturnDisputeDialog
-            open={disputeOpen}
-            productName={row.productLabel}
-            submitting={disputeSubmitting}
-            onOpenChange={handleDisputeOpenChange}
-            onSubmit={handleDisputeSubmit}
-          />
-        </>
+        <VendorReturnDisputeDialog
+          open={disputeOpen}
+          productName={row.productLabel}
+          submitting={disputeSubmitting}
+          onOpenChange={handleDisputeOpenChange}
+          onSubmit={handleDisputeSubmit}
+        />
       ) : null}
-    </div>
+    </>
   );
 }

@@ -49,7 +49,6 @@ export function CheckoutPaymentNoticeDialog({
       }}
       secondaryAction={{
         label: "View cart",
-        variant: "outline",
         onClick: handleSecondaryClick,
       }}
     />

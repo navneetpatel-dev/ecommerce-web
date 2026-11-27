@@ -1,5 +1,6 @@
 "use client";
 
+import { Flag } from "lucide-react";
 import { FormFieldFrame } from "@/shared/components/forms";
 import { Input } from "@/shared/components/ui/input";
 import { Textarea } from "@/shared/components/ui/textarea";
@@ -43,6 +44,7 @@ export function VendorReturnDisputeDialog({
 
   return (
     <StatusDialog
+      icon={Flag}
       open={open}
       onOpenChange={handleOpenChange}
       variant="warning"

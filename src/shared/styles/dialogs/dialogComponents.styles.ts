@@ -1,44 +1,43 @@
 import { OVERLAY_BACKDROP } from "../common.styles";
 
-export const loginRequiredDialogStyles = {
-  content: "max-w-md",
-  header: "items-center space-y-2 text-center sm:text-center",
-  iconWrap:
-    "mb-1 flex h-12 w-12 items-center justify-center rounded-full border border-brand/25 bg-brand-subtle text-brand",
-  icon: "h-5 w-5",
-  title: "font-display text-[1.375rem] tracking-tight text-ink",
-  description: "max-w-[32ch] text-body leading-relaxed text-ink-muted",
-  actions: "flex flex-col gap-2.5",
-  action: "h-11 w-full",
-} as const;
-
+/** Every confirmation: icon tile beside the title, ✕ on the same line, actions bottom-right. */
 export const statusDialogStyles = {
-  content: "max-w-md sm:text-left",
-  header: "space-y-4 sm:text-left",
-  iconWrap:
-    "mx-auto flex h-12 w-12 items-center justify-center rounded-full border sm:mx-0",
-  titleGroup: "space-y-1.5",
-  title: "font-display text-[1.25rem] tracking-tight text-ink",
-  description: "text-body leading-relaxed text-ink-muted",
-  childrenWrapper: "space-y-3",
-  footer: "dialog-footer-start",
-  actionHint: "flex w-full sm:inline-flex sm:w-auto",
+  content: "max-w-[27.5rem] rounded-2xl",
+  contentWide: "max-w-2xl rounded-2xl",
+  body: "gap-5 px-5 pt-5 [--dialog-pad:1.25rem] sm:gap-5 sm:px-5 sm:[--dialog-pad:1.25rem]",
+  closeButton: "bg-surface-raised",
+  header: "flex-row items-start gap-3.5 space-y-0 pr-9 text-left",
+  iconWrap: "flex size-10 shrink-0 items-center justify-center rounded-[11px]",
+  icon: "size-5",
+  titleGroup: "min-w-0 flex-1 space-y-1.5 break-words",
+  title:
+    "text-balance pt-px text-[1.0625rem] font-semibold leading-snug tracking-normal text-ink",
+  description: "text-body-sm leading-relaxed text-ink-muted",
+  /** Fields line up under the title once there is room for the indent. */
+  childrenWrapper: "space-y-3 min-[480px]:pl-[3.375rem]",
+  childrenWrapperWide: "space-y-3",
+  footer: "dialog-footer-compact",
+  actionHint: "flex w-full min-[480px]:inline-flex min-[480px]:w-auto",
   variants: {
     info: {
-      iconWrap: "border-line bg-paper text-ink-muted",
-      icon: "text-ink-muted",
+      iconWrap: "bg-ink/[0.07] text-ink-muted",
+      confirmVariant: "default",
+      confirmButton: "",
     },
     success: {
-      iconWrap: "border-success/25 bg-success-subtle text-success",
-      icon: "text-success",
+      iconWrap: "bg-success-subtle text-success",
+      confirmVariant: "default",
+      confirmButton: "bg-success text-paper hover:bg-success/90",
     },
     warning: {
-      iconWrap: "border-warning/25 bg-warning-subtle text-warning",
-      icon: "text-warning",
+      iconWrap: "bg-warning-subtle text-warning",
+      confirmVariant: "default",
+      confirmButton: "bg-warning text-paper hover:bg-warning/90",
     },
     danger: {
-      iconWrap: "border-danger/25 bg-danger-subtle text-danger",
-      icon: "text-danger",
+      iconWrap: "bg-danger-subtle text-danger",
+      confirmVariant: "destructive",
+      confirmButton: "",
     },
   },
 } as const;

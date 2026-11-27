@@ -1,10 +1,11 @@
 "use client";
 
 import { Pencil } from "lucide-react";
-import { Button } from "@/shared/components/ui/button";
+import { RowActionButton } from "@/shared/components/DataTable/RowActions/RowActionButton.component";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import type { TaxRuleRow } from "../../api/tax/tax.api";
+import { taxRuleDeleteBody } from "../../utils/tax/taxRuleDeleteBody";
 import { AdminConfirmAction } from "../shared/AdminConfirmAction.component";
 
 interface TaxRuleRowActionsProps {
@@ -21,19 +22,19 @@ export function TaxRuleRowActions({
 }: TaxRuleRowActionsProps) {
   const handleEdit = () => onEdit(rule);
   const handleDelete = () => onDelete(rule);
-  const body = formatLabel(
-    rule.isDefault
-      ? LABELS.taxRuleDeleteDefaultBody
-      : LABELS.taxRuleDeleteCategoryBody,
-    { name: rule.categoryName ?? "", count: String(rule.appliesToCount) },
-  );
+  const body = formatLabel(taxRuleDeleteBody(rule), {
+    name: rule.categoryName ?? "",
+    count: String(rule.appliesToCount),
+  });
 
   return (
     <>
-      <Button type="button" variant="outline" size="sm" onClick={handleEdit}>
-        <Pencil aria-hidden />
-        {LABELS.edit}
-      </Button>
+      <RowActionButton
+        kind="edit"
+        icon={Pencil}
+        label={LABELS.edit}
+        onClick={handleEdit}
+      />
       <AdminConfirmAction
         label={LABELS.delete}
         dialogVariant="danger"

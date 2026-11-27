@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { TableRowAction } from "@/shared/components/DataTable/TableRowActions.component";
+import { CircleX } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { AdminConfirmAction } from "../../shared/AdminConfirmAction.component";
@@ -40,33 +40,30 @@ export function ProductModerationRowActions({
 
   return (
     <>
-      <TableRowAction>
-        <AdminConfirmAction
-          label={LABELS.approve}
-          tone="success"
-          dialogVariant="success"
-          title={LABELS.confirmApproveProductTitle}
-          description={approveDescription}
-          confirmLabel={LABELS.approve}
-          onConfirm={handleApprove}
-          disabled={rowBusy}
-        />
-      </TableRowAction>
-      <TableRowAction destructive>
-        <AdminConfirmAction
-          label={LABELS.reject}
-          tone="danger"
-          dialogVariant="danger"
-          title={LABELS.confirmRejectProductTitle}
-          description={rejectDescription}
-          confirmLabel={LABELS.reject}
-          requireReason
-          reasonLabel={LABELS.rejectionNote}
-          reasonHint={LABELS.enterRejectionNote}
-          onConfirm={handleReject}
-          disabled={rowBusy}
-        />
-      </TableRowAction>
+      <AdminConfirmAction
+        label={LABELS.approve}
+        tone="success"
+        dialogVariant="success"
+        title={LABELS.confirmApproveProductTitle}
+        description={approveDescription}
+        confirmLabel={LABELS.approve}
+        onConfirm={handleApprove}
+        disabled={rowBusy}
+      />
+      <AdminConfirmAction
+        label={LABELS.reject}
+        icon={CircleX}
+        tone="danger"
+        dialogVariant="danger"
+        title={LABELS.confirmRejectProductTitle}
+        description={rejectDescription}
+        confirmLabel={LABELS.reject}
+        requireReason
+        reasonLabel={LABELS.rejectionNote}
+        reasonHint={LABELS.enterRejectionNote}
+        onConfirm={handleReject}
+        disabled={rowBusy}
+      />
     </>
   );
 }

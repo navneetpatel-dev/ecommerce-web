@@ -1,5 +1,6 @@
 "use client";
 
+import { Flag } from "lucide-react";
 import { FormFieldFrame } from "@/shared/components/forms";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { StatusDialog } from "@/shared/components/dialogs/StatusDialog.component";
@@ -30,6 +31,7 @@ export function VendorReviewFlagDialog({
 
   return (
     <StatusDialog
+      icon={Flag}
       open={open}
       onOpenChange={handleOpenChange}
       variant="warning"

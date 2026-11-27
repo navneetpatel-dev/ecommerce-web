@@ -159,7 +159,6 @@ export function useVendorProductsListView(options: {
     },
     primaryAction: {
       label: LABELS.delete,
-      variant: "destructive" as const,
       loading: table.isDeleting,
       onClick: () => {
         table.confirmDelete();

@@ -1,3 +1,11 @@
+import {
+  RotateCcw,
+  CircleX,
+  Truck,
+  PackageCheck,
+  CheckCheck,
+  PackagePlus,
+} from "lucide-react";
 import type { ReactNode } from "react";
 import {
   RETURN_STATUS,
@@ -51,6 +59,7 @@ export function buildReturnRowActions(
       <AdminConfirmAction
         key="retry-refund"
         label={LABELS.retryRefund}
+        icon={RotateCcw}
         dialogVariant="warning"
         title={LABELS.confirmRetryRefundTitle}
         description={formatLabel(LABELS.confirmRetryRefundBody, { name })}
@@ -64,6 +73,7 @@ export function buildReturnRowActions(
       <AdminConfirmAction
         key="reject"
         label={LABELS.reject}
+        icon={CircleX}
         dialogVariant="danger"
         tone="danger"
         title={LABELS.confirmRejectReturnTitle}
@@ -92,6 +102,7 @@ export function buildReturnRowActions(
       <AdminConfirmAction
         key="pickup"
         label={LABELS.returnSchedulePickup}
+        icon={Truck}
         dialogVariant="success"
         title={LABELS.confirmSchedulePickupTitle}
         description={formatLabel(LABELS.confirmSchedulePickupBody, {
@@ -107,6 +118,7 @@ export function buildReturnRowActions(
       <AdminConfirmAction
         key="received"
         label={LABELS.returnMarkReceived}
+        icon={PackageCheck}
         dialogVariant="success"
         title={LABELS.confirmMarkReceivedTitle}
         description={formatLabel(LABELS.confirmMarkReceivedBody, { name })}
@@ -123,6 +135,7 @@ export function buildReturnRowActions(
       <AdminConfirmAction
         key="close"
         label={LABELS.returnClose}
+        icon={CheckCheck}
         dialogVariant="success"
         title={LABELS.confirmCloseReturnTitle}
         description={formatLabel(LABELS.confirmCloseReturnBody, { name })}
@@ -137,6 +150,7 @@ export function buildReturnRowActions(
       <AdminConfirmAction
         key="restock"
         label={LABELS.returnRestock}
+        icon={PackagePlus}
         tone="neutral"
         title={LABELS.confirmRestockReturnTitle}
         description={formatLabel(LABELS.confirmRestockReturnBody, { name })}

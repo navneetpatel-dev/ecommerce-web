@@ -1,25 +1,15 @@
 "use client";
 
-import { BarChart2 } from "lucide-react";
-import { Button } from "@/shared/components/ui/button";
-import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
 import {
   DataTable,
   type DataTablePaginationProps,
 } from "@/shared/components/DataTable";
-import {
-  AdminConfirmAction,
-  EditCouponAction,
-  type CouponFormInput,
-} from "@/features/admin-dashboard";
-import { couponsApi } from "@/features/coupons";
-import { vendorCouponKeys } from "../../api/coupons/vendor-coupons.queries";
+import { type CouponFormInput } from "@/features/admin-dashboard";
 import { LABELS, ROLES } from "@/shared/constants/labels";
-import { COUPON_STATUS } from "@/shared/constants/statuses";
 import { useAuthStore } from "@/shared/stores/auth/auth.store";
-import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import type { UseFormReturn } from "react-hook-form";
 import type { Coupon, CouponAnalytics } from "@/shared/api/types";
+import { VendorCouponRowActions } from "./VendorCouponsView/VendorCouponRowActions.component";
 import { CouponAnalyticsDialog } from "./VendorCouponsView/CouponAnalyticsDialog.component";
 import { CouponsHeaderSection } from "./VendorCouponsView/CouponsHeaderSection.component";
 import {
@@ -49,9 +39,6 @@ interface VendorCouponsViewProps {
   onUpdateStatus: (coupon: Coupon, status: Coupon["status"]) => Promise<void>;
 }
 
-const saveVendorCoupon = (id: string, body: unknown) =>
-  couponsApi.vendorUpdate(id, body);
-
 /** Vendor coupons screen: header + table with status actions + analytics. */
 export function VendorCouponsView(props: VendorCouponsViewProps) {
   const {
@@ -79,86 +66,15 @@ export function VendorCouponsView(props: VendorCouponsViewProps) {
   );
   const columns = buildVendorCouponColumns();
 
-  const renderActions = (row: Coupon) => {
-    const setStatus = (status: Coupon["status"]) => () =>
-      onUpdateStatus(row, status);
-    const openAnalytics = () => setAnalyticsId(row.id);
-
-    if (!isOwner) {
-      return (
-        <Button
-          type="button"
-          size="sm"
-          variant="outline"
-          className={tableMenuButtonClass("neutral")}
-          onClick={openAnalytics}
-        >
-          <BarChart2 strokeWidth={2.25} aria-hidden />
-          <span>{LABELS.viewAnalytics}</span>
-        </Button>
-      );
-    }
-
-    return (
-      <>
-        <Button
-          type="button"
-          size="sm"
-          variant="outline"
-          className={tableMenuButtonClass("neutral")}
-          onClick={openAnalytics}
-        >
-          <BarChart2 strokeWidth={2.25} aria-hidden />
-          <span>{LABELS.viewAnalytics}</span>
-        </Button>
-        {row.status !== COUPON_STATUS.ARCHIVED &&
-        row.status !== COUPON_STATUS.REJECTED ? (
-          <EditCouponAction
-            coupon={row}
-            save={saveVendorCoupon}
-            invalidateKey={vendorCouponKeys.all}
-            forceVendorId={vendorId}
-            vendorMode
-          />
-        ) : null}
-        {row.status === COUPON_STATUS.ACTIVE ? (
-          <AdminConfirmAction
-            label={LABELS.pauseCoupon}
-            tone="neutral"
-            title={LABELS.confirmPauseCouponTitle}
-            description={formatLabel(LABELS.confirmPauseCouponBody, {
-              code: row.code,
-            })}
-            onConfirm={setStatus(COUPON_STATUS.PAUSED)}
-          />
-        ) : null}
-        {row.status === COUPON_STATUS.PAUSED ||
-        row.status === COUPON_STATUS.DRAFT ? (
-          <AdminConfirmAction
-            label={LABELS.activateCoupon}
-            tone="success"
-            dialogVariant="success"
-            title={LABELS.confirmActivateCouponTitle}
-            description={formatLabel(LABELS.confirmActivateCouponBody, {
-              code: row.code,
-            })}
-            onConfirm={setStatus(COUPON_STATUS.ACTIVE)}
-          />
-        ) : null}
-        {row.status !== COUPON_STATUS.ARCHIVED ? (
-          <AdminConfirmAction
-            label={LABELS.archiveCoupon}
-            tone="archive"
-            title={LABELS.confirmArchiveCouponTitle}
-            description={formatLabel(LABELS.confirmArchiveCouponBody, {
-              code: row.code,
-            })}
-            onConfirm={setStatus(COUPON_STATUS.ARCHIVED)}
-          />
-        ) : null}
-      </>
-    );
-  };
+  const renderActions = (row: Coupon) => (
+    <VendorCouponRowActions
+      coupon={row}
+      isOwner={isOwner}
+      vendorId={vendorId}
+      onOpenAnalytics={setAnalyticsId}
+      onUpdateStatus={onUpdateStatus}
+    />
+  );
 
   return (
     <div className={vendorCouponsViewStyles.stack}>

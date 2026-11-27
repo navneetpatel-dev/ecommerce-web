@@ -13,7 +13,9 @@ export function CommissionInvoicesTableHeader() {
         <TableHead className={styles.tableCellStandard}>
           {LABELS.issuedAt}
         </TableHead>
-        <TableHead className={styles.tableCellStandard} />
+        <TableHead className={styles.tableCellActions}>
+          <span className={styles.srOnly}>{LABELS.actions}</span>
+        </TableHead>
       </TableRow>
     </TableHeader>
   );

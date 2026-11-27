@@ -1,13 +1,12 @@
 "use client";
 
 import { useMemo } from "react";
-import { BarChart2 } from "lucide-react";
+import { BarChart2, CircleX, Pause, Play } from "lucide-react";
 import {
   DataTable,
+  RowActionButton,
   type DataTablePaginationProps,
 } from "@/shared/components/DataTable";
-import { Button } from "@/shared/components/ui/button";
-import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
 import { LABELS } from "@/shared/constants/labels";
 import {
   COUPON_STATUS,
@@ -79,16 +78,11 @@ export function CouponsTable({
 
     return (
       <>
-        <Button
-          type="button"
-          size="sm"
-          variant="outline"
-          className={tableMenuButtonClass("neutral")}
+        <RowActionButton
+          icon={BarChart2}
+          label={LABELS.viewAnalytics}
           onClick={openAnalytics}
-        >
-          <BarChart2 strokeWidth={2.25} aria-hidden />
-          <span>{LABELS.viewAnalytics}</span>
-        </Button>
+        />
         {!readOnly && isEditable(row) ? (
           <EditCouponAction
             coupon={row}
@@ -99,6 +93,7 @@ export function CouponsTable({
         {!readOnly && row.status === COUPON_STATUS.ACTIVE ? (
           <AdminConfirmAction
             label={LABELS.pauseCoupon}
+            icon={Pause}
             tone="neutral"
             dialogVariant="warning"
             title={LABELS.confirmPauseCouponTitle}
@@ -113,6 +108,7 @@ export function CouponsTable({
           row.status === COUPON_STATUS.DRAFT) ? (
           <AdminConfirmAction
             label={LABELS.activateCoupon}
+            icon={Play}
             tone="success"
             dialogVariant="success"
             title={LABELS.confirmActivateCouponTitle}
@@ -140,6 +136,7 @@ export function CouponsTable({
         row.status !== COUPON_STATUS.ARCHIVED ? (
           <AdminConfirmAction
             label={LABELS.rejectCoupon}
+            icon={CircleX}
             tone="danger"
             dialogVariant="danger"
             title={LABELS.confirmRejectCouponTitle}

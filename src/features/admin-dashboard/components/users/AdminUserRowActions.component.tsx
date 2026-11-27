@@ -1,3 +1,4 @@
+import { Check, Ban } from "lucide-react";
 import { USER_STATUS } from "@/shared/constants/statuses";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
@@ -37,6 +38,7 @@ export function AdminUserRowActions({
       {isSelf ? null : (
         <AdminConfirmAction
           label={isBlocked ? LABELS.activate : LABELS.block}
+          icon={isBlocked ? Check : Ban}
           dialogVariant={isBlocked ? "success" : "warning"}
           tone={isBlocked ? "success" : "neutral"}
           title={

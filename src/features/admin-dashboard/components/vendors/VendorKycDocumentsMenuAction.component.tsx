@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { FileText } from "lucide-react";
-import { Button } from "@/shared/components/ui/button";
+import { RowActionButton } from "@/shared/components/DataTable/RowActions/RowActionButton.component";
 import { LABELS } from "@/shared/constants/labels";
 import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
 import { VendorKycDocumentsDialog } from "./VendorKycDocumentsDialog.component";
@@ -29,16 +29,12 @@ export function VendorKycDocumentsMenuAction({
 
   return (
     <>
-      <Button
-        size="sm"
-        variant="outline"
-        type="button"
+      <RowActionButton
+        label={LABELS.viewKycDocuments}
+        icon={FileText}
         className={tableMenuButtonClass("edit")}
         onClick={handleOpenDialog}
-      >
-        <FileText strokeWidth={2.25} aria-hidden />
-        <span>{LABELS.viewKycDocuments}</span>
-      </Button>
+      />
       <VendorKycDocumentsDialog
         vendorId={vendorId}
         vendorName={vendorName}

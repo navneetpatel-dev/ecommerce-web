@@ -13,7 +13,10 @@ import {
   adminShippingKeys,
   type RtoQueueShipment,
 } from "../../api/shipping/shipping.api";
-import { buildRtoQueueColumns } from "../../utils/shipping/rtoQueueColumns";
+import {
+  buildRtoQueueActions,
+  buildRtoQueueColumns,
+} from "../../utils/shipping/rtoQueueColumns";
 
 /** Parcels returning to the seller, and confirming one is back. */
 export function useRtoQueuePanel() {
@@ -90,8 +93,9 @@ export function useRtoQueuePanel() {
     ? (markReceived.variables ?? null)
     : null;
 
-  const columns = useMemo(
-    () => buildRtoQueueColumns(pendingShipmentId, handleMarkReceived),
+  const columns = useMemo(() => buildRtoQueueColumns(), []);
+  const renderActions = useMemo(
+    () => buildRtoQueueActions(pendingShipmentId, handleMarkReceived),
     [pendingShipmentId, handleMarkReceived],
   );
 
@@ -105,6 +109,7 @@ export function useRtoQueuePanel() {
     shipments,
     filteredShipments,
     columns,
+    renderActions,
     loading: query.isLoading,
     pendingCount,
     search,

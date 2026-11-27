@@ -1,15 +1,6 @@
 "use client";
 
-import {
-  Children,
-  Fragment,
-  isValidElement,
-  type ReactElement,
-  type ReactNode,
-  type SyntheticEvent,
-} from "react";
-import { MoreHorizontal } from "lucide-react";
-import { Button } from "@/shared/components/ui/button";
+import { Children, type ReactNode, type SyntheticEvent } from "react";
 import {
   Popover,
   PopoverContent,
@@ -17,173 +8,62 @@ import {
 } from "@/shared/components/ui/popover";
 import { LABELS } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/dom/cn";
+import { useRowActionsMenu } from "../../hooks/data-table/useRowActionsMenu.hook";
 import { tableRowActionsStyles } from "../../styles/data-table/dataTableComponents.styles";
-
-interface TableRowActionProps {
-  children: ReactNode;
-  /** When true, action is sorted last (destructive / reject / delete). */
-  destructive?: boolean;
-}
-
-/** Optional wrapper to mark an action as destructive for sort order inside `TableRowActions`. */
-export function TableRowAction({ destructive, children }: TableRowActionProps) {
-  return (
-    <span
-      className={tableRowActionsStyles.itemSpan}
-      data-table-row-menu-item
-      data-table-action-destructive={destructive ? true : undefined}
-    >
-      {children}
-    </span>
-  );
-}
+import { rowActionsStyles } from "../../styles/data-table/rowActions.styles";
+import { RowActionsHost } from "./RowActions/RowActionsHost.component";
+import { RowActionsPanel } from "./RowActions/RowActionsPanel.component";
+import { RowActionsTrigger } from "./RowActions/RowActionsTrigger.component";
 
 interface TableRowActionsProps {
+  /** `RowActionButton`s, or components that render them. */
   children: ReactNode;
   className?: string;
-  menuClassName?: string;
 }
 
-function componentDisplayName(type: unknown): string {
-  if (typeof type !== "function" && typeof type !== "object") return "";
-  const named = type as { displayName?: string; name?: string };
-  return named.displayName ?? named.name ?? "";
-}
-
-/** Dialogs/portals are not row action controls — exclude from the kebab menu list. */
-function isNonActionSlot(node: ReactNode): boolean {
-  if (!isValidElement(node)) return false;
-  if (typeof node.type === "string") return false;
-  const name = componentDisplayName(node.type);
-  return /Dialog|Modal|Portal|TooltipProvider/i.test(name);
-}
-
-function flattenActionNodes(nodes: ReactNode): ReactNode[] {
-  const out: ReactNode[] = [];
-  Children.forEach(nodes, (child) => {
-    if (child == null || typeof child === "boolean") return;
-    if (isNonActionSlot(child)) return;
-
-    if (isValidElement(child)) {
-      if (
-        child.type === Fragment ||
-        (child.type === "div" &&
-          (child.props as Record<string, unknown>).children)
-      ) {
-        out.push(
-          ...flattenActionNodes(
-            (child as ReactElement<{ children?: ReactNode }>).props.children,
-          ),
-        );
-        return;
-      }
-    }
-
-    out.push(child);
-  });
-  return out;
-}
-
-function isOpaqueActionWrapper(node: ReactNode): boolean {
-  if (!isValidElement(node)) return false;
-  if (node.type === Fragment) return false;
-  if (typeof node.type === "string") return false;
-  return !isNonActionSlot(node);
-}
-
-function isDestructiveAction(node: ReactNode): boolean {
-  if (!isValidElement(node)) return false;
-
-  const props = node.props as Record<string, unknown>;
-
-  if (props["data-table-action-destructive"] === true) return true;
-  if (props.tone === "danger" || props.dialogVariant === "danger") return true;
-  if (props.variant === "destructive") return true;
-
-  const className = props.className;
-  if (typeof className === "string" && className.includes("bg-danger"))
-    return true;
-
-  if (node.type === Fragment) {
-    return flattenActionNodes(props.children as ReactNode).some(
-      isDestructiveAction,
-    );
-  }
-
-  return false;
-}
-
-function sortActions(items: ReactNode[]): ReactNode[] {
-  const neutral: ReactNode[] = [];
-  const destructive: ReactNode[] = [];
-
-  for (const item of items) {
-    if (isDestructiveAction(item)) {
-      destructive.push(item);
-    } else {
-      neutral.push(item);
-    }
-  }
-
-  return [...neutral, ...destructive];
-}
-
-function resolveMenuItems(children: ReactNode): ReactNode[] {
-  const wrappedInSingleComponent =
-    Children.count(children) === 1 && isOpaqueActionWrapper(children);
-
-  if (wrappedInSingleComponent) {
-    return Children.toArray(children);
-  }
-
-  return sortActions(flattenActionNodes(children));
-}
+const stopRowEvent = (event: SyntheticEvent) => event.stopPropagation();
 
 /**
- * Row actions always render as a ⋮ kebab menu — never as inline buttons in table cells.
+ * Row actions always render as a ⋮ menu, never as inline buttons in table cells.
  */
-export function TableRowActions({
-  children,
-  className,
-  menuClassName,
-}: TableRowActionsProps) {
-  const menuItems = resolveMenuItems(children);
+export function TableRowActions({ children, className }: TableRowActionsProps) {
+  const { triggerRef, ...menu } = useRowActionsMenu();
 
-  if (menuItems.length === 0) return null;
-
-  const stopRowEvent = (event: SyntheticEvent) => event.stopPropagation();
-
-  const menuItemElements = menuItems.map((item, index) => (
-    <div key={index} className={tableRowActionsStyles.menuItemDiv}>
-      {item}
-    </div>
-  ));
+  if (Children.toArray(children).length === 0) return null;
 
   return (
     <div className={cn(tableRowActionsStyles.container, className)}>
-      <Popover>
+      <Popover open={menu.open} onOpenChange={menu.handleOpenChange}>
         <PopoverTrigger asChild>
-          <Button
-            type="button"
-            size="sm"
-            variant="ghost"
-            className={tableRowActionsStyles.triggerBtn}
-            aria-label={LABELS.moreActions}
+          <RowActionsTrigger
+            ref={triggerRef}
+            busy={menu.busy}
             onClick={stopRowEvent}
-          >
-            <MoreHorizontal aria-hidden />
-          </Button>
+          />
         </PopoverTrigger>
         <PopoverContent
           align="end"
           collisionPadding={12}
           sideOffset={4}
-          className={cn(tableRowActionsStyles.popoverContent, menuClassName)}
+          aria-label={LABELS.moreActions}
+          className={rowActionsStyles.panel}
           onClick={stopRowEvent}
+          onCloseAutoFocus={menu.handleCloseAutoFocus}
         >
-          {menuItemElements}
+          <RowActionsPanel
+            entries={menu.entries}
+            onSelect={menu.handleSelect}
+          />
         </PopoverContent>
       </Popover>
+      {menu.hostMounted ? (
+        <RowActionsHost key={menu.session} registry={menu.registry}>
+          {children}
+        </RowActionsHost>
+      ) : null}
+      <span role="status" className={rowActionsStyles.status}>
+        {menu.busy ? LABELS.rowActionRunning : null}
+      </span>
     </div>
   );
 }

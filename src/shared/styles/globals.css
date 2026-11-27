@@ -485,8 +485,21 @@ html::-webkit-scrollbar-track {
   }
 }
 
-.dialog-footer-start {
-  justify-content: flex-start;
+/* Confirmation dialogs: actions bottom-right with no divider; content that scrolls fades out
+   beneath them. */
+.dialog-body .dialog-footer.dialog-footer-compact {
+  margin-top: 0;
+  border-top: 0;
+  padding-block: 0 var(--dialog-pad);
+}
+
+.dialog-body .dialog-footer.dialog-footer-compact::before {
+  content: "";
+  position: absolute;
+  inset: auto 0 100%;
+  height: 1rem;
+  pointer-events: none;
+  background: linear-gradient(transparent, var(--color-surface-raised));
 }
 
 /**

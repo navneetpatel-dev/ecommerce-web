@@ -26,9 +26,6 @@ export const vendorTeamStyles = {
   ownerIcon: "h-4 w-4 shrink-0 text-brand",
   staffIcon: "h-4 w-4 shrink-0 text-ink-muted",
   primaryOwnerNote: "text-xs italic text-ink-faint",
-  removeBtn:
-    "h-8 px-2 text-destructive hover:bg-destructive/10 hover:text-destructive",
-  removeBtnIcon: "mr-1 h-4 w-4",
   dialogError: "mb-4 rounded-md bg-destructive/10 p-3 text-xs text-destructive",
   dialogStack: "space-y-4",
 } as const;

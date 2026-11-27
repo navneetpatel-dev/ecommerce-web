@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { TableRowAction } from "@/shared/components/DataTable/TableRowActions.component";
+import { CircleX } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { AdminConfirmAction } from "../../shared/AdminConfirmAction.component";
@@ -52,37 +52,32 @@ export function VendorApprovalRowActions({
 
   return (
     <>
-      <TableRowAction>
-        <VendorKycDocumentsMenuAction
-          vendorId={vendor.id}
-          vendorName={vendor.businessName}
-          onClose={onRefresh}
-        />
-      </TableRowAction>
-      <TableRowAction>
-        <AdminApproveVendorAction
-          vendorName={vendorDisplayName}
-          onApprove={handleApprove}
-          disabled={!vendor.kycComplete || rowBusy}
-          disabledHint={
-            !vendor.kycComplete ? LABELS.kycApproveBlocked : undefined
-          }
-        />
-      </TableRowAction>
-      <TableRowAction destructive>
-        <AdminConfirmAction
-          label={LABELS.reject}
-          tone="danger"
-          dialogVariant="danger"
-          title={LABELS.confirmRejectVendorTitle}
-          description={rejectDescription}
-          confirmLabel={LABELS.reject}
-          requireReason
-          reasonHint={LABELS.enterRejectionReason}
-          onConfirm={handleReject}
-          disabled={rowBusy}
-        />
-      </TableRowAction>
+      <VendorKycDocumentsMenuAction
+        vendorId={vendor.id}
+        vendorName={vendor.businessName}
+        onClose={onRefresh}
+      />
+      <AdminApproveVendorAction
+        vendorName={vendorDisplayName}
+        onApprove={handleApprove}
+        disabled={!vendor.kycComplete || rowBusy}
+        disabledHint={
+          !vendor.kycComplete ? LABELS.kycApproveBlocked : undefined
+        }
+      />
+      <AdminConfirmAction
+        label={LABELS.reject}
+        icon={CircleX}
+        tone="danger"
+        dialogVariant="danger"
+        title={LABELS.confirmRejectVendorTitle}
+        description={rejectDescription}
+        confirmLabel={LABELS.reject}
+        requireReason
+        reasonHint={LABELS.enterRejectionReason}
+        onConfirm={handleReject}
+        disabled={rowBusy}
+      />
     </>
   );
 }

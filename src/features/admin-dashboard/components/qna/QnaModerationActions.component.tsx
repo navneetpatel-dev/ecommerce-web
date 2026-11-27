@@ -1,3 +1,4 @@
+import { CircleX } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { productQnaApi } from "@/features/productQna";
@@ -47,6 +48,7 @@ export function QnaModerationActions({
       />
       <AdminConfirmAction
         label={LABELS.reject}
+        icon={CircleX}
         dialogVariant="danger"
         requireReason
         reasonLabel={LABELS.rejectionNote}

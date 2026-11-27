@@ -4,6 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { LABELS } from "@/shared/constants/labels";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
+import { notifyError } from "@/shared/stores/notifications/errorToast.store";
 import { notificationsApi } from "../../api/notifications/notifications.api";
 
 /** Re-queues one failed email from the log; `onDone` reloads the list. */
@@ -19,7 +20,13 @@ export function useResendNotification(onDone: () => void) {
     },
     onError: (failure) => {
       setNotice(null);
-      setError(getApiErrorMessage(failure, LABELS.notificationResendFailed));
+      const message = getApiErrorMessage(
+        failure,
+        LABELS.notificationResendFailed,
+      );
+      setError(message);
+      // The row menu has no room for inline text, so the failure shows as a toast.
+      notifyError(message);
     },
   });
 

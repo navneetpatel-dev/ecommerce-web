@@ -34,13 +34,11 @@ export function ConfirmDeleteDialog({
       description={description}
       primaryAction={{
         label: LABELS.deleteConfirm,
-        variant: "destructive",
         loading: isPending,
         onClick: onConfirm,
       }}
       secondaryAction={{
         label: LABELS.keepIt,
-        variant: "outline",
         onClick: handleKeep,
       }}
     />

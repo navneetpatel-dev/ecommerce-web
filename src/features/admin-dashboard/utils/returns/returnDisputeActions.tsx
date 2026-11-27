@@ -1,3 +1,4 @@
+import { Gavel, CircleX } from "lucide-react";
 import type { ReactNode } from "react";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
@@ -19,6 +20,7 @@ export function buildReturnDisputeActions(
     <AdminConfirmAction
       key="uphold-dispute"
       label={LABELS.upholdDispute}
+      icon={Gavel}
       dialogVariant="warning"
       title={LABELS.upholdDisputeTitle}
       description={formatLabel(LABELS.upholdDisputeBody, {
@@ -37,6 +39,7 @@ export function buildReturnDisputeActions(
     <AdminConfirmAction
       key="reject-dispute"
       label={LABELS.rejectDispute}
+      icon={CircleX}
       dialogVariant="danger"
       title={LABELS.rejectDisputeTitle}
       description={LABELS.rejectDisputeBody}

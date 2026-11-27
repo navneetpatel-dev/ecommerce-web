@@ -1,12 +1,11 @@
 "use client";
 
 import { Pencil } from "lucide-react";
-import { Button } from "@/shared/components/ui/button";
+import { RowActionButton } from "@/shared/components/DataTable/RowActions/RowActionButton.component";
 import { FormFieldFrame } from "@/shared/components/forms";
 import { Input } from "@/shared/components/ui/input";
 import { StatusDialog } from "@/shared/components/dialogs/StatusDialog.component";
 import { LABELS } from "@/shared/constants/labels";
-import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
 import type { AdminDataRow } from "../../hooks/shared/useAdminDataList.hook";
 import { useAdminEditShippingZoneAction } from "../../hooks/shipping/useAdminEditShippingZoneAction.hook";
 import { adminEditShippingZoneActionStyles as styles } from "../../styles/shipping/adminEditShippingZoneAction.styles";
@@ -45,18 +44,16 @@ export function AdminEditShippingZoneAction({
 
   return (
     <>
-      <Button
-        size="sm"
-        variant="outline"
-        className={tableMenuButtonClass("edit")}
+      <RowActionButton
+        kind="edit"
+        icon={Pencil}
+        label={LABELS.edit}
         disabled={loading}
         onClick={openDialog}
-      >
-        <Pencil strokeWidth={2.25} aria-hidden />
-        <span>{LABELS.edit}</span>
-      </Button>
+      />
 
       <StatusDialog
+        icon={Pencil}
         open={open}
         onOpenChange={handleOpenChange}
         variant="info"

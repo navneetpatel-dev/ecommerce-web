@@ -110,6 +110,8 @@ All React components across `web/` must adhere to strict separation of concerns 
 - Do not render dates/times with bare `toLocaleDateString()` / `toLocaleTimeString()` / `toLocaleString()` — use `formatDate` / `formatTime` / `formatDateTime`, or pass a locale. `scripts/check-date-locale.mjs` enforces it.
 - Shared, repeated a11y primitives live in `shared/components/a11y`, `shared/hooks/a11y`, `shared/utils/a11y` and `shared/styles/a11y`.
 - Result counts that change without a navigation (filtering, paging) must be a `role="status"` region — `PaginationResultSummary` and the listing `SortBar` already are.
+- Row actions go in the ⋮ menu (`TableRowActions`) as `RowActionButton`s with a `label`, `icon` and `kind` (`view`/`edit` become the top tiles, `danger` sorts last in red). A raw button there is invisible, and inline error text is too: use a toast or a dialog. `scripts/check-row-actions.mjs` enforces it.
+- Confirmations are `StatusDialog`s: pick the `variant` (`danger`, `warning`, `success`, `info`), which colours the icon and confirm button, and pass an `icon` that names the action. Do not hand-build a confirmation from `DialogContent`; `scripts/check-confirm-dialogs.mjs` checks by file name.
 - Data tables get their structure from `DataTable`: every header cell is `scope="col"` and the table is named by its `title`. Do not hand-roll a table.
 - Reversible destructive actions offer undo through a toast callback action (`notifySuccess(message, { label, onClick })`); reserve confirm dialogs for irreversible ones.
 - Long forms call `useUnsavedChanges(form.formState.isDirty)`. Forms use `mode: "onTouched"` so errors appear on blur, not only on submit.

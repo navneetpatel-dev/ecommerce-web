@@ -22,7 +22,7 @@ export function RevokeOtherSessionsDialog({
     <StatusDialog
       open={open}
       onOpenChange={handleOpenChange}
-      variant="warning"
+      variant="danger"
       icon={LogOut}
       title="Sign out other devices?"
       description="All sessions except this one will be ended. Those devices will need to sign in again."

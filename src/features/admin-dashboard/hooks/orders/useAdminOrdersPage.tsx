@@ -1,5 +1,6 @@
 "use client";
 
+import { CircleX } from "lucide-react";
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { useSearchParams } from "next/navigation";
 import { useUrlQueryState } from "@/shared/hooks/navigation/useUrlQueryState.hook";
@@ -117,7 +118,7 @@ export function useAdminOrdersPage(
           {isPending && (
             <AdminConfirmAction
               label={LABELS.confirm}
-              dialogVariant="info"
+              dialogVariant="success"
               tone="success"
               title={LABELS.confirmOrderTitle}
               description={formatLabel(LABELS.confirmOrderBody, { name })}
@@ -127,8 +128,8 @@ export function useAdminOrdersPage(
           {canCancel && (
             <AdminConfirmAction
               label={LABELS.cancelOrder}
+              icon={CircleX}
               dialogVariant="danger"
-              confirmVariant="destructive"
               tone="danger"
               title={LABELS.confirmCancelOrderTitle}
               description={LABELS.confirmCancelOrderBody}

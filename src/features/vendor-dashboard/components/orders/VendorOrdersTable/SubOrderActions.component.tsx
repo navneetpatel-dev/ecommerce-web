@@ -1,5 +1,6 @@
 "use client";
 
+import { CircleX, Download, Pencil } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import {
   Select,
@@ -7,15 +8,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select";
-import {
-  TableRowActions,
-  TableRowAction,
-} from "@/shared/components/DataTable/TableRowActions.component";
-import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
+import { TableRowActions } from "@/shared/components/DataTable/TableRowActions.component";
+import { RowActionButton } from "@/shared/components/DataTable/RowActions/RowActionButton.component";
 import { LABELS } from "@/shared/constants/labels";
 import { AdminConfirmAction } from "@/features/admin-dashboard";
 import { SUB_ORDER_STATUS_OPTION_LABELS } from "../../../constants/orders/subOrderStatuses";
 import { useSubOrderActions } from "../../../hooks/orders/useSubOrderActions.hook";
+import { useSubOrderEditorFocus } from "../../../hooks/orders/useSubOrderEditorFocus.hook";
 import { ShipTrackingNumberFields } from "./ShipTrackingNumberFields.component";
 import { SubOrderStatusOptions } from "./SubOrderStatusOptions.component";
 import { VENDOR_ORDERS_TABLE_STYLES } from "../../../styles/orders/vendorOrdersTable.styles";
@@ -39,6 +38,7 @@ interface SubOrderActionsProps {
 export function SubOrderActions(props: SubOrderActionsProps) {
   const { canDownloadInvoice = false, statusError = null } = props;
   const actions = useSubOrderActions(props);
+  const rootRef = useSubOrderEditorFocus(actions.isEditing);
   const showTracking = actions.pendingShipment || actions.shipOnly;
 
   const error = statusError ? (
@@ -49,44 +49,34 @@ export function SubOrderActions(props: SubOrderActionsProps) {
 
   if (!actions.isEditing) {
     return (
-      <div className={VENDOR_ORDERS_TABLE_STYLES.actionsRoot}>
+      <div ref={rootRef} className={VENDOR_ORDERS_TABLE_STYLES.actionsRoot}>
         <TableRowActions>
           {canDownloadInvoice ? (
-            <TableRowAction>
-              <Button
-                size="sm"
-                variant="outline"
-                className={tableMenuButtonClass("neutral")}
-                loading={actions.invoicePending}
-                onClick={actions.handleDownloadInvoice}
-              >
-                {LABELS.downloadTaxInvoice}
-              </Button>
-            </TableRowAction>
+            <RowActionButton
+              icon={Download}
+              label={LABELS.downloadTaxInvoice}
+              loading={actions.invoicePending}
+              onClick={actions.handleDownloadInvoice}
+            />
           ) : null}
           {actions.canEditStatus ? (
-            <TableRowAction>
-              <Button
-                size="sm"
-                variant="outline"
-                className={tableMenuButtonClass("edit")}
-                onClick={actions.startEditing}
-              >
-                {LABELS.updateStatus}
-              </Button>
-            </TableRowAction>
+            <RowActionButton
+              kind="edit"
+              icon={Pencil}
+              label={LABELS.updateStatus}
+              onClick={actions.startEditing}
+            />
           ) : null}
           {actions.canCancel ? (
-            <TableRowAction>
-              <AdminConfirmAction
-                label={LABELS.cancelSubOrder}
-                tone="danger"
-                dialogVariant="danger"
-                title={LABELS.confirmCancelSubOrderTitle}
-                description={LABELS.confirmCancelSubOrderBody}
-                onConfirm={actions.confirmCancel}
-              />
-            </TableRowAction>
+            <AdminConfirmAction
+              label={LABELS.cancelSubOrder}
+              icon={CircleX}
+              tone="danger"
+              dialogVariant="danger"
+              title={LABELS.confirmCancelSubOrderTitle}
+              description={LABELS.confirmCancelSubOrderBody}
+              onConfirm={actions.confirmCancel}
+            />
           ) : null}
         </TableRowActions>
         {actions.invoiceError ? (
@@ -101,7 +91,7 @@ export function SubOrderActions(props: SubOrderActionsProps) {
 
   if (showTracking) {
     return (
-      <div className={VENDOR_ORDERS_TABLE_STYLES.actionsRoot}>
+      <div ref={rootRef} className={VENDOR_ORDERS_TABLE_STYLES.actionsRoot}>
         <ShipTrackingNumberFields
           trackingId={actions.trackingId}
           onTrackingIdChange={actions.setTrackingId}
@@ -114,7 +104,7 @@ export function SubOrderActions(props: SubOrderActionsProps) {
   }
 
   return (
-    <div className={VENDOR_ORDERS_TABLE_STYLES.editorRoot}>
+    <div ref={rootRef} className={VENDOR_ORDERS_TABLE_STYLES.editorRoot}>
       <div className={VENDOR_ORDERS_TABLE_STYLES.editorActions}>
         {actions.otherStatuses.length > 0 ? (
           <Select onValueChange={actions.handleStatusSelect}>

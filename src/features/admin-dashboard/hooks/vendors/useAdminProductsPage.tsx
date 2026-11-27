@@ -1,5 +1,6 @@
 "use client";
 
+import { ArchiveRestore } from "lucide-react";
 import { useCallback, useState, type ReactNode } from "react";
 import { useSearchParams } from "next/navigation";
 import {
@@ -145,7 +146,8 @@ export function useAdminProductsPage(): AdminProductsPageModel {
         return (
           <AdminConfirmAction
             label={LABELS.reactivateProduct}
-            dialogVariant="info"
+            icon={ArchiveRestore}
+            dialogVariant="success"
             tone="success"
             title={LABELS.confirmReactivateProductTitle}
             description={formatLabel(LABELS.confirmReactivateProductBody, {

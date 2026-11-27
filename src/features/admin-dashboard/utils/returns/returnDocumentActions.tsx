@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
-import { Button } from "@/shared/components/ui/button";
+import { Download } from "lucide-react";
+import { RowActionButton } from "@/shared/components/DataTable/RowActions/RowActionButton.component";
 import { LABELS } from "@/shared/constants/labels";
 import { returnsApi } from "@/features/returns";
 import { notifyError } from "@/shared/stores/notifications/errorToast.store";
@@ -27,28 +28,22 @@ export function buildReturnDocumentActions(row: AdminDataRow): ReactNode[] {
 
   if (row.creditNoteNumber) {
     buttons.push(
-      <Button
+      <RowActionButton
         key="cn"
-        type="button"
-        variant="outline"
-        size="sm"
+        icon={Download}
+        label={LABELS.downloadCreditNote}
         onClick={handleDownloadCreditNote}
-      >
-        {LABELS.downloadCreditNote}
-      </Button>,
+      />,
     );
   }
   if (row.debitNoteNumber) {
     buttons.push(
-      <Button
+      <RowActionButton
         key="dn"
-        type="button"
-        variant="outline"
-        size="sm"
+        icon={Download}
+        label={LABELS.downloadDebitNote}
         onClick={handleDownloadDebitNote}
-      >
-        {LABELS.downloadDebitNote}
-      </Button>,
+      />,
     );
   }
   return buttons;

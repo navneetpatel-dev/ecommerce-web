@@ -1,19 +1,27 @@
-import { Archive, Check, Trash2, Ban, Play } from "lucide-react";
+import {
+  Archive,
+  Check,
+  Trash2,
+  Ban,
+  Play,
+  type LucideIcon,
+} from "lucide-react";
 import type { StatusDialogVariant } from "@/shared/components/dialogs/StatusDialog.component";
 import type { AdminActionTone } from "./adminActionTone";
 
-export function renderToneIcon(tone: AdminActionTone) {
+/** The icon an action gets when its caller does not name a better one. */
+export function toneIcon(tone: AdminActionTone): LucideIcon {
   switch (tone) {
     case "archive":
-      return <Archive strokeWidth={2.25} aria-hidden />;
+      return Archive;
     case "danger":
-      return <Trash2 strokeWidth={2.25} aria-hidden />;
+      return Trash2;
     case "success":
-      return <Check strokeWidth={2.25} aria-hidden />;
+      return Check;
     case "neutral":
-      return <Ban strokeWidth={2.25} aria-hidden />;
+      return Ban;
     default:
-      return <Play strokeWidth={2.25} aria-hidden />;
+      return Play;
   }
 }
 

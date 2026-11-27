@@ -35,7 +35,6 @@ export function DeleteAddressDialog({
       }}
       primaryAction={{
         label: "Delete",
-        variant: "destructive",
         loading: deleting,
         onClick: onConfirm,
       }}

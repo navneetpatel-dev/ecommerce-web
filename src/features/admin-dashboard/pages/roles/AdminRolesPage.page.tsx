@@ -10,9 +10,11 @@ import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { ShieldCheck } from "lucide-react";
-import { DataTable, type DataTableColumn } from "@/shared/components/DataTable";
-import { TableRowAction } from "@/shared/components/DataTable/TableRowActions.component";
-import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
+import {
+  DataTable,
+  RowActionButton,
+  type DataTableColumn,
+} from "@/shared/components/DataTable";
 import { AdminConfirmAction } from "../../components/shared/AdminConfirmAction.component";
 import { RolePermissionsDialog } from "../../components/roles/RolePermissionsDialog/index";
 import { RolesFilterBar } from "../../components/roles/RolesFilterBar.component";
@@ -93,34 +95,25 @@ function AdminRolesContent() {
     const editRole = () => page.setEditingRoleId(role.id);
 
     const deleteAction = !role.isSystemRole ? (
-      <TableRowAction destructive>
-        <AdminConfirmAction
-          label={LABELS.delete}
-          dialogVariant="danger"
-          tone="danger"
-          title={LABELS.confirmDeleteRoleTitle}
-          description={formatLabel(LABELS.confirmDeleteRoleBody, {
-            name: role.name,
-          })}
-          onConfirm={deleteRole}
-        />
-      </TableRowAction>
+      <AdminConfirmAction
+        label={LABELS.delete}
+        dialogVariant="danger"
+        tone="danger"
+        title={LABELS.confirmDeleteRoleTitle}
+        description={formatLabel(LABELS.confirmDeleteRoleBody, {
+          name: role.name,
+        })}
+        onConfirm={deleteRole}
+      />
     ) : null;
 
     return (
       <>
-        <TableRowAction>
-          <Button
-            type="button"
-            size="sm"
-            variant="outline"
-            className={tableMenuButtonClass("edit")}
-            onClick={editRole}
-          >
-            <ShieldCheck strokeWidth={2.25} aria-hidden />
-            <span>{LABELS.managePermissions}</span>
-          </Button>
-        </TableRowAction>
+        <RowActionButton
+          icon={ShieldCheck}
+          label={LABELS.managePermissions}
+          onClick={editRole}
+        />
         {deleteAction}
       </>
     );

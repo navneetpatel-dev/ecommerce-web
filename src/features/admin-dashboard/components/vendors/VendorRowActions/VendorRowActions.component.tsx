@@ -1,5 +1,6 @@
 "use client";
 
+import { RotateCcw } from "lucide-react";
 import type { ReactNode } from "react";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
@@ -31,7 +32,8 @@ export function VendorRowActions({ row, onReload }: VendorRowActionsProps) {
       {canManage && row.status === "SUSPENDED" ? (
         <AdminConfirmAction
           label={LABELS.unsuspend}
-          dialogVariant="info"
+          icon={RotateCcw}
+          dialogVariant="success"
           tone="neutral"
           title={LABELS.confirmUnsuspendVendorTitle}
           description={formatLabel(LABELS.confirmUnsuspendVendorBody, { name })}

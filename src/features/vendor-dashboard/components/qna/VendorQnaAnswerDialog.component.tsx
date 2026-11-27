@@ -1,5 +1,6 @@
 "use client";
 
+import { MessageSquare } from "lucide-react";
 import { FormFieldFrame } from "@/shared/components/forms";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { StatusDialog } from "@/shared/components/dialogs/StatusDialog.component";
@@ -38,6 +39,7 @@ export function VendorQnaAnswerDialog({
 
   return (
     <StatusDialog
+      icon={MessageSquare}
       open={open}
       onOpenChange={handleOpenChange}
       variant="info"

@@ -1,7 +1,7 @@
 "use client";
 
 import { CheckCircle2 } from "lucide-react";
-import { Button } from "@/shared/components/ui/button";
+import { RowActionButton } from "@/shared/components/DataTable/RowActions/RowActionButton.component";
 import { Input } from "@/shared/components/ui/input";
 import { Textarea } from "@/shared/components/ui/textarea";
 import {
@@ -67,10 +67,11 @@ export function AdminMarkPayoutPaidAction({
 
   return (
     <>
-      <Button size="sm" variant="outline" onClick={openDialog}>
-        <CheckCircle2 className={styles.icon} aria-hidden="true" />
-        {LABELS.markPayoutPaid}
-      </Button>
+      <RowActionButton
+        icon={CheckCircle2}
+        label={LABELS.markPayoutPaid}
+        onClick={openDialog}
+      />
       <StatusDialog
         open={open}
         onOpenChange={handleOpenChange}

@@ -1,19 +1,18 @@
 "use client";
 
 import { useCallback } from "react";
-import { Button } from "@/shared/components/ui/button";
+import { Check, Pencil, Trash2 } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
 import { PROMO_BANNER_STATUS } from "@/shared/constants/statuses";
 import type { PromoBanner } from "@/shared/api/types";
-import {
-  TableRowActions,
-  TableRowAction,
-} from "@/shared/components/DataTable/TableRowActions.component";
-import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
+import { TableRowActions } from "@/shared/components/DataTable/TableRowActions.component";
+import { RowActionButton } from "@/shared/components/DataTable/RowActions/RowActionButton.component";
 import { promoBannersListStyles } from "./adminPromoBanners.styles";
 
 interface PromoBannerRowActionsProps {
   banner: PromoBanner;
+  /** This banner is being activated right now. */
+  activating: boolean;
   onStartEdit: (banner: PromoBanner) => void;
   onActivate: (banner: PromoBanner) => void;
   onDelete: (banner: PromoBanner) => void;
@@ -22,6 +21,7 @@ interface PromoBannerRowActionsProps {
 /** Edit / activate / delete actions for one promo banner row. */
 export function PromoBannerRowActions({
   banner,
+  activating,
   onStartEdit,
   onActivate,
   onDelete,
@@ -40,38 +40,26 @@ export function PromoBannerRowActions({
 
   return (
     <TableRowActions className={promoBannersListStyles.actions}>
-      <TableRowAction>
-        <Button
-          size="sm"
-          variant="outline"
-          className={tableMenuButtonClass("edit")}
-          onClick={handleEdit}
-        >
-          {LABELS.editPromoBanner}
-        </Button>
-      </TableRowAction>
+      <RowActionButton
+        kind="edit"
+        icon={Pencil}
+        label={LABELS.editPromoBanner}
+        onClick={handleEdit}
+      />
       {banner.status !== PROMO_BANNER_STATUS.ACTIVE ? (
-        <TableRowAction>
-          <Button
-            size="sm"
-            variant="outline"
-            className={tableMenuButtonClass("success")}
-            onClick={handleActivate}
-          >
-            {PROMO_BANNER_STATUS.ACTIVE}
-          </Button>
-        </TableRowAction>
+        <RowActionButton
+          icon={Check}
+          label={LABELS.activate}
+          loading={activating}
+          onClick={handleActivate}
+        />
       ) : null}
-      <TableRowAction destructive>
-        <Button
-          size="sm"
-          variant="outline"
-          className={tableMenuButtonClass("danger")}
-          onClick={handleDelete}
-        >
-          {LABELS.delete}
-        </Button>
-      </TableRowAction>
+      <RowActionButton
+        kind="danger"
+        icon={Trash2}
+        label={LABELS.delete}
+        onClick={handleDelete}
+      />
     </TableRowActions>
   );
 }

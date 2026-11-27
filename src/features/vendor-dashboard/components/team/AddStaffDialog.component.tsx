@@ -1,5 +1,6 @@
 "use client";
 
+import { UserPlus } from "lucide-react";
 import { FormFieldFrame } from "@/shared/components/forms";
 import { Input } from "@/shared/components/ui/input";
 import { StatusDialog } from "@/shared/components/dialogs/StatusDialog.component";
@@ -35,6 +36,7 @@ export function AddStaffDialog({
 
   return (
     <StatusDialog
+      icon={UserPlus}
       open={open}
       onOpenChange={handleOpenChange}
       variant="info"

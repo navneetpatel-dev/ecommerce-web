@@ -62,6 +62,7 @@ export function CartConfirmAction({
       </Button>
 
       <StatusDialog
+        icon={Icon}
         open={open}
         onOpenChange={setOpen}
         title={title}
@@ -69,13 +70,11 @@ export function CartConfirmAction({
         variant="danger"
         secondaryAction={{
           label: LABELS.cancel,
-          variant: "outline",
           disabled: pending,
           onClick: handleClose,
         }}
         primaryAction={{
           label: confirmLabel,
-          variant: "destructive",
           loading: pending,
           onClick: handleConfirm,
         }}

@@ -2,7 +2,6 @@
 
 import { useState, useMemo } from "react";
 import { Download } from "lucide-react";
-import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import {
   Select,
@@ -13,9 +12,11 @@ import {
 } from "@/shared/components/ui/select";
 import { FormFieldFrame } from "@/shared/components/forms";
 import { CollapsibleTableFilters } from "@/shared/components/filters";
-import { TableRowAction } from "@/shared/components/DataTable/TableRowActions.component";
-import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
-import { DataTable, type DataTableColumn } from "@/shared/components/DataTable";
+import {
+  DataTable,
+  RowActionButton,
+  type DataTableColumn,
+} from "@/shared/components/DataTable";
 import { LABELS } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/dom/cn";
 import { formatPoints } from "@/shared/utils/formatting/formatPoints";
@@ -226,18 +227,11 @@ export function WalletTransactionsTable({
           if (!rechargeId || !onDownloadInvoice) return null;
           const handleDownload = () => onDownloadInvoice(rechargeId);
           return (
-            <TableRowAction>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                className={tableMenuButtonClass("neutral")}
-                onClick={handleDownload}
-              >
-                <Download strokeWidth={2.25} aria-hidden />
-                <span>{LABELS.walletDownloadRechargeInvoice}</span>
-              </Button>
-            </TableRowAction>
+            <RowActionButton
+              icon={Download}
+              label={LABELS.walletDownloadRechargeInvoice}
+              onClick={handleDownload}
+            />
           );
         }}
         actionsHeader={LABELS.actions}

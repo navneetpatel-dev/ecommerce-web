@@ -1,4 +1,5 @@
-import { Button } from "@/shared/components/ui/button";
+import { RowActionButton } from "@/shared/components/DataTable/RowActions/RowActionButton.component";
+import { PackageCheck } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
 
 interface RtoReceivedActionProps {
@@ -19,14 +20,11 @@ export function RtoReceivedAction({
   const handleClick = () => onMarkReceived(shipmentId);
 
   return (
-    <Button
-      type="button"
-      size="sm"
-      variant="outline"
-      disabled={isPending}
+    <RowActionButton
+      icon={PackageCheck}
+      label={LABELS.markRtoReceived}
+      loading={isPending}
       onClick={handleClick}
-    >
-      {LABELS.markRtoReceived}
-    </Button>
+    />
   );
 }

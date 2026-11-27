@@ -1,16 +1,8 @@
 "use client";
 
 import { LockKeyhole } from "lucide-react";
-import { Button } from "@/shared/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/shared/components/ui/dialog";
 import { LABELS } from "@/shared/constants/labels";
-import { loginRequiredDialogStyles as styles } from "../../styles/dialogs/dialogComponents.styles";
+import { StatusDialog } from "./StatusDialog.component";
 
 interface LoginRequiredDialogProps {
   open: boolean;
@@ -25,8 +17,8 @@ interface LoginRequiredDialogProps {
 }
 
 /**
- * The sign-in interruption. Actions stack full-width in priority order
- * (Log in → Create an account → Not now) so none of them wraps on its own.
+ * The sign-in interruption. On phones the actions stack in priority order
+ * (Log in → Create an account → Not now).
  */
 export function LoginRequiredDialog({
   open,
@@ -39,42 +31,16 @@ export function LoginRequiredDialog({
   onCloseAutoFocus,
 }: LoginRequiredDialogProps) {
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent
-        className={styles.content}
-        onCloseAutoFocus={onCloseAutoFocus}
-      >
-        <DialogHeader className={styles.header}>
-          <span className={styles.iconWrap} aria-hidden>
-            <LockKeyhole className={styles.icon} />
-          </span>
-          <DialogTitle className={styles.title}>{title}</DialogTitle>
-          <DialogDescription className={styles.description}>
-            {message}
-          </DialogDescription>
-        </DialogHeader>
-        <div className={styles.actions}>
-          <Button type="button" className={styles.action} onClick={onLogin}>
-            {LABELS.logIn}
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            className={styles.action}
-            onClick={onRegister}
-          >
-            {LABELS.createAccount}
-          </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            className={styles.action}
-            onClick={onCancel}
-          >
-            {LABELS.signInPromptNotNow}
-          </Button>
-        </div>
-      </DialogContent>
-    </Dialog>
+    <StatusDialog
+      open={open}
+      onOpenChange={onOpenChange}
+      icon={LockKeyhole}
+      title={title}
+      description={message}
+      onCloseAutoFocus={onCloseAutoFocus}
+      extraAction={{ label: LABELS.signInPromptNotNow, onClick: onCancel }}
+      secondaryAction={{ label: LABELS.createAccount, onClick: onRegister }}
+      primaryAction={{ label: LABELS.logIn, onClick: onLogin }}
+    />
   );
 }

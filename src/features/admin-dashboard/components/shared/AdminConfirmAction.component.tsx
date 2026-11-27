@@ -1,15 +1,15 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { Button } from "@/shared/components/ui/button";
+import type { LucideIcon } from "lucide-react";
+import { RowActionButton } from "@/shared/components/DataTable/RowActions/RowActionButton.component";
 import {
   StatusDialog,
   type StatusDialogVariant,
 } from "@/shared/components/dialogs/StatusDialog.component";
-import { DisabledActionHint } from "@/shared/components/forms/DisabledActionHint.component";
 import { LABELS } from "@/shared/constants/labels";
 import type { AdminActionTone } from "../../utils/shared/adminActionTone";
-import { renderToneIcon } from "../../utils/shared/adminConfirmActionIcon";
+import { toneIcon } from "../../utils/shared/adminConfirmActionIcon";
 import { useAdminConfirmAction } from "../../hooks/shared/useAdminConfirmAction.hook";
 import { ConfirmReasonField } from "./AdminConfirmAction/ConfirmReasonField.component";
 import { adminConfirmActionStyles as styles } from "../../styles/shared/adminConfirmAction.styles";
@@ -25,7 +25,6 @@ interface AdminConfirmActionProps {
   /** Visual tone for the table trigger chip. */
   tone?: AdminActionTone;
   triggerVariant?: ButtonVariant;
-  confirmVariant?: ButtonVariant;
   confirmLabel?: string;
   triggerClassName?: string;
   requireReason?: boolean;
@@ -35,11 +34,12 @@ interface AdminConfirmActionProps {
   disabled?: boolean;
   /** Shown when the trigger is disabled (e.g. KYC incomplete). */
   disabledHint?: string;
-  showIcon?: boolean;
+  /** Overrides the icon the tone would pick. */
+  icon?: LucideIcon;
   inline?: boolean;
 }
 
-/** Button + StatusDialog confirmation for admin list actions. */
+/** Row action (or button) + StatusDialog confirmation for admin list actions. */
 export function AdminConfirmAction({
   label,
   title,
@@ -47,7 +47,6 @@ export function AdminConfirmAction({
   dialogVariant = "warning",
   tone,
   triggerVariant = "outline",
-  confirmVariant,
   confirmLabel,
   triggerClassName,
   requireReason = false,
@@ -56,7 +55,7 @@ export function AdminConfirmAction({
   onConfirm,
   disabled = false,
   disabledHint,
-  showIcon = true,
+  icon,
   inline = false,
 }: AdminConfirmActionProps) {
   const {
@@ -81,38 +80,13 @@ export function AdminConfirmAction({
     onConfirm,
   });
 
-  const primaryVariant =
-    confirmVariant ?? (dialogVariant === "danger" ? "destructive" : "default");
   const triggerButtonClassName = styles.triggerButton(
     resolvedTone,
     inline,
     triggerClassName,
   );
-  const triggerDisabled = disabled || loading;
-  const toneIcon = showIcon ? renderToneIcon(resolvedTone) : null;
-  const showDisabledHint = disabled && Boolean(disabledHint);
   const confirmButtonLabel = confirmLabel ?? label;
-
-  const triggerButton = (
-    <Button
-      size="sm"
-      variant={triggerVariant}
-      className={triggerButtonClassName}
-      disabled={triggerDisabled}
-      onClick={openTriggerDialog}
-    >
-      {toneIcon}
-      <span>{label}</span>
-    </Button>
-  );
-
-  const triggerElement = showDisabledHint ? (
-    <DisabledActionHint disabled message={disabledHint!} block>
-      {triggerButton}
-    </DisabledActionHint>
-  ) : (
-    triggerButton
-  );
+  const actionIcon = icon ?? toneIcon(resolvedTone);
 
   const reasonField = requireReason ? (
     <ConfirmReasonField
@@ -131,12 +105,22 @@ export function AdminConfirmAction({
 
   return (
     <>
-      {triggerElement}
+      <RowActionButton
+        label={label}
+        icon={actionIcon}
+        kind={resolvedTone === "danger" ? "danger" : "default"}
+        variant={triggerVariant}
+        className={triggerButtonClassName}
+        disabled={disabled || loading}
+        disabledHint={disabled ? disabledHint : undefined}
+        onClick={openTriggerDialog}
+      />
 
       <StatusDialog
         open={open}
         onOpenChange={onDialogOpenChange}
         variant={dialogVariant}
+        icon={actionIcon}
         title={title}
         description={description}
         secondaryAction={{
@@ -146,7 +130,6 @@ export function AdminConfirmAction({
         }}
         primaryAction={{
           label: confirmButtonLabel,
-          variant: primaryVariant,
           loading,
           disabled: reasonMissing,
           disabledHint: primaryDisabledHint,

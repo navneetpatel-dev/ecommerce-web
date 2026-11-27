@@ -19,17 +19,15 @@ export function DiscardChangesDialog({
     <StatusDialog
       open={open}
       onOpenChange={onOpenChange}
-      variant="warning"
+      variant="danger"
       title={LABELS.discardChangesTitle}
       description={LABELS.discardChangesBody}
       primaryAction={{
         label: LABELS.discardChanges,
-        variant: "destructive",
         onClick: onDiscard,
       }}
       secondaryAction={{
         label: LABELS.keepEditing,
-        variant: "outline",
         onClick: onKeepEditing,
       }}
     />

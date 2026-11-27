@@ -1,5 +1,6 @@
 "use client";
 
+import { Upload } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { FilePicker } from "@/shared/components/FileUpload/FilePicker.component";
 import { StatusDialog } from "@/shared/components/dialogs/StatusDialog.component";
@@ -46,6 +47,7 @@ export function VendorBulkImportDialog({
       </Button>
 
       <StatusDialog
+        icon={Upload}
         open={open}
         onOpenChange={handleOpenChange}
         variant="info"

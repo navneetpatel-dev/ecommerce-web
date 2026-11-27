@@ -3,7 +3,7 @@
 import { Images } from "lucide-react";
 import type { ReviewMediaItem } from "@/shared/api/types";
 import { MediaImage } from "@/shared/components/media/MediaImage.component";
-import { Button } from "@/shared/components/ui/button";
+import { RowActionButton } from "@/shared/components/DataTable/RowActions/RowActionButton.component";
 import {
   Dialog,
   DialogContent,
@@ -12,7 +12,6 @@ import {
   DialogTrigger,
 } from "@/shared/components/ui/dialog";
 import { LABELS } from "@/shared/constants/labels";
-import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { reviewMediaGalleryStyles as styles } from "../../styles/media/reviewMediaGallery.styles";
 
@@ -30,17 +29,12 @@ export function ReviewMediaModerationAction({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button
-          type="button"
-          size="sm"
-          variant="outline"
-          className={tableMenuButtonClass("neutral")}
-        >
-          <Images strokeWidth={2.25} aria-hidden />
-          <span>
-            {formatLabel(LABELS.reviewMediaModerate, { count: items.length })}
-          </span>
-        </Button>
+        <RowActionButton
+          icon={Images}
+          label={formatLabel(LABELS.reviewMediaModerate, {
+            count: items.length,
+          })}
+        />
       </DialogTrigger>
       <DialogContent
         className={styles.moderationContent}

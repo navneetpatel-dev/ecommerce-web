@@ -1,17 +1,11 @@
 "use client";
 
-import { cn } from "@/shared/utils/dom/cn";
 import { attentionStyles } from "@/shared/styles/attention.styles";
-import { Button } from "@/shared/components/ui/button";
-import { DisabledActionHint } from "@/shared/components/forms/DisabledActionHint.component";
-import {
-  TableRowActions,
-  TableRowAction,
-} from "@/shared/components/DataTable/TableRowActions.component";
+import { TableRowActions } from "@/shared/components/DataTable/TableRowActions.component";
+import { RowActionButton } from "@/shared/components/DataTable/RowActions/RowActionButton.component";
 import { Pencil, Trash2, Send, Images, Boxes, Eye } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
 import { PRODUCT_STATUS } from "@/shared/constants/statuses";
-import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
 import type { ProductRowActionsProps } from "../../../types/products/ProductsTable-types";
 
 /** Row/card kebab actions: submit, manage images, edit, delete. */
@@ -39,114 +33,55 @@ export function ProductActions(props: ProductRowActionsProps) {
   return (
     <TableRowActions>
       {onPreview ? (
-        <TableRowAction>
-          <Button
-            size="sm"
-            variant="outline"
-            type="button"
-            className={cn(
-              tableMenuButtonClass("neutral"),
-              attentionStyles.previewRow,
-            )}
-            onClick={handlePreview}
-          >
-            <Eye strokeWidth={2.25} aria-hidden />
-            <span>{LABELS.previewAsCustomer}</span>
-          </Button>
-        </TableRowAction>
+        <RowActionButton
+          kind="view"
+          icon={Eye}
+          label={LABELS.previewAsCustomer}
+          attentionClassName={attentionStyles.previewRow}
+          onClick={handlePreview}
+        />
       ) : null}
       {canSubmit ? (
-        <TableRowAction>
-          <DisabledActionHint
-            disabled={Boolean(isSubmitting)}
-            message={LABELS.submitForApproval}
-            block
-          >
-            <Button
-              size="sm"
-              variant="outline"
-              type="button"
-              className={cn(
-                tableMenuButtonClass("success"),
-                attentionStyles.submitRow,
-              )}
-              disabled={isSubmitting}
-              onClick={handleSubmit}
-            >
-              <Send strokeWidth={2.25} aria-hidden />
-              <span>{LABELS.submitForApproval}</span>
-            </Button>
-          </DisabledActionHint>
-        </TableRowAction>
+        <RowActionButton
+          icon={Send}
+          label={LABELS.submitForApproval}
+          attentionClassName={attentionStyles.submitRow}
+          loading={isSubmitting}
+          onClick={handleSubmit}
+        />
       ) : null}
       {onManageImages ? (
-        <TableRowAction>
-          <Button
-            size="sm"
-            variant="outline"
-            type="button"
-            className={cn(
-              tableMenuButtonClass("neutral"),
-              attentionStyles.imagesRow,
-            )}
-            onClick={handleManageImages}
-          >
-            <Images strokeWidth={2.25} aria-hidden />
-            <span>{LABELS.manageProductImages}</span>
-          </Button>
-        </TableRowAction>
+        <RowActionButton
+          icon={Images}
+          label={LABELS.manageProductImages}
+          attentionClassName={attentionStyles.imagesRow}
+          onClick={handleManageImages}
+        />
       ) : null}
       {onManageVariants ? (
-        <TableRowAction>
-          <Button
-            size="sm"
-            variant="outline"
-            type="button"
-            className={cn(
-              tableMenuButtonClass("neutral"),
-              attentionStyles.variantsRow,
-            )}
-            onClick={handleManageVariants}
-          >
-            <Boxes strokeWidth={2.25} aria-hidden />
-            <span>{LABELS.manageVariants}</span>
-          </Button>
-        </TableRowAction>
+        <RowActionButton
+          icon={Boxes}
+          label={LABELS.manageVariants}
+          attentionClassName={attentionStyles.variantsRow}
+          onClick={handleManageVariants}
+        />
       ) : null}
       {onEdit ? (
-        <TableRowAction>
-          <Button
-            size="sm"
-            variant="outline"
-            type="button"
-            className={tableMenuButtonClass("edit")}
-            onClick={handleEdit}
-          >
-            <Pencil strokeWidth={2.25} aria-hidden />
-            <span>{LABELS.edit}</span>
-          </Button>
-        </TableRowAction>
+        <RowActionButton
+          kind="edit"
+          icon={Pencil}
+          label={LABELS.edit}
+          onClick={handleEdit}
+        />
       ) : null}
       {onDelete ? (
-        <TableRowAction destructive>
-          <DisabledActionHint
-            disabled={Boolean(isDeleting)}
-            message={LABELS.deletingProductEllipsis}
-            block
-          >
-            <Button
-              size="sm"
-              variant="outline"
-              type="button"
-              className={tableMenuButtonClass("danger")}
-              disabled={isDeleting}
-              onClick={handleDelete}
-            >
-              <Trash2 strokeWidth={2.25} aria-hidden />
-              <span>{LABELS.delete}</span>
-            </Button>
-          </DisabledActionHint>
-        </TableRowAction>
+        <RowActionButton
+          kind="danger"
+          icon={Trash2}
+          label={LABELS.delete}
+          loading={isDeleting}
+          onClick={handleDelete}
+        />
       ) : null}
     </TableRowActions>
   );

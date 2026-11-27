@@ -3,6 +3,7 @@ export const dialogStyles = {
   closeButtonWrap: "flex shrink-0 items-center justify-end",
   closeButtonWrapFullscreen: "fixed right-3 top-3 z-[60]",
   closeButtonWrapDefault: "px-3 pt-3 pb-0",
+  closeButtonWrapCorner: "absolute right-3 top-3.5 z-20",
   portalWrap: "fixed inset-0 z-50 pointer-events-none",
   portalWrapFullscreen: "p-0",
   portalWrapDefault: "flex items-center justify-center p-4",

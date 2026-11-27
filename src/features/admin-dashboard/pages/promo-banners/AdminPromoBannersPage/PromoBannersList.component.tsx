@@ -25,6 +25,7 @@ interface PromoBannersListProps {
   onSaveEdit: () => void;
   onStartEdit: (banner: PromoBanner) => void;
   onActivate: (banner: PromoBanner) => void;
+  activatingId: string | null;
   onDelete: (banner: PromoBanner) => void;
 }
 
@@ -44,6 +45,7 @@ export function PromoBannersList({
   onSaveEdit,
   onStartEdit,
   onActivate,
+  activatingId,
   onDelete,
 }: PromoBannersListProps) {
   return (
@@ -127,6 +129,7 @@ export function PromoBannersList({
                 banner={banner}
                 onStartEdit={onStartEdit}
                 onActivate={onActivate}
+                activating={activatingId === banner.id}
                 onDelete={onDelete}
               />
             </div>

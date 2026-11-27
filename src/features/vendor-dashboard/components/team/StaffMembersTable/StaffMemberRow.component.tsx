@@ -1,9 +1,11 @@
 "use client";
 
 import { Trash2, ShieldCheck, UserCheck } from "lucide-react";
-import { Button } from "@/shared/components/ui/button";
+import { TableRowActions } from "@/shared/components/DataTable/TableRowActions.component";
+import { RowActionButton } from "@/shared/components/DataTable/RowActions/RowActionButton.component";
 import { Badge } from "@/shared/components/ui/badge";
 import { formatOrderDate } from "@/shared/utils/formatting/orderFormat";
+import { LABELS } from "@/shared/constants/labels";
 import { HOVER_ON_SURFACE_ROW } from "@/shared/styles/interaction.styles";
 import { cn } from "@/shared/utils/dom/cn";
 import type { StaffMember } from "../../../api/vendorStaff.api";
@@ -40,15 +42,14 @@ export function StaffMemberRow({ member, onRemove }: StaffMemberRowProps) {
         {member.isOwner ? (
           <span className={styles.primaryOwnerNote}>Primary Owner</span>
         ) : (
-          <Button
-            size="sm"
-            variant="ghost"
-            className={styles.removeBtn}
-            onClick={handleRemoveClick}
-          >
-            <Trash2 className={styles.removeBtnIcon} />
-            Remove
-          </Button>
+          <TableRowActions>
+            <RowActionButton
+              kind="danger"
+              icon={Trash2}
+              label={LABELS.remove}
+              onClick={handleRemoveClick}
+            />
+          </TableRowActions>
         )}
       </td>
     </tr>

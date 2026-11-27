@@ -1,5 +1,6 @@
 "use client";
 
+import { CircleX } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { StatusDialog } from "@/shared/components/dialogs/StatusDialog.component";
 import { LABELS } from "@/shared/constants/labels";
@@ -31,20 +32,19 @@ export function OrderCancelAction({ order }: OrderCancelActionProps) {
       </Button>
 
       <StatusDialog
+        icon={CircleX}
         open={open}
         onOpenChange={setOpen}
-        variant="warning"
+        variant="danger"
         title={LABELS.confirmCancelOrderTitle}
         description={LABELS.confirmCancelOrderBody}
         primaryAction={{
           label: LABELS.cancelOrder,
-          variant: "destructive",
           loading: isPending,
           onClick: () => void confirmCancel(),
         }}
         secondaryAction={{
           label: LABELS.keepOrder,
-          variant: "outline",
           onClick: () => setOpen(false),
         }}
       />

@@ -8,10 +8,7 @@ import type { RtoQueueShipment } from "../../api/shipping/shipping.api";
 import { RtoReceivedAction } from "../../components/shipping/RtoQueuePanel/RtoReceivedAction.component";
 import { rtoQueuePanelStyles as styles } from "../../styles/shipping/rtoQueuePanel.styles";
 
-export function buildRtoQueueColumns(
-  pendingShipmentId: string | null,
-  onMarkReceived: (shipmentId: string) => void,
-): DataTableColumn<RtoQueueShipment>[] {
+export function buildRtoQueueColumns(): DataTableColumn<RtoQueueShipment>[] {
   return [
     {
       id: "tracking",
@@ -42,18 +39,22 @@ export function buildRtoQueueColumns(
       className: styles.tableCellMuted,
       cell: (row) => row.failureReason ?? "—",
     },
-    {
-      id: "actions",
-      header: LABELS.actionsColumn,
-      truncate: false,
-      cell: (row) => (
-        <RtoReceivedAction
-          shipmentId={row.id}
-          status={row.status}
-          isPending={pendingShipmentId === row.id}
-          onMarkReceived={onMarkReceived}
-        />
-      ),
-    },
   ];
+}
+
+/** The ⋮ menu of one returning shipment. */
+export function buildRtoQueueActions(
+  pendingShipmentId: string | null,
+  onMarkReceived: (shipmentId: string) => void,
+) {
+  return function renderRtoActions(row: RtoQueueShipment) {
+    return (
+      <RtoReceivedAction
+        shipmentId={row.id}
+        status={row.status}
+        isPending={pendingShipmentId === row.id}
+        onMarkReceived={onMarkReceived}
+      />
+    );
+  };
 }

@@ -18,7 +18,9 @@ export const commissionInvoicesTableStyles = {
   mobileCardNumber: "font-mono text-[0.875rem] text-ink",
   mobileCardDate: "mt-1 text-[0.875rem] text-ink-muted",
   mobileCardAmount: "mt-2 font-mono text-[1rem] text-ink",
-  mobileCardButton: "mt-3",
+  mobileCardActions: "mt-3 flex justify-end",
+  srOnly: "sr-only",
   tableCellStandard: TABLE_DATA_CELL_CLASS,
+  tableCellActions: cn(TABLE_DATA_CELL_CLASS, "w-16 text-right"),
   tableCellMono: cn(TABLE_DATA_CELL_CLASS, "font-mono"),
 } as const;

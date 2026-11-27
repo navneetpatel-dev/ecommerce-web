@@ -3,13 +3,12 @@
 import type { KeyboardEvent, ReactNode, SyntheticEvent } from "react";
 import { Eye } from "lucide-react";
 import { TableCell, TableRow } from "@/shared/components/ui/table";
-import { Button } from "@/shared/components/ui/button";
 import { TableRowActions } from "@/shared/components/DataTable/TableRowActions.component";
+import { RowActionButton } from "@/shared/components/DataTable/RowActions/RowActionButton.component";
 import {
   TABLE_ACTIONS_CELL_CLASS,
   TABLE_DATA_CELL_CLASS,
 } from "@/shared/constants/table/table";
-import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
 import { LABELS } from "@/shared/constants/labels";
 import { Checkbox } from "@/shared/components/ui/checkbox";
 import { cn } from "@/shared/utils/dom/cn";
@@ -126,17 +125,12 @@ export function DataTableDesktopRow<T>({
         >
           <TableRowActions>
             {showViewButton && rowsInteractive ? (
-              <Button
-                type="button"
-                size="sm"
-                variant="outline"
-                className={tableMenuButtonClass("neutral")}
+              <RowActionButton
+                kind="view"
+                icon={Eye}
+                label={LABELS.view}
                 onClick={activateRow}
-                aria-label={LABELS.view}
-              >
-                <Eye className="size-3.5" strokeWidth={2} aria-hidden />
-                <span>{LABELS.view}</span>
-              </Button>
+              />
             ) : null}
             {actions?.(row, index)}
           </TableRowActions>

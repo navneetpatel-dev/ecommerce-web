@@ -3,9 +3,8 @@
 import type { KeyboardEvent, ReactNode } from "react";
 import { Eye } from "lucide-react";
 import { Checkbox } from "@/shared/components/ui/checkbox";
-import { Button } from "@/shared/components/ui/button";
 import { TableRowActions } from "@/shared/components/DataTable/TableRowActions.component";
-import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
+import { RowActionButton } from "@/shared/components/DataTable/RowActions/RowActionButton.component";
 import { LABELS } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/dom/cn";
 import { dataTableMobileStyles } from "../../styles/data-table/dataTable.styles";
@@ -58,11 +57,12 @@ export function DataTableMobileCards<T>({
           ? resolveCell(primary, row, index)
           : null;
 
+        const activateCard = () => onActivateRow(row, index);
         const rowActivationProps = rowsInteractive
           ? {
               role: "button" as const,
               tabIndex: 0,
-              onClick: () => onActivateRow(row, index),
+              onClick: activateCard,
               onKeyDown: (event: KeyboardEvent<HTMLElement>) =>
                 onRowKeyDown(event, row, index),
             }
@@ -154,17 +154,12 @@ export function DataTableMobileCards<T>({
               <div className="flex items-center justify-end gap-2 pt-2 border-t border-line">
                 <TableRowActions>
                   {showViewButton && rowsInteractive ? (
-                    <Button
-                      type="button"
-                      size="sm"
-                      variant="outline"
-                      className={tableMenuButtonClass("neutral")}
-                      onClick={() => onActivateRow(row, index)}
-                      aria-label={LABELS.view}
-                    >
-                      <Eye className="size-3.5" strokeWidth={2} aria-hidden />
-                      <span>{LABELS.view}</span>
-                    </Button>
+                    <RowActionButton
+                      kind="view"
+                      icon={Eye}
+                      label={LABELS.view}
+                      onClick={activateCard}
+                    />
                   ) : null}
                   {actions?.(row, index)}
                 </TableRowActions>

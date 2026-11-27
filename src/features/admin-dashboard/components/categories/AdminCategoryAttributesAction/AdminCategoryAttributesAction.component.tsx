@@ -1,7 +1,7 @@
 "use client";
 
 import { SlidersHorizontal } from "lucide-react";
-import { Button } from "@/shared/components/ui/button";
+import { RowActionButton } from "@/shared/components/DataTable/RowActions/RowActionButton.component";
 import {
   Dialog,
   DialogContent,
@@ -10,7 +10,6 @@ import {
   DialogTitle,
 } from "@/shared/components/ui/dialog";
 import { LABELS } from "@/shared/constants/labels";
-import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
 import { AttributesSortableList } from "./AttributesSortableList.component";
 import { AttributeFormFields } from "./AttributeFormFields.component";
 import { useAdminCategoryAttributesAction } from "../../../hooks/categories/useAdminCategoryAttributesAction.hook";
@@ -48,15 +47,11 @@ export function AdminCategoryAttributesAction({
 
   return (
     <>
-      <Button
-        size="sm"
-        variant="outline"
-        className={tableMenuButtonClass("neutral")}
+      <RowActionButton
+        icon={SlidersHorizontal}
+        label={LABELS.manageAttributes}
         onClick={handleOpen}
-      >
-        <SlidersHorizontal strokeWidth={2.25} aria-hidden />
-        <span>{LABELS.manageAttributes}</span>
-      </Button>
+      />
 
       <Dialog open={open} onOpenChange={handleOpenChange}>
         <DialogContent className={styles.dialogContent}>

@@ -110,7 +110,6 @@ export function useAdminShippingRatesPage(): AdminShippingRatesPageModel {
       <AdminConfirmAction
         label={LABELS.delete}
         dialogVariant="danger"
-        confirmVariant="destructive"
         tone="danger"
         title={shippingRatesLabels.deleteShippingRate}
         description={shippingRatesLabels.deleteShippingRateConfirm}

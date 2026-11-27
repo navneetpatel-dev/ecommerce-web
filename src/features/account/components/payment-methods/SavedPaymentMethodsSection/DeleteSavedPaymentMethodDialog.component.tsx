@@ -33,7 +33,6 @@ export function DeleteSavedPaymentMethodDialog({
       secondaryAction={{ label: "Cancel", onClick: onClose }}
       primaryAction={{
         label: "Remove",
-        variant: "destructive",
         loading: deleting,
         onClick: onConfirm,
       }}

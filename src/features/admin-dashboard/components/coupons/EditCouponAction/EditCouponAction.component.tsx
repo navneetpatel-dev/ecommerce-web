@@ -1,7 +1,7 @@
 "use client";
 
 import { Pencil } from "lucide-react";
-import { Button } from "@/shared/components/ui/button";
+import { RowActionButton } from "@/shared/components/DataTable/RowActions/RowActionButton.component";
 import {
   Dialog,
   DialogContent,
@@ -10,7 +10,6 @@ import {
 } from "@/shared/components/ui/dialog";
 import { FormError } from "@/shared/components/forms";
 import { LABELS } from "@/shared/constants/labels";
-import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
 import {
   useEditCoupon,
   type UseEditCouponArgs,
@@ -32,16 +31,12 @@ export function EditCouponAction({
 
   return (
     <Dialog open={edit.open} onOpenChange={edit.setOpen}>
-      <Button
-        type="button"
-        size="sm"
-        variant="outline"
-        className={tableMenuButtonClass("neutral")}
+      <RowActionButton
+        kind="edit"
+        icon={Pencil}
+        label={LABELS.editCoupon}
         onClick={edit.handleOpen}
-      >
-        <Pencil strokeWidth={2.25} aria-hidden />
-        <span>{LABELS.editCoupon}</span>
-      </Button>
+      />
       <DialogContent
         className={styles.dialogContent}
         aria-describedby={undefined}

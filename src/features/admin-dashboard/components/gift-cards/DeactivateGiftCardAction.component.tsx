@@ -1,5 +1,6 @@
 "use client";
 
+import { Ban } from "lucide-react";
 import type { GiftCardView } from "@/features/giftCards";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
@@ -21,6 +22,7 @@ export function DeactivateGiftCardAction({
   return (
     <AdminConfirmAction
       label={LABELS.giftCardDeactivate}
+      icon={Ban}
       dialogVariant="danger"
       tone="danger"
       title={formatLabel(LABELS.giftCardDeactivateTitle, { code: card.code })}

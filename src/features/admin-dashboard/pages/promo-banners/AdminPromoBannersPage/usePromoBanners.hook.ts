@@ -21,6 +21,7 @@ export function usePromoBanners() {
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [createSaving, setCreateSaving] = useState(false);
+  const [activatingId, setActivatingId] = useState<string | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<PromoBanner | null>(null);
 
   const [isCreateOpen, setIsCreateOpen] = useState(false);
@@ -116,6 +117,7 @@ export function usePromoBanners() {
 
   const onActivate = async (banner: PromoBanner) => {
     setMessage(null);
+    setActivatingId(banner.id);
     try {
       await homepageAdminApi.updateBanner(banner.id, {
         status: PROMO_BANNER_STATUS.ACTIVE,
@@ -124,6 +126,8 @@ export function usePromoBanners() {
       await reload();
     } catch (err) {
       setMessage(getApiErrorMessage(err, LABELS.couldNotSavePromoBanner));
+    } finally {
+      setActivatingId(null);
     }
   };
 
@@ -155,6 +159,7 @@ export function usePromoBanners() {
     handleDeleteOpenChange,
     confirmDelete,
     onActivate,
+    activatingId,
     startEdit: edit.startEdit,
     cancelEdit: edit.cancelEdit,
     onSaveEdit: edit.onSaveEdit,

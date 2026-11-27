@@ -1,5 +1,6 @@
 "use client";
 
+import { Trash2 } from "lucide-react";
 import { useCallback } from "react";
 import { StatusDialog } from "@/shared/components/dialogs/StatusDialog.component";
 import { LABELS } from "@/shared/constants/labels";
@@ -37,6 +38,7 @@ export function RemoveStaffDialog({
 
   return (
     <StatusDialog
+      icon={Trash2}
       open={Boolean(member)}
       onOpenChange={onOpenChange}
       variant="danger"

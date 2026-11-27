@@ -55,7 +55,7 @@ export function ReasonPromptDialog({
     <StatusDialog
       open={open}
       onOpenChange={handleOpenChange}
-      variant="warning"
+      variant="danger"
       title={title}
       description={description}
       secondaryAction={{
@@ -65,7 +65,6 @@ export function ReasonPromptDialog({
       }}
       primaryAction={{
         label: confirmLabel,
-        variant: "destructive",
         loading: pending,
         disabled: !trimmedReason,
         disabledHint: trimmedReason ? undefined : LABELS.reasonRequiredHint,

@@ -1,5 +1,7 @@
+import { Download } from "lucide-react";
 import { TableRow, TableCell } from "@/shared/components/ui/table";
-import { Button } from "@/shared/components/ui/button";
+import { TableRowActions } from "@/shared/components/DataTable/TableRowActions.component";
+import { RowActionButton } from "@/shared/components/DataTable/RowActions/RowActionButton.component";
 import { LABELS } from "@/shared/constants/labels";
 import type { CommissionInvoiceViewModel } from "../../../hooks/commission/useCommissionInvoices.hook";
 import { commissionInvoicesTableStyles as styles } from "../../../styles/commission/commissionInvoicesTable.styles";
@@ -26,16 +28,15 @@ export function CommissionInvoiceTableRow({
       <TableCell className={styles.tableCellStandard}>
         {invoice.formattedDate}
       </TableCell>
-      <TableCell className={styles.tableCellStandard}>
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          loading={invoice.isDownloading}
-          onClick={handleDownloadClick}
-        >
-          {LABELS.downloadCommissionInvoice}
-        </Button>
+      <TableCell className={styles.tableCellActions}>
+        <TableRowActions>
+          <RowActionButton
+            icon={Download}
+            label={LABELS.downloadCommissionInvoice}
+            loading={invoice.isDownloading}
+            onClick={handleDownloadClick}
+          />
+        </TableRowActions>
       </TableCell>
     </TableRow>
   );

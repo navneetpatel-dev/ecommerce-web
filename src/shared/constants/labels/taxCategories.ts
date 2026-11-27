@@ -39,6 +39,10 @@ export const taxCategoriesLabels = {
     "This is the platform default. Deleting it changes the GST of every category without its own rule: they fall back to 18%. {count} categories are affected.",
   taxRuleDeleteCategoryBody:
     "{name} will use its parent's rate (or the platform default) instead. {count} categories are affected.",
+  taxRuleDeleteDefaultBodyOne:
+    "This is the platform default. Deleting it changes the GST of every category without its own rule: they fall back to 18%. 1 category is affected.",
+  taxRuleDeleteCategoryBodyOne:
+    "{name} will use its parent's rate (or the platform default) instead. 1 category is affected.",
   taxRuleScopeAll: "All rules",
   taxRuleScopeDefault: "Platform default",
   taxRuleScopeCategory: "Category rules",
@@ -81,11 +85,10 @@ export const taxCategoriesLabels = {
   categorySlugKept: "The web address stays /{slug}.",
   // Archive / delete impact
   categoryImpactArchive:
-    "{name} has {products} products and {children} subcategories. Archiving hides it from the shop.",
-  categoryImpactArchiveCascade:
-    "Also archive its {count} active subcategories.",
+    "{name}. Products: {products}. Subcategories: {children}. Archiving hides it from the shop.",
+  categoryImpactArchiveCascade: "Active subcategories also archived: {count}.",
   categoryImpactDelete:
-    "{name} will be deleted for good. It has {products} products and {children} subcategories, so it can only be deleted when both are 0.",
+    "{name} will be deleted for good. Products: {products}. Subcategories: {children}. It can only be deleted when both are 0.",
   categoryImpactTaxRule:
     "Its tax rule ({percent}% GST) will be deleted with it.",
   categoryImpactLoading: "Checking what this affects…",

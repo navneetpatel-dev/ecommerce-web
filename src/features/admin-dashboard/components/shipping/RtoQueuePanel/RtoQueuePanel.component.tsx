@@ -25,6 +25,7 @@ export function RtoQueuePanel() {
     visible,
     filteredShipments,
     columns,
+    renderActions,
     loading,
     pendingBadge,
     search,
@@ -85,6 +86,7 @@ export function RtoQueuePanel() {
         ariaLabel={LABELS.rtoQueueTableAria}
         columns={columns}
         rows={filteredShipments}
+        actions={renderActions}
         getRowId={getRowId}
         loading={loading}
         emptyMessage={LABELS.rtoQueueEmpty}

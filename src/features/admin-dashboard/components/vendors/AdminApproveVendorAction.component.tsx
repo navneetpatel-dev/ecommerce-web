@@ -1,13 +1,11 @@
 "use client";
 
 import { Check } from "lucide-react";
-import { Button } from "@/shared/components/ui/button";
+import { RowActionButton } from "@/shared/components/DataTable/RowActions/RowActionButton.component";
 import { NumberInput } from "@/shared/components/forms/NumberInput.component";
 import { FormFieldFrame } from "@/shared/components/forms";
 import { StatusDialog } from "@/shared/components/dialogs/StatusDialog.component";
-import { DisabledActionHint } from "@/shared/components/forms/DisabledActionHint.component";
 import { LABELS } from "@/shared/constants/labels";
-import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
 import { adminEntityDetailLabels } from "@/shared/constants/labels/adminEntityDetail";
 import { useAdminApproveVendorAction } from "../../hooks/vendors/useAdminApproveVendorAction.hook";
 import { adminApproveVendorActionStyles as styles } from "../../styles/vendors/adminApproveVendorAction.styles";
@@ -37,28 +35,6 @@ export function AdminApproveVendorAction({
     handleSubmit,
   } = useAdminApproveVendorAction({ onApprove });
 
-  const triggerButton = (
-    <Button
-      size="sm"
-      variant="outline"
-      className={tableMenuButtonClass("success")}
-      disabled={disabled || loading}
-      onClick={handleOpen}
-    >
-      <Check strokeWidth={2.25} aria-hidden />
-      <span>{LABELS.approve}</span>
-    </Button>
-  );
-
-  const showDisabledHint = disabled && Boolean(disabledHint);
-  const triggerElement = showDisabledHint ? (
-    <DisabledActionHint disabled message={disabledHint!} block>
-      {triggerButton}
-    </DisabledActionHint>
-  ) : (
-    triggerButton
-  );
-
   const errorMessage = error ? (
     <p role="alert" className={styles.errorMessage}>
       {error}
@@ -67,9 +43,16 @@ export function AdminApproveVendorAction({
 
   return (
     <>
-      {triggerElement}
+      <RowActionButton
+        label={LABELS.approve}
+        icon={Check}
+        disabled={disabled || loading}
+        disabledHint={disabled ? disabledHint : undefined}
+        onClick={handleOpen}
+      />
 
       <StatusDialog
+        icon={Check}
         open={open}
         onOpenChange={handleOpenChange}
         variant="success"

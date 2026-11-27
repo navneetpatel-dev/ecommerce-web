@@ -24,7 +24,7 @@ export function RevokeSessionDialog({
     <StatusDialog
       open={open}
       onOpenChange={handleOpenChange}
-      variant="warning"
+      variant="danger"
       icon={LogOut}
       title="Revoke this session?"
       description={`End the session on ${targetDeviceName}. That device will need to sign in again.`}
@@ -34,7 +34,6 @@ export function RevokeSessionDialog({
       }}
       primaryAction={{
         label: "Revoke",
-        variant: "destructive",
         loading: isPending,
         onClick: onConfirm,
       }}

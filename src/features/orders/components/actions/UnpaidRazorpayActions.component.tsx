@@ -1,5 +1,6 @@
 "use client";
 
+import { CircleX } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { StatusDialog } from "@/shared/components/dialogs/StatusDialog.component";
 import { LABELS } from "@/shared/constants/labels";
@@ -37,20 +38,19 @@ export function UnpaidRazorpayActions({ order }: UnpaidRazorpayActionsProps) {
       </Button>
 
       <StatusDialog
+        icon={CircleX}
         open={actions.open}
         onOpenChange={actions.setOpen}
-        variant="warning"
+        variant="danger"
         title={LABELS.confirmCancelOrderTitle}
         description={LABELS.confirmCancelUnpaidOrderBody}
         primaryAction={{
           label: LABELS.cancelOrder,
-          variant: "destructive",
           loading: actions.cancelling,
           onClick: () => void actions.confirmCancel(),
         }}
         secondaryAction={{
           label: LABELS.keepOrder,
-          variant: "outline",
           onClick: () => actions.setOpen(false),
         }}
       />

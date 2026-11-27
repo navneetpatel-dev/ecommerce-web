@@ -87,11 +87,11 @@ describe("archive and delete confirmation text", () => {
     render(<ArchiveDescription categoryId="c" name="Home" />);
     await waitFor(() =>
       expect(
-        screen.getByText(/7 products and 3 subcategories/),
+        screen.getByText(/Products: 7\. Subcategories: 3\./),
       ).toBeInTheDocument(),
     );
     expect(
-      screen.getByText(/Also archive its 2 active subcategories/),
+      screen.getByText(/Active subcategories also archived: 2\./),
     ).toBeInTheDocument();
   });
 

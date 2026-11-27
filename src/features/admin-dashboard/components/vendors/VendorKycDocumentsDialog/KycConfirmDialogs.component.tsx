@@ -1,5 +1,6 @@
 "use client";
 
+import { CircleX } from "lucide-react";
 import { type ChangeEvent } from "react";
 import { StatusDialog } from "@/shared/components/dialogs/StatusDialog.component";
 import { FormFieldFrame } from "@/shared/components/forms";
@@ -67,6 +68,7 @@ export function KycConfirmDialogs({
       />
 
       <StatusDialog
+        icon={CircleX}
         open={mode === "reject" && Boolean(activeItem)}
         onOpenChange={handleOpenChange}
         variant="danger"

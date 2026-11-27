@@ -1,7 +1,7 @@
 "use client";
 
 import { RotateCw } from "lucide-react";
-import { Button } from "@/shared/components/ui/button";
+import { RowActionButton } from "@/shared/components/DataTable/RowActions/RowActionButton.component";
 import { LABELS } from "@/shared/constants/labels";
 
 interface ResendNotificationButtonProps {
@@ -19,15 +19,11 @@ export function ResendNotificationButton({
   const handleClick = () => onResend(id);
 
   return (
-    <Button
-      type="button"
-      size="sm"
-      variant="outline"
+    <RowActionButton
+      icon={RotateCw}
+      label={LABELS.notificationResend}
       loading={loading}
       onClick={handleClick}
-    >
-      <RotateCw aria-hidden="true" />
-      {LABELS.notificationResend}
-    </Button>
+    />
   );
 }

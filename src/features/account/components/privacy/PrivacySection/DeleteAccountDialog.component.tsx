@@ -52,7 +52,6 @@ export function DeleteAccountDialog({
       }}
       primaryAction={{
         label: LABELS.deleteAccount,
-        variant: "destructive",
         disabled: !canConfirm,
         loading: pending,
         onClick: onConfirm,

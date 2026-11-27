@@ -1,16 +1,10 @@
 "use client";
 
+import { Send } from "lucide-react";
 import type { ChangeEvent } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/shared/components/ui/dialog";
-import { Button } from "@/shared/components/ui/button";
+import { StatusDialog } from "@/shared/components/dialogs/StatusDialog.component";
 import { Textarea } from "@/shared/components/ui/textarea";
-import { FormActions, FormFieldFrame } from "@/shared/components/forms";
+import { FormFieldFrame } from "@/shared/components/forms";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { ADMIN_NOTE_LIMITS } from "@/features/products";
@@ -40,48 +34,39 @@ export function SubmitOnBehalfDialog({
   const handleSubmit = () => void form.submit();
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>
-            {formatLabel(LABELS.submitOnBehalfTitle, { name: productName })}
-          </DialogTitle>
-          <DialogDescription>{LABELS.submitOnBehalfBody}</DialogDescription>
-        </DialogHeader>
-        <FormFieldFrame
-          counter={{ value: form.note, max: ADMIN_NOTE_LIMITS.MAX }}
-          label={LABELS.consentNoteLabel}
-          error={form.error ?? undefined}
-          required
-        >
-          <Textarea
-            value={form.note}
-            maxLength={ADMIN_NOTE_LIMITS.MAX}
-            placeholder={LABELS.consentNotePlaceholder}
-            disabled={form.submitting}
-            className={adminProductEditorStyles.noteTextarea}
-            onChange={handleChange}
-          />
-        </FormFieldFrame>
-        <FormActions>
-          <Button
-            type="button"
-            variant="outline"
-            disabled={form.submitting}
-            onClick={handleCancel}
-          >
-            {LABELS.cancel}
-          </Button>
-          <Button
-            type="button"
-            loading={form.submitting}
-            disabled={!form.canSubmit}
-            onClick={handleSubmit}
-          >
-            {LABELS.submitForReview}
-          </Button>
-        </FormActions>
-      </DialogContent>
-    </Dialog>
+    <StatusDialog
+      open={open}
+      onOpenChange={onOpenChange}
+      icon={Send}
+      title={formatLabel(LABELS.submitOnBehalfTitle, { name: productName })}
+      description={LABELS.submitOnBehalfBody}
+      secondaryAction={{
+        label: LABELS.cancel,
+        disabled: form.submitting,
+        onClick: handleCancel,
+      }}
+      primaryAction={{
+        label: LABELS.submitForReview,
+        loading: form.submitting,
+        disabled: !form.canSubmit,
+        onClick: handleSubmit,
+      }}
+    >
+      <FormFieldFrame
+        counter={{ value: form.note, max: ADMIN_NOTE_LIMITS.MAX }}
+        label={LABELS.consentNoteLabel}
+        error={form.error ?? undefined}
+        required
+      >
+        <Textarea
+          value={form.note}
+          maxLength={ADMIN_NOTE_LIMITS.MAX}
+          placeholder={LABELS.consentNotePlaceholder}
+          disabled={form.submitting}
+          className={adminProductEditorStyles.noteTextarea}
+          onChange={handleChange}
+        />
+      </FormFieldFrame>
+    </StatusDialog>
   );
 }

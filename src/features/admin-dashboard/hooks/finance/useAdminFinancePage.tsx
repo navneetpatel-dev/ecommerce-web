@@ -1,5 +1,6 @@
 "use client";
 
+import { CircleX, RotateCw } from "lucide-react";
 import { useCallback, useState, type ReactNode } from "react";
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { LABELS } from "@/shared/constants/labels";
@@ -61,6 +62,7 @@ export function useAdminFinancePage(): AdminFinancePageModel {
             />
             <AdminConfirmAction
               label={LABELS.markPayoutFailed}
+              icon={CircleX}
               dialogVariant="danger"
               tone="danger"
               title={LABELS.confirmMarkPayoutFailedTitle}
@@ -75,6 +77,7 @@ export function useAdminFinancePage(): AdminFinancePageModel {
         return (
           <AdminConfirmAction
             label={LABELS.retryPayout}
+            icon={RotateCw}
             dialogVariant="warning"
             tone="success"
             title={LABELS.confirmRetryPayoutTitle}

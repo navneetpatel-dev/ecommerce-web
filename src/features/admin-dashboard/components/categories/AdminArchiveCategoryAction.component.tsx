@@ -18,6 +18,7 @@ export function AdminArchiveCategoryAction({
     label,
     dialogVariant,
     tone,
+    icon,
     title,
     archivedBodyText,
     handleConfirm,
@@ -34,6 +35,7 @@ export function AdminArchiveCategoryAction({
       label={label}
       dialogVariant={dialogVariant}
       tone={tone}
+      icon={icon}
       title={title}
       description={description}
       onConfirm={handleConfirm}

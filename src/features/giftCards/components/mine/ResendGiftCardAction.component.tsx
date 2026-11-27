@@ -1,5 +1,5 @@
 import { Mail } from "lucide-react";
-import { Button } from "@/shared/components/ui/button";
+import { RowActionButton } from "@/shared/components/DataTable/RowActions/RowActionButton.component";
 import { LABELS } from "@/shared/constants/labels";
 import type { GiftCardView } from "../../api/gift-cards/giftCards.api";
 
@@ -19,16 +19,11 @@ export function ResendGiftCardAction({
   const handleClick = () => onResend(card);
 
   return (
-    <Button
-      type="button"
-      size="sm"
-      variant="outline"
+    <RowActionButton
+      icon={Mail}
+      label={LABELS.giftCardResend}
       loading={pending}
-      disabled={pending}
       onClick={handleClick}
-    >
-      <Mail aria-hidden />
-      <span>{LABELS.giftCardResend}</span>
-    </Button>
+    />
   );
 }

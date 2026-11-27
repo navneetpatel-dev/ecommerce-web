@@ -4,6 +4,7 @@ import { Pencil, Plus } from "lucide-react";
 import type { CashbackOffer } from "@/features/cashback";
 import { FormError } from "@/shared/components/forms";
 import { Button } from "@/shared/components/ui/button";
+import { RowActionButton } from "@/shared/components/DataTable/RowActions/RowActionButton.component";
 import {
   Dialog,
   DialogContent,
@@ -12,7 +13,6 @@ import {
   DialogTrigger,
 } from "@/shared/components/ui/dialog";
 import { LABELS } from "@/shared/constants/labels";
-import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
 import { useCashbackOfferDialog } from "../../hooks/cashback-offers/useCashbackOfferDialog.hook";
 import { adminCashbackOffersStyles as styles } from "../../styles/cashback-offers/adminCashbackOffers.styles";
 import { CashbackOfferFormFields } from "./CashbackOfferFormFields.component";
@@ -32,16 +32,12 @@ export function CashbackOfferDialog({
     <Dialog open={dialog.open} onOpenChange={dialog.setOpen}>
       <DialogTrigger asChild>
         {offer ? (
-          <Button
-            type="button"
-            size="sm"
-            variant="outline"
-            className={tableMenuButtonClass("neutral")}
+          <RowActionButton
+            kind="edit"
+            icon={Pencil}
+            label={LABELS.cashbackOfferEdit}
             onClick={dialog.handleOpen}
-          >
-            <Pencil strokeWidth={2.25} aria-hidden />
-            <span>{LABELS.cashbackOfferEdit}</span>
-          </Button>
+          />
         ) : (
           <Button type="button" onClick={dialog.handleOpen}>
             <Plus aria-hidden />

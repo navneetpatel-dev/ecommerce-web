@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useDebouncedValue } from "@/shared/hooks/ui/use-debounce.hook";
-import { Plus } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 import { RequirePermission } from "@/shared/components/system/RequirePermission.component";
 import { StatusDialog } from "@/shared/components/dialogs/StatusDialog.component";
 import { Badge } from "@/shared/components/ui/badge";
@@ -159,6 +159,7 @@ export function AdminPromoBannersPage() {
                 onSaveEdit={promo.onSaveEdit}
                 onStartEdit={promo.startEdit}
                 onActivate={promo.onActivate}
+                activatingId={promo.activatingId}
                 onDelete={promo.requestDelete}
               />
             )}
@@ -166,6 +167,7 @@ export function AdminPromoBannersPage() {
         ) : null}
 
         <StatusDialog
+          icon={Trash2}
           open={promo.deleteTarget !== null}
           onOpenChange={promo.handleDeleteOpenChange}
           variant="danger"
@@ -179,7 +181,6 @@ export function AdminPromoBannersPage() {
           }}
           primaryAction={{
             label: LABELS.delete,
-            variant: "destructive",
             onClick: promo.confirmDelete,
           }}
         />

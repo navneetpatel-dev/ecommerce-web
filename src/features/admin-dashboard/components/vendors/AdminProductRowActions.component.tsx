@@ -1,15 +1,12 @@
 "use client";
 
-import { cn } from "@/shared/utils/dom/cn";
 import { attentionStyles } from "@/shared/styles/attention.styles";
-import { Boxes, Eye, Pencil, Send } from "lucide-react";
+import { Boxes, Eye, Pencil, Rocket, Send } from "lucide-react";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { AdminConfirmAction } from "../shared/AdminConfirmAction.component";
-import { Button } from "@/shared/components/ui/button";
-import { TableRowAction } from "@/shared/components/DataTable/TableRowActions.component";
+import { RowActionButton } from "@/shared/components/DataTable/RowActions/RowActionButton.component";
 import { LABELS } from "@/shared/constants/labels";
 import { PRODUCT_STATUS } from "@/shared/constants/statuses";
-import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
 import type { ProductTarget } from "../../hooks/vendors/useAdminProductEditor.hook";
 
 const SUBMITTABLE = new Set<string>([
@@ -51,78 +48,45 @@ export function AdminProductRowActions({
 
   return (
     <>
-      <TableRowAction>
-        <Button
-          size="sm"
-          variant="outline"
-          type="button"
-          className={cn(
-            tableMenuButtonClass("neutral"),
-            attentionStyles.previewRow,
-          )}
-          onClick={handlePreview}
-        >
-          <Eye strokeWidth={2.25} aria-hidden />
-          <span>{LABELS.previewAsCustomer}</span>
-        </Button>
-      </TableRowAction>
-      <TableRowAction>
-        <Button
-          size="sm"
-          variant="outline"
-          type="button"
-          className={tableMenuButtonClass("edit")}
-          onClick={handleEdit}
-        >
-          <Pencil strokeWidth={2.25} aria-hidden />
-          <span>{LABELS.edit}</span>
-        </Button>
-      </TableRowAction>
-      <TableRowAction>
-        <Button
-          size="sm"
-          variant="outline"
-          type="button"
-          className={cn(
-            tableMenuButtonClass("neutral"),
-            attentionStyles.variantsRow,
-          )}
-          onClick={handleVariants}
-        >
-          <Boxes strokeWidth={2.25} aria-hidden />
-          <span>{LABELS.manageVariants}</span>
-        </Button>
-      </TableRowAction>
+      <RowActionButton
+        kind="view"
+        icon={Eye}
+        label={LABELS.previewAsCustomer}
+        attentionClassName={attentionStyles.previewRow}
+        onClick={handlePreview}
+      />
+      <RowActionButton
+        kind="edit"
+        icon={Pencil}
+        label={LABELS.edit}
+        onClick={handleEdit}
+      />
+      <RowActionButton
+        icon={Boxes}
+        label={LABELS.manageVariants}
+        attentionClassName={attentionStyles.variantsRow}
+        onClick={handleVariants}
+      />
       {canPublish ? (
-        <TableRowAction>
-          <AdminConfirmAction
-            label={LABELS.publishPlatformProduct}
-            dialogVariant="info"
-            tone="success"
-            title={formatLabel(LABELS.publishPlatformProductTitle, {
-              name: product.name,
-            })}
-            description={LABELS.publishPlatformProductBody}
-            onConfirm={handlePublish}
-          />
-        </TableRowAction>
+        <AdminConfirmAction
+          label={LABELS.publishPlatformProduct}
+          icon={Rocket}
+          dialogVariant="success"
+          tone="success"
+          title={formatLabel(LABELS.publishPlatformProductTitle, {
+            name: product.name,
+          })}
+          description={LABELS.publishPlatformProductBody}
+          onConfirm={handlePublish}
+        />
       ) : null}
       {canSubmit ? (
-        <TableRowAction>
-          <Button
-            size="sm"
-            variant="outline"
-            type="button"
-            className={cn(
-              tableMenuButtonClass("success"),
-              attentionStyles.submitRow,
-            )}
-            onClick={handleSubmit}
-          >
-            <Send strokeWidth={2.25} aria-hidden />
-            <span>{LABELS.submitOnBehalf}</span>
-          </Button>
-        </TableRowAction>
+        <RowActionButton
+          icon={Send}
+          label={LABELS.submitOnBehalf}
+          attentionClassName={attentionStyles.submitRow}
+          onClick={handleSubmit}
+        />
       ) : null}
     </>
   );

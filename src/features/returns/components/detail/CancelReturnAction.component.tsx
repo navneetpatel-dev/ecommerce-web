@@ -37,14 +37,13 @@ export function CancelReturnAction({
       <StatusDialog
         open={confirmOpen}
         onOpenChange={handleOpenChange}
-        variant="warning"
+        variant="danger"
         icon={Undo2}
         title={LABELS.cancelReturnTitle}
         description={LABELS.cancelReturnBody}
         secondaryAction={{ label: LABELS.keepReturn, onClick: onClose }}
         primaryAction={{
           label: LABELS.cancelReturn,
-          variant: "destructive",
           loading: isPending,
           onClick: onConfirm,
         }}

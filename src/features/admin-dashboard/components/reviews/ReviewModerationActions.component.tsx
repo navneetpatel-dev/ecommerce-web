@@ -1,3 +1,4 @@
+import { CircleX, Eraser } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { reviewsApi, ReviewMediaModerationAction } from "@/features/reviews";
@@ -43,6 +44,7 @@ export function ReviewModerationActions({
       />
       <AdminConfirmAction
         label={LABELS.reject}
+        icon={CircleX}
         dialogVariant="danger"
         title={
           isEdit
@@ -60,6 +62,7 @@ export function ReviewModerationActions({
       {row.vendorResponse ? (
         <AdminConfirmAction
           label={LABELS.clearSellerResponse}
+          icon={Eraser}
           dialogVariant="danger"
           title={LABELS.removeSellerResponse}
           description={formatLabel(LABELS.confirmRemoveSellerResponseBody, {

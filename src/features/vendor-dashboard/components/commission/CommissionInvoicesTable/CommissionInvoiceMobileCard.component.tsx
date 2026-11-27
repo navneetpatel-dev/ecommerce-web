@@ -1,4 +1,6 @@
-import { Button } from "@/shared/components/ui/button";
+import { Download } from "lucide-react";
+import { TableRowActions } from "@/shared/components/DataTable/TableRowActions.component";
+import { RowActionButton } from "@/shared/components/DataTable/RowActions/RowActionButton.component";
 import { LABELS } from "@/shared/constants/labels";
 import type { CommissionInvoiceViewModel } from "../../../hooks/commission/useCommissionInvoices.hook";
 import { commissionInvoicesTableStyles as styles } from "../../../styles/commission/commissionInvoicesTable.styles";
@@ -21,16 +23,16 @@ export function CommissionInvoiceMobileCard({
       <p className={styles.mobileCardNumber}>{invoice.number}</p>
       <p className={styles.mobileCardDate}>{invoice.formattedDate}</p>
       <p className={styles.mobileCardAmount}>{invoice.formattedAmount}</p>
-      <Button
-        type="button"
-        variant="outline"
-        size="sm"
-        className={styles.mobileCardButton}
-        loading={invoice.isDownloading}
-        onClick={handleDownloadClick}
-      >
-        {LABELS.downloadCommissionInvoice}
-      </Button>
+      <div className={styles.mobileCardActions}>
+        <TableRowActions>
+          <RowActionButton
+            icon={Download}
+            label={LABELS.downloadCommissionInvoice}
+            loading={invoice.isDownloading}
+            onClick={handleDownloadClick}
+          />
+        </TableRowActions>
+      </div>
     </li>
   );
 }

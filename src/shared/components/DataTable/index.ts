@@ -1,6 +1,10 @@
 export { DataTable } from "./DataTable.component";
 export { KeysetDataTable } from "./KeysetDataTable.component";
-export { TableRowActions, TableRowAction } from "./TableRowActions.component";
+export { TableRowActions } from "./TableRowActions.component";
+export {
+  RowActionButton,
+  type RowActionButtonProps,
+} from "./RowActions/RowActionButton.component";
 export { InfiniteLoadMore } from "./InfiniteLoadMore.component";
 export { TableCellImage } from "./TableCellImage.component";
 export { TableScrollShell } from "./TableScrollShell.component";

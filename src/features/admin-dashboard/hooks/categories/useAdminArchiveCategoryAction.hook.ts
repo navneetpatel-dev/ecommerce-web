@@ -1,5 +1,6 @@
 "use client";
 
+import { Archive, ArchiveRestore } from "lucide-react";
 import { categoriesApi } from "@/features/categories";
 import { LABELS } from "@/shared/constants/labels";
 import { CATEGORY_STATUS } from "@/shared/constants/statuses";
@@ -26,6 +27,7 @@ export function useAdminArchiveCategoryAction({
     ? ("success" as const)
     : ("warning" as const);
   const tone = isArchived ? ("success" as const) : ("archive" as const);
+  const icon = isArchived ? ArchiveRestore : Archive;
   const title = isArchived
     ? LABELS.confirmReactivateCategoryTitle
     : LABELS.confirmArchiveCategoryTitle;
@@ -56,6 +58,7 @@ export function useAdminArchiveCategoryAction({
     label,
     dialogVariant,
     tone,
+    icon,
     title,
     archivedBodyText,
     handleConfirm,
