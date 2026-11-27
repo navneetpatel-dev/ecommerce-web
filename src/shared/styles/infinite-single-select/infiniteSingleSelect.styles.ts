@@ -1,11 +1,13 @@
 export const infiniteSingleSelectStyles = {
   root: "w-full",
-  popoverContent: "w-[var(--radix-popover-trigger-width)] space-y-2 p-1",
+  /* As wide as its field, but never so narrow that the option names are unreadable. */
+  popoverContent:
+    "w-[var(--radix-popover-trigger-width)] min-w-[min(18rem,calc(100vw-1.5rem))] max-w-[calc(100vw-1.5rem)] space-y-2 p-1",
   optionRow: {
     base: "relative flex min-h-10 w-full cursor-pointer select-none items-center rounded-sm px-3.5 py-1.5 pr-9 text-left text-body outline-none hover:bg-brand-subtle focus-visible:bg-brand-subtle disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
     selected: "bg-brand-subtle/60",
     labelWrapper: "min-w-0 flex-1",
-    label: "line-clamp-1 block text-body-sm font-medium text-ink",
+    label: "line-clamp-2 block break-words text-body-sm font-medium text-ink",
     sublabel: "line-clamp-1 block text-[11px] font-mono text-ink-muted",
     checkWrapper: "absolute right-2 flex items-center justify-center",
     checkIcon: "text-brand",

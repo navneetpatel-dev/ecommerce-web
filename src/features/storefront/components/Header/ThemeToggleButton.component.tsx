@@ -7,7 +7,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { useThemePalette } from "@/shared/hooks/theme/useThemePalette.hook";
 import { themeToggleButtonStyles as styles } from "../../styles/header/themeToggleButton.styles";
 
-export function ThemeToggleButton() {
+export function ThemeToggleButton({ className }: { className?: string }) {
   const { mode, toggleMode, mounted } = useThemePalette();
   const isDark = mounted && mode === "dark";
 
@@ -17,7 +17,7 @@ export function ThemeToggleButton() {
       variant="outline"
       size="sm"
       onClick={toggleMode}
-      className={cn(styles.base, styles.opaque)}
+      className={cn(styles.base, styles.opaque, className)}
       aria-label={isDark ? LABELS.themeLight : LABELS.themeDark}
       title={isDark ? LABELS.themeLight : LABELS.themeDark}
     >

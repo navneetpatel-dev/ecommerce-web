@@ -237,6 +237,17 @@
 }
 
 @layer base {
+  /* Nothing is wider than the box it sits in. A grid without explicit columns on phones would
+     otherwise grow to its widest content, and form controls bring a browser default width. Both
+     rules have zero specificity, so utilities still win. */
+  :where(.grid, .inline-grid) {
+    grid-auto-columns: minmax(0, 1fr);
+  }
+
+  :where(input, select, textarea, fieldset) {
+    min-width: 0;
+  }
+
   *,
   ::after,
   ::before,
@@ -390,7 +401,8 @@ html::-webkit-scrollbar-track {
   margin-inline: calc(var(--dialog-pad) * -1);
   /* The last field never touches the action row's top edge when scrolled to the end. */
   margin-top: 1rem;
-  padding: 0.875rem var(--dialog-pad);
+  /* Dialogs without body padding still keep their buttons off the edges. */
+  padding: 0.875rem max(var(--dialog-pad), 1.25rem);
   border-top: 1px solid var(--color-line);
   background: var(--color-surface-raised);
 }
@@ -411,6 +423,22 @@ html::-webkit-scrollbar-track {
 }
 
 .dialog-body:not(:has(:is(.dialog-footer, [data-form-actions]))) {
+  padding-bottom: var(--dialog-pad);
+}
+
+/* Buttons inside a bordered form section belong to that section: they are not the dialog's action
+   row, so they are neither pinned nor stretched past the section's edges. */
+.dialog-body [data-form-section] [data-form-actions] {
+  position: static;
+  margin: 0;
+  padding: 0;
+  border-top: 0;
+  background: transparent;
+}
+
+.dialog-body:not(
+  :has(:is(.dialog-footer, [data-form-actions]):not([data-form-section] *))
+) {
   padding-bottom: var(--dialog-pad);
 }
 
@@ -465,6 +493,16 @@ html::-webkit-scrollbar-track {
   line-height: 1 !important;
   flex: 0 0 auto;
   vertical-align: middle;
+}
+
+/* A group of buttons inside a footer stacks too; side by side, full-width buttons overflow. */
+@media (max-width: 479.98px) {
+  .dialog-footer > div:has(> * + *) {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
 }
 
 @media (min-width: 480px) {

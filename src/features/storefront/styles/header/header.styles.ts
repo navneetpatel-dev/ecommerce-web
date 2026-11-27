@@ -10,11 +10,18 @@ export const headerStyles = {
   container:
     "storefront-container flex h-full flex-nowrap items-center gap-1.5 sm:gap-3 lg:gap-4 2xl:gap-6",
   brandName:
-    "min-w-0 shrink truncate text-[1.25rem] font-display font-semibold leading-none sm:text-[1.5rem] lg:text-[1.625rem] xl:text-[1.75rem]",
+    "min-w-0 shrink truncate text-[1.25rem] font-display font-semibold leading-none max-[399px]:text-[1.125rem] sm:text-[1.5rem] lg:text-[1.625rem] xl:text-[1.75rem]",
   brandNameSolid: "text-brand",
   spacer: "hidden flex-1 xl:block",
   actionsNav:
     "ml-auto flex shrink-0 items-center gap-1.5 overflow-visible sm:gap-2",
+
+  // Phones: the shop name needs the room, so the theme switch lives in the menu
+  // drawer. Workspace headers have no drawer and keep it at icon-button size.
+  themeToggleInDrawer: "max-sm:hidden",
+  themeToggleCompact: "max-sm:h-9 max-sm:min-h-9 max-sm:w-9",
+  /** Narrowest phones, signed-in shoppers only: the drawer also lists Wishlist. */
+  wishlistInDrawer: "max-[359px]:hidden",
 
   // Skeletons
   iconButtonBox: "h-11 w-11 shrink-0 rounded-md max-sm:h-9 max-sm:w-9",

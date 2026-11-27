@@ -37,7 +37,7 @@ export const accountLayoutStyles = {
   desktopNavList: "divide-y divide-line",
   desktopNavButton: (selected: boolean) =>
     cn(
-      "h-auto min-h-0 max-h-none w-full items-start gap-3 rounded-none px-4 py-3.5 text-left font-normal",
+      "h-auto min-h-0 max-h-none w-full items-start gap-3 whitespace-normal rounded-none px-4 py-3.5 text-left font-normal leading-normal",
       selected
         ? "bg-paper shadow-[inset_3px_0_0_0_var(--brand)] hover:bg-brand-subtle/40"
         : "hover:bg-brand-subtle/40",

@@ -18,6 +18,10 @@ export const mobileNavDrawerStyles = {
   accountHeading: "px-3 py-2 text-body-sm font-medium text-ink-muted mt-4",
   accountLink:
     "flex items-center px-3 py-2.5 rounded-md text-body hover:bg-brand-subtle transition-colors",
+  /** Phones only: from sm up the switch is in the header. */
+  themeRow:
+    "mt-4 flex w-full items-center justify-start gap-2.5 whitespace-normal rounded-none border-0 border-t border-line px-3 py-2.5 text-left text-body font-normal sm:hidden",
+  themeIcon: "h-4 w-4 shrink-0 text-ink-muted",
   loginLink:
     "flex items-center px-3 py-2.5 rounded-md text-body font-medium text-brand hover:bg-brand-subtle transition-colors mt-4",
 

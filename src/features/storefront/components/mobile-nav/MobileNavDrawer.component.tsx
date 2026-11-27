@@ -12,6 +12,7 @@ import { useIsAuthenticated } from "@/shared/hooks/auth/useRequireAuth.hook";
 import { useModalOverlay } from "@/shared/hooks/ui/useModalOverlay.hook";
 import { MobileNavCategoryTree } from "./MobileNavCategoryTree.component";
 import { MobileNavPrimaryLinks } from "./MobileNavPrimaryLinks.component";
+import { MobileNavThemeRow } from "./MobileNavThemeRow.component";
 import { mobileNavDrawerStyles as styles } from "../../styles/mobile-nav/mobileNavDrawer.styles";
 
 interface MobileNavDrawerProps {
@@ -168,6 +169,8 @@ export function MobileNavDrawer({
               {LABELS.logIn}
             </Link>
           ) : null}
+
+          <MobileNavThemeRow />
         </nav>
       </div>
     </div>

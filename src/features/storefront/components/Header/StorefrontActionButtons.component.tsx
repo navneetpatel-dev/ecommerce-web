@@ -24,6 +24,7 @@ import {
   HeaderSearchButtonSkeleton,
   StorefrontActionButtonsSkeleton,
 } from "./HeaderActionSkeletons.component";
+import { headerStyles } from "../../styles/header/header.styles";
 
 interface StorefrontActionButtonsProps {
   cartItemCount: number;
@@ -34,6 +35,8 @@ interface StorefrontActionButtonsProps {
   isLoading?: boolean;
   /** Session itself unresolved, so even the count-free search trigger is unknown. */
   navLoading?: boolean;
+  /** The menu drawer also lists Wishlist, so the narrowest phones can drop it. */
+  wishlistInDrawer?: boolean;
   onOpenCart: () => void;
   onOpenMobileSearch: () => void;
 }
@@ -44,6 +47,7 @@ export function StorefrontActionButtons({
   walletBalance,
   isLoading = false,
   navLoading = false,
+  wishlistInDrawer = false,
   onOpenCart,
   onOpenMobileSearch,
 }: StorefrontActionButtonsProps) {
@@ -96,7 +100,10 @@ export function StorefrontActionButtons({
             variant="ghost"
             size="icon-sm"
             asChild
-            className={cn(HEADER_ICON_BTN)}
+            className={cn(
+              HEADER_ICON_BTN,
+              wishlistInDrawer && headerStyles.wishlistInDrawer,
+            )}
           >
             <Link
               href={PATHS.wishlist}

@@ -151,7 +151,8 @@ export function DataTableMobileCards<T>({
             </div>
 
             {hasActions ? (
-              <div className="flex items-center justify-end gap-2 pt-2 border-t border-line">
+              // A row with nothing to offer renders no menu, so no footer line either.
+              <div className="flex items-center justify-end gap-2 pt-2 border-t border-line empty:hidden">
                 <TableRowActions>
                   {showViewButton && rowsInteractive ? (
                     <RowActionButton

@@ -62,7 +62,7 @@ export function ProductCategoryCard({
           <FolderTree className="size-4 text-brand" aria-hidden />
           <span>Category & Taxonomy Details</span>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           {categoryStatus && <StatusBadge status={categoryStatus} />}
           {categoryId && (
             <a

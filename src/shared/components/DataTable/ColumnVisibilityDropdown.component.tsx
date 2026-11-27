@@ -80,7 +80,7 @@ export function ColumnVisibilityDropdown<T>({
       <PopoverContent
         align="end"
         sideOffset={6}
-        className="w-56 p-3 space-y-2.5 z-50 bg-surface-raised border-line shadow-elevation-2"
+        className="w-64 max-w-[calc(100vw-1.5rem)] p-3 space-y-2.5 z-50 bg-surface-raised border-line shadow-elevation-2"
       >
         <div className="flex items-center justify-between border-b border-line pb-2">
           <p className="text-body-sm font-semibold text-ink">Display Columns</p>
@@ -114,7 +114,7 @@ export function ColumnVisibilityDropdown<T>({
                   onCheckedChange={() => handleToggle(col.id)}
                   aria-label={`Toggle column ${label}`}
                 />
-                <span className="truncate flex-1">{label}</span>
+                <span className="min-w-0 flex-1 break-words">{label}</span>
                 {isFirst && (
                   <span className="text-[10px] text-ink-muted/70 font-mono">
                     required

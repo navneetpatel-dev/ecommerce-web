@@ -51,7 +51,9 @@ export function StatCard({
         <CardTitle className={titleTone}>{title}</CardTitle>
         {iconElement}
       </CardHeader>
-      <CardContent>{valueElement}</CardContent>
+      <CardContent className={statCardStyles.content}>
+        {valueElement}
+      </CardContent>
     </Card>
   );
 }

@@ -3,7 +3,7 @@ export const keysetDataTableStyles = {
 } as const;
 
 export const tableRowActionsStyles = {
-  container: "flex shrink-0 items-center justify-end",
+  container: "relative flex shrink-0 items-center justify-end",
   triggerBtn:
     "h-8 w-8 shrink-0 p-0 text-ink-muted hover:text-ink [&_svg]:size-4",
 } as const;

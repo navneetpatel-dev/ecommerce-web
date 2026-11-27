@@ -83,7 +83,7 @@ export const recordDetailDialogStyles = {
     "text-[10px] font-semibold uppercase tracking-wider text-ink-muted/80 truncate",
   fieldValue: "min-w-0 text-body-sm font-medium text-ink break-words",
   pre: "max-h-48 overflow-auto rounded-lg border border-line bg-paper px-3 py-2 font-mono text-caption leading-relaxed text-ink whitespace-pre-wrap break-words",
-  stringVal: "break-words whitespace-pre-wrap",
+  stringVal: "min-w-0 whitespace-pre-wrap break-words [overflow-wrap:anywhere]",
   numVal: "font-mono tabular-nums font-semibold",
   dash: "text-ink-faint",
 } as const;

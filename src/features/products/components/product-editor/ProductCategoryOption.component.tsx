@@ -49,14 +49,16 @@ export function ProductCategoryOption({
         <MediaImage src={imageUrl} alt="" sizes="36px" />
       </span>
       <span className={styles.categoryText}>
-        <span className={styles.categoryName[level]}>{name}</span>
-        {path ? <span className={styles.categoryPath}>{path}</span> : null}
-      </span>
-      {badge ? (
-        <span className={styles.categoryGst} title={badge.title}>
-          {badge.text}
+        <span className={styles.categoryLabel}>
+          <span className={styles.categoryName[level]}>{name}</span>
+          {path ? <span className={styles.categoryPath}>{path}</span> : null}
         </span>
-      ) : null}
+        {badge ? (
+          <span className={styles.categoryGst} title={badge.title}>
+            {badge.text}
+          </span>
+        ) : null}
+      </span>
     </span>
   );
 }

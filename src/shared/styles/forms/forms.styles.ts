@@ -19,7 +19,7 @@ export const dateRangeFieldsStyles = {
 } as const;
 
 export const formFieldFrameStyles = {
-  container: "space-y-2",
+  container: "min-w-0 space-y-2",
   requiredMark: "text-danger",
   labelRow: "flex items-center justify-between",
   footerRow: "flex flex-wrap items-center justify-between gap-x-2 gap-y-1",

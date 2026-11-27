@@ -34,15 +34,17 @@ export const emptyCartStateStyles = {
 
 export const statCardStyles = {
   sizes: {
-    sm: "text-[1.375rem]",
-    md: "text-[1.75rem]",
-    lg: "text-[1.75rem]",
+    sm: "text-[length:min(1.375rem,15cqi)]",
+    md: "text-[length:min(1.75rem,15cqi)]",
+    lg: "text-[length:min(1.75rem,15cqi)]",
   },
+  /** The figure shrinks with its tile, so a long amount never spills out of a phone-width card. */
+  content: "@container",
   headerLayout: "flex-row items-center justify-between pb-2",
   titleTone: "text-body-sm font-normal text-ink-muted",
   icon: "h-4 w-4 text-ink-faint",
   skeleton: "h-10 w-32",
-  value: "font-mono font-bold",
+  value: "font-mono font-bold [overflow-wrap:anywhere]",
 } as const;
 
 export const ratingStarsStyles = {

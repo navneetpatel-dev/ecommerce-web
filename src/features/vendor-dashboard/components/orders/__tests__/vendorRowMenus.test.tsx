@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { describe, expect, it, vi } from "vitest";
 import type { StaffMember } from "../../../api/vendorStaff.api";
 import { CommissionInvoiceTableRow } from "../../commission/CommissionInvoicesTable/CommissionInvoiceTableRow.component";
-import { StaffMemberRow } from "../../team/StaffMembersTable/StaffMemberRow.component";
+import { StaffMembersTable } from "../../team/StaffMembersTable.component";
 import { VendorReturnRestockAction } from "../../returns/VendorReturnsTable/VendorReturnRestockAction.component";
 import { SubOrderActions } from "../VendorOrdersTable/SubOrderActions.component";
 import type { VendorReturnRowViewModel } from "../../../hooks/returns/useVendorReturnsTablePresentation.hook";
@@ -38,18 +38,21 @@ describe("vendor row menus", () => {
   it("removes a staff member from the menu", async () => {
     const user = userEvent.setup();
     const onRemove = vi.fn();
-    inTable(<StaffMemberRow member={member} onRemove={onRemove} />);
+    render(<StaffMembersTable members={[member]} onRemove={onRemove} />);
 
-    const menu = await openMenu(user);
-    await user.click(within(menu).getByRole("button", { name: "Remove" }));
+    // Both the table and the phone cards are in the DOM; CSS shows one.
+    await user.click(
+      screen.getAllByRole("button", { name: "More actions" })[0]!,
+    );
+    await user.click(screen.getByRole("button", { name: "Remove" }));
 
     expect(onRemove).toHaveBeenCalledWith(member);
   });
 
   it("gives the owner no menu", () => {
-    inTable(
-      <StaffMemberRow
-        member={{ ...member, isOwner: true }}
+    render(
+      <StaffMembersTable
+        members={[{ ...member, isOwner: true }]}
         onRemove={vi.fn()}
       />,
     );

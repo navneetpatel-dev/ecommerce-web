@@ -4,7 +4,8 @@ export const walletRechargePanelStyles = {
   heading: "text-body font-semibold text-ink",
   subheading: "mt-1 text-[0.875rem] text-ink-muted",
   maxBalanceNote: "mt-2 text-[0.75rem] leading-relaxed text-info",
-  presetsGrid: "mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4",
+  presetsGrid:
+    "mt-4 grid grid-cols-[repeat(auto-fill,minmax(6.5rem,1fr))] gap-2",
   presetButton: "h-auto min-h-9 justify-start px-3 py-2",
   presetContent: "flex flex-col items-start leading-tight",
   customAmountWrapper: "mt-4 space-y-3",

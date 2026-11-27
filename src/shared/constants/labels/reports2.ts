@@ -26,6 +26,8 @@ export const reports2Labels = {
   account: "Account",
   themeLight: "Light",
   themeDark: "Dark",
+  themeSwitchToLight: "Switch to light theme",
+  themeSwitchToDark: "Switch to dark theme",
   openAccountMenu: "Open account menu",
   browseCategories: "Browse categories",
   remove: "Remove",

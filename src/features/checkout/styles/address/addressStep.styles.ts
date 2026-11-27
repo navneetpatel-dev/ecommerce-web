@@ -16,7 +16,7 @@ export const ADDRESS_STEP_STYLES = {
   list: "space-y-3",
   addressButton: (selected: boolean) =>
     cn(
-      "h-auto min-h-11 max-h-none w-full px-4 py-4 text-left font-normal",
+      "h-auto min-h-11 max-h-none w-full flex-col items-start whitespace-normal px-4 py-4 text-left font-normal leading-normal",
       selected
         ? "border-brand bg-brand-subtle shadow-[inset_3px_0_0_0_var(--brand)] hover:bg-brand-subtle hover:text-ink"
         : "border-line hover:border-ink/25",

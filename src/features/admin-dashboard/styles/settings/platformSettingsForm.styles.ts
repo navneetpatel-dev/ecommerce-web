@@ -15,8 +15,8 @@ export const platformSettingsFormStyles = {
   selectorClearAllButton: "gap-1.5 text-ink-muted hover:text-ink",
   selectorClearAllIcon: "size-4 text-ink-muted",
   selectorFilterSearchBar:
-    "flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between",
-  tabsRoot: "shrink-0",
+    "flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between",
+  tabsRoot: "min-w-0",
   tabsList:
     "h-auto flex-wrap justify-start gap-1 rounded-md border border-line-strong bg-paper p-1",
   tabTrigger:

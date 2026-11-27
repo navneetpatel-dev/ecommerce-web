@@ -9,7 +9,9 @@ export const productEditorFormStyles = {
   mediaSectionContent: "gap-6",
 
   // Details
-  categoryOption: "flex min-w-0 flex-1 items-center gap-2.5 self-stretch",
+  /** A size container: narrow dropdowns put the GST under the name instead of beside it. */
+  categoryOption:
+    "@container flex min-w-0 flex-1 items-center gap-2 self-stretch @[17rem]:gap-2.5",
   categoryItem: [
     "h-auto min-h-12 py-1.5",
     "h-auto min-h-10 py-0",
@@ -20,20 +22,22 @@ export const productEditorFormStyles = {
     "relative shrink-0 overflow-hidden rounded-md border border-line bg-surface",
   categoryThumbSize: ["size-9", "size-7", "size-6", "size-6"],
   categoryName: [
-    "min-w-0 truncate font-semibold text-ink",
-    "min-w-0 truncate text-ink",
-    "min-w-0 truncate text-ink-muted",
-    "min-w-0 truncate text-ink-muted",
+    "line-clamp-2 break-words font-semibold text-ink",
+    "line-clamp-2 break-words text-ink",
+    "line-clamp-2 break-words text-ink-muted",
+    "line-clamp-2 break-words text-ink-muted",
   ],
-  categoryText: "flex min-w-0 flex-1 flex-col",
+  categoryText:
+    "flex min-w-0 flex-1 flex-col items-start gap-0.5 py-0.5 @[17rem]:flex-row @[17rem]:items-center @[17rem]:gap-2",
+  categoryLabel: "flex min-w-0 max-w-full flex-col @[17rem]:flex-1",
   categoryPath: "truncate text-caption text-ink-muted",
   categoryGst:
-    "ml-auto shrink-0 whitespace-nowrap rounded-full bg-brand-subtle px-2.5 py-0.5 text-caption font-medium tabular-nums text-brand",
+    "shrink-0 whitespace-nowrap rounded-full bg-brand-subtle px-2 py-0.5 text-caption font-medium tabular-nums text-brand @[17rem]:ml-auto @[17rem]:px-2.5",
   /** One column of the tree guide: a vertical line, with a short elbow into the row on the last one. */
   categoryGuide:
-    "relative w-5 shrink-0 self-stretch border-l border-line-strong/40",
+    "relative w-3 shrink-0 self-stretch border-l border-line-strong/40 @[17rem]:w-5",
   categoryGuideElbow:
-    "after:absolute after:left-0 after:top-1/2 after:h-px after:w-3.5 after:bg-line-strong/40",
+    "after:absolute after:left-0 after:top-1/2 after:h-px after:w-2 after:bg-line-strong/40 @[17rem]:after:w-3.5",
   colSpan2: "sm:col-span-2",
   detailsContent: "gap-x-6 gap-y-8",
   pricingGroup:

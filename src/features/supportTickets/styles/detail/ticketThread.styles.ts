@@ -37,7 +37,7 @@ export const ticketThreadStyles = {
     "border border-dashed border-line bg-paper/40 px-4 py-8 text-center text-[0.875rem] text-ink-muted",
   convList: "space-y-3",
   convContainer:
-    "max-h-[min(70vh,36rem)] overflow-y-auto overscroll-contain rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
+    "max-h-[min(70vh,36rem)] overflow-y-auto overflow-x-hidden overscroll-contain rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
   convViewport: "relative w-full",
   convItemWrapper: "absolute left-0 top-0 w-full pb-3",
 
@@ -59,7 +59,8 @@ export const ticketThreadStyles = {
   bubbleMetaOther: "justify-start",
   bubbleSenderName: "text-[0.75rem] font-semibold text-ink sm:text-body-sm",
   bubbleTimestamp: "text-[0.6875rem] text-ink-muted",
-  bubbleText: "whitespace-pre-wrap text-body leading-relaxed text-ink",
+  bubbleText:
+    "whitespace-pre-wrap break-words text-body leading-relaxed text-ink",
 
   thumbsList: "mt-3 flex flex-wrap gap-2",
   thumbBoxBase:

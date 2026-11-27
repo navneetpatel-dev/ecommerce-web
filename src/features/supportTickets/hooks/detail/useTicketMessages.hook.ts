@@ -28,6 +28,8 @@ export function useTicketMessages(ticketId: string) {
     estimateSize: () => 104,
     overscan: 8,
     enabled: useVirtual,
+    // Measuring happens during React's own commit, where a forced flush is not allowed.
+    useFlushSync: false,
   });
 
   const scrollToBottom = useCallback(() => {

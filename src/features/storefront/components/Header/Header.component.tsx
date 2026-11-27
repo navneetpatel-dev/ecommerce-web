@@ -4,7 +4,7 @@ import { useMemo } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/shared/utils/dom/cn";
-import { LABELS } from "@/shared/constants/labels";
+import { LABELS, ROLES } from "@/shared/constants/labels";
 import { homePathForContext } from "@/shared/utils/roles/roleSurface";
 import type { Category, CurrentUser } from "@/shared/api/types";
 import { DesktopPrimaryNav } from "./DesktopPrimaryNav.component";
@@ -115,10 +115,17 @@ export function Header({
           )}
 
           <nav aria-label="Header actions" className={styles.actionsNav}>
-            <ThemeToggleButton />
+            <ThemeToggleButton
+              className={
+                showStorefrontChrome
+                  ? styles.themeToggleInDrawer
+                  : styles.themeToggleCompact
+              }
+            />
 
             {showStorefrontChrome ? (
               <StorefrontActionButtons
+                wishlistInDrawer={currentUser?.role === ROLES.CUSTOMER}
                 cartItemCount={cartItemCount}
                 wishlistItemCount={wishlistItemCount}
                 walletBalance={walletBalance}

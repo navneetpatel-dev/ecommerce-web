@@ -1,41 +1,38 @@
 "use client";
 
+import { DataTable } from "@/shared/components/DataTable";
+import { LABELS } from "@/shared/constants/labels";
 import type { StaffMember } from "../../api/vendorStaff.api";
-import { StaffMembersTableBody } from "./StaffMembersTable/StaffMembersTableBody.component";
-import { vendorTeamStyles as styles } from "../../styles/team/vendorTeam.styles";
+import { staffMemberColumns } from "./StaffMembersTable/staffMemberColumns";
+import { StaffMemberActions } from "./StaffMembersTable/StaffMemberActions.component";
 
 interface StaffMembersTableProps {
   members: StaffMember[];
   onRemove: (member: StaffMember) => void;
 }
 
+const getRowId = (member: StaffMember) => member.id;
+
 export function StaffMembersTable({
   members,
   onRemove,
 }: StaffMembersTableProps) {
-  if (members.length === 0) {
-    return (
-      <div className={styles.emptyBox}>
-        No team members found. Click &quot;Add Member&quot; to invite a
-        colleague to your store.
-      </div>
+  // The owner cannot be removed, so that row gets no menu.
+  const renderActions = (member: StaffMember) =>
+    member.isOwner ? null : (
+      <StaffMemberActions member={member} onRemove={onRemove} />
     );
-  }
 
   return (
-    <div className={styles.tableWrap}>
-      <table className={styles.table}>
-        <thead className={styles.thead}>
-          <tr>
-            <th className={styles.th}>Name</th>
-            <th className={styles.th}>Email</th>
-            <th className={styles.th}>Role</th>
-            <th className={styles.th}>Joined</th>
-            <th className={styles.thRight}>Actions</th>
-          </tr>
-        </thead>
-        <StaffMembersTableBody members={members} onRemove={onRemove} />
-      </table>
-    </div>
+    <DataTable
+      ariaLabel={LABELS.staffTableAria}
+      columns={staffMemberColumns}
+      rows={members}
+      getRowId={getRowId}
+      emptyMessage={LABELS.staffEmpty}
+      actions={renderActions}
+      rowDetails={false}
+      enableFullscreen={false}
+    />
   );
 }

@@ -53,7 +53,7 @@ export function ProductVendorCard({ product }: ProductVendorCardProps) {
           <span>Vendor & Merchant Details</span>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           {status && <StatusBadge status={status} />}
           {vendorId && (
             <a
