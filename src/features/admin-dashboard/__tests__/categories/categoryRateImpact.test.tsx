@@ -5,9 +5,9 @@ import { LABELS } from "@/shared/constants/labels";
 import { useCategoryRateImpact } from "../../hooks/categories/useCategoryRateImpact.hook";
 
 const change = {
-  kind: "reassign" as const,
-  fromCategoryId: "a",
-  toCategoryId: "b",
+  kind: "reparent" as const,
+  categoryId: "a",
+  parentId: "b",
 };
 const answer = (canApply: boolean, productCount = 2) => ({
   productCount,
@@ -38,18 +38,6 @@ describe("changing what vendors are charged by moving categories", () => {
     vi.spyOn(categoriesApi, "rateImpact").mockResolvedValue(answer(false));
     const { result } = renderHook(() => useCategoryRateImpact(change));
     await waitFor(() => expect(result.current.blocked).toBe(true));
-  });
-
-  it("is blocked while a vendor lacks documents for the target", async () => {
-    vi.spyOn(categoriesApi, "rateImpact").mockResolvedValue({
-      ...answer(true, 0),
-      blockedVendors: [
-        { vendorId: "v", businessName: "Spice Co", products: 3 },
-      ],
-    });
-    const { result } = renderHook(() => useCategoryRateImpact(change));
-    await waitFor(() => expect(result.current.blocked).toBe(true));
-    expect(result.current.notAllowed).toBe(false);
   });
 
   it("needs nothing when no rate changes", async () => {

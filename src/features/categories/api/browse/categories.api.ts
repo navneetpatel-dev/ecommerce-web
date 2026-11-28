@@ -114,7 +114,7 @@ export const categoriesApi = {
       orderedIds,
     }),
 
-  /** Admin: what a reassignment or new parent would charge vendor products differently. */
+  /** Admin: what a new commission rate or parent would charge vendor products differently. */
   rateImpact: (change: CategoryRateChange) =>
     apiClient.get<CategoryRateImpact>(
       API.categories.rateImpact(
@@ -125,21 +125,6 @@ export const categoriesApi = {
         ).toString(),
       ),
     ),
-
-  reassignProducts: (
-    fromCategoryId: string,
-    toCategoryId: string,
-    changeReason?: string,
-  ) =>
-    apiClient.post<{
-      fromCategoryId: string;
-      toCategoryId: string;
-      updatedCount: number;
-    }>(API.categories.reassignProducts, {
-      fromCategoryId,
-      toCategoryId,
-      changeReason,
-    }),
 
   delete: (id: string) => apiClient.delete(API.categories.detail(id)),
 

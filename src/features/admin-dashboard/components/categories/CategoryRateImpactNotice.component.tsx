@@ -5,7 +5,6 @@ import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import type { CategoryRates } from "../../hooks/categories/useCategoryRateImpact.hook";
 import { categoryRateImpactStyles as styles } from "../../styles/categories/categoryRateImpact.styles";
-import { CategoryBlockedVendorsList } from "./CategoryBlockedVendorsList.component";
 import { MrpImpactNotice } from "../shared/MrpImpactNotice.component";
 
 interface CategoryRateImpactNoticeProps {
@@ -14,21 +13,20 @@ interface CategoryRateImpactNoticeProps {
 }
 
 /**
- * Before a move or reassignment: who it is blocked by, or that it changes what vendors are
- * charged (and why it is being done).
+ * Before a move or commission change: that it changes what vendors are charged (and why it is
+ * being done), or that this admin may not make it.
  */
 export function CategoryRateImpactNotice({
   rates,
   disabled,
 }: CategoryRateImpactNoticeProps) {
-  const { impact, affected, notAllowed, blockedVendors, reason } = rates;
+  const { impact, affected, blocked, reason } = rates;
   const hasAboveMrp = (impact?.aboveMrp?.variantCount ?? 0) > 0;
-  if (!impact || (!affected && blockedVendors.length === 0 && !hasAboveMrp)) {
+  if (!impact || (!affected && !hasAboveMrp)) {
     return null;
   }
   return (
     <div className={styles.box} role="status">
-      <CategoryBlockedVendorsList vendors={blockedVendors} />
       <MrpImpactNotice impact={impact.aboveMrp} />
       {affected ? (
         <p className={styles.summary}>
@@ -40,7 +38,7 @@ export function CategoryRateImpactNotice({
           })}
         </p>
       ) : null}
-      {notAllowed ? (
+      {blocked ? (
         <p className={styles.blocked}>{LABELS.categoryRateImpactBlocked}</p>
       ) : (
         <PriceChangeReasonField reason={reason} disabled={disabled} />

@@ -5,7 +5,7 @@ export type CategoryImpact = {
   childCount: number;
   activeChildCount: number;
   productCount: number;
-  /** Deleted products still filed here: they block deleting it until reassigned. */
+  /** Deleted products still filed here: they block deleting it. */
   deletedProductCount?: number;
   /** Products listing it as a secondary category. */
   secondaryCount?: number;
@@ -31,7 +31,6 @@ export type CategoryWriteBody = {
 };
 
 export type CategoryRateChange =
-  | { kind: "reassign"; fromCategoryId: string; toCategoryId: string }
   | { kind: "reparent"; categoryId: string; parentId?: string }
   /** A new commission rate (absent: cleared); `parentId` only if the edit also moves it. */
   | {
@@ -55,10 +54,4 @@ export type CategoryRateImpact = {
   };
   /** Whether the signed-in admin may make this change. */
   canApply: boolean;
-  /** Reassignment only: vendors lacking documents for the target; any of them stops the move. */
-  blockedVendors?: Array<{
-    vendorId: string;
-    businessName: string;
-    products: number;
-  }>;
 };

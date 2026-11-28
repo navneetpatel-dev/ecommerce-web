@@ -19,7 +19,6 @@ import { AdminEditCategoryAction } from "../../components/categories/AdminEditCa
 import { AdminCategoryAttributesAction } from "../../components/categories/AdminCategoryAttributesAction.component";
 import { AdminArchiveCategoryAction } from "../../components/categories/AdminArchiveCategoryAction.component";
 import { ArchiveDescription } from "../../components/categories/AdminArchiveCategoryAction/ArchiveDescription.component";
-import { AdminReassignProductsAction } from "../../components/categories/AdminReassignProductsAction.component";
 import { useAdminDataList } from "../shared/useAdminDataList.hook";
 import {
   CATEGORY_FORM_DEFAULTS,
@@ -167,6 +166,5 @@ export function useAdminCategoriesPage() {
       onStatusChange: urlFilters.set("status"),
       onClear: () => urlFilters.clearAll(["search", "status"]),
     },
-    reassignToolbar: <AdminReassignProductsAction onDone={list.reload} />,
   };
 }

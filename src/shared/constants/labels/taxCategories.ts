@@ -94,7 +94,7 @@ export const taxCategoriesLabels = {
   categoryImpactTaxRule:
     "Its tax rule ({percent}% GST) will be deleted with it.",
   categoryImpactDeletedProducts:
-    "Deleted products still filed here: {count}. Reassign them before deleting.",
+    "Deleted products still filed here: {count}. They stop it being deleted, so archive it instead.",
   categoryImpactSecondaryDelete:
     "Products using it as a secondary category: {count}. They lose that tag.",
   categoryImpactSecondaryArchive:

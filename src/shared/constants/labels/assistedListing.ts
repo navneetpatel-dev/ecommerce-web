@@ -19,9 +19,6 @@ export const assistedListingLabels = {
     "Only a Super Admin can change prices, the category or tax details of a live product.",
   categoryRateImpactSummary:
     "{products} live or pending product(s) from {vendors} vendor(s) would be charged differently (GST changes on {gst}, commission on {commission}).",
-  categoryReassignBlocked:
-    "Nothing can be moved: these vendors lack verified documents for the new category.",
-  categoryReassignBlockedVendor: "{vendor}: {count} live or pending product(s)",
   categoryRateImpactBlocked:
     "Only a Super Admin can make this change, because it changes what vendors are charged.",
   categoryCommissionLockedHint:

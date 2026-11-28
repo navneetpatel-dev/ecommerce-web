@@ -3,5 +3,4 @@ export const categoryRateImpactStyles = {
   summary: "break-words text-sm text-ink",
   blocked: "text-sm font-medium text-danger",
   warning: "block break-words text-sm font-medium text-danger",
-  list: "mt-1 list-disc break-words pl-5 text-sm text-ink",
 } as const;

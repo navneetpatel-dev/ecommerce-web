@@ -36,7 +36,6 @@ export const categoriesRoutes = {
   impact: (id: string) => `/api/categories/admin/${id}/impact`,
   move: (id: string) => `/api/categories/${id}/move`,
   reorder: "/api/categories/reorder",
-  reassignProducts: "/api/categories/reassign-products",
   rateImpact: (query: string) => `/api/categories/rate-impact?${query}`,
   attributes: (categoryId: string) =>
     `/api/categories/${categoryId}/attributes`,

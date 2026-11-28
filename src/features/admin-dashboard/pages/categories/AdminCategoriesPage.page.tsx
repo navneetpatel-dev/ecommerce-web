@@ -19,7 +19,6 @@ export function AdminCategoriesPage() {
         onSubmit={page.onSubmit}
         isPending={page.isPending}
         error={page.createError}
-        toolbar={page.reassignToolbar}
       />
       <DiscardChangesDialog
         open={page.discardOpen}

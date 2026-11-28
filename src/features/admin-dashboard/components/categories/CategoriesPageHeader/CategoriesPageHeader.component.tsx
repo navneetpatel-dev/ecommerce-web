@@ -1,6 +1,5 @@
 "use client";
 
-import type { ReactNode } from "react";
 import type { UseFormReturn } from "react-hook-form";
 import { Plus } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
@@ -25,7 +24,6 @@ export interface CategoriesPageHeaderProps {
   onSubmit: (data: CategoryFormInput) => void;
   isPending: boolean;
   error?: string | null;
-  toolbar?: ReactNode;
 }
 
 export function CategoriesPageHeader({
@@ -35,7 +33,6 @@ export function CategoriesPageHeader({
   onSubmit,
   isPending,
   error = null,
-  toolbar,
 }: CategoriesPageHeaderProps) {
   const { handleSubmit } = useCategoriesPageHeader({ form, onSubmit });
 
@@ -50,7 +47,6 @@ export function CategoriesPageHeader({
         </p>
       </div>
       <ButtonGroup className={categoriesPageHeaderStyles.buttonGroup}>
-        {toolbar}
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
             <Button type="button" size="sm" fullWidth="mobile">

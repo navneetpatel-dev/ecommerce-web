@@ -10,7 +10,7 @@ import {
 import { ADMIN_NOTE_LIMITS } from "@/features/products";
 
 /**
- * What a reassignment or new parent would charge vendor products differently, and the written
+ * What a new commission rate or parent would charge vendor products differently, and the written
  * reason the API asks for when it would. `change` is null while there is nothing to check.
  */
 export function useCategoryRateImpact(change: CategoryRateChange | null) {
@@ -40,9 +40,7 @@ export function useCategoryRateImpact(change: CategoryRateChange | null) {
 
   const impact = key && loaded?.key === key ? loaded.impact : null;
   const affected = (impact?.productCount ?? 0) > 0;
-  const blockedVendors = impact?.blockedVendors ?? [];
-  const notAllowed = affected && !impact?.canApply;
-  const blocked = notAllowed || blockedVendors.length > 0;
+  const blocked = affected && !impact?.canApply;
   const required = affected && !blocked;
 
   const onChange = (next: string) => {
@@ -63,8 +61,6 @@ export function useCategoryRateImpact(change: CategoryRateChange | null) {
     impact,
     affected,
     blocked,
-    notAllowed,
-    blockedVendors,
     checking: Boolean(key) && loaded?.key !== key,
     reason: { required, value, error, onChange },
     takeReason,
