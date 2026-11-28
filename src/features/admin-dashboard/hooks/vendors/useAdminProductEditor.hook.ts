@@ -1,20 +1,17 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import {
+  useDirtyFormHandlers,
   useProductEditorState,
-  type ProductListingFormValues,
-  type VariantDraft,
 } from "@/features/products";
 
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { usePermissions } from "@/shared/hooks/auth/usePermissions.hook";
 import { useRouteQueryDialog } from "@/shared/hooks/navigation/useRouteQueryDialog.hook";
+import { useProductSideDialogs } from "./useProductSideDialogs.hook";
 
-export interface ProductTarget {
-  id: string;
-  name: string;
-}
+export type { ProductTarget } from "./useProductSideDialogs.hook";
 
 /**
  * The admin Products page's editor: list a product for a vendor, edit it, manage its variants and
@@ -37,14 +34,14 @@ export function useAdminProductEditor(onChanged: () => void) {
     requireVendor: true,
   });
 
-  const [formDirty, setFormDirty] = useState(false);
-  const [variantsTarget, setVariantsTarget] = useState<ProductTarget | null>(
-    null,
-  );
-  const [submitTarget, setSubmitTarget] = useState<ProductTarget | null>(null);
-  const [previewTarget, setPreviewTarget] = useState<ProductTarget | null>(
-    null,
-  );
+  const {
+    formDirty,
+    setFormDirty,
+    handleFormChange,
+    handleImageUrlsChange,
+    handleVariantRowsChange,
+  } = useDirtyFormHandlers(form);
+  const sideDialogs = useProductSideDialogs(onChanged);
   const lastKeyRef = useRef<string | null>(null);
 
   useEffect(() => {
@@ -64,24 +61,12 @@ export function useAdminProductEditor(onChanged: () => void) {
     }
     if (!canManage) return close();
     if (editId) queueMicrotask(() => void form.loadEditProduct(editId));
-  }, [canCreate, canManage, close, editId, form, mode, open]);
+  }, [canCreate, canManage, close, editId, form, mode, open, setFormDirty]);
 
   const showDialog =
     open &&
     ((mode === "create" && canCreate) || (mode === "edit" && canManage));
 
-  const handleFormChange = (patch: Partial<ProductListingFormValues>) => {
-    setFormDirty(true);
-    form.setValues((current) => ({ ...current, ...patch }));
-  };
-  const handleImageUrlsChange = (urls: string[]) => {
-    setFormDirty(true);
-    form.setImageUrls(urls);
-  };
-  const handleVariantRowsChange = (rows: VariantDraft[]) => {
-    setFormDirty(true);
-    form.setVariantRows(rows);
-  };
   const handleVendorChange = (vendorId: string) => {
     setFormDirty(true);
     form.setVendorId(vendorId);
@@ -133,54 +118,12 @@ export function useAdminProductEditor(onChanged: () => void) {
     },
   };
 
-  const variantsDialogProps = variantsTarget
-    ? {
-        productId: variantsTarget.id,
-        productName: variantsTarget.name,
-        open: true,
-        onOpenChange: (next: boolean) => {
-          if (!next) setVariantsTarget(null);
-        },
-        onChanged,
-      }
-    : null;
-
-  const previewDialogProps = previewTarget
-    ? {
-        productId: previewTarget.id,
-        open: true,
-        onOpenChange: (next: boolean) => {
-          if (!next) setPreviewTarget(null);
-        },
-      }
-    : null;
-
-  const submitDialogProps = submitTarget
-    ? {
-        productId: submitTarget.id,
-        productName: submitTarget.name,
-        open: true,
-        onOpenChange: (next: boolean) => {
-          if (!next) setSubmitTarget(null);
-        },
-        onSubmitted: () => {
-          setSubmitTarget(null);
-          onChanged();
-        },
-      }
-    : null;
-
   return {
     canCreate,
     canManage,
     openCreate,
     openEdit,
-    openVariants: setVariantsTarget,
-    openSubmit: setSubmitTarget,
-    openPreview: setPreviewTarget,
-    previewDialogProps,
+    ...sideDialogs,
     editorDialogProps,
-    variantsDialogProps,
-    submitDialogProps,
   };
 }

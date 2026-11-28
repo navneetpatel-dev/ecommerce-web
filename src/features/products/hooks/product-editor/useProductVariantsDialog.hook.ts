@@ -3,16 +3,12 @@
 import { useCallback, useEffect, useState } from "react";
 import { LABELS } from "@/shared/constants/labels";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
-import { notifySuccess } from "@/shared/stores/notifications/toast.store";
 import type { ProductDetail } from "@/shared/api/types";
-import { ADMIN_NOTE_LIMITS } from "../../constants/listing-form/productFields";
 import { productsApi } from "../../api/listing/products.api";
 import {
-  emptyVariantDraft,
   toVariantBody,
   validateVariantDraft,
   variantMessages,
-  type VariantDraft,
   type VariantDraftErrors,
 } from "../../utils/product-editor/variantDrafts";
 import {
@@ -21,8 +17,9 @@ import {
   variantUpdateBody,
 } from "../../utils/product-editor/variantEdits";
 import { useProductPricingLock } from "./useProductPricingLock.hook";
-
-const MIN_REASON = ADMIN_NOTE_LIMITS.MIN;
+import { usePriceChangeReason } from "./usePriceChangeReason.hook";
+import { useVariantRows } from "./useVariantRows.hook";
+import { useVariantAction } from "./useVariantAction.hook";
 
 interface Options {
   productId: string;
@@ -37,15 +34,21 @@ export function useProductVariantsDialog({
   onChanged,
 }: Options) {
   const [product, setProduct] = useState<ProductDetail | null>(null);
-  const [rows, setRows] = useState<VariantDraft[]>([]);
-  const [newRows, setNewRows] = useState<VariantDraft[]>([]);
+  const {
+    rows,
+    setRows,
+    newRows,
+    setNewRows,
+    patchExisting,
+    patchNew,
+    discardNew,
+    addNewRow,
+  } = useVariantRows();
   const [rowErrors, setRowErrors] = useState<
     Record<string, VariantDraftErrors>
   >({});
-  const [reason, setReason] = useState("");
-  const [reasonError, setReasonError] = useState<string | undefined>();
+  const changeReasonField = usePriceChangeReason();
   const [error, setError] = useState<string | null>(null);
-  const [busyKey, setBusyKey] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const pricing = useProductPricingLock(product);
 
@@ -62,38 +65,23 @@ export function useProductVariantsDialog({
     } finally {
       setLoading(false);
     }
-  }, [productId]);
+  }, [productId, setRows, setNewRows]);
 
   useEffect(() => {
     if (open) void load();
   }, [open, load]);
 
   /** The reason is only asked for when the change is a price one on a product that needs it. */
-  const reasonFor = (isPriceChange: boolean): string | undefined | null => {
-    if (!pricing.reasonRequired || !isPriceChange) return undefined;
-    const text = reason.trim();
-    if (text.length < MIN_REASON) {
-      setReasonError(LABELS.priceChangeReasonRequired);
-      return null;
-    }
-    return text;
-  };
+  const reasonFor = (isPriceChange: boolean) =>
+    pricing.reasonRequired && isPriceChange
+      ? changeReasonField.take()
+      : undefined;
 
-  const run = async (key: string, action: () => Promise<unknown>) => {
-    setBusyKey(key);
-    setError(null);
-    try {
-      await action();
-      notifySuccess(LABELS.variantSaved);
-      setReason("");
-      await load();
-      onChanged?.();
-    } catch (err: unknown) {
-      setError(getApiErrorMessage(err, LABELS.couldNotSaveVariant));
-    } finally {
-      setBusyKey(null);
-    }
-  };
+  const { busyKey, run } = useVariantAction(setError, async () => {
+    changeReasonField.reset();
+    await load();
+    onChanged?.();
+  });
 
   const saveExisting = (key: string) => {
     const draft = rows.find((row) => row.key === key);
@@ -106,7 +94,7 @@ export function useProductVariantsDialog({
       Number(draft.price) !== Number(original.price),
     );
     if (changeReason === null) return;
-    setReasonError(undefined);
+    changeReasonField.clearError();
     void run(key, () =>
       productsApi.updateVariant(
         key,
@@ -127,7 +115,7 @@ export function useProductVariantsDialog({
     const changeReason = reasonFor(true);
     if (changeReason === null) return;
     setRowErrors({});
-    setReasonError(undefined);
+    changeReasonField.clearError();
     void run(key, () =>
       productsApi.addVariant(productId, {
         ...toVariantBody(draft),
@@ -139,31 +127,14 @@ export function useProductVariantsDialog({
   const removeExisting = (key: string) =>
     void run(key, () => productsApi.deleteVariant(key));
 
-  const patchExisting = (key: string, patch: Partial<VariantDraft>) =>
-    setRows((current) =>
-      current.map((row) => (row.key === key ? { ...row, ...patch } : row)),
-    );
-  const patchNew = (key: string, patch: Partial<VariantDraft>) =>
-    setNewRows((current) =>
-      current.map((row) => (row.key === key ? { ...row, ...patch } : row)),
-    );
-  const discardNew = (key: string) =>
-    setNewRows((current) => current.filter((row) => row.key !== key));
-  const addNewRow = () =>
-    setNewRows((current) => [...current, emptyVariantDraft()]);
-  const handleReasonChange = (value: string) => {
-    setReason(value);
-    setReasonError(undefined);
-  };
-
   return {
     product,
     rows,
     newRows,
     rowErrors,
-    reason,
-    reasonError,
-    handleReasonChange,
+    reason: changeReasonField.value,
+    reasonError: changeReasonField.error,
+    handleReasonChange: changeReasonField.onChange,
     error,
     busyKey,
     loading,

@@ -10,7 +10,7 @@ import {
   SelectValue,
 } from "@/shared/components/ui/select";
 import { notificationsApi } from "../../api/notifications/notifications.api";
-import type { BroadcastBuilderState } from "../../hooks/notifications/broadcastBuilder.types";
+import type { BroadcastBuilderState } from "../../types/notifications/broadcastBuilder.types";
 import { BroadcastVendorSegmentFields } from "./BroadcastVendorSegmentFields.component";
 import { InfiniteSearchSelect } from "./InfiniteSearchSelect.component";
 

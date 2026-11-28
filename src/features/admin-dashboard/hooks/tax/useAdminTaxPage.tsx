@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useCallback, type ReactNode } from "react";
-import type { CategoryOptionData } from "@/features/products";
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { LABELS } from "@/shared/constants/labels";
 import { useUrlFilterParams } from "@/shared/hooks/navigation/useUrlFilterParams.hook";
@@ -12,6 +11,7 @@ import {
   type TaxRuleRow,
 } from "../../api/tax/tax.api";
 import { useTaxCategoryFocus } from "./useTaxCategoryFocus.hook";
+import { useTaxRuleDialog } from "./useTaxRuleDialog.hook";
 import { TaxRuleRowActions } from "../../components/tax/TaxRuleRowActions.component";
 import {
   TaxRuleAppliesToCell,
@@ -31,10 +31,6 @@ export function useAdminTaxPage() {
   const scope = urlFilters.get("scope");
   const categoryId = urlFilters.get("categoryId");
   const debouncedSearch = useDebouncedValue(search.trim(), 350);
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [editing, setEditing] = useState<TaxRuleRow | null>(null);
-  const [initialCategory, setInitialCategory] =
-    useState<CategoryOptionData | null>(null);
   const [listVersion, setListVersion] = useState(0);
 
   // Filtering, counting and paging all happen on the server, so totals and later pages are right.
@@ -58,20 +54,6 @@ export function useAdminTaxPage() {
     () => setListVersion((version) => version + 1),
     [],
   );
-  const openCreate = useCallback(() => {
-    setEditing(null);
-    setInitialCategory(null);
-    setDialogOpen(true);
-  }, []);
-  const openEdit = useCallback((rule: TaxRuleRow) => {
-    setInitialCategory(null);
-    setEditing(rule);
-    setDialogOpen(true);
-  }, []);
-  const handleSaved = useCallback(() => {
-    setDialogOpen(false);
-    refresh();
-  }, [refresh]);
   const handleDelete = useCallback(
     (rule: TaxRuleRow) =>
       taxApi.deleteRule(rule.id, { force: rule.isDefault }).then(refresh),
@@ -79,22 +61,17 @@ export function useAdminTaxPage() {
   );
 
   const focus = useTaxCategoryFocus(categoryId, listVersion);
-  const editFocusedRule = useCallback(() => {
-    if (focus.ownRule) openEdit(focus.ownRule);
-  }, [focus.ownRule, openEdit]);
-  const setFocusedCategoryRate = useCallback(() => {
-    if (!focus.effective) return;
-    setEditing(null);
-    setInitialCategory({
-      id: focus.effective.categoryId,
-      name: focus.effective.categoryName,
-    });
-    setDialogOpen(true);
-  }, [focus.effective]);
   const clearFocus = useCallback(
     () => urlFilters.clearAll(["categoryId"]),
     [urlFilters],
   );
+  const {
+    dialog,
+    openCreate,
+    openEdit,
+    editFocusedRule,
+    setFocusedCategoryRate,
+  } = useTaxRuleDialog(focus, refresh);
 
   const actions = useCallback(
     (row: AdminDataRow): ReactNode => (
@@ -141,13 +118,7 @@ export function useAdminTaxPage() {
           "categoryId",
         ]),
     },
-    dialog: {
-      open: dialogOpen,
-      rule: editing,
-      initialCategory,
-      onOpenChange: setDialogOpen,
-      onSaved: handleSaved,
-    },
+    dialog,
     openCreate,
     focus: {
       status: focus.status,

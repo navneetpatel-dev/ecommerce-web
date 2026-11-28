@@ -10,8 +10,9 @@ import type {
   BroadcastMode,
   BroadcastTargetsPreview,
 } from "../../api/notifications/notifications.api";
-import type { BroadcastBuilderState } from "../../hooks/notifications/broadcastBuilder.types";
+import type { BroadcastBuilderState } from "../../types/notifications/broadcastBuilder.types";
 import { BroadcastRecipientSummary } from "./BroadcastRecipientSummary.component";
+import { BroadcastExclusions } from "./BroadcastExclusions.component";
 import { BroadcastSegmentFields } from "./BroadcastSegmentFields.component";
 import { BroadcastUserPicker } from "./BroadcastUserPicker.component";
 
@@ -48,14 +49,6 @@ export function BroadcastAudienceStep({
       ? state.roles.filter((r) => r !== role)
       : [...state.roles, role];
     patch({ roles: next, allUsers: false });
-  };
-
-  const toggleExcludeRole = (role: string) => {
-    patch({
-      excludeRoles: state.excludeRoles.includes(role)
-        ? state.excludeRoles.filter((r) => r !== role)
-        : [...state.excludeRoles, role],
-    });
   };
 
   return (
@@ -157,38 +150,7 @@ export function BroadcastAudienceStep({
             </section>
           )}
 
-          <section className="rounded-xl border border-line/80 bg-paper/35 p-4 space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold uppercase tracking-wider text-ink-muted">
-                Exclusions
-              </span>
-              <span className="text-[11px] font-mono text-ink-muted">
-                {state.excludeUsers.length + state.excludeRoles.length} active
-              </span>
-            </div>
-            <BroadcastUserPicker
-              placeholder="Exclude specific users by name or email..."
-              selected={state.excludeUsers}
-              onChange={(excludeUsers) => patch({ excludeUsers })}
-            />
-            <div className="flex flex-wrap gap-1.5 pt-1">
-              {ROLE_VALUES.map((role) => (
-                <button
-                  key={role}
-                  type="button"
-                  onClick={() => toggleExcludeRole(role)}
-                  className={cn(
-                    "h-7 rounded-lg border px-2.5 text-[11px] font-medium cursor-pointer transition-colors",
-                    state.excludeRoles.includes(role)
-                      ? "border-danger/50 bg-danger/10 text-danger"
-                      : "border-line bg-surface text-ink-muted hover:text-ink",
-                  )}
-                >
-                  Exclude {ROLE_LABELS[role]}
-                </button>
-              ))}
-            </div>
-          </section>
+          <BroadcastExclusions state={state} patch={patch} />
 
           {error ? (
             <p role="alert" className="text-xs font-medium text-danger">

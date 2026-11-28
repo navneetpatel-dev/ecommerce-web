@@ -96,7 +96,7 @@ export function ProductVariantsCard({ product }: ProductVariantsCardProps) {
               <div className="flex items-center gap-3 self-end sm:self-auto shrink-0">
                 {price != null && (
                   <span className="font-mono font-bold text-sm text-ink tabular-nums">
-                    {formatInr(Number(price))}
+                    {formatInr(price)}
                   </span>
                 )}
                 <span

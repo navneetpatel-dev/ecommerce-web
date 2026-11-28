@@ -21,10 +21,10 @@ import {
 import { FormError } from "@/shared/components/forms/FormError.component";
 import { LABELS } from "@/shared/constants/labels";
 import { shippingRatesLabels } from "@/shared/constants/labels/shippingRates";
-import { SHIPPING_METHOD } from "@/shared/constants/statuses";
 import type { ShippingZoneOption } from "../../hooks/shipping/useAdminShippingRatesPage";
 import { useAdminVendorsList } from "../../api/analytics/admin.queries";
 import { ShippingRateNumberField } from "./ShippingRateNumberField.component";
+import { ShippingRateScopeFields } from "./ShippingRateScopeFields.component";
 
 export interface AdminShippingRateDialogProps {
   open: boolean;
@@ -86,9 +86,6 @@ export function AdminShippingRateDialog({
     onSubmit(event);
   };
 
-  const handleMethodChange = (value: string) =>
-    onMethodChange(value as "STANDARD" | "EXPRESS");
-
   const handleVendorSelect = (value: string) =>
     onVendorIdChange(value === "all" ? "" : value);
 
@@ -105,42 +102,13 @@ export function AdminShippingRateDialog({
 
         <form onSubmit={handleSubmit} className="space-y-4 pt-2">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <FormFieldFrame
-              label={shippingRatesLabels.zone}
-              htmlFor="shipping-rate-dialog-zone"
-            >
-              <Select value={zoneId} onValueChange={onZoneIdChange}>
-                <SelectTrigger id="shipping-rate-dialog-zone">
-                  <SelectValue placeholder={shippingRatesLabels.selectZone} />
-                </SelectTrigger>
-                <SelectContent>
-                  {zones.map((zone) => (
-                    <SelectItem key={zone.id} value={zone.id}>
-                      {zone.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </FormFieldFrame>
-
-            <FormFieldFrame
-              label={shippingRatesLabels.method}
-              htmlFor="shipping-rate-dialog-method"
-            >
-              <Select value={method} onValueChange={handleMethodChange}>
-                <SelectTrigger id="shipping-rate-dialog-method">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value={SHIPPING_METHOD.STANDARD}>
-                    Standard
-                  </SelectItem>
-                  <SelectItem value={SHIPPING_METHOD.EXPRESS}>
-                    Express
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            </FormFieldFrame>
+            <ShippingRateScopeFields
+              zoneId={zoneId}
+              method={method}
+              zones={zones}
+              onZoneIdChange={onZoneIdChange}
+              onMethodChange={onMethodChange}
+            />
 
             <ShippingRateNumberField
               label={shippingRatesLabels.minWeightGrams}

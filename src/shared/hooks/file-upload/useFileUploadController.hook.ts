@@ -6,7 +6,6 @@ import {
   getAcceptForUpload,
   getImageUploadHintKey,
   getImageUploadSpec,
-  isAllowedUploadMime,
   maxBytesForUpload,
 } from "@/shared/constants/imageSpecs";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
@@ -17,7 +16,12 @@ import type {
   PreviewEntry,
   SingleProps,
 } from "../../types/file-upload/types";
-import { isPdfFile, isVideoFile, mbLabel } from "../../utils/file-upload/utils";
+import { mbLabel } from "../../utils/file-upload/utils";
+import {
+  partitionForCrop,
+  uploadLimitMessage,
+  validateUploadFile,
+} from "../../utils/file-upload/validateUpload";
 import { useFileUploads } from "./useFileUploads.hook";
 import { useFileCropSession } from "./useFileCropSession.hook";
 import { buildPreviewEntries } from "./useFilePreviews.hook";
@@ -55,77 +59,43 @@ export function useFileUploadController(props: FileUploadProps) {
   });
   const { pending } = uploads;
 
-  const uploadForCrop = async (file: File) => {
-    if (isMultiple) {
-      await uploads.uploadMultipleFiles([file]);
-    } else {
-      await uploads.uploadSingleFile(file);
-    }
+  const uploadAll = async (files: File[]) => {
+    if (isMultiple) await uploads.uploadMultipleFiles(files);
+    else await uploads.uploadSingleFile(files[0]!);
   };
+  const uploadForCrop = (file: File) => uploadAll([file]);
 
   const crop = useFileCropSession({ upload: uploadForCrop, onError: setError });
-
-  const validateFile = (file: File): string | null => {
-    if (file.size > maxBytes) {
-      return formatLabel(LABELS.uploadTooLargeMb, { mb: mbLabel(maxBytes) });
-    }
-    const mime = file.type.toLowerCase();
-    if (!isAllowedUploadMime(props.entityType, props.purpose, mime)) {
-      if (spec?.mimeTypes.every((type) => type.startsWith("video/"))) {
-        return LABELS.imageUploadInvalidVideoType;
-      }
-      return spec?.mimeTypes.includes("application/pdf")
-        ? LABELS.imageUploadInvalidDocumentType
-        : LABELS.uploadInvalidImageType;
-    }
-    return null;
-  };
 
   const processFiles = async (files: File[]) => {
     setError(null);
 
     if (maxFiles !== undefined && files.length > remainingSlots) {
-      setError(
-        limitReached
-          ? formatLabel(LABELS.uploadLimitFull, { max: maxFiles })
-          : formatLabel(LABELS.uploadLimitReached, {
-              max: maxFiles,
-              remaining: remainingSlots,
-            }),
-      );
+      setError(uploadLimitMessage(maxFiles, remainingSlots));
       if (fileRef.current) fileRef.current.value = "";
       return;
     }
 
     for (const file of files) {
-      const validationError = validateFile(file);
+      const validationError = validateUploadFile(file, {
+        entityType: props.entityType,
+        purpose: props.purpose,
+        maxBytes,
+        spec,
+      });
       if (validationError) {
         setError(validationError);
         return;
       }
     }
 
-    const directUpload: File[] = [];
-    const cropCandidates: File[] = [];
-
-    for (const file of files) {
-      const needsCrop =
-        spec?.cropRequired && !isPdfFile(file) && !isVideoFile(file);
-      if (needsCrop) {
-        cropCandidates.push(file);
-      } else {
-        directUpload.push(file);
-      }
-    }
+    const { directUpload, cropCandidates } = partitionForCrop(
+      files,
+      Boolean(spec?.cropRequired),
+    );
 
     try {
-      if (directUpload.length) {
-        if (isMultiple) {
-          await uploads.uploadMultipleFiles(directUpload);
-        } else {
-          await uploads.uploadSingleFile(directUpload[0]!);
-        }
-      }
+      if (directUpload.length) await uploadAll(directUpload);
 
       if (cropCandidates.length) {
         crop.beginCropSession(cropCandidates);

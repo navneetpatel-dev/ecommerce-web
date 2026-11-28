@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { ArrowLeft, Send } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
-import type { BroadcastBuilderState } from "../../hooks/notifications/broadcastBuilder.types";
+import type { BroadcastBuilderState } from "../../types/notifications/broadcastBuilder.types";
 import { BroadcastComposerControls } from "./BroadcastComposerControls.component";
 import { BroadcastPreviewPane } from "./BroadcastPreviewPane.component";
 import { BroadcastSendConfirmModal } from "./BroadcastSendConfirmModal.component";

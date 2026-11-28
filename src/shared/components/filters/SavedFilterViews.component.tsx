@@ -1,23 +1,13 @@
 "use client";
 
-import { IconCloseButton } from "@/shared/components/ui/icon-close-button";
-import { useEffect, useState } from "react";
-import { Bookmark, Check, Plus, Share2, Trash2 } from "lucide-react";
+import { Bookmark, Check, Share2, Trash2 } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
-import { Input } from "@/shared/components/ui/input";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/shared/components/ui/popover";
 import { cn } from "@/shared/utils/dom/cn";
+import { useSavedFilterViews } from "../../hooks/filters/useSavedFilterViews.hook";
+import { areFilterValuesEqual as areValuesEqual } from "../../utils/filters/areFilterValuesEqual";
+import { SaveViewPopover } from "./SaveViewPopover.component";
 
-export interface SavedFilterViewItem {
-  id: string;
-  name: string;
-  values: Record<string, unknown>;
-  createdAt: number;
-}
+export type { SavedFilterViewItem } from "../../types/filters/savedFilterViews.types";
 
 export interface SavedFilterViewsProps {
   storageKey: string;
@@ -28,21 +18,6 @@ export interface SavedFilterViewsProps {
   className?: string;
 }
 
-function areValuesEqual(
-  a: Record<string, unknown>,
-  b: Record<string, unknown>,
-): boolean {
-  const keysA = Object.keys(a).filter(
-    (k) => a[k] !== "" && a[k] !== undefined && a[k] !== null,
-  );
-  const keysB = Object.keys(b).filter(
-    (k) => b[k] !== "" && b[k] !== undefined && b[k] !== null,
-  );
-
-  if (keysA.length !== keysB.length) return false;
-  return keysA.every((k) => String(a[k]) === String(b[k]));
-}
-
 export function SavedFilterViews({
   storageKey,
   currentValues,
@@ -51,85 +26,17 @@ export function SavedFilterViews({
   onShare,
   className,
 }: SavedFilterViewsProps) {
-  const [views, setViews] = useState<SavedFilterViewItem[]>([]);
-  const [isSaving, setIsSaving] = useState(false);
-  const [newViewName, setNewViewName] = useState("");
-  const [copiedLink, setCopiedLink] = useState(false);
-
-  const fullStorageKey = `saved-filter-views:${storageKey}`;
-
-  // Load from localStorage
-  useEffect(() => {
-    try {
-      const raw = localStorage.getItem(fullStorageKey);
-      if (raw) {
-        const parsed = JSON.parse(raw);
-        if (Array.isArray(parsed)) {
-          setViews(parsed);
-        }
-      }
-    } catch {
-      // Storage unavailable or corrupted
-    }
-  }, [fullStorageKey]);
-
-  const saveToStorage = (updatedViews: SavedFilterViewItem[]) => {
-    setViews(updatedViews);
-    try {
-      localStorage.setItem(fullStorageKey, JSON.stringify(updatedViews));
-    } catch {
-      // Storage full or unavailable
-    }
-  };
-
-  const handleSaveCurrentView = (e: React.FormEvent) => {
-    e.preventDefault();
-    const trimmed = newViewName.trim();
-    if (!trimmed) return;
-
-    const newView: SavedFilterViewItem = {
-      id: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
-      name: trimmed,
-      values: { ...currentValues },
-      createdAt: Date.now(),
-    };
-
-    const updated = [...views, newView];
-    saveToStorage(updated);
-    setNewViewName("");
-    setIsSaving(false);
-  };
-
-  const handleDeleteView = (id: string, e: React.MouseEvent) => {
-    e.stopPropagation();
-    const updated = views.filter((v) => v.id !== id);
-    saveToStorage(updated);
-  };
-
-  const handleShareView = async () => {
-    if (typeof window === "undefined") return;
-    try {
-      const url = new URL(window.location.href);
-      Object.entries(currentValues).forEach(([key, val]) => {
-        if (val !== "" && val !== undefined && val !== null) {
-          url.searchParams.set(key, String(val));
-        } else {
-          url.searchParams.delete(key);
-        }
-      });
-      const shareableUrl = url.toString();
-
-      if (onShare) {
-        onShare(shareableUrl);
-      } else if (navigator?.clipboard?.writeText) {
-        await navigator.clipboard.writeText(shareableUrl);
-      }
-      setCopiedLink(true);
-      setTimeout(() => setCopiedLink(false), 2000);
-    } catch {
-      // Storage or clipboard unavailable
-    }
-  };
+  const {
+    views,
+    isSaving,
+    setIsSaving,
+    newViewName,
+    setNewViewName,
+    copiedLink,
+    handleSaveCurrentView,
+    handleDeleteView,
+    handleShareView,
+  } = useSavedFilterViews({ storageKey, currentValues, onShare });
 
   const isDefaultActive = areValuesEqual(currentValues, defaultValues);
 
@@ -194,66 +101,13 @@ export function SavedFilterViews({
 
       {/* Save & Share Actions */}
       <div className="inline-flex items-center gap-0.5">
-        <Popover open={isSaving} onOpenChange={setIsSaving}>
-          <PopoverTrigger asChild>
-            <Button
-              type="button"
-              size="sm"
-              variant="ghost"
-              className="h-7 gap-1 px-2 text-caption text-ink-muted hover:text-ink"
-              aria-label="Save current filter view"
-            >
-              <Plus className="size-3" aria-hidden />
-              <span>Save view</span>
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent
-            align="start"
-            sideOffset={4}
-            className="w-64 p-3 space-y-2.5 z-50 bg-surface-raised border-line shadow-elevation-2"
-          >
-            <div className="flex items-center justify-between">
-              <p className="text-body-sm font-semibold text-ink">
-                Save Filter View
-              </p>
-              <IconCloseButton
-                variant="inline"
-                onClick={() => setIsSaving(false)}
-              />
-            </div>
-            <form onSubmit={handleSaveCurrentView} className="space-y-2">
-              <Input
-                type="text"
-                autoFocus
-                placeholder="e.g. Urgent or Processing"
-                value={newViewName}
-                onChange={(e) => setNewViewName(e.target.value)}
-                className="h-8 text-body-sm"
-                aria-label="View name"
-              />
-              <div className="flex justify-end gap-1.5">
-                <Button
-                  type="button"
-                  size="sm"
-                  variant="ghost"
-                  onClick={() => setIsSaving(false)}
-                  className="h-7 text-caption"
-                >
-                  Cancel
-                </Button>
-                <Button
-                  type="submit"
-                  size="sm"
-                  variant="default"
-                  disabled={!newViewName.trim()}
-                  className="h-7 text-caption"
-                >
-                  Save
-                </Button>
-              </div>
-            </form>
-          </PopoverContent>
-        </Popover>
+        <SaveViewPopover
+          open={isSaving}
+          onOpenChange={setIsSaving}
+          name={newViewName}
+          onNameChange={setNewViewName}
+          onSubmit={handleSaveCurrentView}
+        />
 
         {/* Share View Link Button */}
         <Button

@@ -22,7 +22,6 @@ import {
 } from "@/shared/components/ui/select";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
-import { CURRENCY_SYMBOL } from "@/shared/utils/formatting/orderFormat";
 import {
   GST_OTHER,
   GST_SLAB_CHOICES,
@@ -30,6 +29,7 @@ import {
   type TaxRuleFormValues,
 } from "../../utils/tax/taxRuleForm";
 import { adminTaxStyles as styles } from "../../styles/tax/adminTax.styles";
+import { TaxRuleBandFields } from "./TaxRuleBandFields.component";
 
 interface TaxRuleFormFieldsProps {
   values: TaxRuleFormValues;
@@ -67,11 +67,6 @@ export function TaxRuleFormFields({
     onPatch({ gstCustom: value == null ? "" : String(value) });
   const handleHsn = (event: ChangeEvent<HTMLInputElement>) =>
     onPatch({ hsnCode: event.target.value.replace(/\D/g, "").slice(0, 8) });
-  const handleThreshold = (value: number | undefined) =>
-    onPatch({ priceBandThreshold: value == null ? "" : String(value) });
-  const handleAbove = (value: number | undefined) =>
-    onPatch({ gstPercentageAbove: value == null ? "" : String(value) });
-
   return (
     <FormStack>
       <FormSection
@@ -174,46 +169,12 @@ export function TaxRuleFormFields({
         ) : null}
       </FormSection>
 
-      <FormSection
-        title={LABELS.taxRuleSectionBand}
-        hint={LABELS.gstPriceBandHint}
-        contentClassName={styles.sectionContent}
-      >
-        <FormFieldFrame
-          label={LABELS.gstPriceBandThreshold}
-          error={errors.band}
-        >
-          <NumberInput
-            value={
-              values.priceBandThreshold === ""
-                ? undefined
-                : Number(values.priceBandThreshold)
-            }
-            min={0}
-            step={100}
-            prefix={CURRENCY_SYMBOL}
-            placeholder={LABELS.gstBandOptional}
-            disabled={disabled}
-            onChange={handleThreshold}
-          />
-        </FormFieldFrame>
-        <FormFieldFrame label={LABELS.gstPercentageAbove}>
-          <NumberInput
-            value={
-              values.gstPercentageAbove === ""
-                ? undefined
-                : Number(values.gstPercentageAbove)
-            }
-            min={0}
-            max={100}
-            step={0.25}
-            suffix="%"
-            placeholder={LABELS.gstBandOptional}
-            disabled={disabled}
-            onChange={handleAbove}
-          />
-        </FormFieldFrame>
-      </FormSection>
+      <TaxRuleBandFields
+        values={values}
+        errors={errors}
+        disabled={disabled}
+        onPatch={onPatch}
+      />
     </FormStack>
   );
 }

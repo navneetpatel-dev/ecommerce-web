@@ -1,5 +1,6 @@
 "use client";
 
+import type { DisplayAmountInput } from "@/shared/utils/formatting/displayAmount";
 import { MediaImage } from "@/shared/components/media/MediaImage.component";
 import { formatInr } from "@/shared/utils/formatting/orderFormat";
 import {
@@ -83,7 +84,7 @@ export function RecordDetailItemSummary({
           </p>
           {lineTotal != null && (
             <span className="font-mono font-bold text-ink text-body-sm shrink-0">
-              {formatInr(Number(lineTotal))}
+              {formatInr(lineTotal as DisplayAmountInput)}
             </span>
           )}
         </div>
@@ -91,7 +92,7 @@ export function RecordDetailItemSummary({
         {qty != null && price != null && (
           <p className="text-[11px] text-ink-muted">
             <span className="font-medium text-ink">Qty: {qty}</span> ×{" "}
-            {formatInr(Number(price))}
+            {formatInr(price as DisplayAmountInput)}
           </p>
         )}
 
@@ -104,7 +105,7 @@ export function RecordDetailItemSummary({
               >
                 <strong className="mr-1 text-ink">{fieldLabel(k)}:</strong>{" "}
                 {isMoneyKey(k)
-                  ? formatInr(Number(v))
+                  ? formatInr(v as DisplayAmountInput)
                   : typeof v === "object"
                     ? "..."
                     : String(v)}

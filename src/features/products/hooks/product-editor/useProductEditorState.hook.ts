@@ -3,49 +3,31 @@
 import { useCallback, useState } from "react";
 import { LABELS } from "@/shared/constants/labels";
 import { useManualFormFieldErrors } from "@/shared/hooks/forms/useManualFormFieldErrors.hook";
-import {
-  applyApiErrorsToManualForm,
-  getFormLevelApiError,
-} from "@/shared/utils/api-errors/applyApiFormErrors";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 import type { ProductDetail } from "@/shared/api/types";
-import { ADMIN_NOTE_LIMITS } from "../../constants/listing-form/productFields";
 import { productsApi } from "../../api/listing/products.api";
 import {
   emptyProductListingValues,
   listingValuesFromProduct,
   type ProductListingFormField,
   type ProductListingFormValues,
-  type ProductWriteBody,
 } from "../../schemas/listing-form/products.schema";
-import { createProductWithImages } from "../../utils/product-editor/createProductWithImages";
-import { pricingFieldsChanged } from "../../utils/product-editor/pricingChanges";
-import {
-  isBlankDraft,
-  toVariantBody,
-  validateVariantDraft,
-  variantMessages,
-  type VariantDraft,
-  type VariantDraftErrors,
+import type {
+  VariantDraft,
+  VariantDraftErrors,
 } from "../../utils/product-editor/variantDrafts";
 import type { CategoryOptionData } from "../../types/product-editor/types";
+import type { ProductEditorStateOptions } from "../../types/product-editor/editorState.types";
+import { categoryOptionOf } from "../../utils/product-editor/categoryOptionOf";
 import { useProductPricingLock } from "./useProductPricingLock.hook";
+import { usePriceChangeReason } from "./usePriceChangeReason.hook";
+import { useProductSave } from "./useProductSave.hook";
 
-export interface ProductEditorStateOptions {
-  mode: "create" | "edit" | null;
-  editId: string | null;
-  close: () => void;
-  /** Called after a successful save (refresh the list). */
-  onSaved: () => void;
-  /** Admin: the product is listed for a vendor chosen in the form. */
-  requireVendor?: boolean;
-}
-
-const MIN_REASON = ADMIN_NOTE_LIMITS.MIN;
+export type { ProductEditorStateOptions } from "../../types/product-editor/editorState.types";
 
 /** State and submit logic of the product editor, shared by the vendor and admin product pages. */
 export function useProductEditorState(options: ProductEditorStateOptions) {
-  const { mode, editId, close, onSaved, requireVendor = false } = options;
+  const { mode } = options;
 
   const [values, setValues] = useState<ProductListingFormValues>(() =>
     emptyProductListingValues(),
@@ -60,8 +42,8 @@ export function useProductEditorState(options: ProductEditorStateOptions) {
   const [variantErrors, setVariantErrors] = useState<
     Record<string, VariantDraftErrors>
   >({});
-  const [changeReason, setChangeReason] = useState("");
-  const [reasonError, setReasonError] = useState<string | undefined>();
+  const reason = usePriceChangeReason();
+  const { reset: resetReason, clearError: clearReasonError } = reason;
   const [product, setProduct] = useState<ProductDetail | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const {
@@ -69,7 +51,6 @@ export function useProductEditorState(options: ProductEditorStateOptions) {
     setErrors: setApiFieldErrors,
     clearAll: clearApiFieldErrors,
   } = useManualFormFieldErrors<ProductListingFormField>();
-  const [submitting, setSubmitting] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const pricing = useProductPricingLock(mode === "edit" ? product : null);
@@ -78,8 +59,8 @@ export function useProductEditorState(options: ProductEditorStateOptions) {
     setSubmitError(null);
     clearApiFieldErrors();
     setVariantErrors({});
-    setReasonError(undefined);
-  }, [clearApiFieldErrors]);
+    clearReasonError();
+  }, [clearApiFieldErrors, clearReasonError]);
 
   const resetFormState = useCallback(
     (categoryId?: string) => {
@@ -88,35 +69,27 @@ export function useProductEditorState(options: ProductEditorStateOptions) {
       setDraftUploadId(crypto.randomUUID());
       setVendorId("");
       setVariantRows([]);
-      setChangeReason("");
+      resetReason();
       setProduct(null);
       setSelectedCategory(null);
       clearMessages();
       setLoading(false);
     },
-    [clearMessages],
+    [clearMessages, resetReason],
   );
 
   const loadEditProduct = useCallback(
     async (productId: string) => {
       setValues(emptyProductListingValues(""));
       setImageUrls([]);
-      setChangeReason("");
+      resetReason();
       setProduct(null);
       clearMessages();
       setLoading(true);
       try {
         const loaded = await productsApi.detail(productId);
         setProduct(loaded);
-        setSelectedCategory(
-          loaded.category
-            ? {
-                id: loaded.category.id,
-                name: loaded.category.name,
-                imageUrl: loaded.category.imageUrl ?? null,
-              }
-            : null,
-        );
+        setSelectedCategory(categoryOptionOf(loaded));
         setValues(listingValuesFromProduct(loaded));
       } catch (err: unknown) {
         setSubmitError(getApiErrorMessage(err, LABELS.couldNotLoadProduct));
@@ -124,77 +97,23 @@ export function useProductEditorState(options: ProductEditorStateOptions) {
         setLoading(false);
       }
     },
-    [clearMessages],
+    [clearMessages, resetReason],
   );
 
-  /** Non-blank variant rows as request bodies, or null (with errors shown) when a row is incomplete. */
-  const collectVariants = () => {
-    const filled = variantRows.filter((row) => !isBlankDraft(row));
-    const errors: Record<string, VariantDraftErrors> = {};
-    for (const row of filled) {
-      const rowErrors = validateVariantDraft(row, variantMessages(LABELS));
-      if (Object.keys(rowErrors).length) errors[row.key] = rowErrors;
-    }
-    setVariantErrors(errors);
-    return Object.keys(errors).length ? null : filled.map(toVariantBody);
-  };
-
-  const handleValidSubmit = async (body: ProductWriteBody) => {
-    clearMessages();
-    const editing = mode === "edit" && Boolean(editId);
-
-    if (!editing && requireVendor && !vendorId) {
-      setSubmitError(LABELS.listForVendorRequired);
-      return;
-    }
-    const variants = editing ? [] : collectVariants();
-    if (variants === null) return;
-
-    let reason: string | undefined;
-    if (editing && pricing.reasonRequired && product) {
-      if (pricingFieldsChanged(product, body)) {
-        reason = changeReason.trim();
-        if (reason.length < MIN_REASON) {
-          setReasonError(LABELS.priceChangeReasonRequired);
-          return;
-        }
-      }
-    }
-
-    setSubmitting(true);
-    try {
-      if (editing && editId) {
-        await productsApi.update(editId, {
-          ...body,
-          ...(reason ? { changeReason: reason } : {}),
-        });
-      } else {
-        await createProductWithImages(body, imageUrls, {
-          onBehalf: requireVendor,
-          vendorId: vendorId || undefined,
-          variants,
-        });
-      }
-      close();
-      resetFormState();
-      onSaved();
-    } catch (err: unknown) {
-      const mapped = applyApiErrorsToManualForm<ProductListingFormField>(
-        err,
-        setApiFieldErrors,
-      );
-      setSubmitError(
-        mapped ? null : getFormLevelApiError(err, LABELS.couldNotSaveProduct),
-      );
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  const handleReasonChange = (value: string) => {
-    setChangeReason(value);
-    setReasonError(undefined);
-  };
+  const { submitting, handleValidSubmit } = useProductSave({
+    ...options,
+    vendorId,
+    variantRows,
+    imageUrls,
+    product,
+    reasonRequired: pricing.reasonRequired,
+    takeReason: reason.take,
+    clearMessages,
+    resetFormState,
+    setVariantErrors,
+    setSubmitError,
+    setApiFieldErrors,
+  });
 
   return {
     values,
@@ -211,9 +130,9 @@ export function useProductEditorState(options: ProductEditorStateOptions) {
     variantErrors,
     product,
     pricing,
-    changeReason,
-    reasonError,
-    handleReasonChange,
+    changeReason: reason.value,
+    reasonError: reason.error,
+    handleReasonChange: reason.onChange,
     submitError,
     apiFieldErrors,
     submitting,

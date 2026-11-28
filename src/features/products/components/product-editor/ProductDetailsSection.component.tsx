@@ -3,11 +3,7 @@
 import type { ChangeEvent } from "react";
 import { Input } from "@/shared/components/ui/input";
 import { Textarea } from "@/shared/components/ui/textarea";
-import { NumberInput } from "@/shared/components/forms/NumberInput.component";
 import { FormFieldFrame, FormSection } from "@/shared/components/forms";
-import { Button } from "@/shared/components/ui/button";
-import { formatLabel } from "@/shared/utils/formatting/formatLabel";
-import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
 import { LABELS } from "@/shared/constants/labels";
 import { PRODUCT_FIELD_LIMITS } from "../../constants/listing-form/productFields";
 import type {
@@ -20,11 +16,9 @@ import type {
   PricingLock,
   ProductEditorFormProps,
 } from "../../types/product-editor/types";
-import { CustomerPricePreview } from "./CustomerPricePreview.component";
-import { ProductPricingGroup } from "./ProductPricingGroup.component";
 import { ProductCategorySelect } from "./ProductCategorySelect.component";
+import { ProductPriceFields } from "./ProductPriceFields.component";
 import { productEditorFormStyles } from "../../styles/product-editor/productEditorForm.styles";
-import { CURRENCY_SYMBOL } from "@/shared/utils/formatting/orderFormat";
 
 interface ProductDetailsSectionProps {
   values: ProductListingFormValues;
@@ -54,52 +48,6 @@ export function ProductDetailsSection({
 
   const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
     patchValues({ name: event.target.value });
-  };
-
-  const handlePriceChange = (value: number | undefined) => {
-    patchValues({ price: value == null ? "" : String(value) });
-  };
-
-  const customerPrice = priceGuide.customerPrice;
-  const mrp =
-    values.compareAtPrice === "" ? null : Number(values.compareAtPrice);
-  // Comparable without a category: an MRP below the selling price itself can never be right.
-  const sellingPrice = values.price === "" ? null : Number(values.price);
-  const mrpBelowPrice =
-    mrp !== null && sellingPrice !== null && mrp < sellingPrice
-      ? formatLabel(LABELS.productMrpBelowPrice, { price: values.price })
-      : undefined;
-  const mrpTooLow =
-    customerPrice !== null && mrp !== null && mrp < customerPrice;
-  const mrpBelowMinimum =
-    mrpTooLow && customerPrice !== null
-      ? formatLabel(LABELS.productMrpBelowCustomerPrice, {
-          amount: formatInrAmount(customerPrice),
-        })
-      : undefined;
-  const handleUseCustomerPrice = () => {
-    if (customerPrice !== null) {
-      patchValues({ compareAtPrice: String(customerPrice) });
-    }
-  };
-  const showUseCustomerPrice =
-    customerPrice !== null && !locked && (mrp === null || mrpTooLow);
-  const useCustomerPriceButton = showUseCustomerPrice ? (
-    <Button
-      type="button"
-      variant="ghost"
-      size="sm"
-      disabled={disabled}
-      onClick={handleUseCustomerPrice}
-    >
-      {formatLabel(LABELS.productUseCustomerPriceAsMrp, {
-        amount: formatInrAmount(customerPrice),
-      })}
-    </Button>
-  ) : undefined;
-
-  const handleCompareAtPriceChange = (value: number | undefined) => {
-    patchValues({ compareAtPrice: value == null ? "" : String(value) });
   };
 
   const handleBrandChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -165,53 +113,14 @@ export function ProductDetailsSection({
           onChange={handleBrandChange}
         />
       </FormFieldFrame>
-      <ProductPricingGroup
-        preview={
-          <CustomerPricePreview
-            preview={priceGuide.preview}
-            missing={priceGuide.missing}
-          />
-        }
-      >
-        <FormFieldFrame
-          label={LABELS.productPriceExclGst}
-          hint={locked ? pricingLock?.hint : priceGuide.priceHint}
-          required
-          error={getError("price")}
-        >
-          <NumberInput
-            prefix={CURRENCY_SYMBOL}
-            min={1}
-            step={1}
-            placeholder={LABELS.productPriceExclGst}
-            value={values.price === "" ? undefined : Number(values.price)}
-            error={Boolean(getError("price"))}
-            disabled={isPriceDisabled}
-            onChange={handlePriceChange}
-          />
-        </FormFieldFrame>
-        <FormFieldFrame
-          label={LABELS.productMrpInclGst}
-          hint={locked ? pricingLock?.hint : priceGuide.mrpHint}
-          error={getError("compareAtPrice") ?? mrpBelowPrice ?? mrpBelowMinimum}
-          footerAction={useCustomerPriceButton}
-        >
-          <NumberInput
-            prefix={CURRENCY_SYMBOL}
-            min={1}
-            step={1}
-            placeholder={LABELS.productMrpInclGst}
-            value={
-              values.compareAtPrice === ""
-                ? undefined
-                : Number(values.compareAtPrice)
-            }
-            error={Boolean(getError("compareAtPrice"))}
-            disabled={isPriceDisabled}
-            onChange={handleCompareAtPriceChange}
-          />
-        </FormFieldFrame>
-      </ProductPricingGroup>
+      <ProductPriceFields
+        values={values}
+        disabled={disabled}
+        getError={getError}
+        patchValues={patchValues}
+        priceGuide={priceGuide}
+        pricingLock={pricingLock}
+      />
       <FormFieldFrame
         counter={{
           value: values.description,

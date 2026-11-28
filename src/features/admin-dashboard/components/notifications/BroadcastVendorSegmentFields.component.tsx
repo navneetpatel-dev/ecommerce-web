@@ -14,7 +14,7 @@ import {
   notificationsApi,
   type BroadcastCategoryOption,
 } from "../../api/notifications/notifications.api";
-import type { BroadcastBuilderState } from "../../hooks/notifications/broadcastBuilder.types";
+import type { BroadcastBuilderState } from "../../types/notifications/broadcastBuilder.types";
 import { InfiniteSearchSelect } from "./InfiniteSearchSelect.component";
 
 interface BroadcastVendorSegmentFieldsProps {

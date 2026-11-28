@@ -98,7 +98,7 @@ const allowlist = [
     why: "Radix viewport base; toastStackStyles.viewport overrides it with the inset-aware offsets.",
   },
   {
-    file: "shared/components/DataTable/DataTableDesktopTable.component.tsx",
+    file: "shared/components/DataTable/DataTableDesktopHeader.component.tsx",
     match: /sticky top-0/,
     why: "Sticky table header pins to its own scroll container, not the viewport edge.",
   },

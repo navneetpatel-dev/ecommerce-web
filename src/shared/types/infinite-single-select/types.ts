@@ -67,3 +67,14 @@ export interface UseInfiniteSelectOptionsArgs {
   pageSize: number;
   searchable: boolean;
 }
+
+export interface UseInfiniteSelectPagesParams {
+  open: boolean;
+  searchable: boolean;
+  debouncedQuery: string;
+  pageSize: number;
+  pinnedOption: InfiniteSingleSelectOption | null;
+  fetchPage: UseInfiniteSelectOptionsArgs["fetchPage"];
+  /** Owned by the query-state hook; cleared here once page 1 resolves. */
+  setInitialLoading: (loading: boolean) => void;
+}

@@ -1,5 +1,6 @@
 "use client";
 
+import type { DisplayAmountInput } from "@/shared/utils/formatting/displayAmount";
 import { ShieldCheck } from "lucide-react";
 import { formatInr } from "@/shared/utils/formatting/orderFormat";
 import { RecordDetailCopyButton } from "../RecordDetailCopyButton.component";
@@ -61,7 +62,7 @@ export function ProductPricingPoliciesCard({
           label: "Return Shipping Fee",
           value: (
             <span className="font-mono">
-              {formatInr(Number(returnShippingFee))}
+              {formatInr(returnShippingFee as DisplayAmountInput)}
             </span>
           ),
         }

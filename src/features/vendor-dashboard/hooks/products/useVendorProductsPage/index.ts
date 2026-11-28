@@ -1,15 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { usePermissions } from "@/shared/hooks/auth/usePermissions.hook";
 import { useRouteQueryDialog } from "@/shared/hooks/navigation/useRouteQueryDialog.hook";
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { QUERY_PARAMS } from "@/shared/constants/navigation/queryParams";
-import type {
-  ProductListingFormValues,
-  VariantDraft,
-} from "@/features/products";
+import { useDirtyFormHandlers } from "@/features/products";
 import { VendorProductImagesDialog } from "../../../components/products/VendorProductImagesDialog.component";
 import { useVendorProductsTable } from "../useVendorProductsTable.hook";
 import { useVendorProductFormState } from "./useVendorProductFormState.hook";
@@ -32,7 +29,13 @@ export function useVendorProductsPage() {
   const form = useVendorProductFormState({ mode, editId, close });
 
   const lastDialogKeyRef = useRef<string | null>(null);
-  const [formDirty, setFormDirty] = useState(false);
+  const {
+    formDirty,
+    setFormDirty,
+    handleFormChange,
+    handleImageUrlsChange,
+    handleVariantRowsChange,
+  } = useDirtyFormHandlers(form);
 
   useEffect(() => {
     if (!open || !mode) {
@@ -63,7 +66,7 @@ export function useVendorProductsPage() {
         void form.loadEditProduct(editId);
       });
     }
-  }, [canCreate, canEdit, close, editId, form, mode, open]);
+  }, [canCreate, canEdit, close, editId, form, mode, open, setFormDirty]);
 
   const imagesProductId = searchParams.get(QUERY_PARAMS.images);
   const variantsProductId = searchParams.get(QUERY_PARAMS.variants);
@@ -83,21 +86,6 @@ export function useVendorProductsPage() {
 
   const showProductDialog =
     open && ((mode === "create" && canCreate) || (mode === "edit" && canEdit));
-
-  /** User edits mark the form dirty so the dialog can confirm before discarding. */
-  const handleFormChange = (patch: Partial<ProductListingFormValues>) => {
-    setFormDirty(true);
-    form.setValues((current) => ({ ...current, ...patch }));
-  };
-  const handleImageUrlsChange = (urls: string[]) => {
-    setFormDirty(true);
-    form.setImageUrls(urls);
-  };
-
-  const handleVariantRowsChange = (rows: VariantDraft[]) => {
-    setFormDirty(true);
-    form.setVariantRows(rows);
-  };
 
   const formDialogProps = {
     open: showProductDialog,

@@ -1,3 +1,4 @@
+import type { DisplayAmountInput } from "@/shared/utils/formatting/displayAmount";
 import { LABELS } from "@/shared/constants/labels";
 import { tryFormatDateTime } from "@/shared/utils/formatting/formatDate";
 import { formatInr } from "@/shared/utils/formatting/orderFormat";
@@ -111,7 +112,7 @@ export function adminCellText(row: AdminDataRow, columnKey: string): string {
     if (value != null && value !== "" && !isNaN(Number(value))) {
       return type === "percentage"
         ? `${Number(value)}%`
-        : formatInr(Number(value));
+        : formatInr(value as DisplayAmountInput);
     }
   }
   if (isMoneyColumnKey(columnKey)) {
@@ -121,7 +122,7 @@ export function adminCellText(row: AdminDataRow, columnKey: string): string {
         !isNaN(Number(value)) &&
         value.trim() !== "")
     ) {
-      return formatInr(Number(value));
+      return formatInr(value);
     }
   }
   if (

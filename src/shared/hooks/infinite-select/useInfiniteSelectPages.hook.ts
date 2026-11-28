@@ -2,19 +2,8 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { InfiniteSingleSelectOption } from "../../types/infinite-single-select/types";
-import type { UseInfiniteSelectOptionsArgs } from "../../types/infinite-single-select/types";
+import type { UseInfiniteSelectPagesParams } from "../../types/infinite-single-select/types";
 import { mergePageOptions } from "../../utils/infinite-single-select/infiniteSelectOptions.utils";
-
-interface UseInfiniteSelectPagesParams {
-  open: boolean;
-  searchable: boolean;
-  debouncedQuery: string;
-  pageSize: number;
-  pinnedOption: InfiniteSingleSelectOption | null;
-  fetchPage: UseInfiniteSelectOptionsArgs["fetchPage"];
-  /** Owned by the query-state hook; cleared here once page 1 resolves. */
-  setInitialLoading: (loading: boolean) => void;
-}
 
 /**
  * Owns the loaded pages for the single-select listbox: the first page (reloaded

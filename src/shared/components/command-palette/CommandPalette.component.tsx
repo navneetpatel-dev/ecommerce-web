@@ -1,192 +1,22 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
-import { useRouter } from "next/navigation";
-import {
-  Boxes,
-  Bug,
-  Headphones,
-  LifeBuoy,
-  Moon,
-  Package,
-  Plus,
-  Search,
-  ShoppingBag,
-  Sun,
-  Ticket,
-  Truck,
-  Users,
-} from "lucide-react";
+import { Search } from "lucide-react";
 import { cn } from "@/shared/utils/dom/cn";
-import { useThemePalette } from "@/shared/hooks/theme/useThemePalette.hook";
+import { useCommandPalette } from "../../hooks/command-palette/useCommandPalette.hook";
 
-export interface CommandItem {
-  id: string;
-  title: string;
-  category: "Navigation" | "Quick Actions" | "System";
-  icon: typeof Search;
-  shortcut?: string;
-  path?: string;
-  perform?: () => void;
-}
+export type { CommandItem } from "../../types/command-palette/types";
 
 export function CommandPalette() {
-  const [open, setOpen] = useState(false);
-  const [query, setQuery] = useState("");
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const router = useRouter();
-  const { mode, toggleMode } = useThemePalette();
-
-  const commands: CommandItem[] = useMemo(
-    () => [
-      {
-        id: "nav-orders",
-        title: "Orders Management",
-        category: "Navigation",
-        icon: ShoppingBag,
-        path: "/admin/orders",
-      },
-      {
-        id: "nav-users",
-        title: "Users & Customers",
-        category: "Navigation",
-        icon: Users,
-        path: "/admin/users",
-      },
-      {
-        id: "nav-products",
-        title: "Products & Moderation",
-        category: "Navigation",
-        icon: Package,
-        path: "/admin/products",
-      },
-      {
-        id: "nav-shipping",
-        title: "Shipping & RTO Operations",
-        category: "Navigation",
-        icon: Truck,
-        path: "/admin/shipping",
-      },
-      {
-        id: "nav-tickets",
-        title: "Support Tickets",
-        category: "Navigation",
-        icon: Headphones,
-        path: "/support/tickets",
-      },
-      {
-        id: "nav-bugs",
-        title: "Bug Reports",
-        category: "Navigation",
-        icon: Bug,
-        path: "/bug-reports",
-      },
-      {
-        id: "nav-coupons",
-        title: "Coupons & Discounts",
-        category: "Navigation",
-        icon: Ticket,
-        path: "/admin/coupons",
-      },
-      {
-        id: "nav-categories",
-        title: "Categories Management",
-        category: "Navigation",
-        icon: Boxes,
-        path: "/admin/categories",
-      },
-      {
-        id: "action-new-ticket",
-        title: "Create Support Ticket",
-        category: "Quick Actions",
-        icon: Plus,
-        path: "/support/tickets/new",
-      },
-      {
-        id: "action-new-product",
-        title: "Add New Product",
-        category: "Quick Actions",
-        icon: Plus,
-        path: "/vendor/products/new",
-      },
-      {
-        id: "action-toggle-theme",
-        title: `Switch to ${mode === "dark" ? "Light" : "Dark"} Mode`,
-        category: "System",
-        icon: mode === "dark" ? Sun : Moon,
-        perform: () => toggleMode?.(),
-      },
-      {
-        id: "action-help",
-        title: "Help & Documentation",
-        category: "System",
-        icon: LifeBuoy,
-        path: "/help",
-      },
-    ],
-    [mode, toggleMode],
-  );
-
-  const filtered = useMemo(() => {
-    if (!query.trim()) return commands;
-    const q = query.toLowerCase();
-    return commands.filter(
-      (cmd) =>
-        cmd.title.toLowerCase().includes(q) ||
-        cmd.category.toLowerCase().includes(q) ||
-        cmd.path?.toLowerCase().includes(q),
-    );
-  }, [commands, query]);
-
-  // Global hotkey: Cmd+K / Ctrl+K
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
-        e.preventDefault();
-        setOpen((prev) => !prev);
-        setQuery("");
-        setSelectedIndex(0);
-      } else if (e.key === "Escape" && open) {
-        setOpen(false);
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [open]);
-
-  // Keyboard navigation within list
-  useEffect(() => {
-    if (!open) return;
-
-    const handleListKeys = (e: KeyboardEvent) => {
-      if (e.key === "ArrowDown") {
-        e.preventDefault();
-        setSelectedIndex((prev) => (prev < filtered.length - 1 ? prev + 1 : 0));
-      } else if (e.key === "ArrowUp") {
-        e.preventDefault();
-        setSelectedIndex((prev) => (prev > 0 ? prev - 1 : filtered.length - 1));
-      } else if (e.key === "Enter") {
-        e.preventDefault();
-        const selected = filtered[selectedIndex];
-        if (selected) {
-          executeCommand(selected);
-        }
-      }
-    };
-
-    window.addEventListener("keydown", handleListKeys);
-    return () => window.removeEventListener("keydown", handleListKeys);
-  }, [open, filtered, selectedIndex]);
-
-  const executeCommand = (cmd: CommandItem) => {
-    setOpen(false);
-    if (cmd.perform) {
-      cmd.perform();
-    } else if (cmd.path) {
-      router.push(cmd.path);
-    }
-  };
+  const {
+    open,
+    setOpen,
+    query,
+    handleQueryChange,
+    filtered,
+    selectedIndex,
+    setSelectedIndex,
+    executeCommand,
+  } = useCommandPalette();
 
   if (!open) return null;
 
@@ -212,10 +42,7 @@ export function CommandPalette() {
             autoFocus
             type="text"
             value={query}
-            onChange={(e) => {
-              setQuery(e.target.value);
-              setSelectedIndex(0);
-            }}
+            onChange={(e) => handleQueryChange(e.target.value)}
             placeholder="Type a command or search..."
             className="w-full bg-transparent text-body font-normal text-ink outline-none placeholder:text-ink-muted"
             aria-label="Search commands"

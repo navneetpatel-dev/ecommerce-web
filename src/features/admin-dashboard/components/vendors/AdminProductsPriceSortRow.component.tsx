@@ -1,5 +1,6 @@
 "use client";
 
+import { LABELS } from "@/shared/constants/labels";
 import { Input } from "@/shared/components/ui/input";
 import {
   Select,
@@ -76,23 +77,29 @@ export function AdminProductsPriceSortRow(
         </Select>
       </FormFieldFrame>
 
-      <FormFieldFrame label="Min Price (₹)" htmlFor="admin-products-min-price">
+      <FormFieldFrame
+        label={LABELS.priceFilterMinLabel}
+        htmlFor="admin-products-min-price"
+      >
         <Input
           id="admin-products-min-price"
           type="number"
           min={0}
-          placeholder="Min ₹"
+          placeholder={LABELS.priceFilterMinPlaceholder}
           value={minPrice}
           onChange={(e) => onMinPriceChange?.(e.target.value)}
         />
       </FormFieldFrame>
 
-      <FormFieldFrame label="Max Price (₹)" htmlFor="admin-products-max-price">
+      <FormFieldFrame
+        label={LABELS.priceFilterMaxLabel}
+        htmlFor="admin-products-max-price"
+      >
         <Input
           id="admin-products-max-price"
           type="number"
           min={0}
-          placeholder="Max ₹"
+          placeholder={LABELS.priceFilterMaxPlaceholder}
           value={maxPrice}
           onChange={(e) => onMaxPriceChange?.(e.target.value)}
         />

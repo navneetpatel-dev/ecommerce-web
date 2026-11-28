@@ -4,7 +4,7 @@ export const emailTemplatesStyles = {
     "rounded-xl border border-line bg-surface lg:max-h-[75vh] lg:overflow-y-auto",
   group: "border-b border-line last:border-b-0",
   groupHeading:
-    "sticky top-0 bg-surface px-4 py-2 text-caption font-semibold uppercase tracking-wide text-brand",
+    "bg-surface lg:sticky lg:top-0 px-4 py-2 text-caption font-semibold uppercase tracking-wide text-brand",
   audienceTag:
     "ml-2 rounded-full bg-surface-muted px-2 py-0.5 text-[10px] font-medium normal-case tracking-normal text-ink-muted",
   item: "flex w-full flex-col items-start gap-0.5 px-4 py-2.5 text-left transition-colors hover:bg-surface-muted",

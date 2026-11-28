@@ -1,28 +1,10 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Trash2 } from "lucide-react";
-import type { ProductListItem } from "@/shared/api/types";
 import { QUERY_PARAMS } from "@/shared/constants/navigation/queryParams";
-import { LABELS } from "@/shared/constants/labels";
-import { PRODUCT_STATUS } from "@/shared/constants/statuses";
-import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import type { useVendorProductsTable } from "../useVendorProductsTable.hook";
-
-type RichProductItem = ProductListItem & {
-  sku?: string;
-  status?: string;
-  listedByPlatform?: boolean;
-  variants?: Array<{
-    id: string;
-    sku?: string;
-    stock?: number;
-    lowStockAt?: number;
-    aboveMrp?: boolean;
-  }>;
-  rejectionNote?: string | null;
-  aboveMrp?: boolean;
-};
+import { toVendorProductRows } from "../../../utils/products/vendorProductRows";
+import { useVendorProductDialogs } from "./useVendorProductDialogs.hook";
 
 export function useVendorProductsListView(options: {
   table: ReturnType<typeof useVendorProductsTable>;
@@ -50,35 +32,18 @@ export function useVendorProductsListView(options: {
   } = options;
 
   const products = useMemo(
-    () =>
-      (table.data?.items ?? []).map((product: RichProductItem) => ({
-        id: product.id,
-        name: product.name,
-        slug: product.slug,
-        sku: product.variants?.[0]?.sku ?? product.sku ?? "—",
-        stock: product.stock ?? product.variants?.[0]?.stock ?? 0,
-        lowStockAt: product.variants?.[0]?.lowStockAt ?? 5,
-        basePrice: product.basePrice,
-        status: product.status ?? PRODUCT_STATUS.LIVE,
-        listedByPlatform: product.listedByPlatform,
-        rejectionNote: product.rejectionNote,
-        aboveMrp: product.aboveMrp,
-        aboveMrpVariants: product.variants?.filter((v) => v.aboveMrp).length,
-      })),
+    () => toVendorProductRows(table.data?.items),
     [table.data?.items],
   );
 
-  const imagesTarget = useMemo(() => {
-    if (!imagesProductId) return null;
-    const product = products.find((row) => row.id === imagesProductId);
-    return product ? { id: product.id, name: product.name } : null;
-  }, [imagesProductId, products]);
-
-  const variantsTarget = useMemo(() => {
-    if (!variantsProductId) return null;
-    const product = products.find((row) => row.id === variantsProductId);
-    return product ? { id: product.id, name: product.name } : null;
-  }, [variantsProductId, products]);
+  const dialogs = useVendorProductDialogs({
+    table,
+    products,
+    setQuery,
+    imagesProductId,
+    variantsProductId,
+    refresh,
+  });
 
   // "View as customer" is local to the page: no URL state needed.
   const [previewId, setPreviewId] = useState<string | null>(null);
@@ -146,63 +111,9 @@ export function useVendorProductsListView(options: {
       : undefined,
   };
 
-  const deleteDialogProps = {
-    open: Boolean(table.deleteTarget),
-    onOpenChange: (open: boolean) => {
-      if (!open) table.setDeleteTarget(null);
-    },
-    variant: "danger" as const,
-    icon: Trash2,
-    title: LABELS.confirmDeleteProductTitle,
-    description: table.deleteTarget
-      ? formatLabel(LABELS.confirmDeleteProductBody, {
-          name: table.deleteTarget.name,
-        })
-      : LABELS.confirmDeleteProductFallback,
-    secondaryAction: {
-      label: LABELS.cancel,
-      onClick: () => table.setDeleteTarget(null),
-    },
-    primaryAction: {
-      label: LABELS.delete,
-      loading: table.isDeleting,
-      onClick: () => {
-        table.confirmDelete();
-      },
-    },
-  };
-
-  const imagesDialogProps = imagesTarget
-    ? {
-        productId: imagesTarget.id,
-        productName: imagesTarget.name,
-        open: true,
-        onOpenChange: (open: boolean) => {
-          if (!open) {
-            setQuery({ [QUERY_PARAMS.images]: null });
-          }
-        },
-        onChanged: () => refresh(),
-      }
-    : null;
-
-  const variantsDialogProps = variantsTarget
-    ? {
-        productId: variantsTarget.id,
-        productName: variantsTarget.name,
-        open: true,
-        onOpenChange: (open: boolean) => {
-          if (!open) setQuery({ [QUERY_PARAMS.variants]: null });
-        },
-        onChanged: () => refresh(),
-      }
-    : null;
-
   return {
     tableViewProps,
-    deleteDialogProps,
-    imagesDialogProps,
-    variantsDialogProps,
+    ...dialogs,
     previewDialogProps,
   };
 }

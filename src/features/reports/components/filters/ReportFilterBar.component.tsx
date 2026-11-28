@@ -9,6 +9,7 @@ import { LABELS } from "@/shared/constants/labels";
 import type { ExportFileFormat } from "../../hooks/table/useReportHubHelpers/index";
 import type { ReportCatalogItem } from "../../api/table/reportsEngine.api";
 import { exportFilterDisableHint } from "../../utils/export/exportDisableHint";
+import { reportFilterSummary } from "../../utils/filters/reportFilterSummary";
 import { ReportExportButtons } from "../export/ReportExportButtons.component";
 import { ReportExportStatus } from "../export/ReportExportStatus.component";
 import { ReportFilterTextField } from "./ReportFilterTextField.component";
@@ -91,20 +92,15 @@ export function ReportFilterBar({
       ? LABELS.reportExportSelectReportFirst
       : "";
 
-  const activeCount = [from, to, vendorId, categoryId, status].filter((v) =>
-    v.trim(),
-  ).length;
-
-  const selectedItem = catalog.find((item) => item.type === reportType);
-  const summaryText = [
-    selectedItem ? labelForKey(selectedItem.labelKey) : "",
-    from || to ? `${from || "…"} – ${to || "…"}` : "",
-    vendorId ? LABELS.reportVendor : "",
-    categoryId ? LABELS.reportCategory : "",
-    status ? `${LABELS.reportFilterSummaryStatus}: ${status}` : "",
-  ]
-    .filter(Boolean)
-    .join(" · ");
+  const { activeCount, summaryText } = reportFilterSummary({
+    selectedItem: catalog.find((item) => item.type === reportType),
+    labelForKey,
+    from,
+    to,
+    vendorId,
+    categoryId,
+    status,
+  });
 
   return (
     <CollapsibleTableFilters

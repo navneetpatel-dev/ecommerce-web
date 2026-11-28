@@ -2,14 +2,11 @@
 
 import { LABELS } from "@/shared/constants/labels";
 import { motionSafeScrollBehavior } from "@/shared/utils/a11y/scrollMotion";
-import { formatLabel } from "@/shared/utils/formatting/formatLabel";
-import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
 import { useManualFormFieldErrors } from "@/shared/hooks/forms/useManualFormFieldErrors.hook";
 import {
   allRequiredFieldsMet,
   firstMissingRequiredHint,
 } from "@/shared/utils/validation/firstMissingRequiredHint";
-import type { PriceGuide } from "../../types/product-editor/types";
 import {
   parseProductListingForm,
   productFormFieldErrors,
@@ -19,6 +16,7 @@ import {
   type ProductWriteBody,
 } from "../../schemas/listing-form/products.schema";
 import { useGstPricePreview } from "../../api/listing/products.queries";
+import { buildPriceGuide } from "../../utils/product-editor/priceGuide";
 
 interface UseProductFormControllerOptions {
   values: ProductListingFormValues;
@@ -103,50 +101,7 @@ export function useProductFormController({
     Number(values.price),
     mrpNumber,
   );
-  const previewReady = Boolean(
-    gstPreview && values.categoryId && values.price !== "",
-  );
-  const customerPrice = previewReady ? gstPreview!.displayPrice : null;
-  const missing: PriceGuide["missing"] = !values.categoryId
-    ? "category"
-    : values.price === ""
-      ? "price"
-      : null;
-  const priceGuide: PriceGuide = {
-    missing,
-    priceHint: previewReady
-      ? formatLabel(LABELS.productPriceBreakdown, {
-          price: values.price,
-          percent: gstPreview!.gstPercentage,
-          amount: formatInrAmount(gstPreview!.displayPrice),
-        })
-      : !values.categoryId
-        ? LABELS.productPriceNeedsCategory
-        : LABELS.productPriceGstHint,
-    mrpHint: !previewReady
-      ? !values.categoryId
-        ? LABELS.productMrpNeedsCategory
-        : LABELS.productMrpHint
-      : gstPreview!.showMrp && gstPreview!.discountPercent != null
-        ? formatLabel(LABELS.productMrpShownHint, {
-            mrp: formatInrAmount(gstPreview!.compareAtPrice),
-            percent: gstPreview!.discountPercent,
-          })
-        : formatLabel(LABELS.productMrpMinimumHint, {
-            amount: formatInrAmount(gstPreview!.displayPrice),
-          }),
-    preview: previewReady
-      ? {
-          displayPrice: gstPreview!.displayPrice,
-          gstPercentage: gstPreview!.gstPercentage,
-          compareAtPrice: gstPreview!.compareAtPrice ?? null,
-          showMrp: Boolean(gstPreview!.showMrp),
-          discountPercent: gstPreview!.discountPercent ?? null,
-          savings: gstPreview!.savings ?? null,
-        }
-      : null,
-    customerPrice,
-  };
+  const priceGuide = buildPriceGuide(values, gstPreview);
 
   return {
     getError,

@@ -1,16 +1,11 @@
 "use client";
 
-import {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-  type ReactNode,
-} from "react";
+import { useCallback, useRef, useState, type ReactNode } from "react";
 import { ChevronDown, RotateCcw, SlidersHorizontal } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { Button } from "@/shared/components/ui/button";
 import { cn } from "@/shared/utils/dom/cn";
+import { useFilterHotkey } from "../../hooks/filters/useFilterHotkey.hook";
 
 export interface CollapsibleTableFiltersProps {
   /** Optional title for the toggle button, defaults to "Filters". */
@@ -67,45 +62,7 @@ export function CollapsibleTableFilters({
   );
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  useEffect(() => {
-    if (!enableHotkey) return;
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "/" && !e.metaKey && !e.ctrlKey && !e.altKey) {
-        const target = e.target as HTMLElement | null;
-        const activeTag = (target?.tagName || "").toLowerCase();
-        const isEditable =
-          activeTag === "input" ||
-          activeTag === "textarea" ||
-          activeTag === "select" ||
-          Boolean(target?.isContentEditable);
-        if (isEditable) return;
-
-        if (
-          !containerRef.current ||
-          !document.body.contains(containerRef.current)
-        ) {
-          return;
-        }
-
-        e.preventDefault();
-        setIsOpen(true);
-
-        setTimeout(() => {
-          const input = containerRef.current?.querySelector<HTMLInputElement>(
-            'input[type="search"], input[id*="search"], input[placeholder*="search" i], input',
-          );
-          if (input) {
-            input.focus();
-            input.select?.();
-          }
-        }, 50);
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [enableHotkey, setIsOpen]);
+  useFilterHotkey(enableHotkey, containerRef, setIsOpen);
 
   return (
     <div ref={containerRef} className={cn("space-y-3 mb-4", className)}>

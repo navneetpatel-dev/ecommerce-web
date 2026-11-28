@@ -11,6 +11,7 @@ import { AdminConfirmAction } from "../../components/shared/AdminConfirmAction.c
 import { AdminEditShippingZoneAction } from "../../components/shipping/AdminEditShippingZoneAction.component";
 import { adminRowLabel } from "../../utils/shared/adminRowLabel";
 import { parseCsv } from "../../utils/shipping/csvField";
+import { filterZones } from "../../utils/shipping/filterZones";
 import type { AdminDataRow } from "../shared/useAdminDataList.hook";
 import type { AdminListPageModel } from "../../types/shared/adminListPage.types";
 
@@ -74,25 +75,7 @@ export function useAdminShippingPage(): AdminShippingPageModel {
       void listVersion;
       const res = await adminShippingApi.zones({ page: 1, limit: 100 });
       let items = res.items;
-      if (debouncedSearch) {
-        const q = debouncedSearch.toLowerCase();
-        items = items.filter((zone) => {
-          const nameMatch = String(zone.name ?? "")
-            .toLowerCase()
-            .includes(q);
-          const statesList = Array.isArray(zone.states) ? zone.states : [];
-          const statesMatch = statesList.some((s) =>
-            String(s).toLowerCase().includes(q),
-          );
-          const prefixesList = Array.isArray(zone.pincodePrefixes)
-            ? zone.pincodePrefixes
-            : [];
-          const prefixesMatch = prefixesList.some((p) =>
-            String(p).toLowerCase().includes(q),
-          );
-          return nameMatch || statesMatch || prefixesMatch;
-        });
-      }
+      if (debouncedSearch) items = filterZones(items, debouncedSearch);
       return items;
     },
     [listVersion, debouncedSearch],

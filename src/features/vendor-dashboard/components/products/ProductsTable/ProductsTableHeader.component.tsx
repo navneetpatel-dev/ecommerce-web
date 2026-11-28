@@ -19,17 +19,9 @@ import { formatStatusLabel } from "@/shared/utils/formatting/formatStatus";
 import { useCategories } from "@/features/categories";
 import type { ProductsTableHeaderProps } from "../../../types/products/ProductsTable-types";
 import { productsTableHeaderStyles as styles } from "../../../styles/products/productsTable.styles";
+import { ProductsTablePriceSortRow } from "./ProductsTablePriceSortRow.component";
 
 const ALL_OPTION = "__ALL__";
-
-const SORT_OPTIONS = [
-  { value: ALL_OPTION, label: "Default Sort" },
-  { value: "newest", label: "Newest First" },
-  { value: "price_asc", label: "Price: Low to High" },
-  { value: "price_desc", label: "Price: High to Low" },
-  { value: "rating", label: "Top Rated" },
-  { value: "trending", label: "Trending / Popular" },
-];
 
 const STOCK_OPTIONS = [
   { value: ALL_OPTION, label: "All Inventory" },
@@ -171,53 +163,14 @@ export function ProductsTableHeader(props: ProductsTableHeaderProps) {
             </FormFieldFrame>
           </div>
 
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 items-end pt-1">
-            <FormFieldFrame
-              label="Min Price (₹)"
-              htmlFor="vendor-products-min-price"
-            >
-              <Input
-                id="vendor-products-min-price"
-                type="number"
-                min={0}
-                placeholder="Min ₹"
-                value={minPrice}
-                onChange={(e) => onMinPriceChange?.(e.target.value)}
-              />
-            </FormFieldFrame>
-
-            <FormFieldFrame
-              label="Max Price (₹)"
-              htmlFor="vendor-products-max-price"
-            >
-              <Input
-                id="vendor-products-max-price"
-                type="number"
-                min={0}
-                placeholder="Max ₹"
-                value={maxPrice}
-                onChange={(e) => onMaxPriceChange?.(e.target.value)}
-              />
-            </FormFieldFrame>
-
-            <FormFieldFrame label="Sort By" htmlFor="vendor-products-sort">
-              <Select
-                value={sort || ALL_OPTION}
-                onValueChange={handleSelect(onSortChange)}
-              >
-                <SelectTrigger id="vendor-products-sort">
-                  <SelectValue placeholder="Default Sort" />
-                </SelectTrigger>
-                <SelectContent>
-                  {SORT_OPTIONS.map((opt) => (
-                    <SelectItem key={opt.value} value={opt.value}>
-                      {opt.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </FormFieldFrame>
-          </div>
+          <ProductsTablePriceSortRow
+            minPrice={minPrice}
+            onMinPriceChange={onMinPriceChange}
+            maxPrice={maxPrice}
+            onMaxPriceChange={onMaxPriceChange}
+            sort={sort}
+            onSortChange={onSortChange}
+          />
         </div>
       </CollapsibleTableFilters>
     </div>

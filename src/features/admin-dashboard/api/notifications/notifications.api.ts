@@ -1,214 +1,41 @@
 import { apiClient } from "@/shared/api/client/client";
 import { API } from "@/shared/constants/apiRoutes";
+import type {
+  AdminBroadcastRecord,
+  BroadcastCategoryOption,
+  BroadcastChannel,
+  BroadcastClassification,
+  BroadcastNotificationPayload,
+  BroadcastResult,
+  BroadcastTargetConfig,
+  BroadcastTargetUser,
+  BroadcastTargetsPreview,
+  PaginatedLookupResult,
+} from "./broadcast.types";
+import type {
+  BulkResendPreview,
+  BulkResendResult,
+  EmailHealth,
+  EmailSuppressionRow,
+  EmailTemplatePreview,
+  EmailTemplateSummary,
+  NotificationLogFilters,
+  NotificationLogResponse,
+  NotificationLogRow,
+} from "./notifications.types";
 
-export type NotificationLogRow = {
-  id: string;
-  type: string;
-  channel: string;
-  recipient: string;
-  status: string;
-  /** Why a failed email failed (TEMPORARY, PERMANENT, RENDER, RECIPIENT, CONFIG, UNCERTAIN). */
-  errorCategory: string | null;
-  error: string | null;
-  attempts?: number;
-  sentAt: string | null;
-  createdAt: string;
-};
-
-export type NotificationLogFilters = {
-  search?: string;
-  type?: string;
-  channel?: string;
-  status?: string;
-  errorCategory?: string;
-  referenceId?: string;
-};
-
-export type BroadcastChannel = "EMAIL" | "PUSH" | "IN_APP";
-export type BroadcastClassification = "operational" | "marketing";
-export type BroadcastPriority = "standard" | "high";
-export type BroadcastMode =
-  "roles" | "users" | "user_segment" | "vendor_segment";
-
-export type BroadcastTargetConfig = {
-  mode?: BroadcastMode;
-  allUsers?: boolean;
-  role?: string;
-  roles?: string[];
-  userIds?: string[];
-  emails?: string[];
-  userSegment?: {
-    status?: "ACTIVE" | "BLOCKED" | "ALL";
-    emailVerified?: boolean;
-    emailMarketingConsent?: boolean;
-    signedUpWithinDays?: number;
-    activity?:
-      | "ordered_last_30d"
-      | "inactive_30d"
-      | "inactive_90d"
-      | "repeat_buyers"
-      | "abandoned_cart";
-    state?: string;
-    city?: string;
-  };
-  vendorSegment?: {
-    vendorStatus?: "APPROVED" | "PENDING" | "SUSPENDED";
-    kycVerified?: boolean;
-    categoryIds?: string[];
-    state?: string;
-    minPerformanceScore?: number;
-    maxPerformanceScore?: number;
-  };
-  excludeUserIds?: string[];
-  excludeRoles?: string[];
-};
-
-export type BroadcastNotificationPayload = BroadcastTargetConfig & {
-  subject: string;
-  message: string;
-  ctaLabel?: string;
-  ctaUrl?: string;
-  classification?: BroadcastClassification;
-  priority?: BroadcastPriority;
-  channels?: BroadcastChannel[];
-  scheduledAt?: string | null;
-};
-
-export type BroadcastResult = {
-  broadcastId: string;
-  status?: string;
-  scheduledAt?: string | null;
-  targeted: number;
-  queued: number;
-};
-
-export type BroadcastTargetUser = {
-  id: string;
-  name: string;
-  email: string;
-  role: string;
-  businessName?: string | null;
-};
-
-export type BroadcastTargetsPreview = {
-  total: number;
-  emailEligible: number;
-  pushEligible: number;
-  inAppEligible: number;
-  sampleRecipients: BroadcastTargetUser[];
-  sampleHasMore?: boolean;
-};
-
-export type PaginatedLookupResult<T> = {
-  items: T[];
-  total: number;
-  page: number;
-  hasMore: boolean;
-};
-
-export type BroadcastCategoryOption = {
-  id: string;
-  name: string;
-  slug: string;
-};
-
-export type AdminBroadcastRecord = {
-  id: string;
-  subject: string;
-  message: string;
-  ctaLabel: string | null;
-  ctaUrl: string | null;
-  classification: BroadcastClassification;
-  priority: BroadcastPriority;
-  channels: BroadcastChannel[];
-  targetConfig: BroadcastTargetConfig;
-  status: "SCHEDULED" | "PROCESSING" | "SENT" | "CANCELLED" | "FAILED";
-  scheduledAt: string | null;
-  sentAt: string | null;
-  targetedCount: number;
-  queuedCount: number;
-  error?: string | null;
-  stats?: {
-    sentCount: number;
-    failedCount: number;
-    bouncedCount: number;
-    pendingCount: number;
-  };
-  createdAt: string;
-  actor?: { id: string; name: string; email: string } | null;
-};
-
-export type EmailSuppressionRow = {
-  id: string;
-  email: string;
-  reason: string;
-  expiresAt: string;
-  updatedAt: string;
-};
-
-export type BulkResendResult = {
-  attempted: number;
-  requeued: number;
-  skipped: number;
-  errors: string[];
-};
-
-export type BulkResendPreview = {
-  totalEligible: number;
-  failedCount: number;
-  stuckPendingCount: number;
-  skippedNoPayloadCount: number;
-  byCategory: Record<string, number>;
-  byType: Record<string, number>;
-  sampleRows: Array<{
-    id: string;
-    type: string;
-    recipient: string;
-    status: string;
-    errorCategory: string | null;
-    error: string | null;
-    attempts: number;
-    createdAt: string;
-  }>;
-};
-
-type NotificationLogResponse = Omit<NotificationLogRow, "recipient"> & {
-  user?: { email?: string | null } | null;
-  /** Set for recipients without an account (subscribers, contact enquiries, gift-card recipients). */
-  recipientEmail?: string | null;
-};
-
-export type EmailAudience = "customer" | "vendor" | "admin";
-
-export type EmailTemplateSummary = {
-  type: string;
-  audience: EmailAudience;
-  group: string;
-  subject: string;
-  marketing: boolean;
-};
-
-export type EmailHealth = {
-  status: "OK" | "DEGRADED" | "DOWN";
-  headline: string;
-  windowMinutes: number;
-  sent: number;
-  failed: number;
-  stuck: number;
-  failuresByCategory: Record<string, number>;
-  lastSentAt: string | null;
-  lastFailure: {
-    category: string | null;
-    error: string | null;
-    at: string;
-  } | null;
-};
-
-export type EmailTemplatePreview = {
-  subject: string;
-  html: string;
-  text: string;
-};
+export type * from "./broadcast.types";
+export type {
+  NotificationLogRow,
+  NotificationLogFilters,
+  EmailSuppressionRow,
+  BulkResendResult,
+  BulkResendPreview,
+  EmailAudience,
+  EmailTemplateSummary,
+  EmailHealth,
+  EmailTemplatePreview,
+} from "./notifications.types";
 
 export const notificationsApi = {
   logs: async (

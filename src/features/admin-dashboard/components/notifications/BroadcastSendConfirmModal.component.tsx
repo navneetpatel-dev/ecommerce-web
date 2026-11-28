@@ -2,7 +2,7 @@
 
 import { Send } from "lucide-react";
 import { StatusDialog } from "@/shared/components/dialogs/StatusDialog.component";
-import type { BroadcastBuilderState } from "../../hooks/notifications/broadcastBuilder.types";
+import type { BroadcastBuilderState } from "../../types/notifications/broadcastBuilder.types";
 
 interface BroadcastSendConfirmModalProps {
   mode: "test" | "broadcast" | null;

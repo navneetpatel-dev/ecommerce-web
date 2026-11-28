@@ -100,4 +100,15 @@ export const taxCategoriesLabels = {
   categoryImpactSecondaryArchive:
     "Products using it as a secondary category: {count}. They stop being listed under it.",
   categoryImpactLoading: "Checking what this affects…",
+  archiveCategory: "Archive",
+  reactivateCategory: "Reactivate",
+  confirmArchiveCategoryTitle: "Archive this category?",
+  confirmArchiveCategoryBody:
+    'Archive "{name}"? It will leave navigation and filters. {count} product(s) stay visible via direct links.',
+  confirmReactivateCategoryTitle: "Reactivate this category?",
+  confirmReactivateCategoryBody:
+    'Restore "{name}" to active navigation and filters?',
+  categoryReorderHint:
+    "Drag rows to change display order, or focus a handle and press Space to reorder with the keyboard.",
+  couldNotReorderCategories: "Could not save category order.",
 } as const;

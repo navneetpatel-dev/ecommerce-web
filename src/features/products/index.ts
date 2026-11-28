@@ -72,3 +72,4 @@ export { PriceChangeReasonField } from "./components/product-editor/PriceChangeR
 export { ProductRejectionNote } from "./components/status/ProductRejectionNote.component";
 export { ProductAboveMrpNote } from "./components/status/ProductAboveMrpNote.component";
 export { keepsLastItem } from "./utils/product-editor/listingRules";
+export { useDirtyFormHandlers } from "./hooks/product-editor/useDirtyFormHandlers.hook";

@@ -1,5 +1,6 @@
 "use client";
 
+import type { DisplayAmountInput } from "@/shared/utils/formatting/displayAmount";
 import { formatInr } from "@/shared/utils/formatting/orderFormat";
 
 interface ProductHeroPriceBadgeProps {
@@ -21,12 +22,12 @@ export function ProductHeroPriceBadge({
     <div className="sm:text-right shrink-0 pt-1 sm:pt-0 border-t sm:border-t-0 border-line/60 w-full sm:w-auto flex sm:flex-col justify-between sm:justify-start items-center sm:items-end">
       <div className="flex items-baseline gap-2">
         <span className="text-xl sm:text-2xl font-bold font-mono text-ink tracking-tight">
-          {formatInr(Number(displayPrice))}
+          {formatInr(displayPrice as DisplayAmountInput)}
         </span>
         {compareAtPrice != null &&
           Number(compareAtPrice) > Number(displayPrice) && (
             <span className="text-xs font-mono text-ink-muted line-through">
-              {formatInr(Number(compareAtPrice))}
+              {formatInr(compareAtPrice as DisplayAmountInput)}
             </span>
           )}
       </div>

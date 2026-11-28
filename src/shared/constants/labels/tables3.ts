@@ -132,17 +132,6 @@ export const tables3Labels = {
   couldNotDeleteAttribute: "Could not delete attribute.",
   deleteCategoryAttribute: "Delete attribute",
   selectCategory: "Select category",
-  archiveCategory: "Archive",
-  reactivateCategory: "Reactivate",
-  confirmArchiveCategoryTitle: "Archive this category?",
-  confirmArchiveCategoryBody:
-    'Archive "{name}"? It will leave navigation and filters. {count} product(s) stay visible via direct links.',
-  confirmReactivateCategoryTitle: "Reactivate this category?",
-  confirmReactivateCategoryBody:
-    'Restore "{name}" to active navigation and filters?',
-  categoryReorderHint:
-    "Drag rows to change display order, or focus a handle and press Space to reorder with the keyboard.",
-  couldNotReorderCategories: "Could not save category order.",
   imageUrl: "Image",
   parentId: "Parent",
   parentName: "Parent",

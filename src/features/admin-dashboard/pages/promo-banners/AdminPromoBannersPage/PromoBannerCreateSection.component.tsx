@@ -16,24 +16,16 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/shared/components/ui/dialog";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/shared/components/ui/select";
 import { LABELS } from "@/shared/constants/labels";
 import {
   UPLOAD_ENTITY,
   UPLOAD_PURPOSE,
 } from "@/shared/constants/uploads/uploads";
-import {
-  PROMO_BANNER_LINK_TYPE_VALUES,
-  PROMO_BANNER_STATUS_VALUES,
-  type PromoBannerLinkType,
-  type PromoBannerStatus,
+import type {
+  PromoBannerLinkType,
+  PromoBannerStatus,
 } from "@/shared/constants/statuses";
+import { PromoBannerSelectFields } from "./PromoBannerSelectFields.component";
 import { PromoBannerTargetField } from "./PromoBannerTargetField.component";
 
 export interface PromoBannerCreateDialogProps {
@@ -97,12 +89,6 @@ export function PromoBannerCreateDialog({
 
   const handleTitleChange = (event: ChangeEvent<HTMLInputElement>) =>
     onTitleChange(event.target.value);
-  const handleLinkTypeChange = (value: string) => {
-    onLinkTypeChange(value as PromoBannerLinkType);
-    onLinkTargetIdChange("");
-  };
-  const handleStatusChange = (value: string) =>
-    onStatusChange(value as PromoBannerStatus);
   const handlePriorityChange = (value: number | undefined) =>
     onPriorityChange(value == null ? "" : String(value));
 
@@ -145,43 +131,13 @@ export function PromoBannerCreateDialog({
             />
           </FormFieldFrame>
 
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <FormFieldFrame
-              label={LABELS.promoBannerLinkType}
-              htmlFor="banner-link-type"
-            >
-              <Select value={linkType} onValueChange={handleLinkTypeChange}>
-                <SelectTrigger id="banner-link-type">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {PROMO_BANNER_LINK_TYPE_VALUES.map((value) => (
-                    <SelectItem key={value} value={value}>
-                      {value}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </FormFieldFrame>
-
-            <FormFieldFrame
-              label={LABELS.promoBannerStatus}
-              htmlFor="banner-status"
-            >
-              <Select value={status} onValueChange={handleStatusChange}>
-                <SelectTrigger id="banner-status">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {PROMO_BANNER_STATUS_VALUES.map((value) => (
-                    <SelectItem key={value} value={value}>
-                      {value}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </FormFieldFrame>
-          </div>
+          <PromoBannerSelectFields
+            linkType={linkType}
+            status={status}
+            onLinkTypeChange={onLinkTypeChange}
+            onLinkTargetIdChange={onLinkTargetIdChange}
+            onStatusChange={onStatusChange}
+          />
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <PromoBannerTargetField

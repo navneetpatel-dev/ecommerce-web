@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { CategoryOptionData } from "@/features/products";
 import { LABELS } from "@/shared/constants/labels";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
@@ -16,6 +16,7 @@ import {
   type TaxRuleFormErrors,
   type TaxRuleFormValues,
 } from "../../utils/tax/taxRuleForm";
+import { useTaxScopeTaken } from "./useTaxScopeTaken.hook";
 
 const VALIDATION_MESSAGES = {
   gst: LABELS.enterGstPercentage,
@@ -52,35 +53,8 @@ export function useTaxRuleForm({
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
 
-  // Does another rule already cover the chosen scope (this category, or the platform default)?
-  // Looked up as the category changes, so the conflict is shown before saving, not after.
   const scopeKey = values.categoryId;
-  const [taken, setTaken] = useState<{ key: string; byOther: boolean } | null>(
-    null,
-  );
-  useEffect(() => {
-    let active = true;
-    taxApi
-      .getRules(
-        scopeKey
-          ? { categoryId: scopeKey, limit: 1 }
-          : { scope: "default", limit: 1 },
-      )
-      .then((result) => {
-        const existing = result.items[0];
-        if (active) {
-          setTaken({
-            key: scopeKey,
-            byOther: Boolean(existing && existing.id !== rule?.id),
-          });
-        }
-      })
-      .catch(() => undefined);
-    return () => {
-      active = false;
-    };
-  }, [scopeKey, rule?.id]);
-  const scopeTaken = taken?.key === scopeKey && taken.byOther;
+  const scopeTaken = useTaxScopeTaken(scopeKey, rule?.id);
 
   // Why the Save button is disabled (shown as its tooltip), or null when it can be used.
   const blocking = validateTaxRule(values, VALIDATION_MESSAGES);
