@@ -68,7 +68,7 @@ export function CouponRowActions({
         <RowActionButton
           kind="edit"
           icon={Pencil}
-          label={LABELS.editCoupon}
+          label={LABELS.edit}
           onClick={openEdit}
         />
       ) : null}

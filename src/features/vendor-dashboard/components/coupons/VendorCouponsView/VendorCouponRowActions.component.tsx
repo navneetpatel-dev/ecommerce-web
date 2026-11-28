@@ -49,7 +49,7 @@ export function VendorCouponRowActions({
         <RowActionButton
           kind="edit"
           icon={Pencil}
-          label={LABELS.editCoupon}
+          label={LABELS.edit}
           onClick={openEdit}
         />
       ) : null}
