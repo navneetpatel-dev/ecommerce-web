@@ -19,8 +19,6 @@ export const adminUserDetailStyles = {
   dt: "text-ink-muted",
   dd: "text-ink",
   ddFlex: "flex items-center gap-2 text-ink",
-  manageRoleLink:
-    "text-xs text-brand underline underline-offset-2 hover:text-brand-hover",
 } as const;
 
 export const userAddressesCardStyles = {

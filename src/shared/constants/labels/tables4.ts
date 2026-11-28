@@ -44,11 +44,4 @@ export const tables4Labels = {
   clickToUpload: "Click to upload",
   clickToCollapse: "Click to close",
   rejectionActionHint: "Upload a replacement file to request verification.",
-  staffTableAria: "Team members",
-  staffEmpty:
-    "No team members found. Click “Add Member” to invite a colleague to your store.",
-  staffEmail: "Email",
-  staffJoined: "Joined",
-  staffRole: "Staff",
-  staffPrimaryOwner: "Primary Owner",
 } as const;

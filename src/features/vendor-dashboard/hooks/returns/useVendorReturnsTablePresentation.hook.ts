@@ -45,7 +45,7 @@ function imagesFor(row: ReturnRequest): ProductImage[] {
 }
 
 export function useVendorReturnsTablePresentation(returns: ReturnRequest[]) {
-  // Disputing a return puts the customer's refund in question: owners only (vendor staff still restock).
+  // Disputing a return puts the customer's refund in question, so it needs payout access.
   const { hasPermission } = usePermissions();
   const mayDispute = hasPermission(PERMISSIONS.PAYOUT_VIEW);
   const rows: VendorReturnRowViewModel[] = useMemo(

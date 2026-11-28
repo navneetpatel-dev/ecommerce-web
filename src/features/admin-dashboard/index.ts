@@ -55,4 +55,3 @@ export { AdminVendorsPage } from "./pages/vendors/AdminVendorsPage.page";
 export { AdminVendorDetailPage } from "./pages/vendors/AdminVendorDetailPage.page";
 export { PlatformSettingsPage } from "./pages/settings/PlatformSettingsPage.page";
 export { AdminWebVitalsPage } from "./pages/web-vitals/AdminWebVitalsPage.page";
-export { AdminRolesPage } from "./pages/roles/AdminRolesPage.page";

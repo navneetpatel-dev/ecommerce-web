@@ -9,8 +9,6 @@ import type {
 } from "@/shared/components/InfiniteSingleSelect";
 import { apiClient } from "@/shared/api/client/client";
 import { API } from "@/shared/constants/apiRoutes";
-import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
-import { usePermissions } from "@/shared/hooks/auth/usePermissions.hook";
 import type { VendorInfo } from "@/shared/api/types";
 import { vendorsApi } from "@/features/vendors";
 import { createPageCache } from "@/shared/utils/infinite-single-select/pageCache";
@@ -31,24 +29,15 @@ interface UseAdminVendorFilterSelectArgs {
 }
 
 /**
- * Vendor dropdown data. Vendor managers (vendor.manage / vendor.approve) browse the full admin list,
- * which carries any status and each vendor's details. Everyone else who filters by vendor (the
- * Catalog, Order and Finance managers) uses the approved-vendor directory, because the admin list
- * refuses them.
+ * Admin vendor dropdown data. Filters browse the full admin list, which carries any status and each
+ * vendor's details; a picker for approved vendors only needs an id and a name from the directory.
  */
 export function useAdminVendorFilterSelect({
   value,
   onChange,
   status,
 }: UseAdminVendorFilterSelectArgs) {
-  const { hasAnyPermission } = usePermissions();
-  const canManageVendors = hasAnyPermission(
-    PERMISSIONS.VENDOR_MANAGE,
-    PERMISSIONS.VENDOR_APPROVE,
-  );
-  // Picking an approved vendor needs only an id and a name: the light directory serves that for everyone.
-  // The full admin list is for browsing vendors of any status.
-  const useAdminList = canManageVendors && status !== "APPROVED";
+  const useAdminList = status !== "APPROVED";
   const source = useAdminList ? "admin" : "directory";
 
   const { data: selectedOption } = useQuery<InfiniteSingleSelectOption | null>({

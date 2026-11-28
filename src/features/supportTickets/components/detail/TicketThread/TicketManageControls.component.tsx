@@ -33,7 +33,7 @@ interface TicketManageControlsProps {
   onReassign: () => void;
 }
 
-/** Priority + assignee management blocks shown to staff (canManage). */
+/** Priority + assignee management blocks shown to the platform team (canManage). */
 export function TicketManageControls(props: TicketManageControlsProps) {
   const { ticket } = props;
 

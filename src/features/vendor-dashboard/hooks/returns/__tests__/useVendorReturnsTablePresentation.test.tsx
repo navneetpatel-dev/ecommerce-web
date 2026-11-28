@@ -37,7 +37,7 @@ const OWNER = [
   "suborder.manage",
   "payout.view",
 ];
-const STAFF = ["product.update", "suborder.manage"];
+const NO_PAYOUTS = ["product.update", "suborder.manage"];
 
 beforeEach(() => {
   useAuthStore.setState({ accessToken: null, currentUser: null });
@@ -53,8 +53,8 @@ describe("vendor returns: who can dispute", () => {
     expect(result.current.rows[0]?.canDispute).toBe(true);
   });
 
-  it("vendor staff can still restock but cannot dispute", () => {
-    signIn("VENDOR_STAFF", STAFF);
+  it("without payout.view restocking works but disputing does not", () => {
+    signIn("VENDOR_OWNER", NO_PAYOUTS);
     const { result } = renderHook(() =>
       useVendorReturnsTablePresentation([arrived]),
     );

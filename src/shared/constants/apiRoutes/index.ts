@@ -44,7 +44,6 @@ import { paymentsRoutes } from "./payments.routes";
 import { productQnaRoutes } from "./productQna.routes";
 import { giftCardsRoutes } from "./giftCards.routes";
 import { cashbackRoutes } from "./cashback.routes";
-import { rolesRoutes } from "./roles.routes";
 import { exportsRoutes } from "./exports.routes";
 
 export const API = {
@@ -87,6 +86,5 @@ export const API = {
   productQna: productQnaRoutes,
   giftCards: giftCardsRoutes,
   cashback: cashbackRoutes,
-  roles: rolesRoutes,
   exports: exportsRoutes,
 } as const;

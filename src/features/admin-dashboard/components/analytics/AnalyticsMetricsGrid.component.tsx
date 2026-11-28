@@ -17,8 +17,7 @@ const fadeUp = {
 
 interface AnalyticsMetricsGridProps {
   data: AdminAnalytics;
-  /** Null for admins without `analytics.revenue`: the revenue cards are left out. */
-  revenue: AnalyticsRevenueMetrics | null;
+  revenue: AnalyticsRevenueMetrics;
 }
 
 /** The two top-of-page KPI card rows (GMV/AOV/orders, then customers/vendors/rates). */
@@ -33,7 +32,7 @@ export function AnalyticsMetricsGrid({
         {...fadeUp}
         transition={{ duration: 0.35, delay: 0.05 }}
       >
-        {revenue ? <AnalyticsRevenueCards revenue={revenue} /> : null}
+        <AnalyticsRevenueCards revenue={revenue} />
         <AnalyticsMetricCard
           title={LABELS.analyticsTotalOrders}
           value={String(data.totalOrders)}

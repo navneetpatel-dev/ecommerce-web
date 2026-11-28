@@ -70,69 +70,33 @@ beforeEach(() => {
   useAuthStore.setState({ accessToken: null, currentUser: null });
 });
 
-describe("useAdminVendorFilterSelect: which list a role's dropdown uses", () => {
-  // The page cache is shared across calls, so each case searches for its own term.
-  it.each([
-    ["Super Admin", "SUPER_ADMIN", []],
-    ["a vendor manager", "ADMIN_CATALOG_MANAGER", ["vendor.manage"]],
-    ["a vendor approver", "ADMIN_CATALOG_MANAGER", ["vendor.approve"]],
-  ] as const)(
-    "%s browses the full admin list (any status, with details)",
-    async (_label, role, permissions) => {
-      signIn(role, [...permissions]);
-      const { result } = renderHook(
-        () => useAdminVendorFilterSelect({ value: "" }),
-        { wrapper },
-      );
-      const page = await result.current.fetchPage({
-        page: 1,
-        limit: 25,
-        search: `acm ${_label}`,
-      });
-      expect(adminVendors).toHaveBeenCalledWith({
-        page: 1,
-        limit: 25,
-        search: `acm ${_label}`,
-        status: undefined,
-      });
-      expect(directory).not.toHaveBeenCalled();
-      expect(page.items[0]).toEqual({
-        id: "v1",
-        label: "Acme Traders",
-        sublabel: "@acme · Gujarat · #v1",
-      });
-      expect(page.totalPages).toBe(2);
-      expect(result.current.resetKey).toBe("admin");
-    },
-  );
-
-  it.each([
-    ["Catalog Manager", "ADMIN_CATALOG_MANAGER", ["product.manage"]],
-    ["Order Manager", "ADMIN_ORDER_MANAGER", ["order.manage"]],
-    ["Finance Manager", "ADMIN_FINANCE_MANAGER", ["payout.manage"]],
-  ] as const)(
-    "regression: %s uses the approved-vendor directory, never the admin list that refuses them",
-    async (_label, role, permissions) => {
-      signIn(role, [...permissions]);
-      const { result } = renderHook(
-        () => useAdminVendorFilterSelect({ value: "" }),
-        { wrapper },
-      );
-      const page = await result.current.fetchPage({
-        page: 2,
-        limit: 25,
-        search: `brig ${_label}`,
-      });
-      expect(directory).toHaveBeenCalledWith({
-        page: 2,
-        limit: 25,
-        search: `brig ${_label}`,
-      });
-      expect(adminVendors).not.toHaveBeenCalled();
-      expect(page.items).toEqual([{ id: "v2", label: "Bright Goods" }]);
-      expect(result.current.resetKey).toBe("directory");
-    },
-  );
+describe("useAdminVendorFilterSelect: which list the dropdown uses", () => {
+  it("a filter browses the full admin list (any status, with details)", async () => {
+    signIn("SUPER_ADMIN", []);
+    const { result } = renderHook(
+      () => useAdminVendorFilterSelect({ value: "" }),
+      { wrapper },
+    );
+    const page = await result.current.fetchPage({
+      page: 1,
+      limit: 25,
+      search: "acm",
+    });
+    expect(adminVendors).toHaveBeenCalledWith({
+      page: 1,
+      limit: 25,
+      search: "acm",
+      status: undefined,
+    });
+    expect(directory).not.toHaveBeenCalled();
+    expect(page.items[0]).toEqual({
+      id: "v1",
+      label: "Acme Traders",
+      sublabel: "@acme · Gujarat · #v1",
+    });
+    expect(page.totalPages).toBe(2);
+    expect(result.current.resetKey).toBe("admin");
+  });
 
   it("does not mix cached pages between the two sources", async () => {
     signIn("SUPER_ADMIN", []);
@@ -140,17 +104,17 @@ describe("useAdminVendorFilterSelect: which list a role's dropdown uses", () => 
       wrapper,
     });
     await first.result.current.fetchPage({ page: 1, limit: 25 });
-    signIn("ADMIN_CATALOG_MANAGER", ["product.manage"]);
-    const second = renderHook(() => useAdminVendorFilterSelect({ value: "" }), {
-      wrapper,
-    });
+    const second = renderHook(
+      () => useAdminVendorFilterSelect({ value: "", status: "APPROVED" }),
+      { wrapper },
+    );
     const page = await second.result.current.fetchPage({ page: 1, limit: 25 });
     expect(page.items[0]?.id).toBe("v2");
   });
 });
 
 describe("useAdminVendorFilterSelect: the name of an already-selected vendor", () => {
-  it("a vendor manager reads the vendor's detail", async () => {
+  it("a filter reads the vendor's detail", async () => {
     signIn("SUPER_ADMIN", []);
     apiGet.mockResolvedValue({
       id: "v1",
@@ -167,11 +131,11 @@ describe("useAdminVendorFilterSelect: the name of an already-selected vendor", (
     expect(directory).not.toHaveBeenCalled();
   });
 
-  it("a role without vendor permissions resolves the name through the directory by id", async () => {
-    signIn("ADMIN_CATALOG_MANAGER", ["product.manage"]);
+  it("an approved-vendor picker resolves the name through the directory by id", async () => {
+    signIn("SUPER_ADMIN", []);
     directory.mockResolvedValue(directoryPage);
     const { result } = renderHook(
-      () => useAdminVendorFilterSelect({ value: "v2" }),
+      () => useAdminVendorFilterSelect({ value: "v2", status: "APPROVED" }),
       { wrapper },
     );
     await waitFor(() => expect(result.current.pinnedOption).not.toBeNull());
@@ -184,7 +148,7 @@ describe("useAdminVendorFilterSelect: the name of an already-selected vendor", (
   });
 
   it("an id that is not in the directory pins nothing instead of failing", async () => {
-    signIn("ADMIN_CATALOG_MANAGER", ["product.manage"]);
+    signIn("SUPER_ADMIN", []);
     directory.mockResolvedValue({
       items: [],
       page: 1,
@@ -192,7 +156,7 @@ describe("useAdminVendorFilterSelect: the name of an already-selected vendor", (
       total: 0,
     });
     const { result } = renderHook(
-      () => useAdminVendorFilterSelect({ value: "gone" }),
+      () => useAdminVendorFilterSelect({ value: "gone", status: "APPROVED" }),
       { wrapper },
     );
     await waitFor(() => expect(directory).toHaveBeenCalled());
@@ -200,14 +164,14 @@ describe("useAdminVendorFilterSelect: the name of an already-selected vendor", (
   });
 
   it("makes no lookup when nothing is selected", () => {
-    signIn("ADMIN_CATALOG_MANAGER", ["product.manage"]);
+    signIn("SUPER_ADMIN", []);
     renderHook(() => useAdminVendorFilterSelect({ value: "" }), { wrapper });
     expect(directory).not.toHaveBeenCalled();
     expect(apiGet).not.toHaveBeenCalled();
   });
 
   it("passes a chosen vendor up to the page's filter", () => {
-    signIn("ADMIN_CATALOG_MANAGER", ["product.manage"]);
+    signIn("SUPER_ADMIN", []);
     const onChange = vi.fn();
     const { result } = renderHook(
       () => useAdminVendorFilterSelect({ value: "", onChange }),
@@ -217,7 +181,7 @@ describe("useAdminVendorFilterSelect: the name of an already-selected vendor", (
     expect(onChange).toHaveBeenCalledWith("v2");
   });
 
-  it("a picker for approved vendors uses the light directory for everyone, even Super Admin", async () => {
+  it("a picker for approved vendors uses the light directory", async () => {
     signIn("SUPER_ADMIN", []);
     const { result } = renderHook(
       () => useAdminVendorFilterSelect({ value: "", status: "APPROVED" }),
@@ -240,9 +204,9 @@ describe("useAdminVendorFilterSelect: the name of an already-selected vendor", (
   it("a fetched page is reused for a minute, then fetched again so new vendors appear", async () => {
     vi.useFakeTimers();
     try {
-      signIn("ADMIN_CATALOG_MANAGER", ["product.manage"]);
+      signIn("SUPER_ADMIN", []);
       const { result } = renderHook(
-        () => useAdminVendorFilterSelect({ value: "" }),
+        () => useAdminVendorFilterSelect({ value: "", status: "APPROVED" }),
         { wrapper },
       );
       const query = { page: 1, limit: 25, search: "ttl term" };

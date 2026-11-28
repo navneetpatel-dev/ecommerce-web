@@ -9,43 +9,14 @@ import { useVendorLayout } from "../useVendorLayout.hook";
 vi.mock("next/navigation", () => ({ usePathname: () => "/" }));
 
 /** Mirrors backend `ROLE_PERMISSIONS` (core/permissions/permissionKeys.ts). Keep in sync. */
-const ORDER_MANAGER = [
-  "order.manage",
-  "suborder.manage",
-  "order.refund",
-  "shipping.manage",
-  "analytics.view",
-  "ticket.manage",
-];
-const FINANCE_MANAGER = [
-  "payout.manage",
-  "commission.view",
-  "analytics.view",
-  "analytics.revenue",
-  "wallet.adjust",
-  "cashback.manage",
-  "gift_card.manage",
-];
-const CATALOG_MANAGER = [
-  "product.manage",
-  "product.create",
-  "product.approve",
-  "category.manage",
-  "coupon.manage",
-  "banner.manage",
-  "review.moderate",
-  "analytics.view",
-];
-const VENDOR_OWNER = [
+const VENDOR = [
   "product.create",
   "product.update",
   "product.delete",
   "suborder.manage",
   "payout.view",
   "review.respond",
-  "team.manage",
 ];
-const VENDOR_STAFF = ["product.update", "suborder.manage"];
 
 function signIn(
   role: CurrentUser["role"],
@@ -82,147 +53,23 @@ beforeEach(() => {
 });
 
 describe("admin sidebar by role", () => {
-  it("Super Admin sees all 25 items", () => {
+  it("Super Admin sees all 24 items", () => {
     signIn("SUPER_ADMIN", []);
-    expect(adminHrefs()).toHaveLength(25);
-  });
-
-  it("Order Manager sees exactly its 6 operations items (no Audit, Bug Reports, Web Vitals or Gift Cards)", () => {
-    signIn("ADMIN_ORDER_MANAGER", ORDER_MANAGER);
-    expect(adminHrefs().sort()).toEqual(
-      [
-        A.analytics,
-        A.reports,
-        A.orders,
-        A.returns,
-        A.shipping,
-        A.supportTickets,
-      ].sort(),
-    );
-  });
-
-  it("Finance Manager sees exactly its 5 money items", () => {
-    signIn("ADMIN_FINANCE_MANAGER", FINANCE_MANAGER);
-    expect(adminHrefs().sort()).toEqual(
-      [A.analytics, A.reports, A.finance, A.giftCards, A.cashbackOffers].sort(),
-    );
-  });
-
-  it("Finance Manager gets no operations, catalog, user or system pages", () => {
-    signIn("ADMIN_FINANCE_MANAGER", FINANCE_MANAGER);
-    const hrefs = adminHrefs();
-    for (const other of [
-      A.orders,
-      A.returns,
-      A.shipping,
-      A.supportTickets,
-      A.bugReports,
-      A.products,
-      A.inventory,
-      A.categories,
-      A.tax,
-      A.coupons,
-      A.banners,
-      A.reviews,
-      A.qna,
-      A.vendors,
-      A.users,
-      A.roles,
-      A.audit,
-      A.settings,
-      A.notifications,
-      A.webVitals,
-    ]) {
-      expect(hrefs).not.toContain(other);
-    }
-  });
-
-  it("only Super Admin and the Finance Manager see Gift Cards, Finance & Payouts and Cashback Offers", () => {
-    for (const [role, perms] of [
-      ["ADMIN_ORDER_MANAGER", ORDER_MANAGER],
-      ["ADMIN_CATALOG_MANAGER", CATALOG_MANAGER],
-    ] as const) {
-      signIn(role, [...perms]);
-      const hrefs = adminHrefs();
-      expect(hrefs).not.toContain(A.giftCards);
-      expect(hrefs).not.toContain(A.finance);
-      expect(hrefs).not.toContain(A.cashbackOffers);
-    }
-    signIn("ADMIN_FINANCE_MANAGER", FINANCE_MANAGER);
+    expect(adminHrefs()).toHaveLength(24);
     expect(adminHrefs()).toEqual(
-      expect.arrayContaining([A.giftCards, A.finance, A.cashbackOffers]),
+      expect.arrayContaining([
+        A.webVitals,
+        A.cashbackOffers,
+        A.giftCards,
+        A.finance,
+        A.audit,
+        A.bugReports,
+      ]),
     );
-  });
-
-  it("Catalog Manager sees exactly its 9 catalog/marketing items (no Audit, Web Vitals or Cashback Offers)", () => {
-    signIn("ADMIN_CATALOG_MANAGER", CATALOG_MANAGER);
-    expect(adminHrefs().sort()).toEqual(
-      [
-        A.analytics,
-        A.reports,
-        A.products,
-        A.inventory,
-        A.categories,
-        A.coupons,
-        A.banners,
-        A.reviews,
-        A.qna,
-      ].sort(),
-    );
-  });
-
-  it("only Super Admin sees Web Vitals and Cashback Offers", () => {
-    signIn("SUPER_ADMIN", []);
-    expect(adminHrefs()).toContain(A.webVitals);
-    expect(adminHrefs()).toContain(A.cashbackOffers);
-    for (const [role, perms] of [
-      ["ADMIN_ORDER_MANAGER", ORDER_MANAGER],
-      ["ADMIN_CATALOG_MANAGER", CATALOG_MANAGER],
-    ] as const) {
-      signIn(role, [...perms]);
-      expect(adminHrefs()).not.toContain(A.webVitals);
-      expect(adminHrefs()).not.toContain(A.cashbackOffers);
-    }
-  });
-
-  it("analytics.view no longer opens Web Vitals, and coupon.manage no longer opens Cashback Offers", () => {
-    signIn("ADMIN_ORDER_MANAGER", ["analytics.view"]);
-    expect(adminHrefs()).toContain(A.analytics);
-    expect(adminHrefs()).not.toContain(A.webVitals);
-    signIn("ADMIN_CATALOG_MANAGER", ["coupon.manage"]);
-    expect(adminHrefs()).toContain(A.coupons);
-    expect(adminHrefs()).not.toContain(A.cashbackOffers);
-    signIn("ADMIN_CATALOG_MANAGER", ["webvitals.view", "cashback.manage"]);
-    expect(adminHrefs()).toContain(A.webVitals);
-    expect(adminHrefs()).toContain(A.cashbackOffers);
-  });
-
-  it("only Super Admin sees Bug Reports", () => {
-    signIn("SUPER_ADMIN", []);
-    expect(adminHrefs()).toContain(A.bugReports);
-    signIn("ADMIN_ORDER_MANAGER", ORDER_MANAGER);
-    expect(adminHrefs()).not.toContain(A.bugReports);
-    expect(adminHrefs()).toContain(A.supportTickets);
-    signIn("ADMIN_CATALOG_MANAGER", CATALOG_MANAGER);
-    expect(adminHrefs()).not.toContain(A.bugReports);
-    signIn("ADMIN_ORDER_MANAGER", [...ORDER_MANAGER, "bug_report.manage"]);
-    expect(adminHrefs()).toContain(A.bugReports);
-  });
-
-  it("only Super Admin sees Audit", () => {
-    signIn("SUPER_ADMIN", []);
-    expect(adminHrefs()).toContain(A.audit);
-    signIn("ADMIN_ORDER_MANAGER", ORDER_MANAGER);
-    expect(adminHrefs()).not.toContain(A.audit);
-    signIn("ADMIN_CATALOG_MANAGER", CATALOG_MANAGER);
-    expect(adminHrefs()).not.toContain(A.audit);
-    signIn("ADMIN_ORDER_MANAGER", [...ORDER_MANAGER, "audit.view"]);
-    expect(adminHrefs()).toContain(A.audit);
   });
 
   it.each([
-    ["VENDOR_OWNER", VENDOR_OWNER],
-    ["VENDOR_STAFF", VENDOR_STAFF],
+    ["VENDOR_OWNER", VENDOR],
     ["CUSTOMER", []],
   ] as const)("%s sees no admin items", (role, perms) => {
     signIn(role, [...perms], role === "CUSTOMER" ? null : "v1");
@@ -235,8 +82,8 @@ describe("admin sidebar by role", () => {
 });
 
 describe("vendor sidebar by role", () => {
-  it("Vendor Owner sees all 14 items", () => {
-    signIn("VENDOR_OWNER", VENDOR_OWNER, "v1");
+  it("Vendor sees all 13 items", () => {
+    signIn("VENDOR_OWNER", VENDOR, "v1");
     expect(vendorHrefs().sort()).toEqual(
       [
         V.overview,
@@ -252,78 +99,23 @@ describe("vendor sidebar by role", () => {
         V.supportTickets,
         V.bugReports,
         V.shopSettings,
-        V.team,
       ].sort(),
     );
   });
 
-  it("Vendor Staff sees 7 items and no owner-only pages", () => {
-    signIn("VENDOR_STAFF", VENDOR_STAFF, "v1");
-    const hrefs = vendorHrefs();
-    expect(hrefs.sort()).toEqual(
-      [
-        V.overview,
-        V.products,
-        V.orders,
-        V.returns,
-        V.reports,
-        V.supportTickets,
-        V.bugReports,
-      ].sort(),
-    );
-    for (const ownerOnly of [
-      V.coupons,
-      V.shopSettings,
-      V.payouts,
-      V.analytics,
-      V.team,
-      V.reviews,
-      V.productQna,
-    ]) {
-      expect(hrefs).not.toContain(ownerOnly);
-    }
-  });
-
-  it("payout.view without team.manage does not show Team", () => {
-    signIn("VENDOR_OWNER", ["payout.view", "suborder.manage"], "v1");
-    const hrefs = vendorHrefs();
-    expect(hrefs).toContain(V.payouts);
-    expect(hrefs).not.toContain(V.team);
-  });
-
-  it("team.manage alone shows only Team", () => {
-    signIn("VENDOR_OWNER", ["team.manage"], "v1");
-    expect(vendorHrefs()).toEqual([V.team]);
-  });
-
-  it("Order Manager (suborder.manage, no store) sees no vendor items", () => {
-    signIn("ADMIN_ORDER_MANAGER", ORDER_MANAGER);
+  it("Super Admin without a store sees no vendor items", () => {
+    signIn("SUPER_ADMIN", []);
     const { result } = renderHook(() => useVendorLayout());
     expect(result.current.navItems).toEqual([]);
     expect(result.current.hasVendorAccess).toBe(false);
   });
 
-  it("Catalog Manager (product.create, no store) sees no vendor items", () => {
-    signIn("ADMIN_CATALOG_MANAGER", CATALOG_MANAGER);
-    expect(vendorHrefs()).toEqual([]);
-  });
-
-  it("Super Admin without a store sees no vendor items", () => {
-    signIn("SUPER_ADMIN", []);
-    expect(vendorHrefs()).toEqual([]);
-  });
-
-  it("Super Admin impersonating a vendor owner sees the owner sidebar", () => {
-    signIn("VENDOR_OWNER", VENDOR_OWNER, "v1");
+  it("Super Admin impersonating a vendor sees the vendor sidebar", () => {
+    signIn("VENDOR_OWNER", VENDOR, "v1");
     useAuthStore.setState((s) => ({
       currentUser: { ...s.currentUser!, impersonatedBy: "admin-1" },
     }));
-    expect(vendorHrefs()).toHaveLength(14);
-  });
-
-  it("Finance Manager (no store) sees no vendor items", () => {
-    signIn("ADMIN_FINANCE_MANAGER", FINANCE_MANAGER);
-    expect(vendorHrefs()).toEqual([]);
+    expect(vendorHrefs()).toHaveLength(13);
   });
 
   it("Customer sees no vendor items", () => {

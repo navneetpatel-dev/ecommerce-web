@@ -11,7 +11,7 @@ export const blogPosts = [
     title: "How vendor quality checks work",
     excerpt:
       "Understand moderation, approval, and trust signals across the marketplace.",
-    body: "New products enter a pending queue before they go live. Catalog managers review imagery, pricing, and category accuracy. Approved listings appear in search and collections; rejected listings return to the vendor with notes so they can resubmit.",
+    body: "New products enter a pending queue before they go live. Our team reviews imagery, pricing, and category accuracy. Approved listings appear in search and collections; rejected listings return to the vendor with notes so they can resubmit.",
   },
 ] as const;
 

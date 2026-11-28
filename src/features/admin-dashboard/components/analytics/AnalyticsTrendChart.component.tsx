@@ -34,19 +34,14 @@ import { analyticsStyles } from "../../styles/analytics/analyticsComponents.styl
 interface Point {
   date: string;
   count: number;
-  revenue?: number | null;
+  revenue?: number;
 }
 
 interface AnalyticsTrendChartProps {
   data: Point[];
-  /** False for admins without `analytics.revenue`: orders only, no revenue axis or line. */
-  showRevenue?: boolean;
 }
 
-export function AnalyticsTrendChart({
-  data,
-  showRevenue = true,
-}: AnalyticsTrendChartProps) {
+export function AnalyticsTrendChart({ data }: AnalyticsTrendChartProps) {
   const colors = useChartThemeColors();
 
   const chartData = useMemo(
@@ -64,10 +59,7 @@ export function AnalyticsTrendChart({
     [chartData],
   );
 
-  const isEmpty = useMemo(
-    () => isTrendEmpty(chartData, showRevenue),
-    [chartData, showRevenue],
-  );
+  const isEmpty = useMemo(() => isTrendEmpty(chartData), [chartData]);
   const maxOrders = Math.max(...chartData.map((point) => point.count), 0);
   const ordersDomainMax = Math.max(4, Math.ceil(maxOrders * 1.25));
 
@@ -122,17 +114,15 @@ export function AnalyticsTrendChart({
                   width={32}
                   allowDecimals={false}
                 />
-                {showRevenue ? (
-                  <YAxis
-                    yAxisId="revenue"
-                    orientation="right"
-                    tick={{ fill: colors.inkFaint, fontSize: 11 }}
-                    tickLine={false}
-                    axisLine={false}
-                    width={48}
-                    tickFormatter={formatRevenueTick}
-                  />
-                ) : null}
+                <YAxis
+                  yAxisId="revenue"
+                  orientation="right"
+                  tick={{ fill: colors.inkFaint, fontSize: 11 }}
+                  tickLine={false}
+                  axisLine={false}
+                  width={48}
+                  tickFormatter={formatRevenueTick}
+                />
                 <Tooltip
                   cursor={{ fill: colors.brandSubtle, opacity: 0.35 }}
                   content={<AnalyticsTrendTooltip dateByLabel={dateByLabel} />}
@@ -155,18 +145,16 @@ export function AnalyticsTrendChart({
                   radius={[4, 4, 0, 0]}
                   maxBarSize={22}
                 />
-                {showRevenue ? (
-                  <Line
-                    yAxisId="revenue"
-                    type="monotone"
-                    dataKey="revenue"
-                    name={LABELS.analyticsRevenueSeries}
-                    stroke={colors.success}
-                    strokeWidth={2.25}
-                    dot={false}
-                    activeDot={{ r: 4, fill: colors.success, strokeWidth: 0 }}
-                  />
-                ) : null}
+                <Line
+                  yAxisId="revenue"
+                  type="monotone"
+                  dataKey="revenue"
+                  name={LABELS.analyticsRevenueSeries}
+                  stroke={colors.success}
+                  strokeWidth={2.25}
+                  dot={false}
+                  activeDot={{ r: 4, fill: colors.success, strokeWidth: 0 }}
+                />
               </ComposedChart>
             </ResponsiveContainer>
           </div>

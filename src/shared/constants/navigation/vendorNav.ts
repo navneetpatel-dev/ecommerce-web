@@ -61,7 +61,7 @@ export const VENDOR_NAV = [
   {
     href: PATHS.vendor.coupons,
     label: LABELS.coupons,
-    // Owner-only (BE `requireVendorOwner`): staff hold PRODUCT_UPDATE but not PRODUCT_CREATE.
+    // Same gate as the API (BE `requireVendorOwner`).
     permissions: [PERMISSIONS.PRODUCT_CREATE] as PermissionKey[],
   },
   {
@@ -95,13 +95,8 @@ export const VENDOR_NAV = [
   {
     href: PATHS.vendor.shopSettings,
     label: LABELS.vendorShopSettings,
-    // Owner-only (BE `PATCH /vendors/me`): PAYOUT_VIEW is held by VENDOR_OWNER, not VENDOR_STAFF.
+    // Same gate as the API (`PATCH /vendors/me` holds bank and payout settings).
     permissions: [PERMISSIONS.PAYOUT_VIEW] as PermissionKey[],
-  },
-  {
-    href: PATHS.vendor.team,
-    label: LABELS.team,
-    permissions: [PERMISSIONS.TEAM_MANAGE] as PermissionKey[],
   },
 ] as const;
 

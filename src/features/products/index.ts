@@ -41,7 +41,6 @@ export { ProductCategoryOption } from "./components/product-editor/ProductCatego
 export { ProductVariantsDialog } from "./components/product-editor/variants/ProductVariantsDialog.component";
 export { PlatformListedBadge } from "./components/product-editor/PlatformListedBadge.component";
 export { ProductCustomerPreviewDialog } from "./components/preview/ProductCustomerPreviewDialog.component";
-export { useIsVendorStaff } from "./hooks/product-editor/useIsVendorStaff.hook";
 export { SORT_OPTIONS } from "./hooks/listing/useProductListing.hook";
 export type {
   ProductFilters,

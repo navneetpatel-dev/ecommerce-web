@@ -53,7 +53,7 @@ import { stockAlertsLabels } from "./labels/stockAlerts";
 import { productQnaLabels } from "./labels/productQna";
 import { paymentMethodsLabels } from "./labels/paymentMethods";
 import { giftCardsLabels } from "./labels/giftCards";
-import { adminRolesLabels } from "./labels/adminRoles";
+import { accessDeniedLabels } from "./labels/accessDenied";
 import { impersonationLabels } from "./labels/impersonation";
 import { exportsLabels } from "./labels/exports";
 import { appliedFilterLabels } from "./labels/appliedFilters";
@@ -125,7 +125,7 @@ export const LABELS = {
   ...productQnaLabels,
   ...paymentMethodsLabels,
   ...giftCardsLabels,
-  ...adminRolesLabels,
+  ...accessDeniedLabels,
   ...impersonationLabels,
   ...exportsLabels,
   ...appliedFilterLabels,
@@ -155,11 +155,7 @@ export { formatExportProcessing } from "./labels/exports";
 
 export const ROLES = {
   SUPER_ADMIN: "SUPER_ADMIN",
-  ADMIN_ORDER_MANAGER: "ADMIN_ORDER_MANAGER",
-  ADMIN_CATALOG_MANAGER: "ADMIN_CATALOG_MANAGER",
-  ADMIN_FINANCE_MANAGER: "ADMIN_FINANCE_MANAGER",
   VENDOR_OWNER: "VENDOR_OWNER",
-  VENDOR_STAFF: "VENDOR_STAFF",
   CUSTOMER: "CUSTOMER",
 } as const;
 
@@ -168,19 +164,10 @@ export const ROLE_VALUES = Object.values(ROLES) as [RoleName, ...RoleName[]];
 
 export const ROLE_LABELS: Record<RoleName, string> = {
   [ROLES.SUPER_ADMIN]: "Super Admin",
-  [ROLES.ADMIN_ORDER_MANAGER]: "Order Manager",
-  [ROLES.ADMIN_CATALOG_MANAGER]: "Catalog Manager",
-  [ROLES.ADMIN_FINANCE_MANAGER]: "Finance Manager",
-  [ROLES.VENDOR_OWNER]: "Vendor Owner",
-  [ROLES.VENDOR_STAFF]: "Vendor Staff",
+  [ROLES.VENDOR_OWNER]: "Vendor",
   [ROLES.CUSTOMER]: "Customer",
 };
 
-export const ADMIN_ROLES = [
-  ROLES.SUPER_ADMIN,
-  ROLES.ADMIN_ORDER_MANAGER,
-  ROLES.ADMIN_CATALOG_MANAGER,
-  ROLES.ADMIN_FINANCE_MANAGER,
-] as const;
+export const ADMIN_ROLES = [ROLES.SUPER_ADMIN] as const;
 
-export const VENDOR_ROLES = [ROLES.VENDOR_OWNER, ROLES.VENDOR_STAFF] as const;
+export const VENDOR_ROLES = [ROLES.VENDOR_OWNER] as const;

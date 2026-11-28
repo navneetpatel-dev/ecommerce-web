@@ -81,12 +81,6 @@ export const vendorShopSettingsFormStyles = {
   uploadTitle: "text-body font-semibold text-ink",
   uploadSubtitle: "text-body-sm text-ink-muted",
 
-  bankDetailsDisabledNotice:
-    "col-span-full rounded-md border border-line bg-surface-raised p-4",
-  bankDetailsMaskedTitle: "text-body-sm font-medium text-ink",
-  bankDetailsMaskedNumber: "mt-1 font-mono text-body-sm text-ink-muted",
-  bankDetailsMaskedHint: "mt-2 text-body-xs text-info",
   bankDetailsMismatchText: "mt-1 text-body-xs text-danger",
   ifscInput: "uppercase",
-  fulfillmentNotice: "col-span-full text-body-xs text-ink-muted",
 } as const;

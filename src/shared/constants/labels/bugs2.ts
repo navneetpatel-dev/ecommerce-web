@@ -41,7 +41,6 @@ export const bugs2Labels = {
   bugModuleOther: "Other",
   bugReporterRoleCustomer: "Customer",
   bugReporterRoleVendor: "Vendor",
-  bugReporterRoleVendorStaff: "Vendor staff",
   bugFilterAllSeverities: "All severities",
   bugFilterAllModules: "All modules",
   bugFilterAllReporterRoles: "All reporter roles",

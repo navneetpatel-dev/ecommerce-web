@@ -3,9 +3,7 @@ import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { describe, expect, it, vi } from "vitest";
-import type { StaffMember } from "../../../api/vendorStaff.api";
 import { CommissionInvoiceTableRow } from "../../commission/CommissionInvoicesTable/CommissionInvoiceTableRow.component";
-import { StaffMembersTable } from "../../team/StaffMembersTable.component";
 import { VendorReturnRestockAction } from "../../returns/VendorReturnsTable/VendorReturnRestockAction.component";
 import { SubOrderActions } from "../VendorOrdersTable/SubOrderActions.component";
 import type { VendorReturnRowViewModel } from "../../../hooks/returns/useVendorReturnsTablePresentation.hook";
@@ -24,44 +22,7 @@ const inTable = (row: React.ReactNode) =>
     </table>,
   );
 
-const member: StaffMember = {
-  id: "m1",
-  name: "Asha",
-  email: "asha@example.com",
-  isOwner: false,
-  status: "ACTIVE",
-  roleName: "Staff",
-  createdAt: "2026-01-01T00:00:00Z",
-};
-
 describe("vendor row menus", () => {
-  it("removes a staff member from the menu", async () => {
-    const user = userEvent.setup();
-    const onRemove = vi.fn();
-    render(<StaffMembersTable members={[member]} onRemove={onRemove} />);
-
-    // Both the table and the phone cards are in the DOM; CSS shows one.
-    await user.click(
-      screen.getAllByRole("button", { name: "More actions" })[0]!,
-    );
-    await user.click(screen.getByRole("button", { name: "Remove" }));
-
-    expect(onRemove).toHaveBeenCalledWith(member);
-  });
-
-  it("gives the owner no menu", () => {
-    render(
-      <StaffMembersTable
-        members={[{ ...member, isOwner: true }]}
-        onRemove={vi.fn()}
-      />,
-    );
-
-    expect(
-      screen.queryByRole("button", { name: "More actions" }),
-    ).not.toBeInTheDocument();
-  });
-
   it("downloads a commission invoice from the menu", async () => {
     const user = userEvent.setup();
     const onDownload = vi.fn();

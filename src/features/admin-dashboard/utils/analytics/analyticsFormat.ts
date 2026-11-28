@@ -85,14 +85,11 @@ export function pickTrendTickIndexes(length: number, maxTicks = 7): number[] {
   return [...indexes].sort((a, b) => a - b);
 }
 
-/** Nothing to draw: no orders, and (when revenue is shown) no revenue either. */
+/** Nothing to draw: no orders and no revenue. */
 export function isTrendEmpty(
-  points: Array<{ count: number; revenue?: number }>,
-  showRevenue: boolean,
+  points: Array<{ count: number; revenue: number }>,
 ): boolean {
-  return points.every(
-    (point) => point.count === 0 && (!showRevenue || point.revenue === 0),
-  );
+  return points.every((point) => point.count === 0 && point.revenue === 0);
 }
 
 /** Compact rupee tick for the revenue axis: 1500 → 2k, 250000 → 3L. */

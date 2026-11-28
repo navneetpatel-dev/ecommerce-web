@@ -5,8 +5,7 @@ import {
   type DataTablePaginationProps,
 } from "@/shared/components/DataTable";
 import { type CouponFormInput } from "@/features/admin-dashboard";
-import { LABELS, ROLES } from "@/shared/constants/labels";
-import { useAuthStore } from "@/shared/stores/auth/auth.store";
+import { LABELS } from "@/shared/constants/labels";
 import type { UseFormReturn } from "react-hook-form";
 import type { Coupon, CouponAnalytics } from "@/shared/api/types";
 import { VendorCouponRowActions } from "./VendorCouponsView/VendorCouponRowActions.component";
@@ -61,15 +60,11 @@ export function VendorCouponsView(props: VendorCouponsViewProps) {
     onUpdateStatus,
   } = props;
 
-  const isOwner = useAuthStore(
-    (s) => s.currentUser?.role === ROLES.VENDOR_OWNER,
-  );
   const columns = buildVendorCouponColumns();
 
   const renderActions = (row: Coupon) => (
     <VendorCouponRowActions
       coupon={row}
-      isOwner={isOwner}
       vendorId={vendorId}
       onOpenAnalytics={setAnalyticsId}
       onUpdateStatus={onUpdateStatus}
@@ -87,7 +82,6 @@ export function VendorCouponsView(props: VendorCouponsViewProps) {
         formLevelError={formLevelError}
         onSubmit={onSubmit}
         vendorId={vendorId}
-        canManage={isOwner}
       />
 
       {filters ? <CouponsFilters {...filters} /> : null}

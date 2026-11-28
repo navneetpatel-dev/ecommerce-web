@@ -78,15 +78,10 @@ export function useBankDetailsSection({
   const ifscInvalid =
     Boolean(bankDetails?.ifscCode) && !IFSC.test(bankDetails?.ifscCode ?? "");
 
-  const maskedAccountNumber = bankDetails?.accountNumber
-    ? `••••••••${bankDetails.accountNumber.slice(-4)}`
-    : "Not configured";
-
   return {
     accountInvalid,
     ifscInvalid,
     isMismatch,
-    maskedAccountNumber,
     handleHolderNameChange,
     handleBankNameChange,
     handleAccountNumberChange,

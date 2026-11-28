@@ -53,60 +53,36 @@ describe("VendorLayoutContainer access", () => {
     expect(denied()).not.toBeInTheDocument();
   });
 
-  it("blocks an admin with suborder.manage who has no store, even by direct URL", () => {
-    signIn("ADMIN_ORDER_MANAGER", ["suborder.manage", "order.manage"], null);
-    renderAt(PATHS.vendor.orders);
-    expect(denied()).toBeInTheDocument();
-    expect(body()).not.toBeInTheDocument();
-  });
-
-  it("blocks a catalog manager (product.create, no store) from vendor coupons", () => {
-    signIn("ADMIN_CATALOG_MANAGER", ["product.create"], null);
-    renderAt(PATHS.vendor.coupons);
-    expect(denied()).toBeInTheDocument();
-    expect(body()).not.toBeInTheDocument();
-  });
-
-  it.each([PATHS.vendor.coupons, PATHS.vendor.shopSettings, PATHS.vendor.team])(
-    "blocks vendor staff from owner-only page %s",
+  it.each([PATHS.vendor.orders, PATHS.vendor.coupons])(
+    "blocks the Super Admin, who has no store, from %s even by direct URL",
     (path) => {
-      signIn("VENDOR_STAFF", ["product.update", "suborder.manage"], "v1");
+      signIn("SUPER_ADMIN", [], null);
       renderAt(path);
       expect(denied()).toBeInTheDocument();
       expect(body()).not.toBeInTheDocument();
     },
   );
 
-  it.each([PATHS.vendor.orders, PATHS.vendor.products, PATHS.vendor.reports])(
-    "still lets vendor staff open %s",
-    (path) => {
-      signIn("VENDOR_STAFF", ["product.update", "suborder.manage"], "v1");
-      renderAt(path);
-      expect(body()).toBeInTheDocument();
-      expect(denied()).not.toBeInTheDocument();
-    },
-  );
-
-  it.each([PATHS.vendor.coupons, PATHS.vendor.shopSettings])(
-    "lets the vendor owner open %s",
-    (path) => {
-      signIn(
-        "VENDOR_OWNER",
-        ["product.create", "product.update", "suborder.manage", "payout.view"],
-        "v1",
-      );
-      renderAt(path);
-      expect(body()).toBeInTheDocument();
-    },
-  );
-
-  it("lets the vendor owner open Team, and blocks payout.view without team.manage", () => {
-    signIn("VENDOR_OWNER", ["team.manage"], "v1");
-    renderAt(PATHS.vendor.team);
+  it.each([
+    PATHS.vendor.orders,
+    PATHS.vendor.products,
+    PATHS.vendor.reports,
+    PATHS.vendor.coupons,
+    PATHS.vendor.shopSettings,
+  ])("lets the vendor open %s", (path) => {
+    signIn(
+      "VENDOR_OWNER",
+      ["product.create", "product.update", "suborder.manage", "payout.view"],
+      "v1",
+    );
+    renderAt(path);
     expect(body()).toBeInTheDocument();
-    document.body.innerHTML = "";
-    signIn("VENDOR_OWNER", ["payout.view"], "v1");
-    renderAt(PATHS.vendor.team);
+    expect(denied()).not.toBeInTheDocument();
+  });
+
+  it("blocks a vendor-side page whose permission is missing", () => {
+    signIn("VENDOR_OWNER", ["suborder.manage"], "v1");
+    renderAt(PATHS.vendor.shopSettings);
     expect(denied()).toBeInTheDocument();
     expect(body()).not.toBeInTheDocument();
   });

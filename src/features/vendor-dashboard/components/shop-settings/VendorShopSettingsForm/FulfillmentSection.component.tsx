@@ -13,7 +13,6 @@ import {
 import { LABELS } from "@/shared/constants/labels";
 import type { VendorPayoutFrequency } from "../../../api/overview/vendor.api";
 import { CURRENCY_SYMBOL } from "@/shared/utils/formatting/orderFormat";
-import { vendorShopSettingsFormStyles as styles } from "../../../styles/shop-settings/vendorShopSettingsForm.styles";
 
 const NO_PREFERENCE_VALUE = "__none__";
 
@@ -21,7 +20,6 @@ interface FulfillmentSectionProps {
   returnShippingFee: number | null;
   codEnabled: boolean;
   payoutFrequency: VendorPayoutFrequency | null;
-  disabled?: boolean;
   onReturnShippingFeeChange: (value: number | null) => void;
   onCodEnabledChange: (value: boolean) => void;
   onPayoutFrequencyChange: (value: VendorPayoutFrequency | null) => void;
@@ -32,7 +30,6 @@ export function FulfillmentSection({
   returnShippingFee,
   codEnabled,
   payoutFrequency,
-  disabled = false,
   onReturnShippingFeeChange,
   onCodEnabledChange,
   onPayoutFrequencyChange,
@@ -50,12 +47,6 @@ export function FulfillmentSection({
       hint={LABELS.settingsFulfillmentHint}
       columns={3}
     >
-      {disabled ? (
-        <p className={styles.fulfillmentNotice}>
-          Only the store proprietor (Vendor Owner) can adjust delivery
-          surcharges, COD availability, and payout schedule.
-        </p>
-      ) : null}
       <FormFieldFrame
         label={LABELS.returnShippingFee}
         hint={LABELS.returnShippingFeeHint}
@@ -65,7 +56,6 @@ export function FulfillmentSection({
           min={0}
           step={10}
           prefix={CURRENCY_SYMBOL}
-          disabled={disabled}
           onChange={handleReturnShippingFeeChange}
         />
       </FormFieldFrame>
@@ -76,7 +66,6 @@ export function FulfillmentSection({
         <CheckboxField
           id="vendor-shop-cod"
           checked={codEnabled}
-          disabled={disabled}
           onCheckedChange={onCodEnabledChange}
           label={LABELS.vendorCodEnabled}
         />
@@ -87,7 +76,6 @@ export function FulfillmentSection({
       >
         <Select
           value={payoutFrequency ?? NO_PREFERENCE_VALUE}
-          disabled={disabled}
           onValueChange={handlePayoutFrequencyChange}
         >
           <SelectTrigger id="vendor-shop-payout-frequency">

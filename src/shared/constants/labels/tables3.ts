@@ -30,7 +30,6 @@ export const tables3Labels = {
   productMediaUrlInvalid: "Enter a valid media URL or upload a file.",
   productWarrantyType: "Warranty type",
   productHsnCode: "HSN code",
-  productOwnerOnlyHint: "Only the store owner can change this.",
   productHsnCodeHint:
     "Optional display override. Tax still follows category tax rules.",
   productVideoUrl: "Product video",

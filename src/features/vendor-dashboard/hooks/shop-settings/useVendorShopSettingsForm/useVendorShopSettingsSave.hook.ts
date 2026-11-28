@@ -8,9 +8,8 @@ import {
   type ShopSettingsSaveOverride,
   type ShopSettingsSnapshot,
 } from "./shopSettingsPayload";
-import { LABELS, ROLES } from "@/shared/constants/labels";
+import { LABELS } from "@/shared/constants/labels";
 import { STORAGE_KEYS } from "@/shared/constants/storage/storage";
-import { useAuthStore } from "@/shared/stores/auth/auth.store";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 
 export type { ShopSettingsSaveOverride } from "./shopSettingsPayload";
@@ -55,14 +54,7 @@ export function useVendorShopSettingsSave(
     }
     setSaving(true);
     setMessage(null);
-    const isOwner =
-      useAuthStore.getState().currentUser?.role === ROLES.VENDOR_OWNER;
-    const payload = buildShopSettingsPayload(
-      options,
-      override,
-      partial,
-      isOwner,
-    );
+    const payload = buildShopSettingsPayload(options, override, partial);
 
     const isCat = Boolean(
       override && ("categoryIds" in override || "entityType" in override),

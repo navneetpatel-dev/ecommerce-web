@@ -4,14 +4,12 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { RequirePermission } from "@/shared/components/system/RequirePermission.component";
-import { useAuthStore } from "@/shared/stores/auth/auth.store";
-import { isSelfAdminTarget } from "../../utils/shared/isSelfAdminTarget";
 import { DetailQuerySkeleton } from "@/shared/components/Skeletons/DetailQuerySkeleton.component";
 import { QueryErrorAlert } from "@/shared/components/notices/QueryErrorAlert.component";
 import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import { Button } from "@/shared/components/ui/button";
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
-import { LABELS } from "@/shared/constants/labels";
+import { LABELS, ROLE_LABELS, type RoleName } from "@/shared/constants/labels";
 import { adminEntityDetailLabels } from "@/shared/constants/labels/adminEntityDetail";
 import { formatOrderDate } from "@/shared/utils/formatting/orderFormat";
 import {
@@ -20,7 +18,6 @@ import {
   useAdminUserOrders,
 } from "../../api/users/users.queries";
 import { ImpersonateUserButton } from "../../components/users/ImpersonateUserButton.component";
-import { ChangeUserRoleDialog } from "../../components/users/ChangeUserRoleDialog.component";
 import { UserAddressesCard } from "./UserAddressesCard.component";
 import { UserRecentOrdersCard } from "./UserRecentOrdersCard.component";
 import { adminUserDetailStyles } from "./adminUserDetail.styles";
@@ -36,7 +33,6 @@ export function AdminUserDetailPage() {
 function AdminUserDetailContent() {
   const params = useParams<{ id: string }>();
   const userId = params.id;
-  const currentUserId = useAuthStore((s) => s.currentUser?.id);
 
   const userQuery = useAdminUser(userId);
   const addressesQuery = useAdminUserAddresses(userId);
@@ -61,11 +57,7 @@ function AdminUserDetailContent() {
 
   const addresses = addressesQuery.data ?? [];
   const orders = ordersQuery.data?.items ?? [];
-  // Backend rejects role/status changes an admin targets at their own account (self-escalation
-  // guard) — hide the actions here rather than let the admin hit a confusing 403 after filling
-  // out the dialog.
-  const isSelf = isSelfAdminTarget(user.id, currentUserId);
-
+  const roleDisplay = ROLE_LABELS[user.role as RoleName] ?? user.role;
   const userPhoneDisplay = user.phone ?? "—";
   const statusBadgeElement = user.status ? (
     <StatusBadge status={user.status} />
@@ -79,29 +71,6 @@ function AdminUserDetailContent() {
       </dd>
     </>
   ) : null;
-
-  const changeRoleAction = isSelf ? null : (
-    <ChangeUserRoleDialog
-      userId={user.id}
-      userName={user.name}
-      currentRoleName={user.role}
-      currentVendorId={user.vendorId}
-    />
-  );
-
-  const changeRoleEditAction = isSelf ? null : (
-    <ChangeUserRoleDialog
-      userId={user.id}
-      userName={user.name}
-      currentRoleName={user.role}
-      currentVendorId={user.vendorId}
-      trigger={
-        <button type="button" className={adminUserDetailStyles.manageRoleLink}>
-          Edit
-        </button>
-      }
-    />
-  );
 
   const linkedVendorRow = user.vendorId ? (
     <>
@@ -135,7 +104,6 @@ function AdminUserDetailContent() {
 
       <div className={adminUserDetailStyles.actionsRow}>
         <ImpersonateUserButton userId={user.id} />
-        {changeRoleAction}
       </div>
 
       <div className={adminUserDetailStyles.gridTwoCols}>
@@ -146,8 +114,7 @@ function AdminUserDetailContent() {
           <dl className={adminUserDetailStyles.dlGrid}>
             <dt className={adminUserDetailStyles.dt}>{LABELS.role}</dt>
             <dd className={adminUserDetailStyles.ddFlex}>
-              <span>{user.role}</span>
-              {changeRoleEditAction}
+              <span>{roleDisplay}</span>
             </dd>
             <dt className={adminUserDetailStyles.dt}>{LABELS.phone}</dt>
             <dd className={adminUserDetailStyles.dd}>{userPhoneDisplay}</dd>

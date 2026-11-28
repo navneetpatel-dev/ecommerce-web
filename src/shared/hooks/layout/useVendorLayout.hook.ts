@@ -15,7 +15,6 @@ import {
   RotateCcw,
   TrendingUp,
   HelpCircle,
-  Users,
 } from "lucide-react";
 import { usePermissions } from "@/shared/hooks/auth/usePermissions.hook";
 import { useAuthStore } from "@/shared/stores/auth/auth.store";
@@ -36,7 +35,6 @@ const VENDOR_NAV_ICONS = {
   [PATHS.vendor.supportTickets]: LifeBuoy,
   [PATHS.vendor.bugReports]: Bug,
   [PATHS.vendor.shopSettings]: Settings,
-  [PATHS.vendor.team]: Users,
 } as const;
 
 export function useVendorLayout() {

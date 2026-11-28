@@ -1,7 +1,6 @@
 import { renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, it } from "vitest";
 import { LABELS, ROLES } from "@/shared/constants/labels";
-import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { useAuthStore } from "@/shared/stores/auth/auth.store";
 import { useCommissionLock } from "../../hooks/categories/useCommissionLock.hook";
 import { categoryEditRateChange } from "../../utils/categories/categoryRateChange";
@@ -11,9 +10,9 @@ const signIn = (role: string, permissions: string[] = []) =>
   useAuthStore.setState({ currentUser: { role, permissions } as never });
 
 describe("category commission", () => {
-  beforeEach(() => signIn(ROLES.ADMIN_CATALOG_MANAGER, ["category.manage"]));
+  beforeEach(() => signIn(ROLES.VENDOR_OWNER, ["category.manage"]));
 
-  it("is locked for the Catalog Manager, with the reason shown", () => {
+  it("is locked without product pricing, with the reason shown", () => {
     const { result } = renderHook(() => useCommissionLock());
     expect(result.current).toEqual({
       locked: true,
@@ -21,12 +20,8 @@ describe("category commission", () => {
     });
   });
 
-  it("is open to a Super Admin and to a role granted product pricing", () => {
+  it("is open to the Super Admin", () => {
     signIn(ROLES.SUPER_ADMIN);
-    expect(renderHook(() => useCommissionLock()).result.current.locked).toBe(
-      false,
-    );
-    signIn(ROLES.ADMIN_CATALOG_MANAGER, [PERMISSIONS.PRODUCT_PRICING]);
     expect(renderHook(() => useCommissionLock()).result.current.locked).toBe(
       false,
     );

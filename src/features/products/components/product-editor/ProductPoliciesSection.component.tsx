@@ -20,7 +20,6 @@ import {
   type ProductListingFormField,
   type ProductListingFormValues,
 } from "../../schemas/listing-form/products.schema";
-import { useIsVendorStaff } from "../../hooks/product-editor/useIsVendorStaff.hook";
 import type { PricingLock } from "../../types/product-editor/types";
 import { productEditorFormStyles } from "../../styles/product-editor/productEditorForm.styles";
 
@@ -39,9 +38,8 @@ export function ProductPoliciesSection({
   patchValues,
   pricingLock,
 }: ProductPoliciesSectionProps) {
-  const isStaff = useIsVendorStaff();
-  const locked = pricingLock?.locked ?? isStaff;
-  const lockHint = pricingLock?.hint ?? LABELS.productOwnerOnlyHint;
+  const locked = pricingLock?.locked ?? false;
+  const lockHint = pricingLock?.hint;
   const isTaxAndPaymentDisabled = disabled || locked;
 
   const handleDeliveryNoteChange = (

@@ -17,7 +17,7 @@ export function isCustomerRole(role: RoleName | null | undefined): boolean {
   return role === ROLES.CUSTOMER;
 }
 
-/** Admin or vendor staff — not a shopper account. */
+/** An admin or vendor account — not a shopper. */
 export function isWorkspaceRole(role: RoleName | null | undefined): boolean {
   return isAdminRole(role) || isVendorRole(role);
 }

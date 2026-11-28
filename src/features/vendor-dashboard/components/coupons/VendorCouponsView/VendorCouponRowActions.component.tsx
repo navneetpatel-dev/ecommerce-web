@@ -18,8 +18,6 @@ const saveVendorCoupon = (id: string, body: unknown) =>
 
 interface VendorCouponRowActionsProps {
   coupon: Coupon;
-  /** Staff may read analytics; only the owner changes coupons. */
-  isOwner: boolean;
   vendorId: string | null;
   onOpenAnalytics: (id: string) => void;
   onUpdateStatus: (coupon: Coupon, status: Coupon["status"]) => Promise<void>;
@@ -28,7 +26,6 @@ interface VendorCouponRowActionsProps {
 /** Analytics, edit and status changes for one vendor coupon row. */
 export function VendorCouponRowActions({
   coupon,
-  isOwner,
   vendorId,
   onOpenAnalytics,
   onUpdateStatus,
@@ -36,22 +33,16 @@ export function VendorCouponRowActions({
   const setStatus = (status: Coupon["status"]) => () =>
     onUpdateStatus(coupon, status);
   const openAnalytics = () => onOpenAnalytics(coupon.id);
-  const analyticsAction = (
-    <RowActionButton
-      icon={BarChart2}
-      label={LABELS.viewAnalytics}
-      onClick={openAnalytics}
-    />
-  );
-
-  if (!isOwner) return analyticsAction;
-
   const confirmBody = (template: string) =>
     formatLabel(template, { code: coupon.code });
 
   return (
     <>
-      {analyticsAction}
+      <RowActionButton
+        icon={BarChart2}
+        label={LABELS.viewAnalytics}
+        onClick={openAnalytics}
+      />
       {coupon.status !== COUPON_STATUS.ARCHIVED &&
       coupon.status !== COUPON_STATUS.REJECTED ? (
         <EditCouponAction

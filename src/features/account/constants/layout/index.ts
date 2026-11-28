@@ -60,7 +60,7 @@ export const ACCOUNT_SECTIONS: AccountNavItem[] = [
   },
 ];
 
-/** Staff (admin/vendor) profile — no shopper-only sections. */
+/** Admin and vendor profile — no shopper-only sections. */
 const WORKSPACE_ACCOUNT_SECTION_IDS: AccountSectionId[] = [
   "personal",
   "security",
@@ -86,7 +86,7 @@ export function accountSectionsForRole(
   );
 }
 
-/** Staff sections before role hydrates on /admin/profile or /vendor/.../profile. */
+/** Admin/vendor sections before role hydrates on /admin/profile or /vendor/.../profile. */
 export function workspaceAccountSections(): AccountNavItem[] {
   return ACCOUNT_SECTIONS.filter((section) =>
     WORKSPACE_ACCOUNT_SECTION_IDS.includes(section.id),

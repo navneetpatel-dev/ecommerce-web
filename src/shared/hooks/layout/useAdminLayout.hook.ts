@@ -52,7 +52,6 @@ const ADMIN_NAV_ICONS = {
   [PATHS.admin.finance]: Wallet,
   [PATHS.admin.reports]: FileBarChart,
   [PATHS.admin.users]: Users,
-  [PATHS.admin.roles]: Shield,
   [PATHS.admin.analytics]: BarChart3,
   [PATHS.admin.webVitals]: Activity,
   [PATHS.admin.audit]: ClipboardList,

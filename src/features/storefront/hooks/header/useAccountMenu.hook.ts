@@ -62,7 +62,7 @@ export function useAccountMenu(currentUser: CurrentUser | null) {
           label: section.label,
         })),
     };
-    // Shoppers get their orders, money and help pages too; staff keep the profile list.
+    // Shoppers get their orders, money and help pages too; admins and vendors keep the profile list.
     return onWorkspace
       ? [accountGroup]
       : [...SHOPPER_MENU_GROUPS, accountGroup];

@@ -1,11 +1,7 @@
-/**
- * Revenue figures are `null` (and the revenue rankings empty) for admins without `analytics.revenue`;
- * the order counts and operational numbers are always present.
- */
 export interface AdminAnalytics {
-  gmv: number | null;
-  paidGmv: number | null;
-  aov: number | null;
+  gmv: number;
+  paidGmv: number;
+  aov: number;
   totalOrders: number;
   totalCustomers: number;
   totalVendors: number;
@@ -15,7 +11,7 @@ export interface AdminAnalytics {
   pendingVendors: number;
   pendingReviews: number;
   ordersGrowthPct: number;
-  revenueGrowthPct: number | null;
+  revenueGrowthPct: number;
   /** `sharePercent` is the row's share of platform-wide revenue, computed server-side. */
   topVendors: {
     id: string;
@@ -29,7 +25,7 @@ export interface AdminAnalytics {
     revenue: number;
     sharePercent: number;
   }[];
-  orderVolume: { date: string; count: number; revenue: number | null }[];
+  orderVolume: { date: string; count: number; revenue: number }[];
   ordersByStatus: { status: string; count: number }[];
   paymentsByStatus: { status: string; count: number }[];
   ratingDistribution: { rating: number; count: number }[];

@@ -49,26 +49,13 @@ beforeEach(() => {
   useAuthStore.setState({ accessToken: null, currentUser: null });
 });
 
-describe("product policies: owner-only fields", () => {
-  it("vendor staff cannot edit the HSN code or the COD option, and are told why", () => {
-    signIn("VENDOR_STAFF");
-    renderSection();
-    expect(screen.getByDisplayValue("610910")).toBeDisabled();
-    expect(
-      screen.getAllByText(LABELS.productOwnerOnlyHint).length,
-    ).toBeGreaterThanOrEqual(2);
-    const codSelect = screen
-      .getAllByRole("combobox")
-      .find((el) => el.textContent?.includes(LABELS.productCodInherit));
-    expect(codSelect).toBeDisabled();
-  });
-
-  it("the store owner can edit both", () => {
+describe("product policies: vendor fields", () => {
+  it("the vendor can edit the HSN code and the COD option", () => {
     signIn("VENDOR_OWNER");
     renderSection();
     expect(screen.getByDisplayValue("610910")).toBeEnabled();
     expect(
-      screen.queryByText(LABELS.productOwnerOnlyHint),
+      screen.queryByText(LABELS.pricingLockedHint),
     ).not.toBeInTheDocument();
     const codSelect = screen
       .getAllByRole("combobox")
@@ -79,7 +66,7 @@ describe("product policies: owner-only fields", () => {
 
 describe("product policies: lock decided by the editor (platform admins)", () => {
   it("a platform admin locked out of a live vendor product sees the explanation and disabled fields", () => {
-    signIn("ADMIN_CATALOG_MANAGER");
+    signIn("SUPER_ADMIN");
     render(
       <ProductPoliciesSection
         values={values}
@@ -95,8 +82,8 @@ describe("product policies: lock decided by the editor (platform admins)", () =>
     ).toBeGreaterThanOrEqual(2);
   });
 
-  it("an explicit unlock wins over the staff default", () => {
-    signIn("VENDOR_STAFF");
+  it("an explicit unlock leaves the fields editable", () => {
+    signIn("SUPER_ADMIN");
     render(
       <ProductPoliciesSection
         values={values}

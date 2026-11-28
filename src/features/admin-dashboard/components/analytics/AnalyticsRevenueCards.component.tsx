@@ -7,14 +7,14 @@ export interface AnalyticsRevenueMetrics {
   gmv: number;
   paidGmv: number;
   aov: number;
-  growthPct: number | null;
+  growthPct: number;
 }
 
 interface AnalyticsRevenueCardsProps {
   revenue: AnalyticsRevenueMetrics;
 }
 
-/** GMV, paid GMV and AOV: only rendered for admins with `analytics.revenue`. */
+/** GMV, paid GMV and AOV. */
 export function AnalyticsRevenueCards({ revenue }: AnalyticsRevenueCardsProps) {
   return (
     <>
@@ -23,7 +23,7 @@ export function AnalyticsRevenueCards({ revenue }: AnalyticsRevenueCardsProps) {
         value={formatAnalyticsInr(revenue.gmv)}
         icon={Banknote}
         tone="brand"
-        trend={revenue.growthPct ?? undefined}
+        trend={revenue.growthPct}
       />
       <AnalyticsMetricCard
         title={LABELS.analyticsPaidGmv}

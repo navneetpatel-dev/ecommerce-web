@@ -46,9 +46,5 @@ export const adminUsersApi = {
     apiClient.get<Address[]>(API.users.addresses(id)),
   updateStatus: (id: string, status: UserStatus) =>
     apiClient.patch<{ message: string }>(API.users.status(id), { status }),
-  updateRole: (
-    id: string,
-    body: { roleId: string; vendorId?: string | null },
-  ) => apiClient.patch<CurrentUser>(API.users.role(id), body),
   delete: (id: string) => apiClient.delete(API.users.detail(id)),
 };

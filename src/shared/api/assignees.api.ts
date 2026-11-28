@@ -16,7 +16,7 @@ export type AssigneeCandidate = {
 export type AssigneePermission =
   typeof PERMISSIONS.TICKET_MANAGE | typeof PERMISSIONS.BUG_REPORT_MANAGE;
 
-/** Staff eligible as assignees for a permission — used by ticket/bug features via shared AssigneeSelect. */
+/** Accounts eligible as assignees for a permission — used by ticket/bug features via shared AssigneeSelect. */
 export const assigneesApi = {
   listAssignees: async (params: {
     permission: AssigneePermission;

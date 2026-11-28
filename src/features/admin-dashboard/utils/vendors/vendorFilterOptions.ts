@@ -15,7 +15,7 @@ export function formatVendorSublabel(v: VendorInfo): string {
   return parts.join(" · ");
 }
 
-/** A vendor from the full admin list (vendor managers). */
+/** A vendor from the full admin list. */
 export function vendorInfoToOption(v: VendorInfo): InfiniteSingleSelectOption {
   return {
     id: v.id,

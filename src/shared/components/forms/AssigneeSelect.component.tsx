@@ -19,7 +19,7 @@ type Props = {
   onChange: (userId: string) => void;
   /** Keep a current assignee visible even if they are not in the eligible list. */
   currentOption?: { id: string; name: string; email?: string | null } | null;
-  /** When set, scopes ticket assignees to staff for this vendor. */
+  /** When set, scopes ticket assignees to this vendor. */
   vendorId?: string | null;
   allowNone?: boolean;
   noneLabel?: string;

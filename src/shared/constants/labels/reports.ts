@@ -131,8 +131,6 @@ export const reportsLabels = {
   reportVendorReturnRefund: "Return / refund report",
   reportVendorInventory: "Inventory / stock report",
   reportVendorFulfillmentSla: "Order fulfillment (SLA)",
-  reportStaffOrders: "Order / sub-order report",
-  reportStaffInventory: "Inventory report",
   reportCustomerOrderHistory: "Order history export",
   reportTaxInvoiceRegister: "Tax invoice register",
   reportB2bGstinSalesRegister: "B2B GSTIN sales register",

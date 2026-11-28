@@ -54,14 +54,12 @@ const has = (override: ShopSettingsSaveOverride | undefined, key: string) =>
  *
  * A `partial` save (a logo upload, a category change, clearing the return fee) sends only
  * what the override names, so an unrelated half-edited field — a new bank account being
- * typed — is never saved along with it. A full save sends the whole form; the financial
- * fields (fee, COD, payout cadence, entity type, bank) are the store owner's alone.
+ * typed — is never saved along with it. A full save sends the whole form.
  */
 export function buildShopSettingsPayload(
   shop: ShopSettingsSnapshot,
   override: ShopSettingsSaveOverride | undefined,
   partial: boolean,
-  isOwner: boolean,
 ): Record<string, unknown> {
   const pick = <K extends keyof ShopSettingsSaveOverride>(
     key: K,
@@ -77,17 +75,15 @@ export function buildShopSettingsPayload(
     if (has(override, "logoUrl")) payload.logoUrl = override?.logoUrl;
     if (has(override, "bannerUrl")) payload.bannerUrl = override?.bannerUrl;
     if (has(override, "categoryIds")) Object.assign(payload, categories);
-    if (isOwner) {
-      for (const key of [
-        "returnShippingFee",
-        "codEnabled",
-        "payoutFrequency",
-      ] as const) {
-        if (has(override, key)) payload[key] = override?.[key];
-      }
-      if (has(override, "entityType") && entityType)
-        payload.entityType = entityType;
+    for (const key of [
+      "returnShippingFee",
+      "codEnabled",
+      "payoutFrequency",
+    ] as const) {
+      if (has(override, key)) payload[key] = override?.[key];
     }
+    if (has(override, "entityType") && entityType)
+      payload.entityType = entityType;
     return payload;
   }
 
@@ -96,16 +92,11 @@ export function buildShopSettingsPayload(
     bannerUrl: pick("bannerUrl", shop.bannerUrl),
     ...categories,
   };
-  if (isOwner) {
-    payload.returnShippingFee = pick(
-      "returnShippingFee",
-      shop.returnShippingFee,
-    );
-    payload.codEnabled = pick("codEnabled", shop.codEnabled);
-    payload.payoutFrequency = pick("payoutFrequency", shop.payoutFrequency);
-    if (entityType) payload.entityType = entityType;
-    const bank = pick("bankDetails", shop.bankDetails);
-    if (bank !== undefined) payload.bankDetails = bank;
-  }
+  payload.returnShippingFee = pick("returnShippingFee", shop.returnShippingFee);
+  payload.codEnabled = pick("codEnabled", shop.codEnabled);
+  payload.payoutFrequency = pick("payoutFrequency", shop.payoutFrequency);
+  if (entityType) payload.entityType = entityType;
+  const bank = pick("bankDetails", shop.bankDetails);
+  if (bank !== undefined) payload.bankDetails = bank;
   return payload;
 }

@@ -42,5 +42,4 @@ export const BUG_MODULE_LABEL: Record<BugAffectedModule, string> = {
 export const BUG_REPORTER_ROLE_LABEL: Record<BugReporterRole, string> = {
   [BUG_REPORTER_ROLE.CUSTOMER]: LABELS.bugReporterRoleCustomer,
   [BUG_REPORTER_ROLE.VENDOR]: LABELS.bugReporterRoleVendor,
-  [BUG_REPORTER_ROLE.VENDOR_STAFF]: LABELS.bugReporterRoleVendorStaff,
 };

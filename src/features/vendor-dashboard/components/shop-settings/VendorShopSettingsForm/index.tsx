@@ -2,8 +2,7 @@
 
 import { FormActions, FormStack } from "@/shared/components/forms";
 import { Button } from "@/shared/components/ui/button";
-import { LABELS, ROLES } from "@/shared/constants/labels";
-import { useAuthStore } from "@/shared/stores/auth/auth.store";
+import { LABELS } from "@/shared/constants/labels";
 import type { VendorEntityType } from "@/shared/constants/statuses";
 import type {
   VendorPayoutFrequency,
@@ -75,9 +74,6 @@ export function VendorShopSettingsForm({
   onSave,
   onClearOverride,
 }: VendorShopSettingsFormProps) {
-  const isOwner = useAuthStore(
-    (s) => s.currentUser?.role === ROLES.VENDOR_OWNER,
-  );
   return (
     <div className={vendorShopSettingsFormStyles.root}>
       <FormStack className={vendorShopSettingsFormStyles.stack}>
@@ -109,7 +105,6 @@ export function VendorShopSettingsForm({
           entityType={entityType}
           categoryIds={categoryIds}
           saving={saving}
-          isOwner={isOwner}
           onEntityTypeChange={onEntityTypeChange}
           onCategoryIdsChange={onCategoryIdsChange}
           onSaveCategories={onSaveCategories}
@@ -134,7 +129,6 @@ export function VendorShopSettingsForm({
           returnShippingFee={returnShippingFee}
           codEnabled={codEnabled}
           payoutFrequency={payoutFrequency}
-          disabled={!isOwner}
           onReturnShippingFeeChange={onReturnShippingFeeChange}
           onCodEnabledChange={onCodEnabledChange}
           onPayoutFrequencyChange={onPayoutFrequencyChange}
@@ -143,7 +137,6 @@ export function VendorShopSettingsForm({
         <BankDetailsSection
           bankDetails={bankDetails ?? null}
           onChange={onBankDetailsChange ?? (() => {})}
-          isOwner={isOwner}
           savedAccountNumber={savedAccountNumber}
           confirmAccount={confirmAccountNumber}
           onConfirmChange={onConfirmAccountNumberChange}

@@ -51,9 +51,6 @@ describe("Route Permissions Mapping", () => {
       expect(adminPermissionsForPath("/admin/users")).toEqual(
         PERMISSIONS.USER_MANAGE,
       );
-      expect(adminPermissionsForPath("/admin/roles")).toEqual(
-        PERMISSIONS.ROLE_MANAGE,
-      );
       expect(adminPermissionsForPath("/admin/gift-cards")).toEqual(
         PERMISSIONS.GIFT_CARD_MANAGE,
       );
@@ -102,12 +99,6 @@ describe("Route Permissions Mapping", () => {
       );
     });
 
-    it("gates the team page on its own TEAM_MANAGE permission", () => {
-      expect(vendorPermissionsForPath("/vendor/dashboard/team")).toEqual(
-        PERMISSIONS.TEAM_MANAGE,
-      );
-    });
-
     it("maps order and return fulfillment routes to SUBORDER_MANAGE", () => {
       expect(vendorPermissionsForPath("/vendor/dashboard/orders")).toEqual(
         PERMISSIONS.SUBORDER_MANAGE,
@@ -131,7 +122,7 @@ describe("Route Permissions Mapping", () => {
       );
     });
 
-    it("keeps coupons and shop settings owner-only", () => {
+    it("maps coupons and shop settings to the vendor's own permissions", () => {
       expect(vendorPermissionsForPath("/vendor/dashboard/coupons")).toEqual(
         PERMISSIONS.PRODUCT_CREATE,
       );

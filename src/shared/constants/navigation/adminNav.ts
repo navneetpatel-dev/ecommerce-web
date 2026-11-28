@@ -165,12 +165,6 @@ export const ADMIN_NAV = [
     permissions: [PERMISSIONS.USER_MANAGE] as PermissionKey[],
   },
   {
-    href: PATHS.admin.roles,
-    label: LABELS.roles,
-    category: LABELS.adminNavCategoryAdministration,
-    permissions: [PERMISSIONS.ROLE_MANAGE] as PermissionKey[],
-  },
-  {
     href: PATHS.admin.audit,
     label: LABELS.audit,
     category: LABELS.adminNavCategoryAdministration,

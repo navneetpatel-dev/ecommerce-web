@@ -15,9 +15,7 @@ export function MessageBubble({
   message: TicketMessage;
   isOwn: boolean;
 }) {
-  const isVendorRole =
-    message.senderRole === TICKET_SENDER_ROLE.VENDOR ||
-    message.senderRole === TICKET_SENDER_ROLE.VENDOR_STAFF;
+  const isVendorRole = message.senderRole === TICKET_SENDER_ROLE.VENDOR;
   const isAdminRole =
     !isVendorRole && message.senderRole !== TICKET_SENDER_ROLE.CUSTOMER;
 

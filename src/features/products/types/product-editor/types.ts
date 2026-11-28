@@ -77,7 +77,7 @@ export interface ProductEditorFormProps {
   onCancel: () => void;
   /** Opens the customer preview of the product as it is in the form (a button at the bottom left). */
   onPreview?: () => void;
-  /** Overrides the default (vendor staff locked, everyone else free). */
+  /** Set by the admin editor; without it the price fields are open. */
   pricingLock?: PricingLock;
   /** Admin only: the vendor this product is listed for (create mode). */
   vendorField?: ReactNode;

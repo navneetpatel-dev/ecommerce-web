@@ -7,7 +7,6 @@ export const workspaceNavLabels = {
   security: "Security",
   addresses: "Addresses",
   privacy: "Privacy",
-  team: "Team",
 
   // Return reasons
 } as const;

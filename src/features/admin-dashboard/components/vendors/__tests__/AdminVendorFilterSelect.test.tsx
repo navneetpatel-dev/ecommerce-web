@@ -78,16 +78,7 @@ beforeEach(() => {
 });
 
 describe("AdminVendorFilterSelect, as the user sees it", () => {
-  it("lists vendors for a Catalog Manager (who cannot use the admin vendor list)", async () => {
-    signIn("ADMIN_CATALOG_MANAGER", ["product.manage", "product.approve"]);
-    renderSelect();
-    await userEvent.click(screen.getByRole("button", { name: /All Vendors/ }));
-    expect(await screen.findByText("Bright Goods Directory")).toBeVisible();
-    expect(directory).toHaveBeenCalled();
-    expect(adminVendors).not.toHaveBeenCalled();
-  });
-
-  it("still lists vendors, with details, for a Super Admin", async () => {
+  it("lists vendors, with details, for the Super Admin", async () => {
     signIn("SUPER_ADMIN", []);
     renderSelect();
     await userEvent.click(screen.getByRole("button", { name: /All Vendors/ }));

@@ -13,7 +13,6 @@ export { VendorCouponsPage } from "./pages/coupons/VendorCouponsPage.page";
 export { VendorReviewsPage } from "./pages/reviews/VendorReviewsPage.page";
 export { VendorQnaPage } from "./pages/qna/VendorQnaPage.page";
 export { VendorShopSettingsPage } from "./pages/shop-settings/VendorShopSettingsPage.page";
-export { VendorTeamPage } from "./pages/team/VendorTeamPage.page";
 export { PayoutsPage } from "./pages/payouts/PayoutsPage.page";
 export { ProductsTable } from "./pages/products/ProductsTable.page";
 export { VendorAnalyticsPage } from "./pages/analytics/VendorAnalyticsPage.page";

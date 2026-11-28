@@ -51,11 +51,8 @@ export const TICKET_ATTACHMENT_TYPE_VALUES = Object.values(
 export const TICKET_SENDER_ROLE = {
   CUSTOMER: "CUSTOMER",
   VENDOR: "VENDOR",
-  VENDOR_STAFF: "VENDOR_STAFF",
   ADMIN: "ADMIN",
   SUPER_ADMIN: "SUPER_ADMIN",
-  ADMIN_ORDER_MANAGER: "ADMIN_ORDER_MANAGER",
-  ADMIN_CATALOG_MANAGER: "ADMIN_CATALOG_MANAGER",
 } as const;
 export type TicketSenderRole =
   (typeof TICKET_SENDER_ROLE)[keyof typeof TICKET_SENDER_ROLE];
@@ -108,7 +105,6 @@ export const BUG_AFFECTED_MODULE_VALUES = Object.values(
 export const BUG_REPORTER_ROLE = {
   CUSTOMER: "CUSTOMER",
   VENDOR: "VENDOR",
-  VENDOR_STAFF: "VENDOR_STAFF",
 } as const;
 export type BugReporterRole =
   (typeof BUG_REPORTER_ROLE)[keyof typeof BUG_REPORTER_ROLE];

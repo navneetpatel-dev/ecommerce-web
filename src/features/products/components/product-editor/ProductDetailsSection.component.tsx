@@ -9,7 +9,6 @@ import { Button } from "@/shared/components/ui/button";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
 import { LABELS } from "@/shared/constants/labels";
-import { useIsVendorStaff } from "../../hooks/product-editor/useIsVendorStaff.hook";
 import { PRODUCT_FIELD_LIMITS } from "../../constants/listing-form/productFields";
 import type {
   ProductListingFormField,
@@ -35,7 +34,7 @@ interface ProductDetailsSectionProps {
   patchValues: (patch: Partial<ProductListingFormValues>) => void;
   /** What customers will pay, GST included (server-computed), and the hints built from it. */
   priceGuide: PriceGuide;
-  /** Set by the editor for platform admins; without it, vendor staff are locked out. */
+  /** Set by the editor for platform admins; vendors are never locked. */
   pricingLock?: PricingLock;
 }
 
@@ -48,13 +47,10 @@ export function ProductDetailsSection({
   priceGuide,
   pricingLock,
 }: ProductDetailsSectionProps) {
-  const isStaff = useIsVendorStaff();
-  const locked = pricingLock?.locked ?? isStaff;
+  const locked = pricingLock?.locked ?? false;
   const isPriceDisabled = disabled || locked;
   // The category sets the GST rate and commission, so it locks with the price.
-  const categoryLockHint = locked
-    ? (pricingLock?.hint ?? LABELS.productOwnerOnlyHint)
-    : undefined;
+  const categoryLockHint = locked ? pricingLock?.hint : undefined;
 
   const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
     patchValues({ name: event.target.value });
@@ -179,12 +175,7 @@ export function ProductDetailsSection({
       >
         <FormFieldFrame
           label={LABELS.productPriceExclGst}
-          hint={
-            locked
-              ? (pricingLock?.hint ??
-                "Base product pricing is configured exclusively by the store owner.")
-              : priceGuide.priceHint
-          }
+          hint={locked ? pricingLock?.hint : priceGuide.priceHint}
           required
           error={getError("price")}
         >
@@ -201,12 +192,7 @@ export function ProductDetailsSection({
         </FormFieldFrame>
         <FormFieldFrame
           label={LABELS.productMrpInclGst}
-          hint={
-            locked
-              ? (pricingLock?.hint ??
-                "MRP is configured exclusively by the store owner.")
-              : priceGuide.mrpHint
-          }
+          hint={locked ? pricingLock?.hint : priceGuide.mrpHint}
           error={getError("compareAtPrice") ?? mrpBelowPrice ?? mrpBelowMinimum}
           footerAction={useCustomerPriceButton}
         >

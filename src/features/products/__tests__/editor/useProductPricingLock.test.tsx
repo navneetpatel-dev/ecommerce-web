@@ -47,21 +47,16 @@ describe("the price lock mirrors the API's pricing policy", () => {
     });
   });
 
-  it("vendor staff: locked", () => {
-    signIn("VENDOR_STAFF", [], "v1");
-    expect(lockFor(live).lock.locked).toBe(true);
-  });
-
-  it("Catalog Manager: locked on a live vendor product, with the explanation", () => {
-    signIn("ADMIN_CATALOG_MANAGER", ["product.manage", "product.create"], null);
+  it("no product.pricing and no store: locked on a live vendor product, with the explanation", () => {
+    signIn("CUSTOMER", ["product.manage", "product.create"], null);
     expect(lockFor(live).lock).toEqual({
       locked: true,
       hint: LABELS.pricingLockedHint,
     });
   });
 
-  it("Catalog Manager: free while creating, on a platform-listed draft, and on the platform's own products", () => {
-    signIn("ADMIN_CATALOG_MANAGER", ["product.manage", "product.create"], null);
+  it("free while creating, on a platform-listed draft, and on the platform's own products", () => {
+    signIn("CUSTOMER", ["product.manage", "product.create"], null);
     expect(lockFor(undefined).lock.locked).toBe(false);
     expect(lockFor(platformDraft)).toEqual({
       lock: { locked: false },
@@ -70,8 +65,8 @@ describe("the price lock mirrors the API's pricing policy", () => {
     expect(lockFor({ ...live, vendorId: null }).lock.locked).toBe(false);
   });
 
-  it("Catalog Manager: a platform-listed product that went live is locked again", () => {
-    signIn("ADMIN_CATALOG_MANAGER", ["product.manage"], null);
+  it("a platform-listed product that went live is locked without product.pricing", () => {
+    signIn("CUSTOMER", ["product.manage"], null);
     expect(lockFor({ ...platformDraft, status: "LIVE" }).lock.locked).toBe(
       true,
     );

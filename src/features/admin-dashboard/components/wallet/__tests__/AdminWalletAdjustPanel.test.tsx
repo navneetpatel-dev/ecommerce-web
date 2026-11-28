@@ -31,7 +31,7 @@ beforeEach(() => {
 
 describe("AdminWalletAdjustPanel", () => {
   it("offers an account picker, not a box to paste a raw user ID", () => {
-    signIn("ADMIN_FINANCE_MANAGER", ["wallet.adjust"]);
+    signIn("SUPER_ADMIN", []);
     render(<AdminWalletAdjustPanel />);
     expect(screen.getByText(LABELS.walletAdjustUserId)).toBeInTheDocument();
     expect(
@@ -44,7 +44,7 @@ describe("AdminWalletAdjustPanel", () => {
   });
 
   it("shows nothing to someone without wallet.adjust", () => {
-    signIn("ADMIN_ORDER_MANAGER", ["order.manage"]);
+    signIn("CUSTOMER", []);
     render(<AdminWalletAdjustPanel />);
     expect(
       screen.queryByText(LABELS.walletAdjustSubmit),

@@ -22,7 +22,7 @@ export const ordersKeys = {
 };
 
 function isVendorRole(role?: string) {
-  return role === ROLES.VENDOR_OWNER || role === ROLES.VENDOR_STAFF;
+  return role === ROLES.VENDOR_OWNER;
 }
 
 export function useMyOrders(
