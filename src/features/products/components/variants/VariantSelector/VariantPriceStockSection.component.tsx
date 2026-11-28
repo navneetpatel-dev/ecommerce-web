@@ -11,8 +11,6 @@ import { variantSelectorStyles } from "../../../styles/variants/variantSelector.
 interface VariantPriceStockSectionProps {
   currentPrice: number;
   currentStock: number;
-  basePrice: number;
-  hasPriceChange: boolean;
   showAddToCart?: boolean;
   onAddToCart?: () => void;
   isAddingToCart?: boolean;
@@ -24,8 +22,6 @@ interface VariantPriceStockSectionProps {
 export function VariantPriceStockSection({
   currentPrice,
   currentStock,
-  basePrice,
-  hasPriceChange,
   showAddToCart,
   onAddToCart,
   isAddingToCart,
@@ -50,11 +46,6 @@ export function VariantPriceStockSection({
         <span className={variantSelectorStyles.currentPrice}>
           <MoneyAmount value={currentPrice} />
         </span>
-        {hasPriceChange ? (
-          <span className={variantSelectorStyles.basePrice}>
-            <MoneyAmount value={basePrice} />
-          </span>
-        ) : null}
       </div>
 
       <div className={variantSelectorStyles.stockWrapper}>

@@ -12,6 +12,7 @@ export const stockAlertsLabels = {
   cancelInvalid: "This link is not valid.",
   cancelFailed: "The alert could not be cancelled. Try again.",
   cancelGoShopping: "Continue shopping",
+  notifyMeChooseOption: "Choose option",
   notifyMe: "Notify me",
   notifyMeEmailPlaceholder: "Enter your email",
   notifyMeSubmit: "Notify me",

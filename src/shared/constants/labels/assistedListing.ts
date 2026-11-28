@@ -24,6 +24,8 @@ export const assistedListingLabels = {
   categoryReassignBlockedVendor: "{vendor}: {count} live or pending product(s)",
   categoryRateImpactBlocked:
     "Only a Super Admin can make this change, because it changes what vendors are charged.",
+  categoryCommissionLockedHint:
+    "Only a Super Admin can set or change the commission rate.",
   submitOnBehalf: "Submit for review on vendor's behalf",
   submitOnBehalfTitle: "Submit {name} for review",
   submitOnBehalfBody:

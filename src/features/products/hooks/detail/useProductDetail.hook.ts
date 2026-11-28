@@ -79,8 +79,6 @@ export function useProductDetail() {
       attributeGroups: selection.attributeGroups,
       currentPrice: Number(selection.currentPrice || basePrice),
       currentStock: Number(selection.currentStock || 0),
-      basePrice,
-      hasPriceChange: selection.hasPriceChange,
       matchedVariant: selection.matchedVariant,
       selectedVariant: selection.selectedVariant,
       isAvailable: selection.isAvailable,

@@ -40,7 +40,6 @@ export const PRODUCT_DETAIL_CONTENT_STYLES = {
   listPriceText: "text-body text-ink-faint",
   listPriceLabel: "mr-1.5",
   strikeThrough: "line-through",
-  listPriceStrike: "text-body text-ink-faint line-through",
   gstText: "text-body-sm text-ink-muted",
   hsnText: "text-body-sm text-ink-muted",
   taxEstimateText: "text-body-sm text-ink-faint",

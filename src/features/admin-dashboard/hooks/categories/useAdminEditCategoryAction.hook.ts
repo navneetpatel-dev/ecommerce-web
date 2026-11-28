@@ -17,6 +17,7 @@ import {
   categoryFormValues,
   type CategoryData,
 } from "../../utils/categories/categoryFormValues";
+import { categoryEditRateChange } from "../../utils/categories/categoryRateChange";
 import { categoriesApi } from "@/features/categories";
 import { useCategoryRateImpact } from "./useCategoryRateImpact.hook";
 import { useUnsavedChanges } from "@/shared/hooks/forms/useUnsavedChanges.hook";
@@ -45,17 +46,9 @@ export function useAdminEditCategoryAction({
 
   // eslint-disable-next-line react-hooks/incompatible-library -- react-hook-form watch() is compiler-incompatible; used directly in render.
   const values = form.watch();
-  // A new parent can change the GST and commission of the products below this category.
-  const reparented =
-    open && (values.parentId ?? "") !== (category.parentId ?? "");
+  // A new parent or commission can change what the products below this category are charged.
   const rates = useCategoryRateImpact(
-    reparented
-      ? {
-          kind: "reparent",
-          categoryId: category.id,
-          parentId: values.parentId || undefined,
-        }
-      : null,
+    open ? categoryEditRateChange(category, values) : null,
   );
   const canSubmit =
     CategoryFormSchema.safeParse(values).success &&

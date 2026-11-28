@@ -4,7 +4,7 @@ import { Trash2 } from "lucide-react";
 import { EmptyWishlistState } from "./EmptyWishlistState.component";
 import { SkeletonGrid } from "@/shared/components/Skeletons.component";
 import { ProductCardContainer } from "@/features/products";
-import { NotifyMeButton } from "@/features/stockAlerts";
+import { WishlistNotifyAction } from "./WishlistNotifyAction.component";
 import { PaginationContainer } from "@/shared/containers/navigation/PaginationContainer.container";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
@@ -86,10 +86,9 @@ export function WishlistView(props: WishlistViewProps) {
                     {unavailableLabel(wishlistItem.unavailableReason)}
                   </Badge>
                   {wishlistItem.unavailableReason ===
-                    UNAVAILABLE_REASON.OUT_OF_STOCK &&
-                  product.variants?.[0]?.id ? (
+                  UNAVAILABLE_REASON.OUT_OF_STOCK ? (
                     <div className={styles.notifyWrapper}>
-                      <NotifyMeButton variantId={product.variants[0].id} />
+                      <WishlistNotifyAction product={product} />
                     </div>
                   ) : null}
                 </div>

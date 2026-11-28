@@ -10,8 +10,6 @@ interface PriceAvailabilityBlockProps {
   compareAtPrice: number | null;
   showMrp: boolean;
   discountPercent: number | null;
-  hasPriceChange: boolean;
-  basePrice: number;
   gstPercentage: number;
   taxInclusiveEstimate: number | null;
   hsnCode: string | null | undefined;
@@ -27,8 +25,6 @@ export function PriceAvailabilityBlock({
   compareAtPrice,
   showMrp,
   discountPercent,
-  hasPriceChange,
-  basePrice,
   gstPercentage,
   taxInclusiveEstimate,
   hsnCode,
@@ -67,10 +63,6 @@ export function PriceAvailabilityBlock({
             <span className={PRODUCT_DETAIL_CONTENT_STYLES.strikeThrough}>
               <MoneyAmount value={compareAtPrice} />
             </span>
-          </p>
-        ) : hasPriceChange ? (
-          <p className={PRODUCT_DETAIL_CONTENT_STYLES.listPriceStrike}>
-            <MoneyAmount value={basePrice} />
           </p>
         ) : null}
         {gstPercentage > 0 ? (

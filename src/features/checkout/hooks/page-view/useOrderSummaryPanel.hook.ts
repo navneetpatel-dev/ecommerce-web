@@ -41,8 +41,11 @@ export function useOrderSummaryPanel({
     !orderTotals && (subtotalPending || summarySubtotal == null);
 
   const itemCount = useMemo(() => {
-    const items = Object.values(groupedByVendor).flat();
-    return items.reduce((sum, item) => sum + item.quantity, 0);
+    // Counted beside the total, so only what the total includes.
+    return Object.values(groupedByVendor)
+      .flat()
+      .filter((item) => item.isAvailable !== false)
+      .reduce((sum, item) => sum + item.quantity, 0);
   }, [groupedByVendor]);
 
   const itemCountText = `${itemCount} ${itemCount === 1 ? "item" : "items"}`;

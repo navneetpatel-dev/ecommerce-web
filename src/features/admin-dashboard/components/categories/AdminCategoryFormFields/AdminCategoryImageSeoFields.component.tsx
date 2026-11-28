@@ -11,6 +11,7 @@ import {
   UPLOAD_PURPOSE,
 } from "@/shared/constants/uploads/uploads";
 import { SeoFieldsSection } from "@/shared/components/forms/seo/SeoFieldsSection.component";
+import { useCommissionLock } from "../../../hooks/categories/useCommissionLock.hook";
 
 interface AdminCategoryImageSeoFieldsProps {
   form: UseFormReturn<CategoryFormInput>;
@@ -26,6 +27,7 @@ export function AdminCategoryImageSeoFields({
   idPrefix,
 }: AdminCategoryImageSeoFieldsProps) {
   const { setValue, watch } = form;
+  const commission = useCommissionLock();
   const watchedImageUrl = watch("imageUrl");
   const trimmedImageUrl = watchedImageUrl?.trim();
   const imageUrlValue = trimmedImageUrl ? trimmedImageUrl : null;
@@ -94,7 +96,7 @@ export function AdminCategoryImageSeoFields({
         <FormFieldFrame
           label={LABELS.categoryCommissionRate}
           htmlFor={`${idPrefix}-commission`}
-          hint={LABELS.categoryCommissionRateHint}
+          hint={commission.hint}
           error={commissionRateError}
         >
           <Input
@@ -103,6 +105,7 @@ export function AdminCategoryImageSeoFields({
             normalizeNumeric="decimal"
             placeholder={LABELS.categoryCommissionPlaceholder}
             error={commissionRateHasError}
+            disabled={commission.locked}
             {...form.register("commissionRate")}
           />
         </FormFieldFrame>

@@ -112,8 +112,5 @@ export function useVariantSelection(
     isActive,
     selectValue,
     hasCompleteSelection,
-    hasPriceChange:
-      selectedVariant?.price !== undefined &&
-      selectedVariant.price !== basePrice,
   };
 }

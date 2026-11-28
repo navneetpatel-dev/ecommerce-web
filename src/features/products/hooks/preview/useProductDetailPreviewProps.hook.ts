@@ -45,8 +45,6 @@ export function useProductDetailPreviewProps(
         selection.selection.currentPrice || selection.basePrice,
       ),
       currentStock: Number(selection.selection.currentStock || 0),
-      basePrice: selection.basePrice,
-      hasPriceChange: selection.selection.hasPriceChange,
       matchedVariant: selection.selection.matchedVariant,
       selectedVariant: selection.selection.selectedVariant,
       isAvailable: selection.selection.isAvailable,

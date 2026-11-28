@@ -7,8 +7,6 @@ export interface VariantSelectorProps {
   attributeGroups: Record<string, string[]>;
   currentPrice: number;
   currentStock: number;
-  basePrice: number;
-  hasPriceChange: boolean;
   isAvailable: (key: string, value: string) => boolean;
   changesOtherChoices?: (key: string, value: string) => string[];
   isActive: (key: string, value: string) => boolean;
@@ -29,8 +27,6 @@ export function VariantSelector({
   attributeGroups,
   currentPrice,
   currentStock,
-  basePrice,
-  hasPriceChange,
   isAvailable,
   changesOtherChoices,
   isActive,
@@ -66,8 +62,6 @@ export function VariantSelector({
         <VariantPriceStockSection
           currentPrice={currentPrice}
           currentStock={currentStock}
-          basePrice={basePrice}
-          hasPriceChange={hasPriceChange}
           showAddToCart={showAddToCart}
           onAddToCart={onAddToCart}
           isAddingToCart={isAddingToCart}

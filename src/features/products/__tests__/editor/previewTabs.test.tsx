@@ -30,8 +30,6 @@ const selection = {
   attributeGroups: {},
   currentPrice: 10,
   currentStock: 0,
-  basePrice: 10,
-  hasPriceChange: false,
   matchedVariant: null,
   selectedVariant: null,
   isAvailable: () => true,

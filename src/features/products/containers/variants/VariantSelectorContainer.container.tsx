@@ -28,8 +28,6 @@ export function VariantSelectorContainer({
       attributeGroups={selector.attributeGroups}
       currentPrice={selector.currentPrice}
       currentStock={selector.currentStock}
-      basePrice={basePrice}
-      hasPriceChange={selector.hasPriceChange}
       isAvailable={selector.isAvailable}
       changesOtherChoices={selector.changesOtherChoices}
       isActive={selector.isActive}

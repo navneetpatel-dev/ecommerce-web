@@ -13,6 +13,7 @@ export { CartDrawer } from "./components/drawer/CartDrawer.component";
 export { CartDrawerContainer } from "./containers/drawer/CartDrawerContainer.container";
 export { CartPage } from "./pages/page/CartPage.page";
 export { cartApi } from "./api/cart/cart.api";
+export { unavailableLabel } from "./components/line-item/CartLineItem/cartLineShared.component";
 export { clearClientGuestSessionCookie } from "./utils/cart/guest-session";
 export {
   resolveCartDisplayTotals,

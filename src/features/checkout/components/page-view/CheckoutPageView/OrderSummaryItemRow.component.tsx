@@ -1,6 +1,7 @@
 import { memo } from "react";
 import { MediaImage } from "@/shared/components/media/MediaImage.component";
 import { MoneyAmount } from "@/shared/components/display/MoneyAmount.component";
+import { unavailableLabel } from "@/features/cart";
 import type { CartItem, CheckoutQuote } from "@/shared/api/types";
 import { resolveCartLineSubtotal } from "../../../utils/checkout/checkoutDisplay.utils";
 import { ORDER_SUMMARY_ITEMS_LIST_STYLES } from "../../../styles/page-view/orderSummaryItemsList.styles";
@@ -17,6 +18,8 @@ export const OrderSummaryItemRow = memo(function OrderSummaryItemRow({
   amountsUnavailable = false,
 }: OrderSummaryItemRowProps) {
   const lineSubtotal = resolveCartLineSubtotal(item, quote);
+  // A line that cannot be bought is in no total, so it shows why instead of a price.
+  const available = item.isAvailable !== false;
 
   return (
     <li className={ORDER_SUMMARY_ITEMS_LIST_STYLES.itemRow}>
@@ -35,10 +38,17 @@ export const OrderSummaryItemRow = memo(function OrderSummaryItemRow({
         <p className={ORDER_SUMMARY_ITEMS_LIST_STYLES.itemQty}>
           Qty {item.quantity}
         </p>
+        {available ? null : (
+          <p className={ORDER_SUMMARY_ITEMS_LIST_STYLES.itemUnavailable}>
+            {unavailableLabel(item.unavailableReason, item.maxQuantity ?? 0)}
+          </p>
+        )}
       </div>
-      <p className={ORDER_SUMMARY_ITEMS_LIST_STYLES.itemPrice}>
-        <MoneyAmount value={lineSubtotal} unavailable={amountsUnavailable} />
-      </p>
+      {available ? (
+        <p className={ORDER_SUMMARY_ITEMS_LIST_STYLES.itemPrice}>
+          <MoneyAmount value={lineSubtotal} unavailable={amountsUnavailable} />
+        </p>
+      ) : null}
     </li>
   );
 });

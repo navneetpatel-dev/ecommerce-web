@@ -119,8 +119,6 @@ export function ProductBuyBoxColumn({
           compareAtPrice={compareAtPrice}
           showMrp={showMrp}
           discountPercent={discountPercent}
-          hasPriceChange={variantSelection.hasPriceChange}
-          basePrice={variantSelection.basePrice}
           gstPercentage={gstPercentage}
           taxInclusiveEstimate={taxInclusiveEstimate}
           hsnCode={product.displayHsnCode}

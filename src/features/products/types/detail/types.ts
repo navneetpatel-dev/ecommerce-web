@@ -10,8 +10,6 @@ export interface VariantSelectionProps {
   attributeGroups: Record<string, string[]>;
   currentPrice: number;
   currentStock: number;
-  basePrice: number;
-  hasPriceChange: boolean;
   matchedVariant?: ProductVariant | null;
   /** The variant the selection points at, sold out or not. */
   selectedVariant?: ProductVariant | null;

@@ -20,7 +20,6 @@ export const variantSelectorStyles = {
     ),
   priceWrapper: "flex items-baseline gap-3",
   currentPrice: "font-sans text-[1.75rem] font-semibold text-brand",
-  basePrice: "text-body-lg text-ink-faint line-through",
   stockWrapper: "space-y-3",
   badgesRow: "flex flex-wrap items-center gap-2",
   freeShippingText: "text-body-sm text-ink-muted",

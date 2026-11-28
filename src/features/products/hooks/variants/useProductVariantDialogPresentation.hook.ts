@@ -52,7 +52,6 @@ export function useProductVariantDialogPresentation({
   return {
     titleRef,
     product,
-    listedPrice,
     isLoading,
     selection,
     canAdd,

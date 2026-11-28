@@ -8,4 +8,5 @@ export const ORDER_SUMMARY_ITEMS_LIST_STYLES = {
   itemName: "truncate text-[0.875rem] font-medium text-ink",
   itemQty: "mt-0.5 text-[0.75rem] text-ink-muted",
   itemPrice: "shrink-0 text-[0.875rem] tabular-nums text-ink",
+  itemUnavailable: "mt-0.5 text-[0.75rem] text-danger",
 } as const;

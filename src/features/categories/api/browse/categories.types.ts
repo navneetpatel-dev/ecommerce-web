@@ -32,7 +32,14 @@ export type CategoryWriteBody = {
 
 export type CategoryRateChange =
   | { kind: "reassign"; fromCategoryId: string; toCategoryId: string }
-  | { kind: "reparent"; categoryId: string; parentId?: string };
+  | { kind: "reparent"; categoryId: string; parentId?: string }
+  /** A new commission rate (absent: cleared); `parentId` only if the edit also moves it. */
+  | {
+      kind: "edit";
+      categoryId: string;
+      commissionRate?: string;
+      parentId?: string;
+    };
 
 export type CategoryRateImpact = {
   /** Live or pending vendor products whose GST or commission would change. */
