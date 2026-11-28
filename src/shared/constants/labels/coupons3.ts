@@ -30,6 +30,8 @@ export const coupons3Labels = {
     "Changing what this coupon gives away sends it back for admin approval.",
   rejectionReason: "Rejection reason",
   couponRejectReasonHint: "The vendor sees this reason.",
+  couponKeptTiers:
+    "This coupon has {count} tiers. You can change the first two here; the others stay as they are.",
   approveCoupon: "Approve",
   confirmApproveCouponTitle: "Approve this vendor coupon?",
   confirmApproveCouponBody: '"{code}" will go live for customers.',

@@ -14,4 +14,5 @@ export const couponDialogStyles = {
   batchStatusError: "text-body-sm text-danger",
   rejectionNote: "rounded-md border border-line p-2 text-body-sm text-ink",
   actions: "flex flex-wrap gap-2",
+  keptTiersNote: "text-body-sm text-ink-muted",
 } as const;

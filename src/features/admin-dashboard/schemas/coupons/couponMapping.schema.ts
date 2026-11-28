@@ -96,6 +96,9 @@ export function toCouponCreateBody(
   };
 }
 
+/** Tiers the form has fields for; a coupon saved with more keeps the others. */
+export const FORM_TIERS = 2;
+
 /** An existing coupon as form values: the reverse of `toCouponCreateBody`. */
 export function toCouponFormValues(coupon: Coupon): CouponFormInput {
   const restriction = coupon.userRestriction;
@@ -104,7 +107,7 @@ export function toCouponFormValues(coupon: Coupon): CouponFormInput {
     : restriction?.value
       ? [restriction.value]
       : [];
-  const tiers = coupon.config?.tiers ?? [];
+  const tiers = coupon.type === "TIERED" ? (coupon.config?.tiers ?? []) : [];
   const isBundle = coupon.type === "BUNDLE";
   return {
     code: coupon.code,
@@ -140,18 +143,38 @@ export function toCouponFormValues(coupon: Coupon): CouponFormInput {
   };
 }
 
-/** The edit to send: unchanged code and dates stay out, so old values aren't re-checked. */
+/**
+ * The edit to send. An unchanged code and dates stay out, so old values aren't re-checked.
+ * A tiered coupon's value and minimum show its first tier: left alone, the saved ones stay,
+ * and so do the tiers the form has no fields for.
+ */
 export function toCouponUpdateBody(
   values: CouponFormInput,
   coupon: Coupon,
   opts?: { forceVendorId?: string },
 ) {
-  const { code, type, startDate, endDate, ...rest } = toCouponCreateBody(
-    values,
-    opts,
-  );
+  const {
+    code,
+    type,
+    startDate,
+    endDate,
+    value,
+    minOrderValue,
+    config,
+    ...rest
+  } = toCouponCreateBody(values, opts);
+  const stillTiered = type === "TIERED" && coupon.type === "TIERED";
+  const savedTiers = stillTiered ? (coupon.config?.tiers ?? []) : [];
+  const first = savedTiers[0];
+  const keptTiers = savedTiers.slice(FORM_TIERS);
   return {
     ...rest,
+    ...(first && value === first.percent ? {} : { value }),
+    ...(first && minOrderValue === first.minSubtotal ? {} : { minOrderValue }),
+    config:
+      "tiers" in config && config.tiers
+        ? { tiers: [...config.tiers, ...keptTiers] }
+        : config,
     ...(code.toUpperCase() !== coupon.code ? { code } : {}),
     ...(type !== coupon.type ? { type } : {}),
     ...(startDate !== coupon.startDate ? { startDate } : {}),

@@ -5,9 +5,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { LABELS } from "@/shared/constants/labels";
 import { useApiFormErrors } from "@/shared/hooks/forms/useApiFormErrors.hook";
+import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import type { Coupon } from "@/shared/api/types";
 import {
   CouponEditSchema,
+  FORM_TIERS,
   toCouponFormValues,
   type CouponFormInput,
 } from "../../schemas/coupons/coupons.schema";
@@ -33,5 +35,18 @@ export function useEditCoupon(
     LABELS.couldNotSaveCoupon,
   );
   const onSubmit = form.handleSubmit((values) => mutation.mutate(values));
-  return { form, onSubmit, isPending: mutation.isPending, formLevelError };
+  const tierCount =
+    coupon.type === "TIERED" ? (coupon.config?.tiers?.length ?? 0) : 0;
+  /** Says so when the coupon has tiers this form doesn't show. */
+  const keptTiersNote =
+    tierCount > FORM_TIERS
+      ? formatLabel(LABELS.couponKeptTiers, { count: tierCount })
+      : null;
+  return {
+    form,
+    onSubmit,
+    isPending: mutation.isPending,
+    formLevelError,
+    keptTiersNote,
+  };
 }

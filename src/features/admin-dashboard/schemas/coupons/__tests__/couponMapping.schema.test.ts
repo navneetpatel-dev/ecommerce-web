@@ -85,3 +85,50 @@ describe("coupon form mapping", () => {
     expect(parsed.success).toBe(false);
   });
 });
+
+describe("editing a tiered coupon", () => {
+  const tiers = [
+    { minSubtotal: 999, percent: 5 },
+    { minSubtotal: 2999, percent: 10 },
+    { minSubtotal: 4999, percent: 15 },
+  ];
+  const tiered: Coupon = {
+    ...coupon,
+    type: "TIERED",
+    value: null,
+    minOrderValue: 299,
+    config: { tiers },
+  };
+
+  it("an unchanged edit keeps every tier, the value and the minimum order", () => {
+    const body = toCouponUpdateBody(toCouponFormValues(tiered), tiered);
+    expect(body.config).toEqual({ tiers });
+    expect(body).not.toHaveProperty("value");
+    expect(body).not.toHaveProperty("minOrderValue");
+  });
+
+  it("changing a shown tier keeps the ones the form has no fields for", () => {
+    const values = {
+      ...toCouponFormValues(tiered),
+      value: 7,
+      tier2Percent: 12,
+    };
+    const body = toCouponUpdateBody(values, tiered);
+    expect(body.value).toBe(7);
+    expect(body.config).toEqual({
+      tiers: [
+        { minSubtotal: 999, percent: 7 },
+        { minSubtotal: 2999, percent: 12 },
+        tiers[2],
+      ],
+    });
+  });
+
+  it("changing the type drops the tiers", () => {
+    const values = {
+      ...toCouponFormValues(tiered),
+      type: "PERCENTAGE" as const,
+    };
+    expect(toCouponUpdateBody(values, tiered).config).toEqual({});
+  });
+});

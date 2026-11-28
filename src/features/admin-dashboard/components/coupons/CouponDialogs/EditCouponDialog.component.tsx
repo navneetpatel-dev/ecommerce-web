@@ -40,6 +40,9 @@ export function EditCouponDialog({
           <DialogTitle>{LABELS.editCoupon}</DialogTitle>
         </DialogHeader>
         {vendorMode ? <p>{LABELS.couponEditNeedsApproval}</p> : null}
+        {edit.keptTiersNote ? (
+          <p className={styles.keptTiersNote}>{edit.keptTiersNote}</p>
+        ) : null}
         <form onSubmit={edit.onSubmit}>
           <CreateCouponForm
             form={edit.form}
