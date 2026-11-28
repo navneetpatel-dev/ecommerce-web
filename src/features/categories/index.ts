@@ -28,3 +28,7 @@ export {
   flattenCategories,
   flattenCategoriesWithDepth,
 } from "./utils/browse/categoryHelpers";
+export type {
+  CategoryRateChange,
+  CategoryRateImpact,
+} from "./api/browse/categories.api";

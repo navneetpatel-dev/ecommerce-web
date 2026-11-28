@@ -5,10 +5,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LABELS } from "@/shared/constants/labels";
 import {
-  CATEGORY_STATUS,
-  type CategoryStatus,
-} from "@/shared/constants/statuses";
-import {
   applyApiErrorsToForm,
   getFormLevelApiError,
 } from "@/shared/utils/api-errors/applyApiFormErrors";
@@ -17,23 +13,13 @@ import {
   toCategoryUpdateBody,
   type CategoryFormInput,
 } from "../../schemas/categories/categories.schema";
+import {
+  categoryFormValues,
+  type CategoryData,
+} from "../../utils/categories/categoryFormValues";
 import { categoriesApi } from "@/features/categories";
+import { useCategoryRateImpact } from "./useCategoryRateImpact.hook";
 import { useUnsavedChanges } from "@/shared/hooks/forms/useUnsavedChanges.hook";
-
-interface CategoryData {
-  id: string;
-  name: string;
-  parentId?: string | null;
-  imageUrl?: string | null;
-  status?: string | null;
-  seoTitle?: string | null;
-  seoDescription?: string | null;
-  commissionRate?: number | null;
-  returnWindowDays?: number | null;
-  codEnabled?: boolean;
-  defaultWarrantyMonths?: number | null;
-  defaultWarrantyType?: string | null;
-}
 
 interface UseAdminEditCategoryActionParams {
   category: CategoryData;
@@ -52,52 +38,33 @@ export function useAdminEditCategoryAction({
     resolver: zodResolver(CategoryFormSchema),
     mode: "onTouched",
     reValidateMode: "onChange",
-    defaultValues: {
-      name: category.name,
-      parentId: category.parentId ?? "",
-      imageUrl: category.imageUrl ?? "",
-      status:
-        category.status === CATEGORY_STATUS.ARCHIVED
-          ? CATEGORY_STATUS.ARCHIVED
-          : CATEGORY_STATUS.ACTIVE,
-      seoTitle: "",
-      seoDescription: "",
-      commissionRate: "",
-      returnWindowDays: "",
-      codEnabled: true,
-      defaultWarrantyMonths: "",
-      defaultWarrantyType: "",
-    },
+    defaultValues: categoryFormValues(category),
   });
 
   useUnsavedChanges(form.formState.isDirty);
 
   // eslint-disable-next-line react-hooks/incompatible-library -- react-hook-form watch() is compiler-incompatible; used directly in render.
   const values = form.watch();
-  const canSubmit = CategoryFormSchema.safeParse(values).success;
+  // A new parent can change the GST and commission of the products below this category.
+  const reparented =
+    open && (values.parentId ?? "") !== (category.parentId ?? "");
+  const rates = useCategoryRateImpact(
+    reparented
+      ? {
+          kind: "reparent",
+          categoryId: category.id,
+          parentId: values.parentId || undefined,
+        }
+      : null,
+  );
+  const canSubmit =
+    CategoryFormSchema.safeParse(values).success &&
+    !rates.checking &&
+    !rates.blocked;
 
   const openEditor = () => {
     setError(null);
-    form.reset({
-      name: category.name,
-      parentId: category.parentId ?? "",
-      imageUrl: category.imageUrl ?? "",
-      status: (category.status as CategoryStatus) || CATEGORY_STATUS.ACTIVE,
-      seoTitle: category.seoTitle ?? "",
-      seoDescription: category.seoDescription ?? "",
-      commissionRate:
-        category.commissionRate != null ? String(category.commissionRate) : "",
-      returnWindowDays:
-        category.returnWindowDays != null
-          ? String(category.returnWindowDays)
-          : "",
-      codEnabled: category.codEnabled !== false,
-      defaultWarrantyMonths:
-        category.defaultWarrantyMonths != null
-          ? String(category.defaultWarrantyMonths)
-          : "",
-      defaultWarrantyType: category.defaultWarrantyType ?? "",
-    });
+    form.reset(categoryFormValues(category));
     setOpen(true);
   };
 
@@ -116,10 +83,15 @@ export function useAdminEditCategoryAction({
   };
 
   const onSubmit = form.handleSubmit(async (data) => {
+    const changeReason = rates.takeReason();
+    if (changeReason === null) return;
     setIsPending(true);
     setError(null);
     try {
-      await categoriesApi.update(category.id, toCategoryUpdateBody(data));
+      await categoriesApi.update(category.id, {
+        ...toCategoryUpdateBody(data),
+        changeReason,
+      });
       setOpen(false);
       onSaved();
     } catch (err) {
@@ -140,6 +112,7 @@ export function useAdminEditCategoryAction({
     error,
     form,
     canSubmit,
+    rates,
     openEditor,
     closeEditor,
     handleOpenChange,

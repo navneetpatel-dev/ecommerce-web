@@ -30,6 +30,8 @@ interface PurchasePanelProps {
   addDisabled: boolean;
   /** Nothing left of the chosen variant: hide quantity and Add, show Notify me. */
   isSoldOut: boolean;
+  /** The chosen variant is priced above its MRP: it cannot be bought, in stock or not. */
+  offSale?: boolean;
   addToCartHint: string;
   addToCartLabel: string;
   isAddingToCart?: boolean;
@@ -65,6 +67,7 @@ export function PurchasePanel({
   quantityDisabledHint,
   addDisabled,
   isSoldOut,
+  offSale = false,
   addToCartHint,
   addToCartLabel,
   isAddingToCart,
@@ -94,6 +97,10 @@ export function PurchasePanel({
         <p className={PRODUCT_DETAIL_CONTENT_STYLES.helperText}>
           {LABELS.variantUnavailableHint}
         </p>
+      ) : offSale ? (
+        <p className={PRODUCT_DETAIL_CONTENT_STYLES.helperText}>
+          {LABELS.variantNotOnSaleHint}
+        </p>
       ) : isSoldOut || (!canAddToCart && displayStock === 0) ? (
         <div className={PRODUCT_DETAIL_CONTENT_STYLES.outOfStockStack}>
           <p className={PRODUCT_DETAIL_CONTENT_STYLES.helperText}>
@@ -117,7 +124,7 @@ export function PurchasePanel({
       )}
 
       <div className={PRODUCT_DETAIL_CONTENT_STYLES.actionRow}>
-        {isSoldOut ? null : (
+        {isSoldOut || offSale ? null : (
           <PurchaseActions
             quantity={quantity}
             onQuantityChange={onQuantityChange}

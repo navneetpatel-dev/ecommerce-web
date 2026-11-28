@@ -10,29 +10,18 @@ import type {
   CategoryAttribute,
   CategoryFacet,
 } from "@/shared/api/types";
+import type {
+  CategoryImpact,
+  CategoryRateChange,
+  CategoryRateImpact,
+  CategoryWriteBody,
+} from "./categories.types";
 
-export type CategoryImpact = {
-  categoryId: string;
-  childCount: number;
-  activeChildCount: number;
-  productCount: number;
-  ownTaxRule: { id: string; gstPercentage: number } | null;
-  gstAfterRuleRemoved: number | null;
-};
-
-export type CategoryWriteBody = {
-  name?: string;
-  /** Also change the URL slug on rename (off by default so links keep working). */
-  regenerateSlug?: boolean;
-  /** Archive active subcategories too. */
-  cascade?: boolean;
-  parentId?: string | null;
-  imageUrl?: string | null;
-  status?: string;
-  displayOrder?: number;
-  seoTitle?: string | null;
-  seoDescription?: string | null;
-  commissionRate?: number | null;
+export type {
+  CategoryImpact,
+  CategoryRateChange,
+  CategoryRateImpact,
+  CategoryWriteBody,
 };
 
 export const categoriesApi = {
@@ -125,12 +114,32 @@ export const categoriesApi = {
       orderedIds,
     }),
 
-  reassignProducts: (fromCategoryId: string, toCategoryId: string) =>
+  /** Admin: what a reassignment or new parent would charge vendor products differently. */
+  rateImpact: (change: CategoryRateChange) =>
+    apiClient.get<CategoryRateImpact>(
+      API.categories.rateImpact(
+        new URLSearchParams(
+          Object.entries(change).filter((entry): entry is [string, string] =>
+            Boolean(entry[1]),
+          ),
+        ).toString(),
+      ),
+    ),
+
+  reassignProducts: (
+    fromCategoryId: string,
+    toCategoryId: string,
+    changeReason?: string,
+  ) =>
     apiClient.post<{
       fromCategoryId: string;
       toCategoryId: string;
       updatedCount: number;
-    }>(API.categories.reassignProducts, { fromCategoryId, toCategoryId }),
+    }>(API.categories.reassignProducts, {
+      fromCategoryId,
+      toCategoryId,
+      changeReason,
+    }),
 
   delete: (id: string) => apiClient.delete(API.categories.detail(id)),
 

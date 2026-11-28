@@ -55,6 +55,7 @@ export function VendorProductImagesDialog({
     loading,
     error,
     busyId,
+    keepsLast,
     onAddImage,
     onReplaceImage,
     onDeleteImage,
@@ -71,6 +72,7 @@ export function VendorProductImagesDialog({
       variants={variants}
       productId={productId}
       busyId={busyId}
+      keepsLast={keepsLast}
       onReplaceImage={onReplaceImage}
       onDeleteImage={onDeleteImage}
       onSetPrimary={onSetPrimary}
@@ -110,6 +112,12 @@ export function VendorProductImagesDialog({
                 {images.map(renderImageRow)}
               </ul>
             )}
+
+            {keepsLast ? (
+              <p className={vendorProductImagesDialogStyles.counter}>
+                {LABELS.lastImageHint}
+              </p>
+            ) : null}
 
             <FormSection
               title={LABELS.productFormSectionImages}

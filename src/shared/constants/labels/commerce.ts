@@ -84,6 +84,7 @@ export const commerceLabels = {
   generalCategory: "General",
   notAvailable: "Not available",
   variantUnavailableHint: "Not available with your current selection.",
+  variantNotOnSaleHint: "This option is not on sale right now.",
   variantOptionAria: "{group}: {value}",
   variantOptionSoldOut: "sold out",
   variantOptionChanges: "changes {groups}",

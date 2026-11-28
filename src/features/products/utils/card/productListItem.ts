@@ -32,12 +32,13 @@ export function toProductListItem(
   > & {
     stock?: number;
     isWishlisted?: boolean;
-    variants?: Array<{ id: string; stock?: number }>;
+    variants?: Array<{ id: string; stock?: number; aboveMrp?: boolean }>;
   },
 ): ProductListItem {
   const variants = product.variants?.map((variant) => ({
     id: variant.id,
     stock: variant.stock,
+    aboveMrp: variant.aboveMrp,
   }));
   const stock = resolveProductStock({ stock: product.stock ?? 0, variants });
 
@@ -69,6 +70,7 @@ export function productDetailToListItem(
     variants: detail.variants?.map((variant) => ({
       id: variant.id,
       stock: variant.stock,
+      aboveMrp: variant.aboveMrp,
     })),
   });
 }

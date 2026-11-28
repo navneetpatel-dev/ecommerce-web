@@ -9,7 +9,11 @@ import {
 import { cn } from "@/shared/utils/dom/cn";
 import { ProductActions } from "./ProductActions.component";
 import type { ProductRowActionsProps } from "../../../types/products/ProductsTable-types";
-import { PlatformListedBadge } from "@/features/products";
+import {
+  PlatformListedBadge,
+  ProductAboveMrpNote,
+  ProductRejectionNote,
+} from "@/features/products";
 import { formatInr } from "@/shared/utils/formatting/orderFormat";
 
 /** Desktop table row for a vendor product. */
@@ -47,6 +51,14 @@ export function ProductRow(props: ProductRowActionsProps) {
       </TableCell>
       <TableCell className={TABLE_DATA_CELL_CLASS}>
         <StatusBadge status={product.status} />
+        <ProductRejectionNote
+          status={product.status}
+          note={product.rejectionNote}
+        />
+        <ProductAboveMrpNote
+          all={product.aboveMrp}
+          count={product.aboveMrpVariants}
+        />
       </TableCell>
       <TableCell className={TABLE_ACTIONS_CELL_CLASS}>
         <ProductActions

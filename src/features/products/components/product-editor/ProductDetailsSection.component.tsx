@@ -51,6 +51,10 @@ export function ProductDetailsSection({
   const isStaff = useIsVendorStaff();
   const locked = pricingLock?.locked ?? isStaff;
   const isPriceDisabled = disabled || locked;
+  // The category sets the GST rate and commission, so it locks with the price.
+  const categoryLockHint = locked
+    ? (pricingLock?.hint ?? LABELS.productOwnerOnlyHint)
+    : undefined;
 
   const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
     patchValues({ name: event.target.value });
@@ -140,6 +144,7 @@ export function ProductDetailsSection({
       <FormFieldFrame
         label={LABELS.selectCategory}
         required
+        hint={categoryLockHint}
         error={getError("categoryId")}
       >
         <ProductCategorySelect
@@ -147,7 +152,7 @@ export function ProductDetailsSection({
           selected={category.selected}
           onSelect={handleCategorySelect}
           error={Boolean(getError("categoryId"))}
-          disabled={disabled}
+          disabled={isPriceDisabled}
         />
       </FormFieldFrame>
       <FormFieldFrame

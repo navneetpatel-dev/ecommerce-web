@@ -43,5 +43,22 @@ export function ArchiveDescription({
         })
       : null;
 
-  return <>{[base, cascade, rule].filter(Boolean).join(" ")}</>;
+  const deleted =
+    mode === "delete" && impact.deletedProductCount
+      ? formatLabel(LABELS.categoryImpactDeletedProducts, {
+          count: String(impact.deletedProductCount),
+        })
+      : null;
+  const secondary = impact.secondaryCount
+    ? formatLabel(
+        mode === "delete"
+          ? LABELS.categoryImpactSecondaryDelete
+          : LABELS.categoryImpactSecondaryArchive,
+        { count: String(impact.secondaryCount) },
+      )
+    : null;
+
+  return (
+    <>{[base, deleted, secondary, cascade, rule].filter(Boolean).join(" ")}</>
+  );
 }

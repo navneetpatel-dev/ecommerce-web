@@ -4,30 +4,25 @@ import { useCallback, useEffect, useState } from "react";
 import { LABELS } from "@/shared/constants/labels";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 import { notifySuccess } from "@/shared/stores/notifications/toast.store";
-import type { ProductDetail, ProductVariant } from "@/shared/api/types";
+import type { ProductDetail } from "@/shared/api/types";
 import { ADMIN_NOTE_LIMITS } from "../../constants/listing-form/productFields";
 import { productsApi } from "../../api/listing/products.api";
 import {
   emptyVariantDraft,
-  formatVariantOptions,
-  parseVariantOptions,
   toVariantBody,
   validateVariantDraft,
   variantMessages,
   type VariantDraft,
   type VariantDraftErrors,
 } from "../../utils/product-editor/variantDrafts";
+import {
+  draftOf,
+  validateVariantEdit,
+  variantUpdateBody,
+} from "../../utils/product-editor/variantEdits";
 import { useProductPricingLock } from "./useProductPricingLock.hook";
 
 const MIN_REASON = ADMIN_NOTE_LIMITS.MIN;
-
-const draftOf = (variant: ProductVariant): VariantDraft => ({
-  key: variant.id,
-  sku: variant.sku,
-  price: String(variant.price),
-  stock: String(variant.stock),
-  options: formatVariantOptions(variant.attributes),
-});
 
 interface Options {
   productId: string;
@@ -104,17 +99,19 @@ export function useProductVariantsDialog({
     const draft = rows.find((row) => row.key === key);
     const original = product?.variants.find((variant) => variant.id === key);
     if (!draft || !original) return;
-    const priceChanged = Number(draft.price) !== Number(original.price);
-    const changeReason = reasonFor(priceChanged);
+    const errors = validateVariantEdit(draft, variantMessages(LABELS));
+    setRowErrors(Object.keys(errors).length ? { [key]: errors } : {});
+    if (Object.keys(errors).length) return;
+    const changeReason = reasonFor(
+      Number(draft.price) !== Number(original.price),
+    );
     if (changeReason === null) return;
     setReasonError(undefined);
     void run(key, () =>
-      productsApi.updateVariant(key, {
-        attributes: parseVariantOptions(draft.options),
-        stock: toVariantBody(draft).stock,
-        ...(priceChanged ? { price: Number(draft.price) } : {}),
-        ...(changeReason ? { changeReason } : {}),
-      }),
+      productsApi.updateVariant(
+        key,
+        variantUpdateBody(draft, original, changeReason),
+      ),
     );
   };
 

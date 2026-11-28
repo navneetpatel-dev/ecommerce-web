@@ -40,13 +40,17 @@ export function useReassignProducts(open: boolean, onDone: () => void) {
     };
   }, [open]);
 
-  const onSubmit = async () => {
+  const onSubmit = async (changeReason?: string) => {
     if (!fromId || !toId || fromId === toId) return;
     setLoading(true);
     setError(null);
     setMessage(null);
     try {
-      const result = await categoriesApi.reassignProducts(fromId, toId);
+      const result = await categoriesApi.reassignProducts(
+        fromId,
+        toId,
+        changeReason,
+      );
       setMessage(
         formatLabel(LABELS.productsReassigned, {
           count: String(result.updatedCount),

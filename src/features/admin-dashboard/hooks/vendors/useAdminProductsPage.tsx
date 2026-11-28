@@ -7,7 +7,6 @@ import {
   PERMISSIONS,
   type PermissionKey,
 } from "@/shared/constants/permissions/permissions";
-import { notifySuccess } from "@/shared/stores/notifications/toast.store";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { PlatformListedBadge, productsApi } from "@/features/products";
@@ -17,6 +16,7 @@ import { usePendingProducts } from "../../api/analytics/admin.queries";
 import { usePermissions } from "@/shared/hooks/auth/usePermissions.hook";
 import { AdminProductRowActions } from "../../components/vendors/AdminProductRowActions.component";
 import { useAdminProductEditor } from "./useAdminProductEditor.hook";
+import { AdminProductStatusCell } from "../../components/vendors/AdminProductStatusCell.component";
 import { AdminConfirmAction } from "../../components/shared/AdminConfirmAction.component";
 import { adminRowLabel } from "../../utils/shared/adminRowLabel";
 import type { AdminProductsFiltersProps } from "../../components/vendors/AdminProductsFilters.component";
@@ -31,13 +31,6 @@ export type AdminProductsPageModel = AdminListPageModel & {
   cellOverrides: Record<string, (row: AdminDataRow) => ReactNode>;
   editor: ReturnType<typeof useAdminProductEditor>;
 };
-
-/** A Super Admin publishing one of the platform's own products: it goes live at once. */
-async function publishProduct(id: string, reload: () => void) {
-  await productsApi.submitForApproval(id);
-  notifySuccess(LABELS.platformProductPublished);
-  reload();
-}
 
 export function useAdminProductsPage(): AdminProductsPageModel {
   const { hasPermission } = usePermissions();
@@ -124,8 +117,6 @@ export function useAdminProductsPage(): AdminProductsPageModel {
       const archiveProduct = () =>
         adminApi.archiveProduct(String(row.id)).then(reload);
 
-      const publish = () => publishProduct(String(row.id), reload);
-
       const rowActions = isArchived ? null : (
         <AdminProductRowActions
           product={{ id: String(row.id), name }}
@@ -135,10 +126,6 @@ export function useAdminProductsPage(): AdminProductsPageModel {
           onEdit={editor.openEdit}
           onManageVariants={editor.openVariants}
           onSubmitOnBehalf={editor.openSubmit}
-          canPublish={
-            editor.isSuperAdmin && !row.vendorId && row.status === "DRAFT"
-          }
-          onPublish={publish}
         />
       );
 
@@ -179,13 +166,13 @@ export function useAdminProductsPage(): AdminProductsPageModel {
       editor.openEdit,
       editor.openVariants,
       editor.openSubmit,
-      editor.isSuperAdmin,
     ],
   );
 
   const cellOverrides = {
     listedByPlatform: (row: AdminDataRow) =>
       row.listedByPlatform ? <PlatformListedBadge /> : "—",
+    status: (row: AdminDataRow) => <AdminProductStatusCell row={row} />,
   };
 
   const fetchDetail = useCallback(

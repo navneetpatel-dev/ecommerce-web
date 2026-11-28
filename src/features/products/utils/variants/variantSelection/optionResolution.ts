@@ -1,14 +1,11 @@
 import type { ProductVariant } from "@/shared/api/types";
+import { variantIsSellable } from "./variantAvailability";
 import {
   findSelectedVariant,
   getMatrixAttributeKeys,
   getMatrixVariants,
   resolveDefaultVariantSelection,
 } from "./index";
-
-function variantIsInStock(variant: ProductVariant): boolean {
-  return Number(variant.stock) > 0;
-}
 
 function countKeptChoices(
   variant: ProductVariant,
@@ -54,7 +51,7 @@ export function resolveSelectionForOption(
     .map((variant, index) => ({
       variant,
       index,
-      inStock: variantIsInStock(variant) ? 1 : 0,
+      inStock: variantIsSellable(variant) ? 1 : 0,
       kept: countKeptChoices(variant, current, matrixKeys, key),
     }))
     .sort(
@@ -74,7 +71,7 @@ export function isOptionInStock(
     variants,
     resolveSelectionForOption(variants, current, key, value),
   );
-  return landing ? variantIsInStock(landing) : false;
+  return landing ? variantIsSellable(landing) : false;
 }
 
 /** The other groups whose choice changes when this option is picked. */

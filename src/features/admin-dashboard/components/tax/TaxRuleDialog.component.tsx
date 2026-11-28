@@ -18,6 +18,9 @@ import type { TaxRuleRow } from "../../api/tax/tax.api";
 import { adminTaxStyles as styles } from "../../styles/tax/adminTax.styles";
 import { useTaxRuleForm } from "../../hooks/tax/useTaxRuleForm.hook";
 import { TaxRuleFormFields } from "./TaxRuleFormFields.component";
+import { useTaxRuleImpact } from "../../hooks/tax/useTaxRuleImpact.hook";
+import { proposedTaxRuleChange } from "../../utils/tax/taxRuleChange";
+import { MrpImpactNotice } from "../shared/MrpImpactNotice.component";
 
 interface TaxRuleDialogProps {
   open: boolean;
@@ -38,6 +41,7 @@ function TaxRuleDialogBody({
   onCancel: () => void;
 }) {
   const form = useTaxRuleForm({ rule, initialCategory, onSaved });
+  const impact = useTaxRuleImpact(proposedTaxRuleChange(rule, form.values));
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
     void form.submit();
@@ -52,10 +56,12 @@ function TaxRuleDialogBody({
         nonStandardRate={form.nonStandardRate}
         ratePercent={form.ratePercent}
         disabled={form.saving}
+        isDefaultRule={rule?.isDefault}
         onPatch={form.patch}
         onSelectCategory={form.selectCategory}
         onClearCategory={form.clearCategory}
       />
+      <MrpImpactNotice impact={impact} />
       <FormError
         error={form.submitError}
         fallback={LABELS.couldNotCreateTaxRule}

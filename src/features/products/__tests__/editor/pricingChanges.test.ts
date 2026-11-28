@@ -4,12 +4,14 @@ import { pricingFieldsChanged } from "../../utils/product-editor/pricingChanges"
 const stored = {
   basePrice: 100,
   compareAtPrice: 150,
+  categoryId: "c1",
   hsnCode: "6109",
   codEnabled: null,
 };
 const same = {
   basePrice: 100,
   compareAtPrice: 150,
+  categoryId: "c1",
   hsnCode: "6109",
   codEnabled: null,
 };
@@ -20,6 +22,12 @@ describe("pricingFieldsChanged", () => {
     expect(
       pricingFieldsChanged({ ...stored, basePrice: "100.00" as never }, same),
     ).toBe(false);
+  });
+
+  it("notices a changed category, which sets the GST and commission", () => {
+    expect(pricingFieldsChanged(stored, { ...same, categoryId: "c2" })).toBe(
+      true,
+    );
   });
 
   it("notices a changed price, MRP, HSN code or COD", () => {

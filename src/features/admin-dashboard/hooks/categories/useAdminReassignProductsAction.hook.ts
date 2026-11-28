@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useReassignProducts } from "./useReassignProducts.hook";
+import { useCategoryRateImpact } from "./useCategoryRateImpact.hook";
 
 interface UseAdminReassignProductsActionParams {
   onDone: () => void;
@@ -26,6 +27,12 @@ export function useAdminReassignProductsAction({
     clearFeedback,
   } = reassign;
 
+  const rates = useCategoryRateImpact(
+    open && fromId && toId && fromId !== toId
+      ? { kind: "reassign", fromCategoryId: fromId, toCategoryId: toId }
+      : null,
+  );
+
   const beginReassign = () => {
     setOpen(true);
     clearFeedback();
@@ -36,11 +43,17 @@ export function useAdminReassignProductsAction({
   };
 
   const handleSubmit = () => {
-    void onSubmit();
+    const reason = rates.takeReason();
+    if (reason !== null) void onSubmit(reason);
   };
 
   const canSubmit =
-    !loading && Boolean(fromId) && Boolean(toId) && fromId !== toId;
+    !loading &&
+    !rates.checking &&
+    !rates.blocked &&
+    Boolean(fromId) &&
+    Boolean(toId) &&
+    fromId !== toId;
 
   return {
     open,
@@ -54,6 +67,7 @@ export function useAdminReassignProductsAction({
     message,
     loading,
     canSubmit,
+    rates,
     beginReassign,
     handleOpenChange,
     handleSubmit,

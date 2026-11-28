@@ -29,18 +29,20 @@ export function InventoryStockEditor({
   reload,
 }: InventoryStockEditorProps) {
   const [open, setOpen] = useState(false);
-  const { stock, setStock, pending, error, save } = useInventoryStockEditor(
-    row.stock,
-    row.id,
-  );
+  const { stock, setStock, pending, error, reset, save } =
+    useInventoryStockEditor(row.stock, row.id);
+
+  const handleOpenChange = (next: boolean) => {
+    if (next) reset();
+    setOpen(next);
+  };
 
   const handleStockChange = (event: ChangeEvent<HTMLInputElement>) =>
     setStock(event.target.value.replace(/\D/g, "").replace(/^0+(?=\d)/, ""));
 
   const handleSave = async (e: FormEvent) => {
     e.preventDefault();
-    await save(reload);
-    setOpen(false);
+    if (await save(reload)) setOpen(false);
   };
 
   const handleCancel = () => {
@@ -48,7 +50,7 @@ export function InventoryStockEditor({
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <RowActionButton kind="edit" icon={Package} label={LABELS.editStock} />
       </DialogTrigger>

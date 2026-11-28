@@ -15,6 +15,7 @@ import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { usePermissions } from "@/shared/hooks/auth/usePermissions.hook";
 import { useProductVariantsDialog } from "../../../hooks/product-editor/useProductVariantsDialog.hook";
+import { keepsLastItem } from "../../../utils/product-editor/listingRules";
 import { variantsEditorStyles } from "../../../styles/product-editor/variantsEditor.styles";
 import { PriceChangeReasonField } from "../PriceChangeReasonField.component";
 import { ExistingVariantList } from "./ExistingVariantList.component";
@@ -37,8 +38,10 @@ export function ProductVariantsDialog({
   onChanged,
 }: ProductVariantsDialogProps) {
   const { hasPermission } = usePermissions();
-  const canDelete = hasPermission(PERMISSIONS.PRODUCT_DELETE);
   const dialog = useProductVariantsDialog({ productId, open, onChanged });
+  const keepsLast = keepsLastItem(dialog.product?.status, dialog.rows.length);
+  const mayDelete = hasPermission(PERMISSIONS.PRODUCT_DELETE);
+  const canDelete = mayDelete && !keepsLast;
   const priceLocked = dialog.pricing.lock.locked;
 
   return (
@@ -85,6 +88,8 @@ export function ProductVariantsDialog({
             ) : null}
             <ExistingVariantList
               rows={dialog.rows}
+              variants={dialog.product?.variants}
+              errors={dialog.rowErrors}
               busyKey={dialog.busyKey}
               priceLocked={priceLocked}
               canDelete={canDelete}
@@ -92,6 +97,11 @@ export function ProductVariantsDialog({
               onSave={dialog.saveExisting}
               onRemove={dialog.removeExisting}
             />
+            {mayDelete && keepsLast ? (
+              <p className={variantsEditorStyles.empty}>
+                {LABELS.lastVariantHint}
+              </p>
+            ) : null}
             <NewVariantList
               rows={dialog.newRows}
               errors={dialog.rowErrors}

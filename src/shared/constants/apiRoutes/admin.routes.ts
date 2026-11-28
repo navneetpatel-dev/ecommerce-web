@@ -92,6 +92,7 @@ export const notificationsRoutes = {
 
 export const inventoryRoutes = {
   lowStock: "/api/inventory/low-stock",
+  stockAlertUnsubscribe: "/api/inventory/stock-alerts/unsubscribe",
   variantStock: (variantId: string) =>
     `/api/inventory/variants/${variantId}/stock`,
   stockAlerts: "/api/inventory/stock-alerts",

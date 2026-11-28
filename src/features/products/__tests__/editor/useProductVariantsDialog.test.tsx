@@ -64,7 +64,32 @@ describe("managing the variants of a live vendor product as Super Admin", () => 
       expect(productsApi.updateVariant).toHaveBeenCalledWith("var1", {
         attributes: { Size: "M" },
         stock: 9,
+        expectedStock: 5,
       }),
+    );
+  });
+
+  it("a price-only change sends no stock, so sales made meanwhile are kept", async () => {
+    signIn("VENDOR_OWNER", "v1");
+    const { result } = await mount();
+    act(() => result.current.patchExisting("var1", { price: "80" }));
+    act(() => result.current.saveExisting("var1"));
+    await waitFor(() =>
+      expect(productsApi.updateVariant).toHaveBeenCalledWith("var1", {
+        attributes: { Size: "M" },
+        price: 80,
+      }),
+    );
+  });
+
+  it("a blank stock is refused instead of being saved as zero", async () => {
+    signIn("VENDOR_OWNER", "v1");
+    const { result } = await mount();
+    act(() => result.current.patchExisting("var1", { stock: "" }));
+    act(() => result.current.saveExisting("var1"));
+    expect(productsApi.updateVariant).not.toHaveBeenCalled();
+    expect(result.current.rowErrors.var1?.stock).toBe(
+      LABELS.variantStockRequired,
     );
   });
 

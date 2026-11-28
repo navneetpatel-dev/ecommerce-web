@@ -7,6 +7,7 @@ import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import type { TaxRuleRow } from "../../api/tax/tax.api";
 import { taxRuleDeleteBody } from "../../utils/tax/taxRuleDeleteBody";
 import { AdminConfirmAction } from "../shared/AdminConfirmAction.component";
+import { TaxRuleDeleteImpact } from "./TaxRuleDeleteImpact.component";
 
 interface TaxRuleRowActionsProps {
   rule: TaxRuleRow;
@@ -39,7 +40,12 @@ export function TaxRuleRowActions({
         label={LABELS.delete}
         dialogVariant="danger"
         title={LABELS.confirmDeleteTaxTitle}
-        description={body}
+        description={
+          <>
+            {body}
+            <TaxRuleDeleteImpact ruleId={rule.id} />
+          </>
+        }
         onConfirm={handleDelete}
       />
     </>

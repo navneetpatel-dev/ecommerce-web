@@ -22,6 +22,7 @@ import {
 } from "@/shared/components/ui/select";
 import { LABELS } from "@/shared/constants/labels";
 import { CategoryOptionsList } from "./AdminReassignProductsAction/CategoryOptionsList.component";
+import { CategoryRateImpactNotice } from "./CategoryRateImpactNotice.component";
 import { useAdminReassignProductsAction } from "../../hooks/categories/useAdminReassignProductsAction.hook";
 import { adminReassignProductsActionStyles as styles } from "../../styles/categories/adminReassignProductsAction.styles";
 
@@ -44,6 +45,7 @@ export function AdminReassignProductsAction({
     message,
     loading,
     canSubmit,
+    rates,
     beginReassign,
     handleOpenChange,
     handleSubmit,
@@ -133,6 +135,7 @@ export function AdminReassignProductsAction({
                 </SelectContent>
               </Select>
             </FormFieldFrame>
+            <CategoryRateImpactNotice rates={rates} disabled={loading} />
             {errorMessage}
             {successMessage}
             <FormActions>

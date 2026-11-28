@@ -9,6 +9,7 @@ import { ProductPreviewDialogShell } from "./ProductPreviewDialogShell.component
 import { ProductDetailContent } from "../detail/ProductDetailContent/index";
 import { ProductDetailSkeleton } from "../detail/ProductDetailSkeleton.component";
 import { ProductNotFound } from "../detail/ProductNotFound.component";
+import { ProductRejectionNote } from "../status/ProductRejectionNote.component";
 
 interface ProductCustomerPreviewDialogProps {
   productId: string;
@@ -35,11 +36,17 @@ export function ProductCustomerPreviewDialog({
       onOpenChange={onOpenChange}
       notice={
         notLive && preview.product ? (
-          <p role="status" className={styles.notLiveNotice}>
-            {formatLabel(LABELS.customerPreviewNotLive, {
-              status: preview.product.status.replace(/_/g, " ").toLowerCase(),
-            })}
-          </p>
+          <div role="status" className={styles.notLiveNotice}>
+            <p>
+              {formatLabel(LABELS.customerPreviewNotLive, {
+                status: preview.product.status.replace(/_/g, " ").toLowerCase(),
+              })}
+            </p>
+            <ProductRejectionNote
+              status={preview.product.status}
+              note={preview.product.rejectionNote}
+            />
+          </div>
         ) : null
       }
     >

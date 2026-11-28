@@ -1,11 +1,18 @@
 "use client";
 
-import type { VariantDraft } from "../../../utils/product-editor/variantDrafts";
+import type {
+  VariantDraft,
+  VariantDraftErrors,
+} from "../../../utils/product-editor/variantDrafts";
 
+import type { ProductVariant } from "@/shared/api/types";
 import { ExistingVariantRow } from "./ExistingVariantRow.component";
 
 export function ExistingVariantList(props: {
   rows: VariantDraft[];
+  errors: Record<string, VariantDraftErrors>;
+  /** The saved variants, to flag the ones that are above the MRP. */
+  variants?: ProductVariant[];
   busyKey: string | null;
   priceLocked: boolean;
   canDelete: boolean;
@@ -19,6 +26,10 @@ export function ExistingVariantList(props: {
         <ExistingVariantRow
           key={row.key}
           draft={row}
+          errors={props.errors[row.key]}
+          aboveMrp={
+            props.variants?.find((variant) => variant.id === row.key)?.aboveMrp
+          }
           busy={props.busyKey === row.key}
           priceLocked={props.priceLocked}
           canDelete={props.canDelete}

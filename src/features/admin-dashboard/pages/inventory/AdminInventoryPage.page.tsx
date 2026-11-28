@@ -39,32 +39,18 @@ export function AdminInventoryPage() {
   const search = userSearch ?? paramSearch;
   const debouncedSearch = useDebouncedValue(search.trim(), 350);
 
-  const load = useCallback(async () => {
-    const rows = await inventoryApi.lowStock();
-    const q = debouncedSearch.toLowerCase();
-    const filtered = rows.filter((r) => {
-      if (
-        q &&
-        !r.productName?.toLowerCase().includes(q) &&
-        !r.sku?.toLowerCase().includes(q)
-      ) {
-        return false;
-      }
-      if (stockLevel === "OUT_OF_STOCK" && Number(r.stock) > 0) return false;
-      if (stockLevel === "CRITICAL" && Number(r.stock) > 5) return false;
-      return true;
-    });
-    if (sort === "stock_asc") {
-      filtered.sort((a, b) => Number(a.stock) - Number(b.stock));
-    } else if (sort === "stock_desc") {
-      filtered.sort((a, b) => Number(b.stock) - Number(a.stock));
-    } else if (sort === "name_asc") {
-      filtered.sort((a, b) =>
-        String(a.productName ?? "").localeCompare(String(b.productName ?? "")),
-      );
-    }
-    return filtered;
-  }, [debouncedSearch, stockLevel, sort]);
+  // The server searches, filters, sorts and pages: the list can run to thousands of rows.
+  const load = useCallback(
+    ({ page, limit }: { page: number; limit: number }) =>
+      inventoryApi.lowStock({
+        page,
+        limit,
+        search: debouncedSearch || undefined,
+        level: stockLevel || undefined,
+        sort: sort || undefined,
+      }),
+    [debouncedSearch, stockLevel, sort],
+  );
 
   const activeCount = [search.trim(), stockLevel, sort].filter(Boolean).length;
   const handleClear = () => {

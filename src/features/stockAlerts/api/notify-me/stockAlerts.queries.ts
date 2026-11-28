@@ -15,7 +15,6 @@ export function useCreateStockAlert() {
 
 export function useRemoveStockAlert() {
   return useMutation({
-    mutationFn: ({ id, guestEmail }: { id: string; guestEmail?: string }) =>
-      stockAlertsApi.unsubscribe(id, guestEmail),
+    mutationFn: ({ id }: { id: string }) => stockAlertsApi.unsubscribe(id),
   });
 }

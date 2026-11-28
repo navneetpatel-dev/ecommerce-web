@@ -9,6 +9,9 @@ export interface ProductTableRow {
   basePrice: number;
   status: string;
   listedByPlatform?: boolean;
+  rejectionNote?: string | null;
+  aboveMrp?: boolean;
+  aboveMrpVariants?: number;
 }
 
 interface ProductActionCallbacks {

@@ -79,6 +79,8 @@ export interface VariantMessages {
   price: string;
   priceTooHigh: string;
   stockTooHigh: string;
+  /** A saved variant's stock left blank or not a whole number. */
+  stock: string;
   options: string;
 }
 
@@ -119,6 +121,7 @@ export function variantMessages(
     price: labels.variantPriceRequired!,
     priceTooHigh: labels.variantPriceTooHigh!,
     stockTooHigh: labels.variantStockTooHigh!,
+    stock: labels.variantStockRequired!,
     options: labels.variantOptionsInvalid!,
   };
 }

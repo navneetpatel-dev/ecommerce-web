@@ -18,7 +18,10 @@ type RichProductItem = ProductListItem & {
     sku?: string;
     stock?: number;
     lowStockAt?: number;
+    aboveMrp?: boolean;
   }>;
+  rejectionNote?: string | null;
+  aboveMrp?: boolean;
 };
 
 export function useVendorProductsListView(options: {
@@ -58,6 +61,9 @@ export function useVendorProductsListView(options: {
         basePrice: product.basePrice,
         status: product.status ?? PRODUCT_STATUS.LIVE,
         listedByPlatform: product.listedByPlatform,
+        rejectionNote: product.rejectionNote,
+        aboveMrp: product.aboveMrp,
+        aboveMrpVariants: product.variants?.filter((v) => v.aboveMrp).length,
       })),
     [table.data?.items],
   );

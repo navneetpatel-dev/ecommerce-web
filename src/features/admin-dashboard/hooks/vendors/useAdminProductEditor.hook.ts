@@ -6,8 +6,7 @@ import {
   type ProductListingFormValues,
   type VariantDraft,
 } from "@/features/products";
-import { ROLES } from "@/shared/constants/labels";
-import { useAuthStore } from "@/shared/stores/auth/auth.store";
+
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { usePermissions } from "@/shared/hooks/auth/usePermissions.hook";
 import { useRouteQueryDialog } from "@/shared/hooks/navigation/useRouteQueryDialog.hook";
@@ -26,10 +25,6 @@ export function useAdminProductEditor(onChanged: () => void) {
   const dialog = useRouteQueryDialog();
   const { open, mode, editId, openCreate, openEdit, close, setOpen } = dialog;
 
-  const isSuperAdmin = useAuthStore(
-    (state) => state.currentUser?.role === ROLES.SUPER_ADMIN,
-  );
-
   // Listing for a vendor needs both powers; editing needs product.manage.
   const canManage = hasPermission(PERMISSIONS.PRODUCT_MANAGE);
   const canCreate = canManage && hasPermission(PERMISSIONS.PRODUCT_CREATE);
@@ -40,7 +35,6 @@ export function useAdminProductEditor(onChanged: () => void) {
     close,
     onSaved: onChanged,
     requireVendor: true,
-    allowPlatformProduct: isSuperAdmin,
   });
 
   const [formDirty, setFormDirty] = useState(false);
@@ -102,7 +96,6 @@ export function useAdminProductEditor(onChanged: () => void) {
     onCancel: close,
     vendorId: form.vendorId,
     onVendorChange: handleVendorChange,
-    allowPlatformProduct: isSuperAdmin,
     editing:
       mode === "edit" && form.product
         ? {
@@ -180,7 +173,6 @@ export function useAdminProductEditor(onChanged: () => void) {
   return {
     canCreate,
     canManage,
-    isSuperAdmin,
     openCreate,
     openEdit,
     openVariants: setVariantsTarget,

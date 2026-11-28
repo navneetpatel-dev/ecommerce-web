@@ -21,8 +21,13 @@ export function ProductActions(props: ProductRowActionsProps) {
     isDeleting,
     isSubmitting,
   } = props;
+  const rejected = product.status === PRODUCT_STATUS.REJECTED;
   const canSubmit =
-    Boolean(onSubmitForApproval) && product.status === PRODUCT_STATUS.DRAFT;
+    Boolean(onSubmitForApproval) &&
+    (rejected || product.status === PRODUCT_STATUS.DRAFT);
+  const submitLabel = rejected
+    ? LABELS.resubmitForApproval
+    : LABELS.submitForApproval;
   const handleSubmit = () => onSubmitForApproval?.(product);
   const handlePreview = () => onPreview?.(product);
   const handleManageImages = () => onManageImages?.(product);
@@ -44,7 +49,7 @@ export function ProductActions(props: ProductRowActionsProps) {
       {canSubmit ? (
         <RowActionButton
           icon={Send}
-          label={LABELS.submitForApproval}
+          label={submitLabel}
           attentionClassName={attentionStyles.submitRow}
           loading={isSubmitting}
           onClick={handleSubmit}

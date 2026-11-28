@@ -75,7 +75,9 @@ export const UNAVAILABLE_REASON = {
   /** Some stock left, but less than the line's quantity. */
   LOW_STOCK: "LOW_STOCK",
   PRODUCT_UNPUBLISHED: "PRODUCT_UNPUBLISHED",
+  PRICE_ABOVE_MRP: "PRICE_ABOVE_MRP",
   VENDOR_UNAVAILABLE: "VENDOR_UNAVAILABLE",
+  VARIANT_REMOVED: "VARIANT_REMOVED",
 } as const;
 export type UnavailableReason =
   (typeof UNAVAILABLE_REASON)[keyof typeof UNAVAILABLE_REASON];

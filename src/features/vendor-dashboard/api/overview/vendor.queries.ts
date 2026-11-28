@@ -57,10 +57,10 @@ export function useVendorAnalytics() {
   });
 }
 
-export function useVendorLowStock() {
+export function useVendorLowStock(limit: number) {
   return useQuery({
-    queryKey: vendorKeys.lowStock(),
-    queryFn: () => vendorApi.lowStock(),
+    queryKey: [...vendorKeys.lowStock(), limit] as const,
+    queryFn: () => vendorApi.lowStock({ limit }),
   });
 }
 

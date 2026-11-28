@@ -16,3 +16,4 @@ export { ReturnsPage } from "./pages/legal/ReturnsPage.page";
 export { BlogPage } from "./pages/blog/BlogPage.page";
 export { BlogDetailPage } from "./pages/blog/BlogDetailPage.page";
 export { getBlogPost, blogPosts } from "./constants/site/siteContent";
+export { CancelStockAlertPage } from "./pages/stock-alert-cancel/CancelStockAlertPage.page";

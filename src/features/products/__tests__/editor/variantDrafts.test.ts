@@ -14,6 +14,7 @@ const messages = {
   price: "price?",
   priceTooHigh: "price high",
   stockTooHigh: "stock high",
+  stock: "stock",
   options: "options bad",
 };
 

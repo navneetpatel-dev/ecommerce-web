@@ -40,6 +40,8 @@ interface TaxRuleFormFieldsProps {
   ratePercent: number | null;
   /** Editing a category rule keeps its category (move it to the default instead). */
   categoryLocked?: boolean;
+  /** Editing the platform default, which stays the default. */
+  isDefaultRule?: boolean;
   disabled?: boolean;
   onPatch: (next: Partial<TaxRuleFormValues>) => void;
   onSelectCategory: (category: CategoryOptionData) => void;
@@ -54,6 +56,7 @@ export function TaxRuleFormFields({
   nonStandardRate,
   ratePercent,
   categoryLocked = false,
+  isDefaultRule = false,
   disabled = false,
   onPatch,
   onSelectCategory,
@@ -78,7 +81,11 @@ export function TaxRuleFormFields({
       >
         <FormFieldFrame
           label={LABELS.taxRuleCategory}
-          hint={LABELS.taxRuleCategoryHint}
+          hint={
+            isDefaultRule
+              ? LABELS.taxRuleDefaultScopeHint
+              : LABELS.taxRuleCategoryHint
+          }
         >
           <CategoryPickerSelect
             value={values.categoryId}
@@ -86,7 +93,7 @@ export function TaxRuleFormFields({
             onSelect={onSelectCategory}
             onClear={onClearCategory}
             noneLabel={LABELS.taxRuleCategoryPlaceholder}
-            disabled={disabled || categoryLocked}
+            disabled={disabled || categoryLocked || isDefaultRule}
           />
         </FormFieldFrame>
       </FormSection>

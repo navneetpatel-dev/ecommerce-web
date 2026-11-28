@@ -14,7 +14,11 @@ export function useProductCard(product: ProductListItem) {
   const showMrp = product.showMrp === true;
   const discountPercent = product.discountPercent ?? 0;
 
-  const defaultVariantId = product.variants?.[0]?.id;
+  // Quick add never picks an option that is above its MRP.
+  const defaultVariantId = (
+    product.variants?.find((variant) => !variant.aboveMrp) ??
+    product.variants?.[0]
+  )?.id;
   const cartItem =
     cart?.items.find(
       (item) =>

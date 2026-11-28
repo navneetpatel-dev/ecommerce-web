@@ -26,8 +26,12 @@ export interface ProductListItem {
   vendor: VendorInfo;
   isWishlisted?: boolean;
   /** Present on list payloads when the API includes variants (used for quick-add). */
-  variants?: Array<{ id: string; stock?: number }>;
+  variants?: Array<{ id: string; stock?: number; aboveMrp?: boolean }>;
   categoryId?: string;
+  /** Team views only: why a rejected listing was refused. */
+  rejectionNote?: string | null;
+  /** Every price it sells at is above its MRP, so it is hidden from the shop. */
+  aboveMrp?: boolean;
 }
 
 export interface ProductVariant {
@@ -38,6 +42,8 @@ export interface ProductVariant {
   stock: number;
   lowStockAt: number;
   weightGrams?: number;
+  /** Its price with GST is above the product's MRP: it cannot be bought. */
+  aboveMrp?: boolean;
   codEligibleAtUnitPrice?: boolean;
   /** This variant's price with GST (API-computed on the product page). */
   displayPrice?: number;

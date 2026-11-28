@@ -25,6 +25,10 @@ function unavailableLabel(
       return LABELS.unavailableReasonOutOfStock;
     case UNAVAILABLE_REASON.PRODUCT_UNPUBLISHED:
       return LABELS.unavailableReasonProductUnpublished;
+    case UNAVAILABLE_REASON.VARIANT_REMOVED:
+      return LABELS.unavailableReasonRemoved;
+    case UNAVAILABLE_REASON.PRICE_ABOVE_MRP:
+      return LABELS.unavailableReasonNotOnSale;
     case UNAVAILABLE_REASON.VENDOR_UNAVAILABLE:
       return LABELS.unavailableReasonVendorUnavailable;
     default:

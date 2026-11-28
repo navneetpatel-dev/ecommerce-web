@@ -183,6 +183,7 @@ export function ProductBuyBoxColumn({
           quantityDisabled={quantityDisabled}
           quantityDisabledHint={quantityDisabledHint}
           addDisabled={addDisabled}
+          offSale={Boolean(resolvedVariant?.aboveMrp)}
           isSoldOut={isSoldOut}
           addToCartHint={addToCartHint}
           addToCartLabel={addToCartLabel}

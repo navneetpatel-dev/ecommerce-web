@@ -33,6 +33,18 @@ export type TaxRuleRow = {
   createdAt: string;
 };
 
+export type TaxRuleChange =
+  | { action: "create"; rule: TaxRuleInput }
+  | { action: "update"; ruleId: string; rule: Partial<TaxRuleInput> }
+  | { action: "delete"; ruleId: string };
+
+/** Live and pending listings whose options would stop selling above their MRP. */
+export type MrpImpact = {
+  productCount: number;
+  variantCount: number;
+  vendorCount: number;
+};
+
 export type TaxRuleFilters = PaginationQuery & {
   search?: string;
   gstPercentage?: number;
@@ -72,6 +84,9 @@ export const taxApi = {
   /** `force` is needed for the platform default rule. */
   deleteRule: (id: string, options: { force?: boolean } = {}) =>
     apiClient.delete(API.tax.rule(id, options.force ? "?force=true" : "")),
+  /** What a rule change would put above its MRP, before it is saved. */
+  impact: (change: TaxRuleChange) =>
+    apiClient.post<MrpImpact>(API.tax.impact, change),
   effective: (categoryId: string) =>
     apiClient.get<EffectiveTaxRule>(API.tax.effective(categoryId)),
 };

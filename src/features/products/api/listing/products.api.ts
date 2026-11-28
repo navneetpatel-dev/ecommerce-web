@@ -73,6 +73,8 @@ export interface VariantWriteBody {
   attributes: Record<string, string>;
   price: number;
   stock: number;
+  /** With a stock change to a saved variant: the stock the editor showed. */
+  expectedStock?: number;
   /** Required when a platform admin changes the price of a live product. */
   changeReason?: string;
 }

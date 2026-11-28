@@ -1,8 +1,5 @@
 import type { ProductVariant } from "@/shared/api/types";
-
-function variantIsInStock(variant: ProductVariant): boolean {
-  return Number(variant.stock) > 0;
-}
+import { variantIsSellable } from "./variantAvailability";
 
 function variantHasMatrixAttributes(
   variant: ProductVariant,
@@ -56,7 +53,7 @@ export function getMatrixAttributeKeys(variants: ProductVariant[]): string[] {
   let bestScore = -1;
 
   for (const [signature, group] of groups) {
-    const inStockCount = group.filter(variantIsInStock).length;
+    const inStockCount = group.filter(variantIsSellable).length;
     const score = inStockCount * 100_000 + group.length;
     if (score > bestScore) {
       bestScore = score;
@@ -92,16 +89,16 @@ export function resolveDefaultVariantSelection(
   const matrixVariants = getMatrixVariants(variants, matrixKeys);
 
   if (!matrixKeys.length) {
-    const inStock = variants.filter(variantIsInStock);
+    const inStock = variants.filter(variantIsSellable);
     if (inStock.length === 1) return { ...inStock[0].attributes };
-    if (variants.length === 1 && variantIsInStock(variants[0])) {
+    if (variants.length === 1 && variantIsSellable(variants[0])) {
       return { ...variants[0].attributes };
     }
     return {};
   }
 
   const inStockMatch = matrixVariants.find((variant) =>
-    variantIsInStock(variant),
+    variantIsSellable(variant),
   );
 
   if (!inStockMatch) return {};
@@ -126,7 +123,7 @@ export function findMatchingVariant(
   if (!variants.length) return null;
 
   if (variants.length === 1 && Object.keys(selected).length === 0) {
-    return variantIsInStock(variants[0]) ? variants[0] : null;
+    return variantIsSellable(variants[0]) ? variants[0] : null;
   }
 
   const selectedEntries = Object.entries(selected).filter(
@@ -136,7 +133,7 @@ export function findMatchingVariant(
 
   const attributeKeys = getMatrixAttributeKeys(variants);
   if (!attributeKeys.length) {
-    const inStock = variants.filter(variantIsInStock);
+    const inStock = variants.filter(variantIsSellable);
     if (inStock.length === 1) return inStock[0];
     return null;
   }
@@ -148,7 +145,7 @@ export function findMatchingVariant(
     selectedEntries.every(([key, value]) => variant.attributes[key] === value),
   );
 
-  if (!match || !variantIsInStock(match)) return null;
+  if (!match || !variantIsSellable(match)) return null;
   return match;
 }
 

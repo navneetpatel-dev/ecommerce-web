@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { LABELS } from "@/shared/constants/labels";
-import { productsApi } from "@/features/products";
+import { keepsLastItem, productsApi } from "@/features/products";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 import type { ProductImage, ProductVariant } from "@/shared/api/types";
 
@@ -24,12 +24,14 @@ export function useVendorProductImages({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [busyId, setBusyId] = useState<string | null>(null);
+  const [status, setStatus] = useState<string | null>(null);
 
   const load = useCallback(() => {
     return productsApi
       .detail(productId)
       .then((product) => {
         setImages(product.images ?? []);
+        setStatus(product.status);
         setVariants(product.variants ?? []);
         setError(null);
       })
@@ -107,6 +109,7 @@ export function useVendorProductImages({
     loading,
     error,
     busyId,
+    keepsLast: keepsLastItem(status, images.length),
     onAddImage,
     onReplaceImage,
     onDeleteImage,

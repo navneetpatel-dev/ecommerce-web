@@ -1,4 +1,9 @@
 import { apiClient } from "@/shared/api/client/client";
+import {
+  buildSearchParams,
+  unwrapPaginatedList,
+  type PaginatedList,
+} from "@/shared/api/client/pagination";
 import { API } from "@/shared/constants/apiRoutes";
 
 type LowStockVariantResponse = {
@@ -27,13 +32,26 @@ function mapLowStockRow(row: LowStockVariantResponse): LowStockInventoryRow {
   };
 }
 
+export type LowStockQuery = {
+  page?: number;
+  limit?: number;
+  search?: string;
+  level?: string;
+  sort?: string;
+};
+
 /** Inventory endpoints used by admin and vendor dashboards. */
 export const inventoryApi = {
-  lowStock: async (): Promise<LowStockInventoryRow[]> => {
-    const rows = await apiClient.get<LowStockVariantResponse[]>(
-      API.inventory.lowStock,
+  /** One page of variants at or under their alert level; the server filters and sorts. */
+  lowStock: async (
+    query: LowStockQuery = {},
+  ): Promise<PaginatedList<LowStockInventoryRow>> => {
+    const params = buildSearchParams({ ...query }).toString();
+    const res = await apiClient.getWithResponse<LowStockVariantResponse[]>(
+      params ? `${API.inventory.lowStock}?${params}` : API.inventory.lowStock,
     );
-    return rows.map(mapLowStockRow);
+    const page = unwrapPaginatedList(res);
+    return { ...page, items: page.items.map(mapLowStockRow) };
   },
   /** `expectedStock`: the stock the editor showed, so concurrent order changes survive. */
   updateStock: (variantId: string, stock: number, expectedStock?: number) =>

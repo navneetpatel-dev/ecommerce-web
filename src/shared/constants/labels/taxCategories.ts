@@ -6,6 +6,8 @@ export const taxCategoriesLabels = {
     "Platform default (every category without its own rule)",
   taxRuleCategoryHint:
     "Pick a category to set its own GST. Its subcategories use it too, unless they have their own. Leave empty for the platform default.",
+  taxRuleDefaultScopeHint:
+    "This is the platform default: it cannot be moved to a category. Add a separate rule for a category.",
   taxRuleGstSlab: "GST rate",
   taxRuleGstOther: "Other rate…",
   taxRuleGstCustom: "Custom GST %",
@@ -91,5 +93,11 @@ export const taxCategoriesLabels = {
     "{name} will be deleted for good. Products: {products}. Subcategories: {children}. It can only be deleted when both are 0.",
   categoryImpactTaxRule:
     "Its tax rule ({percent}% GST) will be deleted with it.",
+  categoryImpactDeletedProducts:
+    "Deleted products still filed here: {count}. Reassign them before deleting.",
+  categoryImpactSecondaryDelete:
+    "Products using it as a secondary category: {count}. They lose that tag.",
+  categoryImpactSecondaryArchive:
+    "Products using it as a secondary category: {count}. They stop being listed under it.",
   categoryImpactLoading: "Checking what this affects…",
 } as const;

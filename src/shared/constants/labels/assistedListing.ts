@@ -11,12 +11,19 @@ export const assistedListingLabels = {
   listedByPlatformHint:
     "Our team prepared this listing for you. Review it, then submit it for approval.",
   vendorConsentNoteLabel: "Vendor agreement on record",
-  priceChangeReason: "Reason for this price change",
+  priceChangeReason: "Reason for this change",
   priceChangeReasonHint:
     "Required (10 to 500 characters). It is kept in the audit trail and sent to the vendor.",
   priceChangeReasonRequired: "Give a reason of at least 10 characters.",
   pricingLockedHint:
-    "Only a Super Admin can change prices or tax details of a live product.",
+    "Only a Super Admin can change prices, the category or tax details of a live product.",
+  categoryRateImpactSummary:
+    "{products} live or pending product(s) from {vendors} vendor(s) would be charged differently (GST changes on {gst}, commission on {commission}).",
+  categoryReassignBlocked:
+    "Nothing can be moved: these vendors lack verified documents for the new category.",
+  categoryReassignBlockedVendor: "{vendor}: {count} live or pending product(s)",
+  categoryRateImpactBlocked:
+    "Only a Super Admin can make this change, because it changes what vendors are charged.",
   submitOnBehalf: "Submit for review on vendor's behalf",
   submitOnBehalfTitle: "Submit {name} for review",
   submitOnBehalfBody:
@@ -56,7 +63,16 @@ export const assistedListingLabels = {
   variantPriceTooHigh: "Price cannot be more than ₹1,00,00,000.",
   priceTooHigh: "Price cannot be more than ₹1,00,00,000.",
   variantPriceRequired: "Enter a price of at least 1.",
+  resubmitForApproval: "Resubmit for approval",
+  productRejectedBecause: "Rejected: {note}",
+  variantStockRequired: "Enter the stock as a whole number (0 or more).",
+  stockNow: "Stock saved. It is now {count}.",
+  couldNotUpdateStock: "Could not update stock.",
   variantSaved: "Variant saved.",
+  lastVariantHint:
+    "This listing is on sale or awaiting approval, so its only variant cannot be removed. Add another first.",
+  lastImageHint:
+    "This listing is on sale or awaiting approval, so its only image cannot be removed. Replace it, or add another first.",
   variantsPartialFailure:
     "The product was created, but {count} variant(s) could not be added. Add them from Manage variants.",
   noVariantsYet: "No variants yet.",
@@ -68,14 +84,6 @@ export const assistedListingLabels = {
   approveOwnWorkPlaceholder: "e.g. Sole admin; vendor confirmed by phone",
   approveOwnWorkConfirm: "Approve anyway",
   platformProductName: "Platform product",
-  platformProductOption: "Platform product (no vendor)",
-  platformProductHint:
-    "Leave the vendor empty to create one of the platform's own products. Super Admin only; publishing it makes it live at once.",
-  publishPlatformProduct: "Publish",
-  publishPlatformProductTitle: "Publish {name}?",
-  publishPlatformProductBody:
-    "This is a platform product, so it goes live immediately without a separate approval. The action is recorded in the audit trail.",
-  platformProductPublished: "Product published.",
   productPricingGroupTitle: "Pricing",
   productPricingGroupHint:
     "The selling price is before GST; GST is added at the category's rate. The MRP includes GST.",

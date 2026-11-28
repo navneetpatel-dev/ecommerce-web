@@ -15,8 +15,6 @@ interface AdminProductEditorDialogProps extends Omit<
   formProps: EditorDialogProps["formProps"];
   vendorId: string;
   onVendorChange: (vendorId: string) => void;
-  /** Super Admin: may leave the vendor empty for the platform's own product. */
-  allowPlatformProduct?: boolean;
   /** The product being edited, to show whose it is. */
   editing?: { vendorName?: string | null; listedByPlatform?: boolean } | null;
 }
@@ -26,7 +24,6 @@ export function AdminProductEditorDialog({
   formProps,
   vendorId,
   onVendorChange,
-  allowPlatformProduct = false,
   editing,
   mode,
   ...rest
@@ -44,15 +41,10 @@ export function AdminProductEditorDialog({
         value={vendorId}
         onChange={onVendorChange}
         label={LABELS.listForVendor}
-        placeholder={
-          allowPlatformProduct
-            ? LABELS.platformProductOption
-            : LABELS.listForVendorPlaceholder
-        }
-        hint={allowPlatformProduct ? LABELS.platformProductHint : undefined}
+        placeholder={LABELS.listForVendorPlaceholder}
         status="APPROVED"
-        allowNone={allowPlatformProduct}
-        required={!allowPlatformProduct}
+        allowNone={false}
+        required
       />
     );
   return (

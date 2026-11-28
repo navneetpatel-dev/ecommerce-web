@@ -64,6 +64,7 @@ export const PATHS = {
   about: "/about",
   contact: "/contact",
   unsubscribe: "/unsubscribe",
+  stockAlertCancel: "/stock-alerts/cancel",
   newsletterConfirm: "/newsletter/confirm",
   blog: "/blog",
   blogPost: (slug: string) => `/blog/${slug}`,

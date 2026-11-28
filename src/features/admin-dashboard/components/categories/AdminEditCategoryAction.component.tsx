@@ -15,6 +15,7 @@ import { FormActions } from "@/shared/components/forms";
 import { LABELS } from "@/shared/constants/labels";
 import type { CategoryGstInfo } from "@/shared/api/types";
 import { CategoryTaxSection } from "./CategoryTaxSection.component";
+import { CategoryRateImpactNotice } from "./CategoryRateImpactNotice.component";
 import { AdminCategoryFormFields } from "./AdminCategoryFormFields.component";
 import { useAdminEditCategoryAction } from "../../hooks/categories/useAdminEditCategoryAction.hook";
 import { adminEditCategoryActionStyles as styles } from "../../styles/categories/adminEditCategoryAction.styles";
@@ -48,6 +49,7 @@ export function AdminEditCategoryAction({
     error,
     form,
     canSubmit,
+    rates,
     openEditor,
     closeEditor,
     handleOpenChange,
@@ -79,6 +81,7 @@ export function AdminEditCategoryAction({
               idPrefix={`category-edit-${category.id}`}
             />
             <CategoryTaxSection categoryId={category.id} gst={category.gst} />
+            <CategoryRateImpactNotice rates={rates} disabled={isPending} />
             {error ? (
               <p role="alert" className={styles.errorMessage}>
                 {error}

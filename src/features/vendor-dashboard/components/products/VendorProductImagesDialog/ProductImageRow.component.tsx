@@ -17,6 +17,8 @@ interface ProductImageRowProps {
   variants: ProductVariant[];
   productId: string;
   busyId: string | null;
+  /** The listing's only image, which cannot be removed while it is on sale. */
+  keepsLast?: boolean;
   onReplaceImage: (imageId: string, url: string) => void;
   onDeleteImage: (imageId: string) => void;
   onSetPrimary: (imageId: string) => void;
@@ -29,6 +31,7 @@ export function ProductImageRow(props: ProductImageRowProps) {
     variants,
     productId,
     busyId,
+    keepsLast = false,
     onReplaceImage,
     onDeleteImage,
     onSetPrimary,
@@ -95,7 +98,7 @@ export function ProductImageRow(props: ProductImageRowProps) {
             type="button"
             className={productImageRowStyles.actionsSpacer}
             aria-label={LABELS.deleteImage}
-            disabled={isBusy}
+            disabled={isBusy || keepsLast}
             onClick={handleDelete}
           >
             <Trash2 aria-hidden />

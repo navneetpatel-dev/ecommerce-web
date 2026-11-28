@@ -19,6 +19,7 @@ import { getBlogPost } from "@/features/content/constants/site/siteContent";
 const MAINTENANCE_EXEMPT = [
   /^\/maintenance/,
   /^\/unsubscribe/,
+  /^\/stock-alerts/,
   /^\/admin/,
   /^\/vendor/,
   /^\/login/,

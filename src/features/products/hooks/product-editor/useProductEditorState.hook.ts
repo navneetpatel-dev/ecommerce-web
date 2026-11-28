@@ -39,22 +39,13 @@ export interface ProductEditorStateOptions {
   onSaved: () => void;
   /** Admin: the product is listed for a vendor chosen in the form. */
   requireVendor?: boolean;
-  /** Super Admin: the vendor may be left empty to create the platform's own product. */
-  allowPlatformProduct?: boolean;
 }
 
 const MIN_REASON = ADMIN_NOTE_LIMITS.MIN;
 
 /** State and submit logic of the product editor, shared by the vendor and admin product pages. */
 export function useProductEditorState(options: ProductEditorStateOptions) {
-  const {
-    mode,
-    editId,
-    close,
-    onSaved,
-    requireVendor = false,
-    allowPlatformProduct = false,
-  } = options;
+  const { mode, editId, close, onSaved, requireVendor = false } = options;
 
   const [values, setValues] = useState<ProductListingFormValues>(() =>
     emptyProductListingValues(),
@@ -152,7 +143,7 @@ export function useProductEditorState(options: ProductEditorStateOptions) {
     clearMessages();
     const editing = mode === "edit" && Boolean(editId);
 
-    if (!editing && requireVendor && !vendorId && !allowPlatformProduct) {
+    if (!editing && requireVendor && !vendorId) {
       setSubmitError(LABELS.listForVendorRequired);
       return;
     }

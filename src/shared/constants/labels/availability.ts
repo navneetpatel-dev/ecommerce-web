@@ -5,6 +5,14 @@ export const availabilityLabels = {
   cartSetQuantityTo: "Set to {count}",
   unavailableReasonProductUnpublished: "No longer available",
   unavailableReasonVendorUnavailable: "Shop unavailable",
+  unavailableReasonNotOnSale: "Not on sale right now",
+  unavailableReasonRemoved: "No longer sold",
+  aboveMrpAll:
+    "Above MRP: not on sale. Raise the MRP (it includes GST) or lower the price.",
+  aboveMrpSome: "{count} option(s) above MRP: not on sale.",
+  aboveMrpVariant: "Above MRP with GST: not on sale.",
+  aboveMrpImpact:
+    "Saving this puts {variants} option(s) on {products} listing(s) from {vendors} vendor(s) above their MRP. They stop selling until the vendor corrects the price or MRP.",
   unavailableGeneric: "Unavailable",
 
   // Cart / checkout unavailability

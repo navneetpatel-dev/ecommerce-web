@@ -3,12 +3,18 @@
 import { Save, Trash2 } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
-import type { VariantDraft } from "../../../utils/product-editor/variantDrafts";
+import type {
+  VariantDraft,
+  VariantDraftErrors,
+} from "../../../utils/product-editor/variantDrafts";
+import { productStatusNoteStyles } from "../../../styles/status/productStatusNote.styles";
 import { VariantCard } from "./VariantCard.component";
 import { VariantFields } from "./VariantFields.component";
 
 interface ExistingVariantRowProps {
   draft: VariantDraft;
+  errors?: VariantDraftErrors;
+  aboveMrp?: boolean;
   busy: boolean;
   priceLocked: boolean;
   canDelete: boolean;
@@ -20,6 +26,8 @@ interface ExistingVariantRowProps {
 /** A saved variant: SKU fixed, everything else editable, saved row by row. */
 export function ExistingVariantRow({
   draft,
+  errors,
+  aboveMrp,
   busy,
   priceLocked,
   canDelete,
@@ -60,8 +68,14 @@ export function ExistingVariantRow({
   );
   return (
     <VariantCard title={draft.sku} actions={actions}>
+      {aboveMrp ? (
+        <p className={productStatusNoteStyles.rejection}>
+          {LABELS.aboveMrpVariant}
+        </p>
+      ) : null}
       <VariantFields
         draft={draft}
+        errors={errors}
         disabled={busy}
         skuLocked
         priceLocked={priceLocked}
