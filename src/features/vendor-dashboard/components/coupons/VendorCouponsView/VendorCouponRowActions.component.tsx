@@ -1,59 +1,59 @@
 "use client";
 
-import { BarChart2, Pause, Play } from "lucide-react";
+import { BarChart2, Eye, Pause, Pencil, Play } from "lucide-react";
 import { RowActionButton } from "@/shared/components/DataTable/RowActions/RowActionButton.component";
-import {
-  AdminConfirmAction,
-  EditCouponAction,
-} from "@/features/admin-dashboard";
-import { couponsApi } from "@/features/coupons";
+import { AdminConfirmAction } from "@/features/admin-dashboard";
 import { LABELS } from "@/shared/constants/labels";
 import { COUPON_STATUS } from "@/shared/constants/statuses";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import type { Coupon } from "@/shared/api/types";
-import { vendorCouponKeys } from "../../../api/coupons/vendor-coupons.queries";
-
-const saveVendorCoupon = (id: string, body: unknown) =>
-  couponsApi.vendorUpdate(id, body);
 
 interface VendorCouponRowActionsProps {
-  coupon: Coupon;
-  vendorId: string | null;
-  onOpenAnalytics: (id: string) => void;
+  row: Coupon;
   onUpdateStatus: (coupon: Coupon, status: Coupon["status"]) => Promise<void>;
+  onAnalytics: (id: string | null) => void;
+  onDetail: (coupon: Coupon | null) => void;
+  onEdit: (coupon: Coupon | null) => void;
 }
 
-/** Analytics, edit and status changes for one vendor coupon row. */
+/** View, analytics, edit and status changes for one vendor coupon row. */
 export function VendorCouponRowActions({
-  coupon,
-  vendorId,
-  onOpenAnalytics,
+  row,
   onUpdateStatus,
+  onAnalytics,
+  onDetail,
+  onEdit,
 }: VendorCouponRowActionsProps) {
   const setStatus = (status: Coupon["status"]) => () =>
-    onUpdateStatus(coupon, status);
-  const openAnalytics = () => onOpenAnalytics(coupon.id);
+    onUpdateStatus(row, status);
+  const openAnalytics = () => onAnalytics(row.id);
+  const openDetail = () => onDetail(row);
+  const openEdit = () => onEdit(row);
   const confirmBody = (template: string) =>
-    formatLabel(template, { code: coupon.code });
+    formatLabel(template, { code: row.code });
 
   return (
     <>
+      <RowActionButton
+        kind="view"
+        icon={Eye}
+        label={LABELS.viewCoupon}
+        onClick={openDetail}
+      />
       <RowActionButton
         icon={BarChart2}
         label={LABELS.viewAnalytics}
         onClick={openAnalytics}
       />
-      {coupon.status !== COUPON_STATUS.ARCHIVED &&
-      coupon.status !== COUPON_STATUS.REJECTED ? (
-        <EditCouponAction
-          coupon={coupon}
-          save={saveVendorCoupon}
-          invalidateKey={vendorCouponKeys.all}
-          forceVendorId={vendorId}
-          vendorMode
+      {row.status !== COUPON_STATUS.ARCHIVED ? (
+        <RowActionButton
+          kind="edit"
+          icon={Pencil}
+          label={LABELS.editCoupon}
+          onClick={openEdit}
         />
       ) : null}
-      {coupon.status === COUPON_STATUS.ACTIVE ? (
+      {row.status === COUPON_STATUS.ACTIVE ? (
         <AdminConfirmAction
           label={LABELS.pauseCoupon}
           icon={Pause}
@@ -63,8 +63,7 @@ export function VendorCouponRowActions({
           onConfirm={setStatus(COUPON_STATUS.PAUSED)}
         />
       ) : null}
-      {coupon.status === COUPON_STATUS.PAUSED ||
-      coupon.status === COUPON_STATUS.DRAFT ? (
+      {row.status === COUPON_STATUS.PAUSED ? (
         <AdminConfirmAction
           label={LABELS.activateCoupon}
           icon={Play}
@@ -75,7 +74,7 @@ export function VendorCouponRowActions({
           onConfirm={setStatus(COUPON_STATUS.ACTIVE)}
         />
       ) : null}
-      {coupon.status !== COUPON_STATUS.ARCHIVED ? (
+      {row.status !== COUPON_STATUS.ARCHIVED ? (
         <AdminConfirmAction
           label={LABELS.archiveCoupon}
           tone="archive"

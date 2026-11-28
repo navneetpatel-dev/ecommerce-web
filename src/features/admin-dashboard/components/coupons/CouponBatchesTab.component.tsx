@@ -13,7 +13,12 @@ import { buildCouponBatchColumns } from "../../constants/coupons/couponBatchColu
 import { CouponBatchDetailDialog } from "./CouponsPageHeader/CouponBatchDetailDialog.component";
 import { couponsPageHeaderStyles as styles } from "../../styles/coupons/couponsPageHeader.styles";
 
-export function CouponBatchesTab() {
+interface CouponBatchesTabProps {
+  /** Lists one batch's codes among the platform coupons. */
+  onShowBatch?: (batch: { id: string; name: string } | null) => void;
+}
+
+export function CouponBatchesTab({ onShowBatch }: CouponBatchesTabProps) {
   const [batchDetail, setBatchDetail] = useState<CouponBatch | null>(null);
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebouncedValue(search.trim(), 350);
@@ -73,6 +78,7 @@ export function CouponBatchesTab() {
       <CouponBatchDetailDialog
         batchDetail={batchDetail}
         onClose={closeBatchDetail}
+        onShowBatch={onShowBatch}
       />
     </section>
   );

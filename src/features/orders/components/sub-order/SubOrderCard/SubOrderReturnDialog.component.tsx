@@ -2,7 +2,6 @@ import type { ChangeEvent } from "react";
 import type { OrderItem } from "@/shared/api/types";
 import { Button } from "@/shared/components/ui/button";
 import { DiscardChangesDialog } from "@/shared/components/dialogs/DiscardChangesDialog.component";
-import { Input } from "@/shared/components/ui/input";
 import {
   Dialog,
   DialogContent,
@@ -12,27 +11,14 @@ import {
   DialogTitle,
 } from "@/shared/components/ui/dialog";
 import { FormError } from "@/shared/components/forms/FormError.component";
-import { FileUpload } from "@/shared/components/FileUpload";
-import { FormFieldFrame, FormSection } from "@/shared/components/forms";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/shared/components/ui/select";
 import { LABELS } from "@/shared/constants/labels";
-import {
-  UPLOAD_ENTITY,
-  UPLOAD_PURPOSE,
-} from "@/shared/constants/uploads/uploads";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
-import {
-  REASON_CODES,
-  type ReturnQuantityField,
-  type ReturnReasonCode,
+import type {
+  ReturnQuantityField,
+  ReturnReasonCode,
 } from "../../../hooks/sub-order/useSubOrderReturn.hook";
-import { SubOrderReturnQuantityField } from "./SubOrderReturnQuantityField.component";
+import { SubOrderReturnFields } from "./SubOrderReturnFields.component";
+import { SubOrderReturnEstimate } from "./SubOrderReturnEstimate.component";
 import { SUB_ORDER_CARD_STYLES } from "../../../styles/sub-order/subOrderCard.styles";
 
 interface SubOrderReturnDialogProps {
@@ -99,69 +85,26 @@ export function SubOrderReturnDialog({
             </DialogDescription>
           </DialogHeader>
           <div className={SUB_ORDER_CARD_STYLES.returnDialogBody}>
-            <FormSection
-              title={LABELS.returnRequestFormSection}
-              hint={LABELS.returnRequestFormSectionHint}
-              columns={1}
-            >
-              <FormFieldFrame
-                label={LABELS.returnResolutionLabel}
-                htmlFor="return-type"
-              >
-                <Select value={returnType} onValueChange={onReturnTypeSelect}>
-                  <SelectTrigger id="return-type">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="REFUND">
-                      {LABELS.returnTypeRefund}
-                    </SelectItem>
-                    <SelectItem value="EXCHANGE">
-                      {LABELS.returnTypeExchange}
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-              </FormFieldFrame>
-              <SubOrderReturnQuantityField field={quantityField} />
-              <FormFieldFrame
-                label={LABELS.returnReasonLabel}
-                htmlFor="return-reason-code"
-              >
-                <Select value={reasonCode} onValueChange={onReasonCodeSelect}>
-                  <SelectTrigger id="return-reason-code">
-                    <SelectValue placeholder={LABELS.returnReasonLabel} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {REASON_CODES.map((code) => (
-                      <SelectItem key={code.value} value={code.value}>
-                        {code.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </FormFieldFrame>
-              <FormFieldFrame
-                label={LABELS.returnDetailsLabel}
-                htmlFor="return-reason"
-              >
-                <Input
-                  id="return-reason"
-                  value={reason}
-                  onChange={onReasonInput}
-                  placeholder={LABELS.returnDetailsPlaceholder}
-                />
-              </FormFieldFrame>
-              <FileUpload
-                mode="multiple"
-                entityType={UPLOAD_ENTITY.RETURNS}
-                entityId={draftUploadId}
-                purpose={UPLOAD_PURPOSE.PHOTOS}
-                accept="image/png,image/jpeg,image/webp"
-                valueUrls={photoUrls}
-                onUploaded={onPhotoUrlsChange}
-                label={LABELS.returnPhotosLabel}
-              />
-            </FormSection>
+            <SubOrderReturnFields
+              quantityField={quantityField}
+              reasonCode={reasonCode}
+              reason={reason}
+              returnType={returnType}
+              photoUrls={photoUrls}
+              draftUploadId={draftUploadId}
+              onReasonCodeSelect={onReasonCodeSelect}
+              onReasonInput={onReasonInput}
+              onReturnTypeSelect={onReturnTypeSelect}
+              onPhotoUrlsChange={onPhotoUrlsChange}
+            />
+            <SubOrderReturnEstimate
+              orderItemId={returnTarget?.id ?? null}
+              returnQuantity={
+                quantityField?.value ?? returnTarget?.quantity ?? 1
+              }
+              reasonCode={reasonCode}
+              enabled={returnType === "REFUND"}
+            />
             <FormError error={error} fallback={LABELS.couldNotSubmitReturn} />
             {isSuccess ? (
               <p className={SUB_ORDER_CARD_STYLES.returnSuccessText}>

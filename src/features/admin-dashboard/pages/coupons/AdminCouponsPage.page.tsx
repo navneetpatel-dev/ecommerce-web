@@ -8,6 +8,7 @@ import { CouponsPageHeader } from "../../components/coupons/CouponsPageHeader.co
 import { CouponsTable } from "../../components/coupons/CouponsTable.component";
 import { CouponsFilters } from "../../components/coupons/CouponsFilters.component";
 import { CouponBatchesTab } from "../../components/coupons/CouponBatchesTab.component";
+import { CouponBatchFilterChip } from "../../components/coupons/CouponDialogs/CouponBatchFilterChip.component";
 import {
   Tabs,
   TabsContent,
@@ -61,6 +62,12 @@ export function AdminCouponsPage() {
 
         <TabsContent value="platform" className={adminPagesStyles.tabContent}>
           <CouponsFilters {...page.filters} />
+          {page.batchFilter ? (
+            <CouponBatchFilterChip
+              batchName={page.batchFilter.name}
+              onClear={page.clearBatchFilter}
+            />
+          ) : null}
           <CouponsTable
             coupons={page.coupons}
             loading={page.isLoading}
@@ -78,7 +85,7 @@ export function AdminCouponsPage() {
           />
         </TabsContent>
         <TabsContent value="batches" className={adminPagesStyles.tabContent}>
-          <CouponBatchesTab />
+          <CouponBatchesTab onShowBatch={page.showBatch} />
         </TabsContent>
       </Tabs>
     </div>

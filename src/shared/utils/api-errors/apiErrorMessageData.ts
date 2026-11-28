@@ -28,8 +28,8 @@ export const API_ERROR_LABEL_KEYS: Partial<
   COUPON_INVALID: "couponInvalid",
   COUPON_NOT_APPLICABLE: "couponNotApplicable",
   COUPON_SCOPE: "couponNotApplicable",
-  COUPON_RESTRICTION: "couponNotApplicable",
-  COUPON_MIN_ORDER: "couponMinOrder",
+  COUPON_RESTRICTION: "couponNotEligible",
+  // COUPON_MIN_ORDER is left out on purpose: the server says how much more to add.
   COUPON_STACK: "couponStackConflict",
   COUPON_PRIORITY: "couponPriorityConflict",
   COUPON_CONFIG_INVALID: "couponInvalid",

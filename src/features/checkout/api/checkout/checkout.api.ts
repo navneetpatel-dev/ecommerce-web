@@ -50,8 +50,6 @@ export const checkoutApi = {
   getCheckoutQuote: (body: {
     addressId: string;
     shippingMethodByVendor: Record<string, string>;
-    couponCode?: string | null;
-    /** Full stacked-coupon set — sent alongside `couponCode` for back-compat. */
     couponCodes?: string[];
     walletAmountToUse?: number;
     /** Drives the gift-wrap fee line in the live quote. */
@@ -61,7 +59,6 @@ export const checkoutApi = {
   placeOrder: (body: {
     addressId: string;
     paymentMethod: string;
-    couponCode?: string | null;
     couponCodes?: string[];
     shippingMethodByVendor: Record<string, string>;
     walletAmountToUse?: number;

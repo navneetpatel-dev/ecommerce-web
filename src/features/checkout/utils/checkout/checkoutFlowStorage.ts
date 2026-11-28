@@ -6,8 +6,6 @@ export interface StoredCheckoutFlow {
   step: 1 | 2 | 3 | 4;
   addressId: string | null;
   shippingMethodByVendor: Record<string, ShippingMethod>;
-  appliedCouponCode: string | null;
-  manualCouponOverride: boolean;
   paymentMethod: string | null;
   walletAmountToUse: number;
   giftWrap: boolean;
@@ -71,8 +69,6 @@ export function pickCheckoutFlow(
     step: state.step,
     addressId: state.addressId,
     shippingMethodByVendor: state.shippingMethodByVendor,
-    appliedCouponCode: state.appliedCouponCode,
-    manualCouponOverride: state.manualCouponOverride,
     paymentMethod: state.paymentMethod,
     walletAmountToUse: state.walletAmountToUse,
     giftWrap: state.giftWrap,

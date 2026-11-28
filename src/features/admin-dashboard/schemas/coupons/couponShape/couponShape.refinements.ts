@@ -29,7 +29,20 @@ type RefinementCtx = z.RefinementCtx;
 export function refineCouponValueAndDates(
   data: CouponFormValues,
   ctx: RefinementCtx,
+  opts: { endMustBeFuture?: boolean } = { endMustBeFuture: true },
 ) {
+  if (
+    TYPES_REQUIRING_VALUE.has(data.type) &&
+    data.value != null &&
+    data.value <= 0
+  ) {
+    ctx.addIssue({
+      code: "custom",
+      path: ["value"],
+      message: LABELS.couponValuePositive,
+    });
+  }
+
   if (
     TYPES_REQUIRING_VALUE.has(data.type) &&
     (data.value == null || Number.isNaN(data.value))
@@ -101,6 +114,14 @@ export function refineCouponValueAndDates(
       code: "custom",
       path: ["endDate"],
       message: LABELS.couponEndAfterStart,
+    });
+  }
+
+  if (opts.endMustBeFuture && !Number.isNaN(end) && end <= Date.now()) {
+    ctx.addIssue({
+      code: "custom",
+      path: ["endDate"],
+      message: LABELS.couponEndInFuture,
     });
   }
 

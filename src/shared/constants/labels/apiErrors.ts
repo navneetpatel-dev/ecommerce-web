@@ -15,7 +15,9 @@ export const apiErrorLabels = {
   couponStackConflict:
     "This coupon cannot be combined with others in your cart.",
   couponPriorityConflict: "Another coupon already applies to these items.",
-  couponDuplicateScope: "A coupon with this scope already exists.",
+  couponDuplicateScope:
+    "Only one platform coupon and one coupon per seller can be used together.",
+  couponNotEligible: "You are not eligible for this coupon.",
   walletInsufficientBalance: "Not enough wallet points for this order.",
   walletInvalidAmount: "Enter a valid wallet amount.",
   walletRechargeDisabled: "Wallet recharge is not available right now.",

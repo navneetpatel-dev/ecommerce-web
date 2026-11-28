@@ -105,6 +105,7 @@ export function BulkGenerateDialog({ open, setOpen }: BulkGenerateDialogProps) {
               isPending={false}
               hideSubmit
               hideCodeField
+              bulkTemplate
             />
             {bulk.errorMessage ? (
               <p className={styles.errorMessage} role="alert">

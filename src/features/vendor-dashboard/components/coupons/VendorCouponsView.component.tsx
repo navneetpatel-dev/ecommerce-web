@@ -4,17 +4,19 @@ import {
   DataTable,
   type DataTablePaginationProps,
 } from "@/shared/components/DataTable";
-import { type CouponFormInput } from "@/features/admin-dashboard";
+import {
+  CouponDetailDialog,
+  CouponsFilters,
+  EditCouponDialog,
+  type CouponsFiltersProps,
+  type CouponFormInput,
+} from "@/features/admin-dashboard";
 import { LABELS } from "@/shared/constants/labels";
 import type { UseFormReturn } from "react-hook-form";
 import type { Coupon, CouponAnalytics } from "@/shared/api/types";
 import { VendorCouponRowActions } from "./VendorCouponsView/VendorCouponRowActions.component";
 import { CouponAnalyticsDialog } from "./VendorCouponsView/CouponAnalyticsDialog.component";
 import { CouponsHeaderSection } from "./VendorCouponsView/CouponsHeaderSection.component";
-import {
-  CouponsFilters,
-  type CouponsFiltersProps,
-} from "@/features/admin-dashboard";
 import { buildVendorCouponColumns } from "./VendorCouponsView/vendorCouponColumns.component";
 import { vendorCouponsViewStyles } from "../../styles/coupons/vendorCouponsView.styles";
 
@@ -36,6 +38,11 @@ interface VendorCouponsViewProps {
   analyticsLoading: boolean;
   absorbedDiscountTotal?: number | null;
   onUpdateStatus: (coupon: Coupon, status: Coupon["status"]) => Promise<void>;
+  detailCoupon: Coupon | null;
+  setDetailCoupon: (coupon: Coupon | null) => void;
+  editCoupon: Coupon | null;
+  setEditCoupon: (coupon: Coupon | null) => void;
+  saveCoupon: (values: CouponFormInput, coupon: Coupon) => Promise<unknown>;
 }
 
 /** Vendor coupons screen: header + table with status actions + analytics. */
@@ -58,16 +65,23 @@ export function VendorCouponsView(props: VendorCouponsViewProps) {
     analyticsLoading,
     absorbedDiscountTotal = null,
     onUpdateStatus,
+    detailCoupon,
+    setDetailCoupon,
+    editCoupon,
+    setEditCoupon,
+    saveCoupon,
   } = props;
-
+  const closeDetail = () => setDetailCoupon(null);
+  const closeEdit = () => setEditCoupon(null);
   const columns = buildVendorCouponColumns();
 
   const renderActions = (row: Coupon) => (
     <VendorCouponRowActions
-      coupon={row}
-      vendorId={vendorId}
-      onOpenAnalytics={setAnalyticsId}
+      row={row}
       onUpdateStatus={onUpdateStatus}
+      onAnalytics={setAnalyticsId}
+      onDetail={setDetailCoupon}
+      onEdit={setEditCoupon}
     />
   );
 
@@ -95,10 +109,20 @@ export function VendorCouponsView(props: VendorCouponsViewProps) {
         getRowId={(row) => row.id}
         pagination={pagination}
         actions={renderActions}
-        fetchRowDetail={async (row) =>
-          row as unknown as Record<string, unknown>
-        }
+        rowDetails={false}
       />
+
+      <CouponDetailDialog coupon={detailCoupon} onClose={closeDetail} />
+      {editCoupon ? (
+        <EditCouponDialog
+          key={editCoupon.id}
+          coupon={editCoupon}
+          onClose={closeEdit}
+          onSave={saveCoupon}
+          vendorMode
+          vendorId={vendorId}
+        />
+      ) : null}
 
       <CouponAnalyticsDialog
         analyticsId={analyticsId}

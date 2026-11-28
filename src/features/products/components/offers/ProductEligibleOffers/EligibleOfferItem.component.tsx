@@ -3,46 +3,16 @@
 import { useState } from "react";
 import { Check, Copy } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
-import { formatInr } from "@/shared/utils/formatting/orderFormat";
+import { formatLabel } from "@/shared/utils/formatting/formatLabel";
+import { offerDetailText, offerDisplayName } from "@/features/coupons";
+import type { EligibleCoupon } from "@/shared/api/types";
 import { productEligibleOffersStyles } from "../../../styles/offers/productEligibleOffers.styles";
 
-export interface EligibleOffer {
-  code: string;
-  name?: string;
-  type: string;
-  value?: number | null;
-  discount: number;
-  cashbackAmount?: number;
-  minOrderValue?: number | null;
-  maxDiscountCap?: number | null;
-}
-
 interface EligibleOfferItemProps {
-  offer: EligibleOffer;
+  offer: EligibleCoupon;
 }
 
-function offerDetailLabel(offer: EligibleOffer): string {
-  if (offer.discount > 0) {
-    const saveText = `Save ${formatInr(offer.discount)}`;
-    if (offer.minOrderValue && offer.minOrderValue > 0) {
-      return `${saveText} (Min order ${formatInr(offer.minOrderValue)})`;
-    }
-    return saveText;
-  }
-  if (offer.cashbackAmount && offer.cashbackAmount > 0) {
-    const cbText = `${formatInr(offer.cashbackAmount)} cashback`;
-    if (offer.minOrderValue && offer.minOrderValue > 0) {
-      return `${cbText} (Min order ${formatInr(offer.minOrderValue)})`;
-    }
-    return cbText;
-  }
-  if (offer.type === "FREE_SHIPPING") return LABELS.couponTypeFreeShipping;
-  if (offer.minOrderValue && offer.minOrderValue > 0) {
-    return `On orders above ${formatInr(offer.minOrderValue)}`;
-  }
-  return LABELS.offersAtCheckout;
-}
-
+/** One offer: the code to copy, its name, and what it gives. */
 export function EligibleOfferItem({ offer }: EligibleOfferItemProps) {
   const [copied, setCopied] = useState(false);
 
@@ -64,30 +34,44 @@ export function EligibleOfferItem({ offer }: EligibleOfferItemProps) {
         <button
           type="button"
           onClick={handleCopyCode}
-          title={copied ? "Copied to clipboard!" : `Copy code ${offer.code}`}
+          title={
+            copied
+              ? LABELS.offerCodeCopiedTitle
+              : formatLabel(LABELS.offerCopyCodeTitle, { code: offer.code })
+          }
           className={productEligibleOffersStyles.offerCodeBadge}
-          aria-label={copied ? "Code copied" : `Copy coupon code ${offer.code}`}
+          aria-label={
+            copied
+              ? LABELS.offerCodeCopied
+              : formatLabel(LABELS.offerCopyCodeAria, { code: offer.code })
+          }
         >
           {copied ? (
             <>
-              <Check className="size-3 text-emerald-600" aria-hidden />
-              <span>COPIED</span>
+              <Check
+                className={productEligibleOffersStyles.copiedIcon}
+                aria-hidden
+              />
+              <span>{LABELS.offerCopiedBadge}</span>
             </>
           ) : (
             <>
               <span>{offer.code}</span>
-              <Copy className="size-3 opacity-60" aria-hidden />
+              <Copy
+                className={productEligibleOffersStyles.copyIcon}
+                aria-hidden
+              />
             </>
           )}
         </button>
-        {offer.name && offer.name !== offer.code ? (
+        {offerDisplayName(offer) !== offer.code ? (
           <span className={productEligibleOffersStyles.offerName}>
-            {offer.name}
+            {offerDisplayName(offer)}
           </span>
         ) : null}
       </div>
       <span className={productEligibleOffersStyles.offerDetail}>
-        {offerDetailLabel(offer)}
+        {offerDetailText(offer)}
       </span>
     </li>
   );

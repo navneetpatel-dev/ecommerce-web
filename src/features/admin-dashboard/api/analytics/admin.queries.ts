@@ -3,6 +3,15 @@ import { adminApi } from "./admin.api";
 import { vendorsApi } from "@/features/vendors";
 import { DEFAULT_PAGE_LIMIT } from "@/shared/constants/pagination/pagination";
 
+export type AdminCouponFilters = {
+  search?: string;
+  status?: string;
+  vendorId?: string;
+  type?: string;
+  batchId?: string;
+  excludeBatches?: boolean;
+};
+
 export const adminKeys = {
   all: ["admin"] as const,
   dashboard: () => [...adminKeys.all, "dashboard"] as const,
@@ -21,7 +30,7 @@ export const adminKeys = {
       page: number,
       limit: number,
       vendorScoped?: boolean,
-      filters?: { search?: string; status?: string; vendorId?: string },
+      filters?: AdminCouponFilters,
     ) =>
       [...adminKeys.coupons.all, page, limit, vendorScoped, filters] as const,
   },
@@ -64,7 +73,7 @@ export function useAdminCoupons(
   page = 1,
   limit = DEFAULT_PAGE_LIMIT,
   vendorScoped?: boolean,
-  filters?: { search?: string; status?: string; vendorId?: string },
+  filters?: AdminCouponFilters,
   options?: { enabled?: boolean },
 ) {
   return useQuery({

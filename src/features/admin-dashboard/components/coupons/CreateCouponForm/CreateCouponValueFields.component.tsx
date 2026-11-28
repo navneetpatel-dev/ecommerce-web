@@ -28,29 +28,31 @@ export function CreateCouponValueFields({
   return (
     <FormSection title={LABELS.couponSectionValue} columns={1}>
       <div className={createCouponFormStyles.gridSm2}>
-        <FormFieldFrame
-          label={LABELS.couponValue}
-          hint={LABELS.couponValueGstHint}
-          required={needsValue}
-          error={showError("value")}
-        >
-          <ControlledNumberInput
-            form={form}
-            name="value"
-            min={0}
-            max={type === "PERCENTAGE" || type === "TIERED" ? 100 : undefined}
-            step={1}
-            suffix={
-              type === "PERCENTAGE" || type === "TIERED" ? "%" : undefined
-            }
-            prefix={
-              type === "FLAT" || type === "CASHBACK" || type === "BUNDLE"
-                ? CURRENCY_SYMBOL
-                : undefined
-            }
-            error={hasError("value")}
-          />
-        </FormFieldFrame>
+        {needsValue ? (
+          <FormFieldFrame
+            label={LABELS.couponValue}
+            hint={LABELS.couponValueGstHint}
+            required
+            error={showError("value")}
+          >
+            <ControlledNumberInput
+              form={form}
+              name="value"
+              min={0}
+              max={type === "PERCENTAGE" || type === "TIERED" ? 100 : undefined}
+              step={1}
+              suffix={
+                type === "PERCENTAGE" || type === "TIERED" ? "%" : undefined
+              }
+              prefix={
+                type === "FLAT" || type === "CASHBACK" || type === "BUNDLE"
+                  ? CURRENCY_SYMBOL
+                  : undefined
+              }
+              error={hasError("value")}
+            />
+          </FormFieldFrame>
+        ) : null}
         <FormFieldFrame
           label={LABELS.maxDiscountCap}
           error={showError("maxDiscountCap")}
@@ -58,7 +60,7 @@ export function CreateCouponValueFields({
           <ControlledNumberInput
             form={form}
             name="maxDiscountCap"
-            min={0}
+            min={1}
             step={10}
             prefix={CURRENCY_SYMBOL}
             error={hasError("maxDiscountCap")}

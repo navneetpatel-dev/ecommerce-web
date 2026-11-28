@@ -8,8 +8,6 @@ function selection() {
     step: s.step,
     addressId: s.addressId,
     shippingMethodByVendor: s.shippingMethodByVendor,
-    appliedCouponCode: s.appliedCouponCode,
-    manualCouponOverride: s.manualCouponOverride,
     paymentMethod: s.paymentMethod,
     walletAmountToUse: s.walletAmountToUse,
     giftWrap: s.giftWrap,
@@ -23,7 +21,6 @@ function selectEverything() {
   s.setStep(4);
   s.setAddress("address-1");
   s.setShippingMethod("vendor-1", "EXPRESS");
-  s.setCouponCode("SAVE10", { manual: true });
   s.setPaymentMethod("wallet");
   s.setWalletAmountToUse(250);
   s.setGiftWrap(true);
@@ -34,8 +31,6 @@ const FRESH = {
   step: 1,
   addressId: null,
   shippingMethodByVendor: {},
-  appliedCouponCode: null,
-  manualCouponOverride: false,
   paymentMethod: null,
   walletAmountToUse: 0,
   giftWrap: false,
@@ -113,7 +108,6 @@ describe("checkout store session", () => {
     useCheckoutStore.getState().syncCartSignature("line-a");
 
     expect(useCheckoutStore.getState().step).toBe(4);
-    expect(useCheckoutStore.getState().appliedCouponCode).toBe("SAVE10");
   });
 
   it("prunes shipping methods for vendors that left the basket", () => {

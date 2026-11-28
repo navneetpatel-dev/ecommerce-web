@@ -1,5 +1,6 @@
 import { apiClient } from "@/shared/api/client/client";
 import {
+  buildSearchParams,
   unwrapPaginatedList,
   withQuery,
   type PaginatedList,
@@ -10,6 +11,7 @@ import type {
   Coupon,
   CouponAnalytics,
   CouponBatch,
+  CouponCustomerOption,
   BulkGenerateResult,
   CouponStatus,
 } from "@/shared/api/types";
@@ -21,6 +23,9 @@ export const adminCouponsApi = {
       status?: string;
       search?: string;
       vendorScoped?: boolean;
+      type?: string;
+      batchId?: string;
+      excludeBatches?: boolean;
     } = {},
   ): Promise<PaginatedList<Coupon>> => {
     const res = await apiClient.getWithResponse<Coupon[]>(
@@ -31,6 +36,9 @@ export const adminCouponsApi = {
         status: params.status,
         search: params.search,
         vendorScoped: params.vendorScoped,
+        type: params.type,
+        batchId: params.batchId,
+        excludeBatches: params.excludeBatches,
       }),
     );
     return unwrapPaginatedList(res);
@@ -40,8 +48,27 @@ export const adminCouponsApi = {
     apiClient.post<Coupon>(API.coupons.create, body),
   updateCoupon: (id: string, body: unknown) =>
     apiClient.patch<Coupon>(API.coupons.detail(id), body),
-  updateCouponStatus: (id: string, status: CouponStatus) =>
-    apiClient.patch<Coupon>(API.coupons.status(id), { status }),
+  updateCouponStatus: (id: string, status: CouponStatus, note?: string) =>
+    apiClient.patch<Coupon>(API.coupons.status(id), { status, note }),
+  /** Customers for the "specific customers" picker; needs only coupon access. */
+  couponCustomerOptions: async (
+    params: PaginationQuery & { search?: string } = {},
+  ): Promise<PaginatedList<CouponCustomerOption>> =>
+    unwrapPaginatedList(
+      await apiClient.getWithResponse<CouponCustomerOption[]>(
+        API.coupons.customerOptions(
+          buildSearchParams({
+            page: params.page,
+            limit: params.limit,
+            search: params.search,
+          }).toString(),
+        ),
+      ),
+    ),
+  updateBatchStatus: (id: string, status: "ACTIVE" | "PAUSED") =>
+    apiClient.patch<{ updated: number }>(API.coupons.batchStatus(id), {
+      status,
+    }),
   couponAnalytics: (id: string) =>
     apiClient.get<CouponAnalytics>(API.coupons.analytics(id)),
   bulkGenerateCoupons: (body: unknown) =>

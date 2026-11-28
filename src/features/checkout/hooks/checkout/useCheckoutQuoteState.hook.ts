@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { ApiError } from "@/shared/types/apiError.types";
 import { useCheckoutQuote } from "../../api/checkout/checkout.queries";
 import { useCheckoutStore } from "../../store/checkout.store";
 import { toApiPaymentMethod } from "../../utils/checkout/placeOrderPayload.utils";
@@ -8,7 +10,6 @@ import { useCheckoutCacheActions } from "./useCheckoutCacheActions.hook";
 interface UseCheckoutQuoteStateInput {
   addressId: string | null;
   shippingMethodByVendor: Record<string, string>;
-  appliedCouponCode: string | null;
   couponCodes: string[] | undefined;
   walletAmountToUse: number;
   giftWrap: boolean;
@@ -18,7 +19,6 @@ interface UseCheckoutQuoteStateInput {
 export function useCheckoutQuoteState({
   addressId,
   shippingMethodByVendor,
-  appliedCouponCode,
   couponCodes,
   walletAmountToUse,
   giftWrap,
@@ -28,7 +28,6 @@ export function useCheckoutQuoteState({
   const quoteInput = {
     addressId,
     shippingMethodByVendor,
-    couponCode: appliedCouponCode,
     couponCodes,
     walletAmountToUse,
     giftWrap,
@@ -44,6 +43,15 @@ export function useCheckoutQuoteState({
   } = useCheckoutQuote(quoteInput);
 
   const cacheActions = useCheckoutCacheActions(quoteInput);
+  const { refetchCart } = cacheActions;
+
+  // A coupon stopped working since the cart last loaded: reload it, which drops the code
+  // from the next quote and shows why on the page, instead of leaving checkout stuck.
+  const quoteCouponError =
+    quoteError instanceof ApiError && quoteError.code?.startsWith("COUPON_");
+  useEffect(() => {
+    if (quoteCouponError) void refetchCart();
+  }, [quoteCouponError, refetchCart]);
 
   return {
     quote,

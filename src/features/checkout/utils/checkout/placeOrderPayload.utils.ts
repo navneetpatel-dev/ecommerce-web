@@ -5,7 +5,6 @@ type PlaceOrderBody = Parameters<typeof checkoutApi.placeOrder>[0];
 interface BuildPlaceOrderPayloadInput {
   method: string;
   addressId: string;
-  appliedCouponCode: string | null;
   couponCodes: string[] | undefined;
   shippingMethodByVendor: Record<string, string>;
   walletAmountToUse: number;
@@ -27,7 +26,6 @@ export function toApiPaymentMethod(method: string): string {
 export function buildPlaceOrderPayload({
   method,
   addressId,
-  appliedCouponCode,
   couponCodes,
   shippingMethodByVendor,
   walletAmountToUse,
@@ -48,7 +46,6 @@ export function buildPlaceOrderPayload({
     payload: {
       addressId,
       paymentMethod: apiPaymentMethod,
-      couponCode: appliedCouponCode || undefined,
       couponCodes,
       shippingMethodByVendor,
       walletAmountToUse: apiWalletAmount,

@@ -3,3 +3,4 @@
 // imports subparts from this barrel (would be a circular module).
 export { CouponsAnalyticsDialog } from "./CouponsAnalyticsDialog.component";
 export { buildCouponColumns } from "./couponTableColumns.component";
+export { CouponStatusCell } from "./CouponStatusCell.component";

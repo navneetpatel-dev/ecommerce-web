@@ -4,9 +4,15 @@ import { DEFAULT_PAGE_LIMIT } from "@/shared/constants/pagination/pagination";
 import type { CouponFormInput } from "@/features/admin-dashboard";
 import { toCouponCreateBody } from "@/features/admin-dashboard";
 
+export type VendorCouponFilters = {
+  search?: string;
+  status?: string;
+  type?: string;
+};
+
 export const vendorCouponKeys = {
   all: ["vendor", "coupons"] as const,
-  list: (page: number, filters?: { search?: string; status?: string }) =>
+  list: (page: number, filters?: VendorCouponFilters) =>
     [...vendorCouponKeys.all, "list", page, filters] as const,
   analytics: (id: string) =>
     [...vendorCouponKeys.all, "analytics", id] as const,
@@ -16,7 +22,7 @@ export const vendorCouponKeys = {
 export function useVendorCoupons(
   page = 1,
   limit = DEFAULT_PAGE_LIMIT,
-  filters?: { search?: string; status?: string },
+  filters?: VendorCouponFilters,
 ) {
   return useQuery({
     queryKey: vendorCouponKeys.list(page, filters),

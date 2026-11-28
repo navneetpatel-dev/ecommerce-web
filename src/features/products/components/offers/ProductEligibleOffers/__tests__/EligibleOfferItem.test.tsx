@@ -17,6 +17,8 @@ describe("EligibleOfferItem", () => {
           type: "PERCENTAGE",
           discount: 250,
           minOrderValue: 1000,
+          cashbackAmount: 0,
+          priority: 0,
         }}
       />,
     );

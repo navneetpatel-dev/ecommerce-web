@@ -7,6 +7,10 @@ import type {
   ReportRunResult,
 } from "../../api/table/reportsEngine.api";
 import { formatReportCell } from "../../utils/table/formatReportCell";
+import {
+  reportColumnHeader,
+  visibleReportColumns,
+} from "../../utils/table/reportColumns";
 import { reportTableStyles as styles } from "../../styles/table/reportTable.styles";
 
 interface ReportTableProps {
@@ -29,19 +33,17 @@ export function ReportTable({
   onPageChange,
   onRetry,
 }: ReportTableProps) {
-  const filteredColumns =
-    result?.columns.filter((col) => shouldIncludeReportColumn(col)) ?? [];
+  const filteredColumns = visibleReportColumns(result?.columns ?? []).filter(
+    shouldIncludeReportColumn,
+  );
 
   const columns: DataTableColumn<Record<string, unknown>>[] =
-    filteredColumns.map((col: ReportColumnMeta) => {
-      const labelMap = LABELS as Record<string, string>;
-      return {
-        id: col.key,
-        header: labelMap[col.labelKey] ?? col.labelKey,
-        cell: (row: Record<string, unknown>) =>
-          formatReportCell(row[col.key], col.format, col.key),
-      };
-    });
+    filteredColumns.map((col: ReportColumnMeta) => ({
+      id: col.key,
+      header: reportColumnHeader(col),
+      cell: (row: Record<string, unknown>) =>
+        formatReportCell(row[col.key], col.format, col.key),
+    }));
 
   const pagination = result
     ? {

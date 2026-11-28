@@ -1,37 +1,42 @@
 "use client";
 
-import { useState, useCallback, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { useUrlTabState } from "@/shared/hooks/navigation/useUrlTabState.hook";
-import { useUrlFilterParams } from "@/shared/hooks/navigation/useUrlFilterParams.hook";
 import { useAdminCoupons } from "../../api/analytics/admin.queries";
 import { useCreateCoupon } from "./useCreateCoupon.hook";
 import { DEFAULT_PAGE_LIMIT } from "@/shared/constants/pagination/pagination";
-import { useDebouncedValue } from "@/shared/hooks/ui/use-debounce.hook";
+import { useAdminCouponFilters } from "./useAdminCouponFilters.hook";
 import type { CouponFormInput } from "../../schemas/coupons/coupons.schema";
 
 export type CouponsTab = "platform" | "vendor" | "batches";
 const COUPON_TABS: readonly CouponsTab[] = ["platform", "vendor", "batches"];
+/** The batch whose codes the list is limited to. */
+export type CouponBatchFilter = { id: string; name: string };
 
 export function useAdminCouponsPage() {
   const [page, setPage] = useState(1);
-  const urlFilters = useUrlFilterParams<"search" | "status" | "vendorId">({
-    search: ["q"],
-  });
-  const search = urlFilters.get("search");
-  const status = urlFilters.get("status");
-  const vendorId = urlFilters.get("vendorId");
-  const debouncedSearch = useDebouncedValue(search.trim(), 350);
+  const resetPage = () => setPage(1);
+  const listFilters = useAdminCouponFilters(resetPage);
+  const { search, status, type, vendorId } = listFilters.values;
+  const { debouncedSearch } = listFilters;
 
   const [tab, setTab] = useUrlTabState(COUPON_TABS, "platform");
   const vendorScoped = tab === "vendor";
+  const [batchFilter, setBatchFilter] = useState<CouponBatchFilter | null>(
+    null,
+  );
 
   const couponFilters = useMemo(
     () => ({
       search: debouncedSearch || undefined,
       status: status || undefined,
+      type: type || undefined,
       vendorId: vendorScoped && vendorId ? vendorId : undefined,
+      batchId: batchFilter?.id,
+      // Bulk codes would bury everything else: shown only for a chosen batch.
+      excludeBatches: !batchFilter && !vendorScoped,
     }),
-    [debouncedSearch, status, vendorScoped, vendorId],
+    [debouncedSearch, status, type, vendorScoped, vendorId, batchFilter],
   );
 
   const { data, isLoading } = useAdminCoupons(
@@ -56,43 +61,23 @@ export function useAdminCouponsPage() {
     setPage(1);
   };
 
-  const handleSearchChange = useCallback(
-    (value: string) => {
-      urlFilters.set("search")(value);
-      setPage(1);
-    },
-    [urlFilters],
-  );
-
-  const handleStatusChange = useCallback(
-    (value: string) => {
-      urlFilters.set("status")(value);
-      setPage(1);
-    },
-    [urlFilters],
-  );
-
-  const handleVendorChange = useCallback(
-    (value: string) => {
-      urlFilters.set("vendorId")(value);
-      setPage(1);
-    },
-    [urlFilters],
-  );
-
-  const handleClearFilters = useCallback(() => {
-    urlFilters.clearAll(["search", "status", "vendorId"]);
-    setPage(1);
-  }, [urlFilters]);
-
   const onSubmit = (data: CouponFormInput) => {
     if (createCoupon.isPending) return;
     createCoupon.mutate(data);
   };
 
+  const showBatch = (batch: CouponBatchFilter | null) => {
+    setBatchFilter(batch);
+    setTab("platform");
+    setPage(1);
+  };
+
   return {
     tab,
     setTab: selectTab,
+    batchFilter,
+    showBatch,
+    clearBatchFilter: () => showBatch(null),
     coupons,
     isLoading,
     pagination: {
@@ -106,11 +91,13 @@ export function useAdminCouponsPage() {
     filters: {
       search,
       status,
+      type,
       vendorId,
-      onSearchChange: handleSearchChange,
-      onStatusChange: handleStatusChange,
-      onVendorChange: vendorScoped ? handleVendorChange : undefined,
-      onClear: handleClearFilters,
+      onSearchChange: listFilters.onSearchChange,
+      onStatusChange: listFilters.onStatusChange,
+      onTypeChange: listFilters.onTypeChange,
+      onVendorChange: vendorScoped ? listFilters.onVendorChange : undefined,
+      onClear: listFilters.onClear,
     },
     open,
     setOpen,

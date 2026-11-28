@@ -11,7 +11,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/shared/components/ui/dialog";
-import { Plus, Bell } from "lucide-react";
+import { Plus, Bell, Layers } from "lucide-react";
 import { CreateCouponForm } from "../CreateCouponForm.component";
 import { FormError } from "@/shared/components/forms/FormError.component";
 import type { CouponFormInput } from "../../../schemas/coupons/coupons.schema";
@@ -43,6 +43,7 @@ export function CouponsPageHeader(props: CouponsPageHeaderProps) {
   const notifyAlerts = useNotifyCouponAlerts();
 
   const handleNotifyAlerts = () => notifyAlerts.mutate();
+  const openBulkGenerate = () => setBulkOpen(true);
 
   const submitWithValidation = (data: CouponFormInput) => {
     onSubmit(data);
@@ -66,6 +67,15 @@ export function CouponsPageHeader(props: CouponsPageHeaderProps) {
             onClick={handleNotifyAlerts}
           >
             <Bell aria-hidden /> {LABELS.runCouponAlerts}
+          </Button>
+          <Button
+            type="button"
+            size="sm"
+            variant="outline"
+            fullWidth="mobile"
+            onClick={openBulkGenerate}
+          >
+            <Layers aria-hidden /> {LABELS.bulkGenerate}
           </Button>
           <BulkGenerateDialog open={bulkOpen} setOpen={setBulkOpen} />
 

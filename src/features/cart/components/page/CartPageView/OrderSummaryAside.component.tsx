@@ -1,16 +1,17 @@
 "use client";
 
-import { LABELS } from "@/shared/constants/labels";
 import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import { CartCouponSection } from "../../coupons/CartCouponSection.component";
-import { CashbackCouponNotice } from "@/shared/components/notices/CashbackCouponNotice.component";
-import { CartCashbackOffers } from "@/features/cashback";
-import { AmountsUnavailableNotice } from "@/shared/components/notices/AmountsUnavailableNotice.component";
 import { MoneyAmount } from "@/shared/components/display/MoneyAmount.component";
 import { OrderSummaryTotalsList } from "./OrderSummaryTotalsList.component";
 import { CartDeliveryArea } from "./CartDeliveryArea.component";
 import { CartCheckoutAction } from "./CartCheckoutAction.component";
-import type { AppliedCouponSummary, EligibleCoupon } from "@/shared/api/types";
+import { CartSummaryTotal } from "./CartSummaryTotal.component";
+import type {
+  AppliedCouponSummary,
+  EligibleCoupon,
+  InactiveCoupon,
+} from "@/shared/api/types";
 import type { DeliveryAreaSummary } from "@/shared/utils/delivery/deliveryArea";
 import { isDeliveryAreaBlocked } from "@/shared/utils/delivery/deliveryArea";
 import { cartPageViewStyles as styles } from "../../../styles/page/cartPageView.styles";
@@ -43,6 +44,8 @@ interface OrderSummaryAsideProps {
   appliedCouponCode: string | null;
   appliedDiscount: number;
   appliedCoupons?: AppliedCouponSummary[];
+  inactiveCoupons?: InactiveCoupon[];
+  eligibleError?: string | null;
   appliedCashbackAmount?: number;
   payNowGrandTotal?: number;
   appliedCouponType?: string | null;
@@ -79,6 +82,8 @@ export function OrderSummaryAside({
   appliedCouponCode,
   appliedDiscount,
   appliedCoupons = [],
+  inactiveCoupons = [],
+  eligibleError = null,
   appliedCashbackAmount = 0,
   payNowGrandTotal,
   appliedCouponType,
@@ -94,24 +99,6 @@ export function OrderSummaryAside({
   const amountsPending = pendingLineTotals && !amountsUnavailable;
   const totalPending = total == null || amountsPending;
   const itemCountLabel = itemCount === 1 ? "item" : "items";
-
-  const unavailableNoticeElement = amountsUnavailable ? (
-    <AmountsUnavailableNotice
-      className={styles.asideUnavailableNotice}
-      onRetry={onRetryAmounts}
-    />
-  ) : null;
-
-  const cashbackNoticeElement =
-    (appliedCashbackAmount > 0 || appliedCouponType === "CASHBACK") &&
-    payNowGrandTotal != null ? (
-      <CashbackCouponNotice
-        className={styles.asideCashbackNotice}
-        payNow={payNowGrandTotal}
-        cashbackAmount={appliedCashbackAmount}
-        code={appliedCouponType === "CASHBACK" ? appliedCouponCode : undefined}
-      />
-    ) : null;
 
   return (
     <aside className={styles.aside}>
@@ -154,6 +141,8 @@ export function OrderSummaryAside({
             appliedCouponCode={appliedCouponCode}
             appliedDiscount={appliedDiscount}
             appliedCoupons={appliedCoupons}
+            inactiveCoupons={inactiveCoupons}
+            eligibleError={eligibleError}
             appliedCashbackAmount={appliedCashbackAmount}
             payNowGrandTotal={payNowGrandTotal}
             eligible={eligible}
@@ -165,22 +154,17 @@ export function OrderSummaryAside({
           />
         </div>
 
-        <div className={styles.asideDivider}>
-          <div className={styles.asideTotalRow}>
-            <span className={styles.asideTotalLabel}>{LABELS.total}</span>
-            <span className={styles.asideTotalAmount}>
-              <MoneyAmount
-                value={total}
-                pending={totalPending}
-                unavailable={amountsUnavailable}
-                fallbackClassName={styles.asideTotalFallback}
-              />
-            </span>
-          </div>
-          {unavailableNoticeElement}
-          {cashbackNoticeElement}
-          <CartCashbackOffers categoryIds={cashbackCategoryIds} />
-        </div>
+        <CartSummaryTotal
+          total={total}
+          totalPending={totalPending}
+          amountsUnavailable={amountsUnavailable}
+          onRetryAmounts={onRetryAmounts}
+          appliedCashbackAmount={appliedCashbackAmount}
+          payNowGrandTotal={payNowGrandTotal}
+          appliedCouponType={appliedCouponType}
+          appliedCouponCode={appliedCouponCode}
+          cashbackCategoryIds={cashbackCategoryIds}
+        />
 
         <CartCheckoutAction
           hasUnavailableItems={hasUnavailableItems}

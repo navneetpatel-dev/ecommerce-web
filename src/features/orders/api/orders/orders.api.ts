@@ -30,9 +30,12 @@ export const ordersApi = {
   },
   detail: (id: string) => apiClient.get<Order>(API.orders.detail(id)),
   cancel: (id: string) =>
-    apiClient.post<{ orderId: string; cancelled: boolean }>(
-      API.orders.cancel(id),
-    ),
+    apiClient.post<{
+      orderId: string;
+      cancelled: boolean;
+      /** What went back into the cart: its items, and its coupons when the cart had none. */
+      restoredToCart?: { items: number; coupons: string[] };
+    }>(API.orders.cancel(id)),
   create: (body: { shippingAddressId: string; couponId?: string }) =>
     apiClient.post<Order>(API.orders.list(), body),
   updateStatus: (id: string, status: OrderStatus) =>

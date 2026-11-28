@@ -28,7 +28,6 @@ export {
   CouponsFilters,
   type CouponsFiltersProps,
 } from "./components/coupons/CouponsFilters.component";
-export { EditCouponAction } from "./components/coupons/EditCouponAction";
 export { AdminConfirmAction } from "./components/shared/AdminConfirmAction.component";
 export { AdminHomePage } from "./pages/analytics/AdminHomePage.page";
 export { AdminAnalyticsPage } from "./pages/analytics/AdminAnalyticsPage.page";
@@ -55,3 +54,12 @@ export { AdminVendorsPage } from "./pages/vendors/AdminVendorsPage.page";
 export { AdminVendorDetailPage } from "./pages/vendors/AdminVendorDetailPage.page";
 export { PlatformSettingsPage } from "./pages/settings/PlatformSettingsPage.page";
 export { AdminWebVitalsPage } from "./pages/web-vitals/AdminWebVitalsPage.page";
+export { toCouponUpdateBody } from "./schemas/coupons/coupons.schema";
+export { CouponDetailDialog } from "./components/coupons/CouponDialogs/CouponDetailDialog.component";
+export { CouponStatusCell } from "./components/coupons/CouponsTable/CouponStatusCell.component";
+export { EditCouponDialog } from "./components/coupons/CouponDialogs/EditCouponDialog.component";
+export {
+  couponScopeLabel,
+  couponTypeLabel,
+  couponValueLabel,
+} from "./utils/coupons/couponSummary";

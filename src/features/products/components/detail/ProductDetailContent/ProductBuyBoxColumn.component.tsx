@@ -1,62 +1,16 @@
 "use client";
 
-import type { RefObject } from "react";
 import { ProductHighlights } from "../ProductHighlights.component";
 import { VariantSelector } from "../../variants/VariantSelector.component";
-import { ProductEligibleOffers } from "../../offers/ProductEligibleOffers.component";
 import { ProductSizeChartButton } from "../ProductSizeChartButton.component";
 import { ProductHeadingBlock } from "./ProductHeadingBlock.component";
 import { PriceAvailabilityBlock } from "./PriceAvailabilityBlock.component";
 import { PurchasePanel } from "./PurchasePanel.component";
 import { SellerPerksBlock } from "./SellerPerksBlock.component";
 import { PATHS } from "@/shared/constants/paths/paths";
-import { CashbackOfferBadge } from "@/features/cashback";
-import type { ProductDetail, ProductVariant } from "@/shared/api/types";
-import type { VariantSelectionProps } from "../../../types/detail/types";
+import type { ProductBuyBoxColumnProps } from "../../../types/detail/productBuyBox.types";
 import { PRODUCT_DETAIL_CONTENT_STYLES } from "../../../styles/detail/productDetailContent.styles";
-
-interface ProductBuyBoxColumnProps {
-  product: ProductDetail;
-  addSectionRef: RefObject<HTMLDivElement | null>;
-  resolvedVariant: ProductVariant | null;
-  sellerScore: number | null;
-  avgRating: number;
-  reviewCount: number;
-  onReviewsClick: () => void;
-  hideRating?: boolean;
-  /** A preview of a product that is not on sale: no offers, delivery check, notify-me, wishlist or share. */
-  preview?: boolean;
-  displayPrice: number;
-  compareAtPrice: number | null;
-  showMrp: boolean;
-  discountPercent: number | null;
-  gstPercentage: number;
-  taxInclusiveEstimate: number | null;
-  lowStockAt: number;
-  displayStock: number;
-  needsOptionSelection: boolean;
-  variantUnavailable: boolean;
-  canAddToCart: boolean;
-  variantSelection: VariantSelectionProps;
-  quantity: number;
-  onQuantityChange: (quantity: number) => void;
-  quantityMax: number;
-  quantityDisabled: boolean;
-  quantityDisabledHint: string;
-  addDisabled: boolean;
-  isSoldOut: boolean;
-  addToCartHint: string;
-  addToCartLabel: string;
-  isAddingToCart?: boolean;
-  onDeliveryBlockedChange: (blocked: boolean) => void;
-  isWishlisted: boolean;
-  onToggleWishlist: () => void;
-  onAddToCart?: (quantity: number) => void;
-  freeShippingThreshold?: number;
-  returnWindowDays?: number | null;
-  returnsAllowed?: boolean;
-  warrantyTypeLabel: string;
-}
+import { ProductOffers } from "./ProductOffers.component";
 
 export function ProductBuyBoxColumn({
   product,
@@ -141,13 +95,11 @@ export function ProductBuyBoxColumn({
         ) : null}
 
         {preview ? null : (
-          <>
-            <CashbackOfferBadge
-              categoryId={product.categoryId}
-              variant="detail"
-            />
-            <ProductEligibleOffers productId={product.id} />
-          </>
+          <ProductOffers
+            productId={product.id}
+            categoryId={product.categoryId}
+            variantId={variantSelection.matchedVariant?.id}
+          />
         )}
 
         {product.variants && product.variants.length > 0 ? (

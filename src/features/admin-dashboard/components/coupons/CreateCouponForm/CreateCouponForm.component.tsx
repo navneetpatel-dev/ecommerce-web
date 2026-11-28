@@ -2,10 +2,10 @@
 
 import type { UseFormReturn } from "react-hook-form";
 import {
+  CouponEditSchema,
   CouponSchema,
   couponRequiresValue,
   type CouponFormInput,
-  type CouponLockedField,
 } from "../../../schemas/coupons/coupons.schema";
 import { Button } from "@/shared/components/ui/button";
 import { FormActions, FormStack } from "@/shared/components/forms";
@@ -15,7 +15,7 @@ import {
   type InfiniteMultiSelectPageQuery,
   type InfiniteMultiSelectPageResult,
 } from "@/shared/components/InfiniteMultiSelect";
-import { adminUsersApi } from "../../../api/users/users.api.hook";
+import { adminApi } from "../../../api/analytics/admin.api";
 import { useCallback } from "react";
 import { CreateCouponBasicsFields } from "./CreateCouponBasicsFields.component";
 import { CreateCouponValueFields } from "./CreateCouponValueFields.component";
@@ -37,8 +37,12 @@ interface CreateCouponFormProps {
   hideSubmit?: boolean;
   /** Hide the coupon code field (bulk template). */
   hideCodeField?: boolean;
-  /** Edit of a used coupon: these fields show their value but can't change. */
-  lockedFields?: readonly CouponLockedField[];
+  /** Bulk codes are single-use and never advertised. */
+  bulkTemplate?: boolean;
+  /** Editing an existing coupon. */
+  editing?: boolean;
+  /** A coupon already used keeps its code and type. */
+  lockCodeAndType?: boolean;
 }
 
 export function CreateCouponForm({
@@ -49,7 +53,9 @@ export function CreateCouponForm({
   submitLabel = LABELS.createCoupon,
   hideSubmit = false,
   hideCodeField = false,
-  lockedFields = [],
+  bulkTemplate = false,
+  editing = false,
+  lockCodeAndType = false,
 }: CreateCouponFormProps) {
   const {
     watch,
@@ -59,7 +65,9 @@ export function CreateCouponForm({
   const values = watch();
   const type = values.type;
   const needsValue = couponRequiresValue(type);
-  const canSubmit = CouponSchema.safeParse(values).success;
+  const canSubmit = (editing ? CouponEditSchema : CouponSchema).safeParse(
+    values,
+  ).success;
   const disableHint = couponDisableHint(values);
   const scopeType = values.applicableScopeType;
   const isBundle = type === "BUNDLE";
@@ -76,7 +84,7 @@ export function CreateCouponForm({
     async (
       query: InfiniteMultiSelectPageQuery,
     ): Promise<InfiniteMultiSelectPageResult> => {
-      const result = await adminUsersApi.list({
+      const result = await adminApi.couponCustomerOptions({
         page: query.page,
         limit: query.limit,
         search: query.search,
@@ -110,7 +118,7 @@ export function CreateCouponForm({
         hasError={hasError}
         vendorMode={vendorMode}
         hideCodeField={hideCodeField}
-        lockedFields={lockedFields}
+        lockCodeAndType={lockCodeAndType}
       />
 
       <CreateCouponValueFields
@@ -137,6 +145,7 @@ export function CreateCouponForm({
         form={form}
         showError={showError}
         hasError={hasError}
+        hideTotalLimit={bulkTemplate}
       />
 
       <CreateCouponRestrictionFields
@@ -147,6 +156,7 @@ export function CreateCouponForm({
         showSegment={showSegment}
         showSpecificUsers={showSpecificUsers}
         fetchUsersPage={fetchUsersPage}
+        hideShowInOffers={bulkTemplate}
       />
 
       {!hideSubmit ? (

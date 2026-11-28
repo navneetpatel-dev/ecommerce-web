@@ -1,5 +1,6 @@
 "use client";
 
+import { CartDrawerCouponNotice } from "./CartDrawerCouponNotice.component";
 import Link from "next/link";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths/paths";
@@ -128,6 +129,7 @@ export function CartDrawerSummary({
           </dd>
         </div>
         {couponSavingsElement}
+        <CartDrawerCouponNotice />
         <OrderTaxShippingBreakdown
           className={styles.taxShippingBreakdown}
           pending={amountsPending}

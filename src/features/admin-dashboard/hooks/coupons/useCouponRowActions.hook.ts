@@ -5,6 +5,10 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { adminApi } from "../../api/analytics/admin.api";
 import { adminKeys } from "../../api/analytics/admin.queries";
 import type { Coupon } from "@/shared/api/types";
+import {
+  toCouponUpdateBody,
+  type CouponFormInput,
+} from "../../schemas/coupons/coupons.schema";
 
 /**
  * Owns coupon status mutations and the per-coupon analytics query for the
@@ -23,8 +27,15 @@ export function useCouponRowActions() {
   });
 
   const statusMutation = useMutation({
-    mutationFn: ({ id, status }: { id: string; status: Coupon["status"] }) =>
-      adminApi.updateCouponStatus(id, status),
+    mutationFn: ({
+      id,
+      status,
+      note,
+    }: {
+      id: string;
+      status: Coupon["status"];
+      note?: string;
+    }) => adminApi.updateCouponStatus(id, status, note),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: adminKeys.coupons.all });
     },
@@ -34,8 +45,18 @@ export function useCouponRowActions() {
     void queryClient.invalidateQueries({ queryKey: adminKeys.coupons.all });
   };
 
-  const changeStatus = (input: { id: string; status: Coupon["status"] }) =>
-    statusMutation.mutateAsync(input).then(reload);
+  const changeStatus = (input: {
+    id: string;
+    status: Coupon["status"];
+    note?: string;
+  }) => statusMutation.mutateAsync(input).then(reload);
+
+  const [detailCoupon, setDetailCoupon] = useState<Coupon | null>(null);
+  const [editCoupon, setEditCoupon] = useState<Coupon | null>(null);
+  const saveCoupon = (values: CouponFormInput, coupon: Coupon) =>
+    adminApi
+      .updateCoupon(coupon.id, toCouponUpdateBody(values, coupon))
+      .then(reload);
 
   return {
     analyticsCouponId,
@@ -43,5 +64,10 @@ export function useCouponRowActions() {
     analytics: analyticsQuery.data,
     analyticsLoading: analyticsQuery.isLoading,
     changeStatus,
+    detailCoupon,
+    setDetailCoupon,
+    editCoupon,
+    setEditCoupon,
+    saveCoupon,
   };
 }

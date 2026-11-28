@@ -21,10 +21,15 @@ export const CouponObjectSchema = z.object({
     .string()
     .trim()
     .min(1, LABELS.couponCodeRequired)
-    .max(64, LABELS.couponCodeTooLong),
+    .max(64, LABELS.couponCodeTooLong)
+    .regex(/^[A-Za-z0-9_-]+$/, LABELS.couponCodeFormat),
   type: z.enum(COUPON_TYPES, { message: LABELS.couponTypeRequired }),
   value: optionalNonNegative(LABELS.couponValueNegative),
-  maxDiscountCap: optionalNonNegative(LABELS.couponMaxDiscountNegative),
+  maxDiscountCap: z
+    .number()
+    .positive(LABELS.couponMaxDiscountPositive)
+    .optional()
+    .nullable(),
   minOrderValue: optionalNonNegative(LABELS.couponMinOrderNegative),
   minQuantity: z.number().int().nonnegative().optional().nullable(),
   applicableScopeType: z.enum(SCOPE_TYPES, {
@@ -38,6 +43,9 @@ export const CouponObjectSchema = z.object({
     .nullable(),
   userRestrictionUserIds: z.array(z.string().uuid()).optional(),
   bundleProductIds: z.array(z.string().uuid()).optional(),
+  excludedProductIds: z.array(z.string().uuid()).optional(),
+  excludedCategoryIds: z.array(z.string().uuid()).optional(),
+  showInOffers: z.boolean().optional(),
   tier2MinSubtotal: optionalNonNegative(LABELS.couponMinOrderNegative),
   tier2Percent: optionalNonNegative(LABELS.couponValueNegative),
   usageLimitTotal: z.number().int().positive().optional().nullable(),
@@ -73,10 +81,13 @@ export const COUPON_FORM_DEFAULTS: CouponFormInput = {
   userRestrictionSegment: null,
   userRestrictionUserIds: [],
   bundleProductIds: [],
+  excludedProductIds: [],
+  excludedCategoryIds: [],
+  showInOffers: true,
   tier2MinSubtotal: null,
   tier2Percent: null,
   usageLimitTotal: null,
-  usageLimitPerUser: null,
+  usageLimitPerUser: 1,
   stackable: false,
   priority: 0,
   discountBearer: DISCOUNT_BEARER.PLATFORM,

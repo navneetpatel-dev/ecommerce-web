@@ -1,18 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback, useMemo } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 import { useAuthStore } from "@/shared/stores/auth/auth.store";
 import {
-  CouponSchema,
-  VENDOR_COUPON_FORM_DEFAULTS,
-  type CouponFormInput,
-} from "@/features/admin-dashboard";
-import {
-  useCreateVendorCoupon,
   useVendorAbsorbedSummary,
   useVendorCouponAnalytics,
   useVendorCoupons,
@@ -21,80 +13,31 @@ import {
 import { DEFAULT_PAGE_LIMIT } from "@/shared/constants/pagination/pagination";
 import { QUERY_PARAMS } from "@/shared/constants/navigation/queryParams";
 import { couponsApi } from "@/features/coupons";
-import { useRouteQueryDialog } from "@/shared/hooks/navigation/useRouteQueryDialog.hook";
-import { useApiFormErrors } from "@/shared/hooks/forms/useApiFormErrors.hook";
-import { LABELS } from "@/shared/constants/labels";
 import type { Coupon } from "@/shared/api/types";
-import { useUnsavedChanges } from "@/shared/hooks/forms/useUnsavedChanges.hook";
-import { useDebouncedValue } from "@/shared/hooks/ui/use-debounce.hook";
+import { useVendorCouponCreate } from "./useVendorCouponCreate.hook";
+import { useVendorCouponEditing } from "./useVendorCouponEditing.hook";
+import { useVendorCouponFilters } from "./useVendorCouponFilters.hook";
 
 export function useVendorCouponsPage() {
   const user = useAuthStore((s) => s.currentUser);
   const vendorId = user?.vendorId ?? null;
   const queryClient = useQueryClient();
   const searchParams = useSearchParams();
-  const dialog = useRouteQueryDialog();
   const [page, setPage] = useState(1);
-  const [search, setSearch] = useState("");
-  const [status, setStatus] = useState("");
-  const debouncedSearch = useDebouncedValue(search.trim(), 350);
+  const resetPage = () => setPage(1);
+  const listFilters = useVendorCouponFilters(resetPage);
 
   const analyticsId = searchParams.get(QUERY_PARAMS.analytics);
-
-  const couponFilters = useMemo(
-    () => ({
-      search: debouncedSearch || undefined,
-      status: status || undefined,
-    }),
-    [debouncedSearch, status],
-  );
 
   const { data, isLoading } = useVendorCoupons(
     page,
     DEFAULT_PAGE_LIMIT,
-    couponFilters,
+    listFilters.query,
   );
-  const createMutation = useCreateVendorCoupon(vendorId);
-
-  const form = useForm<CouponFormInput>({
-    resolver: zodResolver(CouponSchema),
-    mode: "onTouched",
-    reValidateMode: "onChange",
-    defaultValues: {
-      ...VENDOR_COUPON_FORM_DEFAULTS,
-      applicableScopeIds: vendorId ? [vendorId] : [],
-    },
-  });
-
-  useUnsavedChanges(form.formState.isDirty);
-
-  const { formLevelError } = useApiFormErrors(
-    form,
-    createMutation.error,
-    LABELS.couldNotCreateCoupon,
-  );
+  const editing = useVendorCouponEditing(vendorId);
+  const { setQuery, ...create } = useVendorCouponCreate(vendorId);
   const analyticsQuery = useVendorCouponAnalytics(analyticsId);
   const absorbedQuery = useVendorAbsorbedSummary();
-
-  useEffect(() => {
-    if (!vendorId) return;
-    if (form.getValues("applicableScopeType") !== "vendor") return;
-    if (form.getValues("applicableScopeIds").length > 0) return;
-    form.setValue("applicableScopeIds", [vendorId]);
-  }, [vendorId, form]);
-
-  const prevCreateOpenRef = useRef(false);
-
-  useEffect(() => {
-    if (dialog.open && !prevCreateOpenRef.current) {
-      form.reset({
-        ...VENDOR_COUPON_FORM_DEFAULTS,
-        applicableScopeIds: vendorId ? [vendorId] : [],
-      });
-      createMutation.reset();
-    }
-    prevCreateOpenRef.current = dialog.open;
-  }, [dialog.open, vendorId, form, createMutation]);
 
   const coupons = data?.items ?? [];
   const limit = data?.limit ?? DEFAULT_PAGE_LIMIT;
@@ -107,51 +50,16 @@ export function useVendorCouponsPage() {
   const absorbedDiscountTotal =
     absorbedQuery.data?.absorbedDiscountTotal ?? null;
 
-  const setDialogOpen = (next: boolean) => {
-    if (next) {
-      dialog.openCreate();
-      return;
-    }
-    dialog.close();
-  };
-
-  const onSubmit = (values: CouponFormInput) => {
-    createMutation.mutate(values, {
-      onSuccess: () => dialog.close(),
-    });
-  };
-
   const updateStatus = async (coupon: Coupon, status: Coupon["status"]) => {
     await couponsApi.vendorUpdateStatus(coupon.id, status);
     void queryClient.invalidateQueries({ queryKey: vendorCouponKeys.all });
   };
 
-  const handleSearchChange = useCallback((value: string) => {
-    setSearch(value);
-    setPage(1);
-  }, []);
-
-  const handleStatusChange = useCallback((value: string) => {
-    setStatus(value);
-    setPage(1);
-  }, []);
-
-  const handleClearFilters = useCallback(() => {
-    setSearch("");
-    setStatus("");
-    setPage(1);
-  }, []);
-
   return {
     vendorId,
     coupons,
     isLoading,
-    open: dialog.open,
-    setOpen: setDialogOpen,
-    form,
-    isPending: createMutation.isPending,
-    formLevelError,
-    onSubmit,
+    ...create,
     pagination: {
       page: currentPage,
       totalPages,
@@ -160,20 +68,15 @@ export function useVendorCouponsPage() {
       to,
       onPageChange: setPage,
     },
-    filters: {
-      search,
-      status,
-      onSearchChange: handleSearchChange,
-      onStatusChange: handleStatusChange,
-      onClear: handleClearFilters,
-    },
+    filters: listFilters.controls,
     analyticsId,
     setAnalyticsId: (id: string | null) => {
-      dialog.setQuery({ [QUERY_PARAMS.analytics]: id });
+      setQuery({ [QUERY_PARAMS.analytics]: id });
     },
     analytics: analyticsQuery.data,
     analyticsLoading: analyticsQuery.isLoading,
     absorbedDiscountTotal,
     updateStatus,
+    ...editing,
   };
 }

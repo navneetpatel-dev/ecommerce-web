@@ -2,10 +2,7 @@
 
 import type { UseFormReturn } from "react-hook-form";
 import { Controller } from "react-hook-form";
-import type {
-  CouponFormInput,
-  CouponLockedField,
-} from "../../../schemas/coupons/coupons.schema";
+import type { CouponFormInput } from "../../../schemas/coupons/coupons.schema";
 import { Input } from "@/shared/components/ui/input";
 import {
   Select,
@@ -16,7 +13,6 @@ import {
 } from "@/shared/components/ui/select";
 import { FormFieldFrame, FormSection } from "@/shared/components/forms";
 import { LABELS } from "@/shared/constants/labels";
-import { DISCOUNT_BEARER } from "@/shared/constants/statuses";
 import { cn } from "@/shared/utils/dom/cn";
 import { COUPON_TYPES } from "../../../constants/coupons/constants";
 import { createCouponFormStyles } from "../../../styles/coupons/createCouponForm.styles";
@@ -28,7 +24,7 @@ interface CreateCouponBasicsFieldsProps {
   hasError: (name: keyof CouponFormInput) => boolean;
   vendorMode: boolean;
   hideCodeField: boolean;
-  lockedFields: readonly CouponLockedField[];
+  lockCodeAndType?: boolean;
 }
 
 export function CreateCouponBasicsFields({
@@ -37,12 +33,9 @@ export function CreateCouponBasicsFields({
   hasError,
   vendorMode,
   hideCodeField,
-  lockedFields,
+  lockCodeAndType = false,
 }: CreateCouponBasicsFieldsProps) {
   const { register, control } = form;
-  const codeLocked = lockedFields.includes("code");
-  const typeLocked = lockedFields.includes("type");
-  const bearerLocked = lockedFields.includes("discountBearer");
 
   return (
     <FormSection title={LABELS.couponSectionBasics} columns={1}>
@@ -57,7 +50,8 @@ export function CreateCouponBasicsFields({
             id="coupon-code"
             error={hasError("code")}
             placeholder={LABELS.couponCode}
-            disabled={codeLocked}
+            className={createCouponFormStyles.codeInput}
+            disabled={lockCodeAndType}
             {...register("code")}
           />
         </FormFieldFrame>
@@ -75,7 +69,7 @@ export function CreateCouponBasicsFields({
             <Select
               value={field.value}
               onValueChange={field.onChange}
-              disabled={typeLocked}
+              disabled={lockCodeAndType}
             >
               <SelectTrigger
                 className={cn(
@@ -98,41 +92,17 @@ export function CreateCouponBasicsFields({
 
       <FormFieldFrame
         label={LABELS.discountBearer}
-        required
-        error={showError("discountBearer")}
+        hint={LABELS.discountBearerHint}
       >
-        {vendorMode ? (
-          <Input value={LABELS.discountBearerVendor} disabled readOnly />
-        ) : (
-          <Controller
-            name="discountBearer"
-            control={control}
-            render={({ field }) => (
-              <Select
-                value={field.value}
-                onValueChange={field.onChange}
-                disabled={bearerLocked}
-              >
-                <SelectTrigger
-                  className={cn(
-                    hasError("discountBearer") &&
-                      createCouponFormStyles.borderDanger,
-                  )}
-                >
-                  <SelectValue placeholder={LABELS.discountBearer} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value={DISCOUNT_BEARER.PLATFORM}>
-                    {LABELS.discountBearerPlatform}
-                  </SelectItem>
-                  <SelectItem value={DISCOUNT_BEARER.VENDOR}>
-                    {LABELS.discountBearerVendor}
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            )}
-          />
-        )}
+        <Input
+          value={
+            vendorMode
+              ? LABELS.discountBearerVendor
+              : LABELS.discountBearerPlatform
+          }
+          disabled
+          readOnly
+        />
       </FormFieldFrame>
 
       <div className={createCouponFormStyles.gridSm2}>

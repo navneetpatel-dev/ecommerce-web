@@ -6,7 +6,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/shared/components/ui/dialog";
+import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
+import { useCouponBatchActions } from "../../../hooks/coupons/useCouponBatchActions.hook";
+import { couponDialogStyles } from "../../../styles/coupons/couponDialogs.styles";
 import type { CouponBatch } from "@/shared/api/types";
 import { formatInr } from "@/shared/utils/formatting/orderFormat";
 import { couponsPageHeaderStyles } from "../../../styles/coupons/couponsPageHeader.styles";
@@ -14,12 +17,20 @@ import { couponsPageHeaderStyles } from "../../../styles/coupons/couponsPageHead
 interface CouponBatchDetailDialogProps {
   batchDetail: CouponBatch | null;
   onClose: () => void;
+  onShowBatch?: (batch: { id: string; name: string } | null) => void;
 }
 
 export function CouponBatchDetailDialog({
   batchDetail,
   onClose,
+  onShowBatch,
 }: CouponBatchDetailDialogProps) {
+  const actions = useCouponBatchActions(batchDetail);
+  const showInList = () => {
+    if (batchDetail)
+      onShowBatch?.({ id: batchDetail.id, name: batchDetail.name });
+    onClose();
+  };
   const handleOpenChange = (next: boolean) => {
     if (!next) onClose();
   };
@@ -69,6 +80,55 @@ export function CouponBatchDetailDialog({
                 </dd>
               </div>
             </dl>
+            {actions.statusMessage ? (
+              <p
+                role="status"
+                className={couponDialogStyles.batchStatusMessage}
+              >
+                {actions.statusMessage}
+              </p>
+            ) : null}
+            {actions.statusError ? (
+              <p role="alert" className={couponDialogStyles.batchStatusError}>
+                {actions.statusError}
+              </p>
+            ) : null}
+            <div className={couponDialogStyles.actions}>
+              <Button
+                type="button"
+                size="sm"
+                variant="outline"
+                onClick={actions.exportCodes}
+              >
+                {LABELS.exportBatchCodes}
+              </Button>
+              <Button
+                type="button"
+                size="sm"
+                variant="outline"
+                onClick={actions.pause}
+                disabled={actions.isPending}
+              >
+                {LABELS.pauseBatch}
+              </Button>
+              <Button
+                type="button"
+                size="sm"
+                variant="outline"
+                onClick={actions.resume}
+                disabled={actions.isPending}
+              >
+                {LABELS.resumeBatch}
+              </Button>
+              <Button
+                type="button"
+                size="sm"
+                variant="outline"
+                onClick={showInList}
+              >
+                {LABELS.showBatchInList}
+              </Button>
+            </div>
             <ul className={couponsPageHeaderStyles.batchCodesList}>
               {(batchDetail.codes ?? []).map((code) => (
                 <li

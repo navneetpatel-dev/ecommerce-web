@@ -1,9 +1,10 @@
 import type { DataTableColumn } from "@/shared/components/DataTable";
 import { LABELS } from "@/shared/constants/labels";
-import { formatDateTime } from "@/shared/utils/formatting/formatDate";
+import { formatDate } from "@/shared/utils/formatting/formatDate";
 import type { CouponBatch } from "@/shared/api/types";
 import { formatInr } from "@/shared/utils/formatting/orderFormat";
 
+/** Dates only, so every column fits beside the sticky actions at 1280px. */
 export function buildCouponBatchColumns(): DataTableColumn<CouponBatch>[] {
   return [
     { id: "name", header: LABELS.bulkBatchName, accessor: "name" },
@@ -33,12 +34,12 @@ export function buildCouponBatchColumns(): DataTableColumn<CouponBatch>[] {
       id: "expires",
       header: LABELS.batchExpires,
       cell: (row) =>
-        row.expiresAt ? formatDateTime(row.expiresAt) : LABELS.usageUnlimited,
+        row.expiresAt ? formatDate(row.expiresAt) : LABELS.usageUnlimited,
     },
     {
       id: "created",
-      header: LABELS.startDate,
-      cell: (row) => formatDateTime(row.createdAt),
+      header: LABELS.batchCreated,
+      cell: (row) => formatDate(row.createdAt),
     },
   ];
 }

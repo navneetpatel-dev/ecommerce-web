@@ -20,3 +20,4 @@ export {
   patchExistingCartItemQuantity,
   patchRemoveCartItem,
 } from "./utils/line-item/cartDisplay.utils";
+export { InactiveCouponsList } from "./components/coupons/InactiveCouponsList.component";

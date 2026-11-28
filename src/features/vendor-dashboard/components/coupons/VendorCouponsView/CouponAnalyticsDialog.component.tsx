@@ -14,7 +14,6 @@ import {
   formatInrAmount,
 } from "@/shared/utils/formatting/orderFormat";
 import type { CouponAnalytics } from "@/shared/api/types";
-import { formatPercent } from "../../../utils/coupons/formatPercent";
 import { couponAnalyticsDialogStyles } from "../../../styles/coupons/vendorCouponsView.styles";
 
 interface CouponAnalyticsDialogProps {
@@ -80,6 +79,14 @@ export function CouponAnalyticsDialog(props: CouponAnalyticsDialogProps) {
             </div>
             <div className={couponAnalyticsDialogStyles.statRow}>
               <dt className={couponAnalyticsDialogStyles.statLabel}>
+                {LABELS.cashbackCredited}
+              </dt>
+              <dd className={couponAnalyticsDialogStyles.statValue}>
+                {formatInr(analytics.cashbackTotal)}
+              </dd>
+            </div>
+            <div className={couponAnalyticsDialogStyles.statRow}>
+              <dt className={couponAnalyticsDialogStyles.statLabel}>
                 {LABELS.revenueImpact}
               </dt>
               <dd className={couponAnalyticsDialogStyles.statValue}>
@@ -91,7 +98,9 @@ export function CouponAnalyticsDialog(props: CouponAnalyticsDialogProps) {
                 {LABELS.conversionRate}
               </dt>
               <dd className={couponAnalyticsDialogStyles.statValue}>
-                {formatPercent(analytics.conversionRate)}
+                {analytics.limitUsedPercent == null
+                  ? "—"
+                  : `${analytics.limitUsedPercent}%`}
               </dd>
             </div>
             <p className={couponAnalyticsDialogStyles.absorbedText}>

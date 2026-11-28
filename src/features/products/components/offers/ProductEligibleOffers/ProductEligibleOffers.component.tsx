@@ -10,6 +10,8 @@ import { useProductEligibleOffers } from "../../../hooks/offers/useProductEligib
 
 export interface ProductEligibleOffersProps {
   productId: string;
+  /** The variant being viewed, so offers reflect its price. */
+  variantId?: string | null;
   className?: string;
   /** When false, skip the network call (e.g. product still loading). */
   enabled?: boolean;
@@ -17,6 +19,7 @@ export interface ProductEligibleOffersProps {
 
 export function ProductEligibleOffers({
   productId,
+  variantId,
   className,
   enabled = true,
 }: ProductEligibleOffersProps) {
@@ -27,9 +30,8 @@ export function ProductEligibleOffers({
     canExpand,
     visibleOffers,
     hiddenCount,
-    isScrollable,
     toggleExpanded,
-  } = useProductEligibleOffers(productId, enabled);
+  } = useProductEligibleOffers(productId, enabled, variantId);
 
   if (!enabled) return null;
 
@@ -75,7 +77,7 @@ export function ProductEligibleOffers({
         </span>
       </div>
 
-      <EligibleOffersList offers={visibleOffers} isScrollable={isScrollable} />
+      <EligibleOffersList offers={visibleOffers} />
 
       {canExpand ? (
         <Button

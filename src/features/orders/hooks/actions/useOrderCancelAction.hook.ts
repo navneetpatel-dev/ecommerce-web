@@ -7,6 +7,17 @@ import { useCancelOrder } from "../../api/orders/orders.queries";
 import { canCancelOrder } from "../../utils/actions/orderCancel.utils";
 import type { Order } from "@/shared/api/types";
 
+/** "Order cancelled", and where its items (and coupon) went, so the cart never surprises. */
+function orderCancelledMessage(restored?: {
+  items: number;
+  coupons: string[];
+}): string {
+  if (!restored || restored.items === 0) return LABELS.orderCancelledSuccess;
+  return restored.coupons.length > 0
+    ? LABELS.orderCancelledItemsAndCouponInCart
+    : LABELS.orderCancelledItemsInCart;
+}
+
 export function useOrderCancelAction(order: Order) {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
@@ -18,8 +29,8 @@ export function useOrderCancelAction(order: Order) {
     setError(null);
     setMessage(null);
     try {
-      await cancelMutation.mutateAsync();
-      setMessage(LABELS.orderCancelledSuccess);
+      const result = await cancelMutation.mutateAsync();
+      setMessage(orderCancelledMessage(result?.restoredToCart));
       setOpen(false);
     } catch (err) {
       setError(getApiErrorMessage(err, LABELS.orderCancelFailed));

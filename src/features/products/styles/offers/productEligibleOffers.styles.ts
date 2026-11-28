@@ -1,5 +1,4 @@
 import { cn } from "@/shared/utils/dom/cn";
-import { PDP_OFFERS_EXPANDED_SCROLL_CLASS } from "../../constants/offers/pdpOffers";
 
 export const productEligibleOffersStyles = {
   root: (className?: string) =>
@@ -13,11 +12,13 @@ export const productEligibleOffersStyles = {
     "truncate text-[0.75rem] font-semibold uppercase tracking-[0.08em] text-ink-muted",
   countBadge:
     "shrink-0 rounded-full bg-paper px-1.5 py-px text-[0.6875rem] tabular-nums text-ink-muted",
-  list: (isScrollable: boolean) =>
-    cn("space-y-1 pr-0.5", isScrollable && PDP_OFFERS_EXPANDED_SCROLL_CLASS),
+  // Grows in place when expanded: a short scroll box showed 2 of 12 offers at a time.
+  list: "space-y-1",
   offerItem:
     "flex items-center justify-between gap-2 rounded-md border border-dashed border-brand/25 bg-brand-subtle/30 px-2.5 py-1.5",
   offerLeft: "flex min-w-0 items-center gap-2",
+  copiedIcon: "size-3 text-success",
+  copyIcon: "size-3 opacity-60",
   offerCodeBadge:
     "inline-flex items-center gap-1 rounded bg-brand/10 px-1.5 py-0.5 font-mono text-[0.6875rem] font-bold tracking-wider text-brand hover:bg-brand/20 transition-colors cursor-pointer shrink-0 select-all",
   offerName: "truncate text-[0.75rem] font-medium text-ink",

@@ -12,7 +12,12 @@ export const BulkCouponSchema = z.object({
     .int()
     .min(1, LABELS.couponBulkCountInvalid)
     .max(500, LABELS.couponBulkCountInvalid),
-  prefix: z.string().trim().max(8).optional(),
+  prefix: z
+    .string()
+    .trim()
+    .max(8)
+    .regex(/^[A-Za-z0-9-]*$/, LABELS.couponPrefixFormat)
+    .optional(),
   template: CouponObjectSchema.omit({ code: true }).superRefine(
     refineCouponValueAndDates,
   ),
